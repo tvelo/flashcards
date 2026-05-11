@@ -1,0 +1,1115 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>AQA Psychology Social Influence Flashcards</title>
+<link rel="manifest" href="manifest.json" />
+<style>
+:root{
+  --bg: #0b0f17;
+  --panel: rgba(20, 26, 38, 0.82);
+  --panel-2: rgba(28, 36, 52, 0.88);
+  --text: #edf2ff;
+  --muted: #9aa8c7;
+  --line: rgba(255,255,255,0.10);
+  --line-2: rgba(255,255,255,0.14);
+  --good: #5bd68a;
+  --bad: #ff6b6b;
+  --accent: #7aa8ff;
+  --accent-2: #9a7aff;
+  --shadow: 0 18px 55px rgba(0,0,0,.35);
+  --radius: 22px;
+  --radius-sm: 14px;
+  --tap: 48px;
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  background:
+    radial-gradient(circle at top, rgba(122,168,255,.12), transparent 35%),
+    radial-gradient(circle at 20% 20%, rgba(154,122,255,.10), transparent 25%),
+    var(--bg);
+  color:var(--text);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+button, select, input { font: inherit; }
+button {
+  border:0;
+  border-radius: 16px;
+  min-height: var(--tap);
+  padding: 0 16px;
+  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  color: var(--text);
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  cursor:pointer;
+  touch-action: manipulation;
+}
+button:active { transform: translateY(1px) scale(.99); }
+button.secondary { background: transparent; }
+button.good { border-color: rgba(91,214,138,.35); color: #d8ffe7; }
+button.bad { border-color: rgba(255,107,107,.35); color: #ffd9d9; }
+select {
+  min-height: var(--tap);
+  padding: 0 14px;
+  border-radius: 16px;
+  border: 1px solid var(--line);
+  background: rgba(255,255,255,.05);
+  color: var(--text);
+  width: 100%;
+}
+.wrap{
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 16px 14px calc(92px + var(--safe-bottom));
+}
+
+/* ── Profile Bar ─────────────────────────────── */
+.profile-bar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+  padding:10px 16px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  backdrop-filter:blur(8px);
+}
+.profile-label{
+  color:var(--muted);
+  font-size:13px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.profile-pills{ display:flex; gap:8px; }
+.profile-pill{
+  min-height:36px !important;
+  padding:0 22px !important;
+  border-radius:999px !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  background:transparent !important;
+  border:1px solid var(--line) !important;
+  color:var(--muted) !important;
+  box-shadow:none !important;
+  transition:all .2s ease;
+  letter-spacing:.01em;
+}
+.profile-pill.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2)) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+  box-shadow:0 4px 18px rgba(122,168,255,.35) !important;
+}
+.sync-chip{
+  margin-left:auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  color:var(--muted);
+  padding:5px 11px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.03);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.sync-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--muted);flex-shrink:0;
+}
+.sync-dot.ok{ background:var(--good); }
+.sync-dot.loading{ background:#f0c040; animation:sdpulse .9s ease-in-out infinite; }
+.sync-dot.error{ background:var(--bad); }
+@keyframes sdpulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+/* ── Header ──────────────────────────────────── */
+.header{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+  margin-bottom:14px;
+}
+.title h1{font-size:clamp(22px,4vw,36px);line-height:1.05;margin:0 0 6px}
+.title p{margin:0;color:var(--muted);max-width:60ch;line-height:1.45}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.pill{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:10px 12px;border-radius:999px;
+  background:rgba(255,255,255,.05);border:1px solid var(--line);
+  color:var(--muted);font-size:13px;
+}
+.controls{
+  display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;
+  gap:10px;margin:16px 0 14px;
+}
+@media(max-width:720px){
+  .header{flex-direction:column;}
+  .pill-row{justify-content:flex-start;}
+  .controls{grid-template-columns:1fr 1fr;}
+  .profile-bar{flex-wrap:wrap;}
+}
+.stats{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;
+}
+.stat{
+  padding:14px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.05);border:1px solid var(--line);
+}
+.stat .num{font-size:22px;font-weight:700;line-height:1}
+.stat .label{color:var(--muted);font-size:12px;margin-top:6px}
+@media(max-width:640px){
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .actions{grid-template-columns:1fr 1fr;}
+  .actions button{min-height:50px;}
+  .card{min-height:54vh;}
+}
+.progress{
+  margin-bottom:14px;padding:12px 14px;border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04);border:1px solid var(--line);
+}
+.progress-top{
+  display:flex;justify-content:space-between;gap:12px;
+  align-items:center;margin-bottom:10px;color:var(--muted);font-size:14px;
+}
+.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.fill{
+  height:100%;width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  border-radius:999px;transition:width .3s ease;
+}
+
+/* ── Card ────────────────────────────────────── */
+.card-shell{ perspective:1400px; margin:16px 0 14px; }
+.card{
+  position:relative;
+  width:100%;
+  min-height:58vh;
+  transform-style:preserve-3d;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  border-radius:calc(var(--radius) + 4px);
+}
+.card.flipped{ transform:rotateY(180deg); }
+.face{
+  position:absolute;inset:0;
+  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  border-radius:calc(var(--radius) + 4px);
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.05));
+  border:1px solid var(--line-2);
+  box-shadow:var(--shadow);
+  padding:20px;
+  display:flex;flex-direction:column;
+  gap:12px;
+}
+.back{ transform:rotateY(180deg); }
+
+/* Centering fix — main content area grows to fill and centers its content */
+.face-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  text-align:center;
+}
+.face-footer{
+  display:flex;flex-direction:column;gap:6px;
+  align-items:center;
+}
+.meta{
+  display:flex;gap:8px;flex-wrap:wrap;
+  align-items:center;justify-content:center;
+  width:100%;
+}
+.topic{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:7px 11px;border-radius:999px;
+  background:rgba(122,168,255,.12);border:1px solid rgba(122,168,255,.20);
+  font-size:12px;color:#dce7ff;
+}
+.difficulty{ font-size:12px;color:var(--muted); }
+.q{
+  font-size:clamp(21px,4.7vw,33px);
+  line-height:1.22;
+  font-weight:700;
+  letter-spacing:-.02em;
+  margin:0;
+  text-align:center;
+  max-width:72ch;
+}
+.a{
+  font-size:clamp(17px,3.7vw,23px);
+  line-height:1.52;
+  margin:0;
+  white-space:pre-wrap;
+  text-align:center;
+  max-width:72ch;
+}
+.hint{ color:var(--muted);font-size:13px;text-align:center; }
+
+/* ── Actions / Nav ───────────────────────────── */
+.actions{
+  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:10px;margin-top:14px;
+}
+.actions button{ padding:0 12px;min-height:54px;font-weight:600; }
+.bottom-nav{
+  position:sticky;bottom:calc(10px + var(--safe-bottom));
+  display:flex;gap:10px;justify-content:space-between;margin-top:14px;
+  padding:10px;border-radius:18px;background:rgba(10,14,22,.78);
+  backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:var(--shadow);
+}
+.bottom-nav .group{ display:flex;gap:10px;flex:1; }
+.bottom-nav button{ flex:1; }
+
+/* ── Study Guide ─────────────────────────────── */
+.study-guide{ margin:14px 0 16px; }
+.study-guide details{
+  border-radius:var(--radius-sm);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  padding:12px 14px;
+}
+.study-guide summary{
+  cursor:pointer;list-style:none;font-size:15px;font-weight:700;
+  display:flex;justify-content:space-between;align-items:center;
+}
+.study-guide summary::-webkit-details-marker{display:none;}
+.study-guide summary::after{
+  content:'Tap to open';font-size:12px;color:var(--muted);font-weight:500;
+}
+.study-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;
+}
+.study-step{
+  padding:12px;border-radius:14px;border:1px solid var(--line);
+  background:rgba(255,255,255,.04);line-height:1.45;font-size:14px;
+}
+.study-note{ margin-top:12px;color:var(--muted);font-size:13px;line-height:1.5; }
+@media(max-width:720px){ .study-grid{grid-template-columns:1fr;} }
+
+.footer-note{ margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5; }
+kbd{
+  padding:2px 6px;border:1px solid var(--line);border-bottom-width:2px;
+  border-radius:6px;background:rgba(255,255,255,.05);color:var(--text);font-size:12px;
+}
+
+/* ── SQL Setup Modal ─────────────────────────── */
+#setupModal{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;padding:20px;
+}
+#setupModal.show{ display:flex; }
+.modal-box{
+  background:#111827;border:1px solid var(--line-2);
+  border-radius:var(--radius);padding:24px;max-width:680px;width:100%;
+  box-shadow:var(--shadow);max-height:90vh;overflow-y:auto;
+}
+.modal-box h2{ margin:0 0 8px;font-size:20px; }
+.modal-box p{ margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.5; }
+.sql-block{
+  background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:10px;
+  padding:14px;font-family:monospace;font-size:12px;line-height:1.6;
+  color:#a8d8a8;overflow-x:auto;white-space:pre;margin-bottom:16px;
+}
+.modal-actions{ display:flex;gap:10px;flex-wrap:wrap; }
+.modal-actions button{ flex:1;min-width:120px; }
+</style>
+</head>
+<body>
+
+<!-- SQL Setup Modal — shown automatically if Supabase tables are missing -->
+<div id="setupModal">
+  <div class="modal-box">
+    <h2>⚙️ One-time Supabase setup</h2>
+    <p>Your database tables don't exist yet. Copy the SQL below, paste it into your <strong>Supabase → SQL Editor</strong>, and click <em>Run</em>. Then come back and tap <strong>Done, reload</strong>.</p>
+    <div class="sql-block" id="sqlBlock"></div>
+    <div class="modal-actions">
+      <button onclick="copySQL()" id="copyBtn">Copy SQL</button>
+      <button onclick="location.reload()">Done, reload</button>
+      <button class="secondary" onclick="document.getElementById('setupModal').classList.remove('show')">Dismiss</button>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+
+  <!-- ── Profile Bar ── -->
+  <div class="profile-bar">
+    <span class="profile-label">Studying as</span>
+    <div class="profile-pills">
+      <button class="profile-pill" id="btnElisha" onclick="switchProfile('Elisha')">Elisha</button>
+      <button class="profile-pill" id="btnLmar" onclick="switchProfile('Lmar')">Lmar</button>
+    </div>
+    <div class="sync-chip">
+      <div class="sync-dot loading" id="syncDot"></div>
+      <span id="syncText">Connecting…</span>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="title">
+      <h1>AQA Psychology: Social Influence</h1>
+      <p>Built for active recall, spaced repetition, and mobile use. Try answering before you flip; then grade yourself so weak cards come back more often.</p>
+    </div>
+    <div class="pill-row">
+      <div class="pill">Tap card to flip</div>
+      <div class="pill">Swipe ←/→ to move</div>
+      <div class="pill">Grade after recall</div>
+    </div>
+  </div>
+
+  <section class="study-guide" aria-label="How to study with this deck">
+    <details>
+      <summary>How to study with this deck</summary>
+      <div class="study-grid">
+        <div class="study-step"><strong>1.</strong> Say the answer from memory before you flip.</div>
+        <div class="study-step"><strong>2.</strong> Check the answer only after you have tried.</div>
+        <div class="study-step"><strong>3.</strong> Grade honestly so weak cards come back sooner.</div>
+      </div>
+      <div class="study-note">Best on phones: use one thumb to flip and the other to grade. Swipe left or right to move through cards quickly.</div>
+    </details>
+  </section>
+
+  <div class="controls">
+    <select id="topicSel" aria-label="Topic filter">
+      <option value="all">All topics</option>
+      <option value="Conformity">Explanations of conformity</option>
+      <option value="Asch">Asch's line study</option>
+      <option value="Zimbardo">Zimbardo's social roles</option>
+      <option value="Milgram">Obedience — Milgram</option>
+      <option value="Adorno">Obedience — Adorno</option>
+      <option value="Resistance">Resistance to social influence</option>
+      <option value="Social Change">Social change</option>
+      <option value="Minority">Minority influence</option>
+    </select>
+    <select id="modeSel" aria-label="Study mode">
+      <option value="all">Study all</option>
+      <option value="due">Due only</option>
+      <option value="weak">Weak only</option>
+      <option value="mixed">Mixed topics</option>
+    </select>
+    <button id="shuffleBtn" class="secondary">Shuffle</button>
+    <button id="resetBtn" class="secondary">Reset progress</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num" id="sTotal">0</div><div class="label">Cards in deck</div></div>
+    <div class="stat"><div class="num" id="sDue">0</div><div class="label">Due now</div></div>
+    <div class="stat"><div class="num" id="sMastered">0</div><div class="label">Mastered</div></div>
+    <div class="stat"><div class="num" id="sStreak">0</div><div class="label">Correct streak</div></div>
+  </div>
+
+  <div class="progress">
+    <div class="progress-top">
+      <div id="progLabel">0 reviewed today</div>
+      <div id="nextDue">Next review: —</div>
+    </div>
+    <div class="bar"><div class="fill" id="progFill"></div></div>
+  </div>
+
+  <div class="card-shell">
+    <div class="card" id="cardInner" role="button" tabindex="0" aria-label="Flashcard. Tap or press space to flip.">
+      <div class="face front">
+        <div class="face-body">
+          <div class="meta">
+            <div class="topic" id="cardTopic">Topic</div>
+            <div class="difficulty" id="cardMeta">Think first · active recall</div>
+          </div>
+          <div class="q" id="cardQ">Loading…</div>
+        </div>
+        <div class="face-footer">
+          <div class="hint">Tap the card to reveal the answer.</div>
+          <div class="hint"><kbd>Space</kbd> flip &nbsp;·&nbsp; <kbd>←</kbd><kbd>→</kbd> move &nbsp;·&nbsp; <kbd>1</kbd>–<kbd>4</kbd> grade</div>
+        </div>
+      </div>
+      <div class="face back">
+        <div class="face-body">
+          <div class="meta">
+            <div class="topic" id="cardTopicB">Topic</div>
+            <div class="difficulty" id="cardMetaB">Answer</div>
+          </div>
+          <div class="a" id="cardA"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="bad" id="againBtn">Again</button>
+    <button id="hardBtn">Hard</button>
+    <button class="good" id="goodBtn">Good</button>
+    <button id="easyBtn">Easy</button>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="group">
+      <button id="prevBtn" class="secondary">← Prev</button>
+      <button id="flipBtn" class="secondary">Flip</button>
+      <button id="nextBtn" class="secondary">Next →</button>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Progress syncs to Supabase separately for each profile. Cards are stored in the cloud — add new ones from your Supabase dashboard without editing this file.
+  </div>
+</div>
+
+<!-- Supabase JS v2 -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* ─────────────────────────────────────────────────────────────────────────
+   SUPABASE SQL — run this ONCE in your Supabase SQL Editor
+   ─────────────────────────────────────────────────────────────────────────
+
+create table if not exists profiles (
+  id          uuid primary key default gen_random_uuid(),
+  name        text unique not null,
+  streak      int  default 0,
+  last_study  text default ''
+);
+
+create table if not exists cards (
+  id         uuid primary key default gen_random_uuid(),
+  topic      text not null,
+  question   text not null,
+  answer     text not null,
+  created_at timestamptz default now()
+);
+
+create table if not exists reviews (
+  id            uuid primary key default gen_random_uuid(),
+  profile_id    uuid references profiles(id) on delete cascade,
+  card_id       uuid references cards(id)    on delete cascade,
+  ease          float   default 2.5,
+  interval_days int     default 0,
+  reps          int     default 0,
+  lapses        int     default 0,
+  due           bigint  default 0,
+  seen          int     default 0,
+  mastered      boolean default false,
+  last_reviewed bigint  default 0,
+  updated_at    timestamptz default now(),
+  unique(profile_id, card_id)
+);
+
+alter table profiles enable row level security;
+alter table cards    enable row level security;
+alter table reviews  enable row level security;
+
+create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
+create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
+create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
+
+insert into profiles (name) values ('Elisha'), ('Lmar')
+  on conflict (name) do nothing;
+
+───────────────────────────────────────────────────────────────────────── */
+
+const SQL_SETUP = `create table if not exists profiles (
+  id         uuid primary key default gen_random_uuid(),
+  name       text unique not null,
+  streak     int  default 0,
+  last_study text default ''
+);
+
+create table if not exists cards (
+  id         uuid primary key default gen_random_uuid(),
+  topic      text not null,
+  question   text not null,
+  answer     text not null,
+  created_at timestamptz default now()
+);
+
+create table if not exists reviews (
+  id            uuid primary key default gen_random_uuid(),
+  profile_id    uuid references profiles(id) on delete cascade,
+  card_id       uuid references cards(id)    on delete cascade,
+  ease          float   default 2.5,
+  interval_days int     default 0,
+  reps          int     default 0,
+  lapses        int     default 0,
+  due           bigint  default 0,
+  seen          int     default 0,
+  mastered      boolean default false,
+  last_reviewed bigint  default 0,
+  updated_at    timestamptz default now(),
+  unique(profile_id, card_id)
+);
+
+alter table profiles enable row level security;
+alter table cards    enable row level security;
+alter table reviews  enable row level security;
+
+create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
+create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
+create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
+
+insert into profiles (name) values ('Elisha'), ('Lmar')
+  on conflict (name) do nothing;`;
+
+// ── Flashcard data ─────────────────────────────────────────────────────────
+const ALL_CARDS = [
+  {t:"Conformity",q:"What is conformity?",a:"A change in behaviour due to external pressure from a real or imaginary group."},
+  {t:"Conformity",q:"What is compliance?",a:"A change in behaviour in order to fit in — the shallowest form of conformity, linked to NSI."},
+  {t:"Conformity",q:"What is identification?",a:"Adopting the behaviours of a group despite internal beliefs. It lasts only as long as the interaction with that group."},
+  {t:"Conformity",q:"What is internalisation?",a:"A permanent change in both external and internal beliefs due to a group. Driven by the desire to be correct — linked to ISI."},
+  {t:"Conformity",q:"What is Normative Social Influence (NSI)?",a:"The weakest form of conformity — a change in behaviour in order to fit in and avoid rejection. Leads to compliance."},
+  {t:"Conformity",q:"What is Informational Social Influence (ISI)?",a:"The strongest form of conformity — a change in behaviour in order to be right, when you believe the group has better information. Leads to internalisation."},
+  {t:"Conformity",q:"Which type of conformity does NSI produce, and which does ISI produce?",a:"NSI → compliance. ISI → internalisation."},
+  {t:"Conformity",q:"What Asch evidence supports NSI as a separate process?",a:"When answers were written privately, conformity fell from 75% to 12.5% — removing the social pressure (NSI) drastically reduced conformity."},
+  {t:"Conformity",q:"What Asch evidence supports ISI as a separate process?",a:"When task difficulty increased, conformity rose — participants were more uncertain and looked to others to be correct (ISI)."},
+  {t:"Conformity",q:"What dispositional criticism applies to conformity explanations?",a:"They ignore internal locus of control — individual differences in personality mean not everyone conforms equally."},
+  {t:"Conformity",q:"What is a key methodological weakness of the NSI/ISI distinction?",a:"It is very difficult to distinguish between NSI and ISI in practice — both may operate simultaneously."},
+
+  {t:"Asch",q:"What was the aim of Asch's line study?",a:"To investigate whether individuals would conform to a group even when the task was unambiguous and the answer was clearly wrong."},
+  {t:"Asch",q:"What was the method of Asch's line study?",a:"123 male American participants. A line study with 8–12 confederates and 1 real participant. 8 critical trials (confederates gave wrong answers) and 4 real trials."},
+  {t:"Asch",q:"What were the findings of Asch's line study?",a:"On critical trials, conformity occurred at least 32% of the time. 72% of participants conformed at least once."},
+  {t:"Asch",q:"What was the conclusion of Asch's line study?",a:"Individuals still conformed even when the task was unambiguous — situational pressure from a unanimous majority drives conformity."},
+  {t:"Asch",q:"What happened to conformity as group size increased in Asch's variations?",a:"Conformity peaked with 3 confederates, then plateaued — larger groups did not produce more conformity."},
+  {t:"Asch",q:"What happened when unanimity was broken in Asch's study?",a:"Conformity fell from 32% to 5–6% when even one confederate agreed with the real participant."},
+  {t:"Asch",q:"What happened to conformity when task difficulty increased in Asch's study?",a:"Conformity rose — participants were less certain and relied on the group for information (ISI)."},
+  {t:"Asch",q:"What is a strength of Asch's line study?",a:"It was a lab study with high internal validity due to tightly controlled conditions (same confederates, same lines, same procedure)."},
+  {t:"Asch",q:"What did Perry and Spencer (1984) find, and what does it suggest about Asch?",a:"British participants conformed only 1 out of 346 times — suggesting Asch's results may reflect Cold War America rather than a universal tendency (temporal validity issue)."},
+  {t:"Asch",q:"What is the ethnocentric bias criticism of Asch?",a:"The sample was American males only — findings cannot be generalised to other cultures or genders."},
+  {t:"Asch",q:"What is the ecological validity criticism of Asch?",a:"Judging line lengths in a lab has little similarity to real-world conformity situations."},
+  {t:"Asch",q:"What is the beta bias criticism of Asch?",a:"The all-male sample ignores potential gender differences in conformity — findings may not apply to women."},
+
+  {t:"Zimbardo",q:"What are social roles?",a:"A pattern of behaviour and attributes associated with a particular role in society."},
+  {t:"Zimbardo",q:"What did Zimbardo believe about the cause of conformity?",a:"That conformity is due to situational factors (the role assigned), not dispositional factors (personality)."},
+  {t:"Zimbardo",q:"What was the aim of Zimbardo's prison study?",a:"To investigate whether individuals would conform to assigned social roles — prisoner or guard."},
+  {t:"Zimbardo",q:"What was the method of Zimbardo's prison study?",a:"Paid advertisement; 24 healthy male participants with no criminal record, randomly assigned as prisoner (uniform + number) or guard (uniform + sunglasses)."},
+  {t:"Zimbardo",q:"What were the findings of Zimbardo's prison study?",a:"Guards became sadistic; prisoners became obedient and weak. The study was stopped after 6 days — it was meant to last 2 weeks."},
+  {t:"Zimbardo",q:"What was the conclusion of Zimbardo's prison study?",a:"Participants conformed to their assigned social roles rather than acting on personal disposition."},
+  {t:"Zimbardo",q:"What is a strength of Zimbardo's participant selection?",a:"All participants were screened as mentally healthy with no criminal record, controlling for dispositional factors."},
+  {t:"Zimbardo",q:"What real-world application does Zimbardo's study have?",a:"It provides insight into behaviour in real prisons and informs prison reform policy."},
+  {t:"Zimbardo",q:"What did Reicher and Haslam find when they replicated Zimbardo?",a:"Only 1/3 of guards turned sadistic — suggesting situational factors alone do not fully explain the behaviour."},
+  {t:"Zimbardo",q:"What is the main ethical criticism of Zimbardo's study?",a:"Prisoners were subjected to significant psychological harm, raising serious concerns about participant welfare."},
+
+  {t:"Milgram",q:"What was the aim of Milgram's obedience study?",a:"To investigate whether individuals would obey an authority figure even when doing so caused harm to another person."},
+  {t:"Milgram",q:"What was the method of Milgram's study?",a:"40 male Americans recruited via advert at Yale University. Assigned the teacher role; a confederate was the learner. Participants administered fake shocks up to 450V, prompted by the researcher."},
+  {t:"Milgram",q:"What were the findings of Milgram's study?",a:"100% of participants obeyed up to 300V. 65% continued to the maximum 450V."},
+  {t:"Milgram",q:"What was the conclusion of Milgram's study?",a:"People obey authority figures even when they do not want to and even when they believe they are causing serious harm."},
+  {t:"Milgram",q:"What is an autonomous state?",a:"When an individual feels solely responsible for their own actions and their consequences."},
+  {t:"Milgram",q:"What is an agentic state?",a:"When an individual attributes their actions to an authority figure and follows orders, reducing personal responsibility."},
+  {t:"Milgram",q:"What is an agentic shift?",a:"The transition from an autonomous state to an agentic state when in the presence of an authority figure."},
+  {t:"Milgram",q:"How did location affect obedience in Milgram's variations?",a:"Moving from Yale University to a run-down building reduced obedience from 65% to 47.5%."},
+  {t:"Milgram",q:"How did proximity affect obedience in Milgram's variations?",a:"When instructions were given over the phone rather than in person, obedience dropped from 65% to 21%."},
+  {t:"Milgram",q:"How did uniform affect obedience in Milgram's variations?",a:"When the researcher wore casual clothes instead of a lab coat, obedience fell from 65% to 20%."},
+  {t:"Milgram",q:"What is a strength of Milgram's study in terms of validity?",a:"High internal validity — the controlled lab setting allowed a clear causal relationship between authority and obedience to be established."},
+  {t:"Milgram",q:"What does Hofling's nurse study add to Milgram's findings?",a:"It provides real-world support — nurses obeyed a doctor's instructions even when they violated protocol, demonstrating obedience to authority outside the lab."},
+  {t:"Milgram",q:"What is the main ethical criticism of Milgram's study?",a:"Participants were deceived and subjected to significant psychological distress, violating ethical guidelines."},
+  {t:"Milgram",q:"What is the ecological validity criticism of Milgram's study?",a:"The artificial lab setting may not reflect real-world obedience situations."},
+  {t:"Milgram",q:"What did Orne and Holland argue about Milgram?",a:"The artificial nature of the task led participants to act on demand characteristics rather than genuine obedience."},
+  {t:"Milgram",q:"What does the fact that not everyone obeyed in Milgram suggest?",a:"Other factors — such as dispositional variables — also influence obedience, meaning situational explanations alone are insufficient."},
+
+  {t:"Adorno",q:"What is an authoritarian personality?",a:"A personality type characterised by dogmatic fixed views, high respect for authority, and low respect for those of lower status. Associated with greater obedience."},
+  {t:"Adorno",q:"What did Adorno believe causes an authoritarian personality?",a:"A harsh upbringing — individuals raised with strict, punitive parenting are more likely to develop it."},
+  {t:"Adorno",q:"What was the aim of Adorno's study?",a:"To investigate whether a specific personality type was linked to obedience."},
+  {t:"Adorno",q:"What was the method of Adorno's study?",a:"2000 male American participants surveyed using the F-scale on obedience, conformity, respect for class, political views, views on race, and social norms."},
+  {t:"Adorno",q:"What were the findings of Adorno's study?",a:"Those who scored high on the F-scale (authoritarian) showed low respect for lower classes, dogmatic views, and high respect for upper classes."},
+  {t:"Adorno",q:"What was the conclusion of Adorno's study?",a:"Personality type is linked to obedience — the authoritarian personality predicts greater deference to authority."},
+  {t:"Adorno",q:"What did Milgram and Elms (1966) find that supports Adorno?",a:"The majority of participants who obeyed up to 450V in Milgram's study were found to have authoritarian personalities."},
+  {t:"Adorno",q:"What is a strength of Adorno's theory in terms of explanation?",a:"It accounts for dispositional factors in obedience — explaining why individuals differ in their obedience levels."},
+  {t:"Adorno",q:"What is a methodological criticism of Adorno's F-scale?",a:"The survey was one-directional, creating response bias — participants may have aimed for a high score, inflating apparent authoritarianism."},
+  {t:"Adorno",q:"What does Adorno's authoritarian personality theory fail to explain?",a:"Majority obedience — most people who obeyed Milgram did not have authoritarian personalities, so it cannot be the sole explanation."},
+
+  {t:"Resistance",q:"What is social support in the context of resistance to social influence?",a:"The presence of another individual who rejects the majority, which counters the pressure to conform by diffusing the sense of responsibility."},
+  {t:"Resistance",q:"How does social support aid resistance to conformity?",a:"When another individual rejects the majority view, it allows others to feel safe doing the same — they no longer feel alone in dissenting."},
+  {t:"Resistance",q:"How does social support aid resistance to obedience?",a:"Having a role model who actively defies authority gives others permission to do the same."},
+  {t:"Resistance",q:"What did Milgram find when introducing confederate teachers who stopped obeying?",a:"When one confederate dropped out at 150V and another at 210V, those who continued to 450V fell from 65% to just 10%."},
+  {t:"Resistance",q:"What does Asch's unanimity variation show about social support?",a:"When one confederate agreed with the real participant, conformity fell from 32% to 5–6% — a single ally dramatically reduces conformity."},
+  {t:"Resistance",q:"What did Allen and Levine find about social support?",a:"Even a confederate with poor eyesight who gave the correct answer still reduced conformity among real participants — the ally effect persists even when the ally's credibility is low."},
+  {t:"Resistance",q:"What is a limitation of social support as an explanation for resistance?",a:"It doesn't explain all resistance — Asch still found 5–6% conformity even when a dissenter was present."},
+  {t:"Resistance",q:"What is an internal locus of control (LOC)?",a:"The belief that one's experiences and outcomes are due to one's own actions and decisions."},
+  {t:"Resistance",q:"What is an external locus of control (LOC)?",a:"The belief that one's experiences are due to external factors outside one's control (luck, fate, others)."},
+  {t:"Resistance",q:"What did Holland (1967) find about LOC and obedience?",a:"37% of participants with an internal LOC resisted Milgram's study, compared to only 23% with an external LOC."},
+  {t:"Resistance",q:"What did Twenge (2004) find that challenges LOC theory?",a:"Over 40 years, people have become more external in LOC but have also become more resistant to authority — contradicting the prediction that external LOC leads to less resistance."},
+  {t:"Resistance",q:"What are two limitations of LOC as an explanation of resistance?",a:"It ignores situational factors; and LOC effects are context-dependent — people may behave differently in familiar vs unfamiliar environments."},
+
+  {t:"Social Change",q:"What is social change?",a:"When the views or behaviours of a minority are accepted and adopted into mainstream society."},
+  {t:"Social Change",q:"What is the full process of social change?",a:"Deep processing → Consistency → Commitment → Flexibility → Snowball effect → Social cryptoamnesia → Conformity → Obedience."},
+  {t:"Social Change",q:"What is deep processing in social change?",a:"The minority's consistent message forces the majority to think more carefully about the issue, even if they don't immediately change their view."},
+  {t:"Social Change",q:"What is the snowball effect in social change?",a:"Once a small number of majority members are converted, more follow rapidly — the movement gains momentum."},
+  {t:"Social Change",q:"What is social cryptoamnesia?",a:"When society adopts the minority's view but forgets that it was originally a minority position — the change feels like it 'always was' the norm."},
+  {t:"Social Change",q:"What is the argumentative principle in social change?",a:"When a minority makes sacrifices for their cause, their message gains legitimacy — the sacrifice signals genuine belief."},
+  {t:"Social Change",q:"What is gradual commitment in social change?",a:"Majority members incrementally commit more to the minority's position over time, rather than changing all at once."},
+  {t:"Social Change",q:"How does social change lead to conformity and obedience?",a:"Once the minority view becomes mainstream, others conform to it (NSI) and institutions enforce it — producing obedience to the new norm."},
+  {t:"Social Change",q:"What real-world example supports social change through consistency?",a:"The civil rights movement — consistent messaging and action over time shifted mainstream societal attitudes."},
+  {t:"Social Change",q:"What real-world example supports social change through flexibility?",a:"The LGBTQ+ movement — willingness to compromise on specific demands while maintaining core goals helped win majority support."},
+  {t:"Social Change",q:"What did Nolan (2008) find that links NSI to social change?",a:"People were more likely to reduce their energy consumption if they believed their neighbours were doing so — demonstrating NSI as a mechanism for behavioural change."},
+  {t:"Social Change",q:"What is a limitation of social change research?",a:"It is very difficult to establish cause and effect — researchers can only use case studies, not controlled experiments with proper comparison groups."},
+
+  {t:"Minority",q:"What is minority influence?",a:"When the views of a majority are changed by a minority group, through persuasion rather than numerical power."},
+  {t:"Minority",q:"What is diachronic consistency in minority influence?",a:"The minority maintaining the same message consistently over time — showing they are committed and not easily swayed."},
+  {t:"Minority",q:"What is synchronic consistency in minority influence?",a:"All members of the minority group holding and expressing the same view — presenting a unified front."},
+  {t:"Minority",q:"What is commitment in minority influence?",a:"The minority being willing to sacrifice for their cause — which signals genuine belief and makes the message more legitimate (argumentative principle)."},
+  {t:"Minority",q:"What is flexibility in minority influence?",a:"The minority not being completely rigid — willing to compromise on some points while maintaining their core position."},
+  {t:"Minority",q:"What was the aim of Moscovici's (1969) study?",a:"To investigate whether consistency in a minority affects the degree of influence they exert on a majority."},
+  {t:"Minority",q:"What was the method of Moscovici's (1969) study?",a:"4 real participants and 2 confederates were shown 36 blue slides of varying shades. Consistent condition: confederates said 'green' for all 36 slides. Inconsistent condition: confederates said 'green' for only 24 slides."},
+  {t:"Minority",q:"What were the findings of Moscovici's study?",a:"Consistent condition: 8.4% conformity. Inconsistent condition: 1.25%. Overall, 32% conformed at least once in the consistent condition."},
+  {t:"Minority",q:"What is a strength of Moscovici's study?",a:"It was a controlled lab study with high internal validity."},
+  {t:"Minority",q:"What are the criticisms of Moscovici's study?",a:"Gynocentric sample (all female); lack of mundane realism; and the percentage difference between conditions was very small."},
+  {t:"Minority",q:"What was the aim of Nemeth's (1974) study?",a:"To investigate whether flexibility was more important than consistency in producing minority influence."},
+  {t:"Minority",q:"What was the method of Nemeth's (1974) study?",a:"A mock jury deciding compensation for a ski accident. 3 confederates and 1 real participant. Inflexible condition: confederates were adamant about a low payout. Flexible condition: confederates were willing to go slightly higher."},
+  {t:"Minority",q:"What were the findings and conclusion of Nemeth's study?",a:"Real participants reduced their compensation amount more in the flexible condition. Conclusion: flexibility is more important than consistency in minority influence."},
+  {t:"Minority",q:"What are the strengths of Nemeth's study?",a:"Controlled lab study with high internal validity; clearly demonstrates the importance of flexibility in minority influence."},
+  {t:"Minority",q:"What are the criticisms of Nemeth's study?",a:"Lack of mundane realism and low ecological validity — a mock jury in a lab is far removed from real-world minority influence."},
+  {t:"Minority",q:"What overall real-world evidence supports minority influence research?",a:"The LGBTQ+ movement — demonstrated both consistency over time and flexibility in demands, successfully shifting mainstream attitudes."},
+  {t:"Minority",q:"What is the overall criticism of minority influence research?",a:"Most studies lack mundane realism — the artificial lab settings do not reflect how minority influence actually operates in society."},
+];
+
+// ── Supabase Config ────────────────────────────────────────────────────────
+const SUPABASE_URL = 'https://chwnfwfjgjoadkvmmkdi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNod25md2ZqZ2pvYWRrdm1ta2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTUzMDksImV4cCI6MjA5NDA5MTMwOX0.tzO3b2wQbabbJ1pQzTSgZzlxUTubDMM_DhfY2TR8fyk';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+// ── App State ──────────────────────────────────────────────────────────────
+let profileMap   = {};   // name → { id, streak, last_study }
+let cardIdMap    = {};   // "topic|question" → supabase card UUID
+let reviewsCache = {};   // "topic|question" → SR state object
+let supabaseReady = false;
+
+let activeProfileName = localStorage.getItem('aqa_active_profile') || 'Elisha';
+let deck        = [];
+let idx         = 0;
+let flipped     = false;
+let currentId   = null;
+let reviewQueue = [];
+let streak      = 0;
+let touchStartX = 0, touchStartY = 0;
+
+// ── Sync Status UI ─────────────────────────────────────────────────────────
+function setSyncStatus(state, label) {
+  const dot  = document.getElementById('syncDot');
+  const text = document.getElementById('syncText');
+  dot.className = 'sync-dot ' + state;
+  const defaults = { ok:'Synced', loading:'Syncing…', error:'Offline mode' };
+  text.textContent = label || defaults[state] || state;
+}
+
+// ── Profile UI ─────────────────────────────────────────────────────────────
+function updateProfileUI() {
+  document.getElementById('btnElisha').classList.toggle('active', activeProfileName === 'Elisha');
+  document.getElementById('btnLmar').classList.toggle('active', activeProfileName === 'Lmar');
+}
+
+async function switchProfile(name) {
+  if (name === activeProfileName) return;
+  activeProfileName = name;
+  localStorage.setItem('aqa_active_profile', name);
+  updateProfileUI();
+  // Load local snapshot immediately for snappy feel
+  reviewsCache = loadLocalReviews();
+  streak       = loadLocalStreak();
+  flipped = false; currentId = null;
+  buildDeck(); updateReviewQueue();
+  // Then sync from Supabase in background
+  if (supabaseReady) {
+    setSyncStatus('loading', 'Loading…');
+    try {
+      await loadReviews();
+      buildDeck(); updateReviewQueue();
+      setSyncStatus('ok');
+    } catch(e) {
+      console.error(e);
+      setSyncStatus('error');
+    }
+  }
+}
+
+// ── Local Storage Helpers ──────────────────────────────────────────────────
+function lk(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${suffix}`; }
+function saveLocalReviews()  { try { localStorage.setItem(lk('reviews'), JSON.stringify(reviewsCache)); } catch{} }
+function loadLocalReviews()  { try { return JSON.parse(localStorage.getItem(lk('reviews'))) || {}; } catch { return {}; } }
+function saveLocalStreak()   { localStorage.setItem(lk('streak'), String(streak)); }
+function loadLocalStreak()   { return parseInt(localStorage.getItem(lk('streak'))) || 0; }
+
+// ── Supabase: Profiles ─────────────────────────────────────────────────────
+async function loadProfiles() {
+  const { data, error } = await db.from('profiles').select('*');
+  if (error) throw error;
+  if (!data || data.length === 0) {
+    const { data: ins, error: ie } = await db.from('profiles')
+      .insert([{ name:'Elisha', streak:0 }, { name:'Lmar', streak:0 }])
+      .select();
+    if (ie) throw ie;
+    ins.forEach(p => profileMap[p.name] = p);
+  } else {
+    data.forEach(p => profileMap[p.name] = p);
+  }
+}
+
+// ── Supabase: Cards ────────────────────────────────────────────────────────
+async function loadOrSeedCards() {
+  const { count, error } = await db.from('cards').select('*', { count:'exact', head:true });
+  if (error) throw error;
+  if (count === 0) {
+    // Seed in batches of 50
+    const batch = ALL_CARDS.map(c => ({ topic:c.t, question:c.q, answer:c.a }));
+    for (let i = 0; i < batch.length; i += 50) {
+      const { error:ie } = await db.from('cards').insert(batch.slice(i, i+50));
+      if (ie) throw ie;
+    }
+  }
+  // Build the local cid → UUID map
+  const { data, error:le } = await db.from('cards').select('id,topic,question');
+  if (le) throw le;
+  cardIdMap = {};
+  data.forEach(c => { cardIdMap[`${c.topic}|${c.question}`] = c.id; });
+}
+
+// ── Supabase: Reviews ──────────────────────────────────────────────────────
+async function loadReviews() {
+  const profile = profileMap[activeProfileName];
+  if (!profile) return;
+  streak = profile.streak || 0;
+
+  const { data, error } = await db.from('reviews').select('*').eq('profile_id', profile.id);
+  if (error) throw error;
+
+  // Reverse map: card UUID → cid string
+  const rev = {};
+  Object.entries(cardIdMap).forEach(([k, id]) => rev[id] = k);
+
+  reviewsCache = {};
+  (data || []).forEach(r => {
+    const key = rev[r.card_id];
+    if (key) reviewsCache[key] = {
+      ease:     r.ease,
+      interval: r.interval_days,
+      reps:     r.reps,
+      lapses:   r.lapses,
+      due:      r.due,
+      seen:     r.seen,
+      mastered: r.mastered,
+      last:     r.last_reviewed
+    };
+  });
+
+  saveLocalReviews();
+  saveLocalStreak();
+}
+
+async function upsertReview(card, s) {
+  const profile = profileMap[activeProfileName];
+  const cardId  = cardIdMap[cid(card)];
+  if (!profile || !cardId) return;
+
+  const { error } = await db.from('reviews').upsert({
+    profile_id:    profile.id,
+    card_id:       cardId,
+    ease:          s.ease,
+    interval_days: s.interval,
+    reps:          s.reps,
+    lapses:        s.lapses,
+    due:           s.due,
+    seen:          s.seen,
+    mastered:      s.mastered,
+    last_reviewed: s.last,
+    updated_at:    new Date().toISOString()
+  }, { onConflict:'profile_id,card_id' });
+  if (error) console.error('Review upsert:', error);
+
+  // Persist streak to profile row
+  await db.from('profiles')
+    .update({ streak, last_study: new Date().toDateString() })
+    .eq('id', profile.id);
+
+  // Keep local profileMap in sync
+  if (profileMap[activeProfileName]) profileMap[activeProfileName].streak = streak;
+}
+
+// ── Init ───────────────────────────────────────────────────────────────────
+async function init() {
+  updateProfileUI();
+
+  // Show local data immediately so the app feels instant
+  reviewsCache = loadLocalReviews();
+  streak       = loadLocalStreak();
+  buildDeck();
+  updateReviewQueue();
+
+  setSyncStatus('loading', 'Connecting…');
+  try {
+    await loadProfiles();
+    await loadOrSeedCards();
+    await loadReviews();
+    supabaseReady = true;
+    setSyncStatus('ok');
+    buildDeck();
+    updateReviewQueue();
+  } catch(e) {
+    console.error('Supabase unavailable, running from local cache:', e);
+    // Check if the error looks like missing tables
+    if (e && e.code === '42P01') {
+      showSetupModal();
+    }
+    setSyncStatus('error', 'Offline mode');
+  }
+}
+
+function showSetupModal() {
+  document.getElementById('sqlBlock').textContent = SQL_SETUP;
+  document.getElementById('setupModal').classList.add('show');
+}
+
+function copySQL() {
+  navigator.clipboard.writeText(SQL_SETUP).then(() => {
+    document.getElementById('copyBtn').textContent = 'Copied ✓';
+    setTimeout(() => document.getElementById('copyBtn').textContent = 'Copy SQL', 2000);
+  });
+}
+
+// ── Core SR Helpers ────────────────────────────────────────────────────────
+function cid(card) { return `${card.t}|${card.q}`; }
+
+function cardState(card) {
+  const id = cid(card);
+  if (!reviewsCache[id]) {
+    reviewsCache[id] = { ease:2.5, interval:0, reps:0, lapses:0, due:0, seen:0, mastered:false, last:0 };
+  }
+  return reviewsCache[id];
+}
+
+function formatDate(ts) {
+  if (!ts) return '—';
+  return new Date(ts).toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+// ── Deck Builder ───────────────────────────────────────────────────────────
+function buildDeck() {
+  const topic = document.getElementById('topicSel').value;
+  const mode  = document.getElementById('modeSel').value;
+  const now   = Date.now();
+  let cards   = ALL_CARDS.filter(c => topic === 'all' ? true : c.t === topic);
+
+  if (mode === 'due') {
+    cards = cards.filter(c => cardState(c).due <= now);
+  } else if (mode === 'weak') {
+    cards = cards.filter(c => {
+      const s = cardState(c);
+      return s.lapses > 0 || s.ease < 2.35 || s.reps < 3;
+    });
+  } else if (mode === 'mixed') {
+    cards = shuffle([...cards]);
+  }
+
+  if (mode !== 'mixed') cards = [...cards];
+  deck = cards;
+  if (!deck.length) deck = ALL_CARDS.filter(c => topic === 'all' ? true : c.t === topic);
+  if (!deck.length) return;
+
+  if (currentId) {
+    const pos = deck.findIndex(c => cid(c) === currentId);
+    idx = pos >= 0 ? pos : 0;
+  } else {
+    idx = 0;
+  }
+  render();
+}
+
+function currentCard() { return deck[idx]; }
+
+function updateReviewQueue() {
+  const now = Date.now();
+  reviewQueue = deck.filter(c => cardState(c).due <= now);
+  reviewQueue.sort((a, b) => cardState(a).due - cardState(b).due);
+}
+
+// ── Render ─────────────────────────────────────────────────────────────────
+function render() {
+  if (!deck.length) return;
+  currentId    = cid(currentCard());
+  const c      = currentCard();
+  const s      = cardState(c);
+
+  document.getElementById('cardQ').textContent      = c.q;
+  document.getElementById('cardA').textContent      = c.a;
+  document.getElementById('cardTopic').textContent  = c.t;
+  document.getElementById('cardTopicB').textContent = c.t;
+  document.getElementById('cardMeta').textContent   = `Seen ${s.seen} × · Ease ${s.ease.toFixed(2)}`;
+  document.getElementById('cardMetaB').textContent  = s.mastered ? 'Mastered ✓' : 'Answer';
+  document.getElementById('progLabel').textContent  = `${reviewedToday()} reviewed today`;
+  document.getElementById('nextDue').textContent    = `Next review: ${nextDueText()}`;
+  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+  updateStats();
+}
+
+function reviewedToday() {
+  const day = new Date().toDateString();
+  return ALL_CARDS.filter(c => {
+    const s = cardState(c);
+    return s.last && new Date(s.last).toDateString() === day;
+  }).length;
+}
+
+function nextDueText() {
+  const now    = Date.now();
+  const future = ALL_CARDS.map(c => cardState(c).due).filter(ts => ts > now).sort((a, b) => a - b);
+  return future.length ? formatDate(future[0]) : 'Now';
+}
+
+function updateStats() {
+  const now      = Date.now();
+  const total    = deck.length;
+  const due      = deck.filter(c => cardState(c).due <= now).length;
+  const mastered = ALL_CARDS.filter(c => cardState(c).mastered).length;
+  document.getElementById('sTotal').textContent    = total;
+  document.getElementById('sDue').textContent      = due;
+  document.getElementById('sMastered').textContent = mastered;
+  document.getElementById('sStreak').textContent   = streak;
+  const pct = total ? Math.min(100, Math.round((reviewedToday() / total) * 100)) : 0;
+  document.getElementById('progFill').style.width  = `${pct}%`;
+}
+
+// ── Card Actions ───────────────────────────────────────────────────────────
+function flipCard() {
+  flipped = !flipped;
+  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+}
+
+function navigate(dir) {
+  if (!deck.length) return;
+  idx = (idx + dir + deck.length) % deck.length;
+  flipped = false;
+  render();
+}
+
+function grade(score) {
+  if (!deck.length) return;
+  const c   = currentCard();
+  const s   = cardState(c);
+  const now = Date.now();
+  s.seen += 1;
+  s.last  = now;
+
+  const g = { again:0, hard:1, good:2, easy:3 }[score];
+
+  if (g === 0) {
+    s.lapses += 1; s.reps = 0;
+    s.ease     = Math.max(1.3, s.ease - 0.20);
+    s.interval = 1;
+    s.due      = now + 10 * 60 * 1000;
+    streak     = 0;
+  } else if (g === 1) {
+    s.reps     = Math.max(1, s.reps);
+    s.ease     = Math.max(1.3, s.ease - 0.05);
+    s.interval = Math.max(1, Math.round(Math.max(1, s.interval) * 1.25));
+    s.due      = now + s.interval * 86400000;
+    streak    += 1;
+  } else if (g === 2) {
+    s.reps    += 1;
+    s.ease     = Math.min(3.2, s.ease + 0.05);
+    if      (s.reps === 1) s.interval = 1;
+    else if (s.reps === 2) s.interval = 3;
+    else                   s.interval = Math.round(Math.max(1, s.interval) * s.ease);
+    s.due      = now + s.interval * 86400000;
+    streak    += 1;
+  } else {
+    s.reps    += 1;
+    s.ease     = Math.min(3.5, s.ease + 0.12);
+    if      (s.reps === 1) s.interval = 2;
+    else if (s.reps === 2) s.interval = 5;
+    else                   s.interval = Math.round(Math.max(1, s.interval) * s.ease * 1.35);
+    s.due      = now + s.interval * 86400000;
+    s.mastered = s.reps >= 4 && s.ease >= 2.9 && s.lapses === 0;
+    streak    += 1;
+  }
+
+  reviewsCache[cid(c)] = s;
+  saveLocalReviews();
+  saveLocalStreak();
+
+  if (supabaseReady) {
+    setSyncStatus('loading', 'Saving…');
+    upsertReview(c, s)
+      .then(() => setSyncStatus('ok'))
+      .catch(e => { console.error(e); setSyncStatus('error'); });
+  }
+
+  flipped = false;
+  idx = (idx < deck.length - 1) ? idx + 1 : 0;
+  updateReviewQueue();
+  render();
+}
+
+async function resetProgress() {
+  if (!confirm(`Reset all progress for ${activeProfileName}? This cannot be undone.`)) return;
+  const profile = profileMap[activeProfileName];
+  if (supabaseReady && profile) {
+    setSyncStatus('loading', 'Resetting…');
+    await db.from('reviews').delete().eq('profile_id', profile.id);
+    await db.from('profiles').update({ streak:0, last_study:'' }).eq('id', profile.id);
+  }
+  localStorage.removeItem(lk('reviews'));
+  localStorage.removeItem(lk('streak'));
+  reviewsCache = {};
+  streak       = 0;
+  flipped      = false;
+  currentId    = null;
+  setSyncStatus('ok');
+  buildDeck();
+  updateReviewQueue();
+}
+
+// ── Input Handlers ─────────────────────────────────────────────────────────
+function onKey(e) {
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+  else if (e.key === 'ArrowLeft')  navigate(-1);
+  else if (e.key === 'ArrowRight') navigate(1);
+  else if (e.key === '1') grade('again');
+  else if (e.key === '2') grade('hard');
+  else if (e.key === '3') grade('good');
+  else if (e.key === '4') grade('easy');
+}
+
+const cardEl = document.getElementById('cardInner');
+cardEl.addEventListener('click', flipCard);
+cardEl.addEventListener('keydown', onKey);
+cardEl.addEventListener('touchstart', e => {
+  const t = e.changedTouches[0];
+  touchStartX = t.clientX; touchStartY = t.clientY;
+}, { passive:true });
+cardEl.addEventListener('touchend', e => {
+  const t  = e.changedTouches[0];
+  const dx = t.clientX - touchStartX;
+  const dy = t.clientY - touchStartY;
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) navigate(dx < 0 ? 1 : -1);
+}, { passive:true });
+
+document.getElementById('topicSel').addEventListener('change', () => { flipped = false; currentId = null; buildDeck(); });
+document.getElementById('modeSel').addEventListener('change',  () => { flipped = false; currentId = null; buildDeck(); });
+document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle([...deck]); idx = 0; flipped = false; render(); });
+document.getElementById('resetBtn').addEventListener('click', resetProgress);
+document.getElementById('prevBtn').addEventListener('click',   () => navigate(-1));
+document.getElementById('nextBtn').addEventListener('click',   () => navigate(1));
+document.getElementById('flipBtn').addEventListener('click',   flipCard);
+document.getElementById('againBtn').addEventListener('click',  () => grade('again'));
+document.getElementById('hardBtn').addEventListener('click',   () => grade('hard'));
+document.getElementById('goodBtn').addEventListener('click',   () => grade('good'));
+document.getElementById('easyBtn').addEventListener('click',   () => grade('easy'));
+window.addEventListener('keydown', onKey);
+
+init();
+</script>
+</body>
+</html>

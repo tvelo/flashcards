@@ -67,7 +67,14 @@ select {
   max-width: 900px;
   margin: 0 auto;
   padding: 16px 14px calc(92px + var(--safe-bottom));
+    position: relative;
+  isolation: isolate;
 }
+  .card, .face {
+  transform: translateZ(0);
+  will-change: transform;
+}
+ 
   
 
 /* ── Profile Bar ─────────────────────────────── */
@@ -80,7 +87,9 @@ select {
   border-radius:var(--radius-sm);
   background:rgba(255,255,255,.04);
   border:1px solid var(--line);
-  backdrop-filter:blur(8px);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transform: translateZ(0);
 }
 .profile-label{
   color:var(--muted);

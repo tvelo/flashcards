@@ -709,12 +709,10 @@ async function switchProfile(name) {
   activeProfileName = name;
   localStorage.setItem('aqa_active_profile', name);
   updateProfileUI();
-  // Load local snapshot immediately for snappy feel
   reviewsCache = loadLocalReviews();
   streak       = loadLocalStreak();
   flipped = false; currentId = null;
   buildDeck(); updateReviewQueue();
-  // Then sync from Supabase in background
   if (supabaseReady) {
     setSyncStatus('loading', 'Loading…');
     try {
@@ -755,14 +753,12 @@ async function loadOrSeedCards() {
   const { count, error } = await db.from('cards').select('*', { count:'exact', head:true });
   if (error) throw error;
   if (count === 0) {
-    // Seed in batches of 50
     const batch = ALL_CARDS.map(c => ({ topic:c.t, question:c.q, answer:c.a }));
     for (let i = 0; i < batch.length; i += 50) {
       const { error:ie } = await db.from('cards').insert(batch.slice(i, i+50));
       if (ie) throw ie;
     }
   }
-  // Build the local cid → UUID map
   const { data, error:le } = await db.from('cards').select('id,topic,question');
   if (le) throw le;
   cardIdMap = {};
@@ -775,10 +771,10 @@ async function loadReviews() {
   if (!profile) return;
   streak = profile.streak || 0;
 
-  const { data, error } = await db.from('reviews').select('*').eq('profile_name', activeProfileName);
+  // FIX 1: query by profile_id (FK), not profile_name (doesn't exist on reviews table)
+  const { data, error } = await db.from('reviews').select('*').eq('profile_id', profile.id);
   if (error) throw error;
 
-  // Reverse map: card UUID → cid string
   const rev = {};
   Object.entries(cardIdMap).forEach(([k, id]) => rev[id] = k);
 
@@ -805,8 +801,12 @@ async function upsertReview(card, s) {
   const cardId = cardIdMap[cid(card)];
   if (!cardId) return;
 
+  const profile = profileMap[activeProfileName];
+  if (!profile) return;
+
+  // FIX 2 (already correct in your file): uses profile_id and correct onConflict key
   const { error } = await db.from('reviews').upsert({
-    profile_name: activeProfileName,
+    profile_id: profile.id,
     card_id: cardId,
     ease: s.ease,
     interval_days: s.interval,
@@ -817,34 +817,22 @@ async function upsertReview(card, s) {
     mastered: s.mastered,
     last_reviewed: s.last,
     updated_at: new Date().toISOString()
-  }, { onConflict: 'profile_name,card_id' });
+  }, { onConflict: 'profile_id,card_id' });
 
   if (error) console.error('Review upsert:', error);
 
-  const profile = profileMap[activeProfileName];
-  if (profile) {
-    await db.from('profiles')
-      .update({ streak, last_study: new Date().toDateString() })
-      .eq('id', profile.id);
-
-    profile.streak = streak;
-  }
-}
-
-  // Persist streak to profile row
+  // FIX 3: removed the orphaned duplicate block that was here — this is the only streak save
   await db.from('profiles')
     .update({ streak, last_study: new Date().toDateString() })
     .eq('id', profile.id);
 
-  // Keep local profileMap in sync
-  if (profileMap[activeProfileName]) profileMap[activeProfileName].streak = streak;
+  profileMap[activeProfileName].streak = streak;
 }
 
 // ── Init ───────────────────────────────────────────────────────────────────
 async function init() {
   updateProfileUI();
 
-  // Show local data immediately so the app feels instant
   reviewsCache = loadLocalReviews();
   streak       = loadLocalStreak();
   buildDeck();
@@ -861,11 +849,10 @@ async function init() {
     updateReviewQueue();
   } catch(e) {
     console.error('Supabase unavailable, running from local cache:', e);
-    // Check if the error looks like missing tables
     if (e && e.code === '42P01') {
       showSetupModal();
     }
-   setSyncStatus('error', 'Sync error');
+    setSyncStatus('error', 'Sync error');
   }
 }
 
@@ -1069,7 +1056,8 @@ async function resetProgress() {
 
   if (supabaseReady && profile) {
     setSyncStatus('loading', 'Resetting…');
-    await db.from('reviews').delete().eq('profile_name', activeProfileName);
+    // FIX 3: was .eq('profile_name', activeProfileName) — reviews has no such column
+    await db.from('reviews').delete().eq('profile_id', profile.id);
     await db.from('profiles').update({ streak: 0, last_study: '' }).eq('id', profile.id);
   }
 

@@ -68,10 +68,7 @@ select {
   margin: 0 auto;
   padding: 16px 14px calc(92px + var(--safe-bottom));
 }
-  .hint kbd {
-  display: inline-block;
-  margin: 0 2px;
-}
+  
 
 /* ── Profile Bar ─────────────────────────────── */
 .profile-bar{
@@ -259,7 +256,10 @@ select {
   max-width:72ch;
 }
 .hint{ color:var(--muted);font-size:13px;text-align:center; }
-
+.hint kbd {
+  display: inline-block;
+  margin: 0 2px;
+}
 /* ── Actions / Nav ───────────────────────────── */
 .actions{
   display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
@@ -625,9 +625,9 @@ kbd{
           </div>
           <div class="q" id="cardQ">Loading…</div>
         </div>
-        <div class="face-footer">
+                <div class="face-footer">
           <div class="hint">Tap the card to reveal the answer.</div>
-          <div class="hint">Tap the card to reveal the answer.</div> <div class="hint"><kbd>Space</kbd> flip · <kbd>←</kbd> <kbd>→</kbd> move · <kbd>1</kbd>–<kbd>4</kbd> grade</div>
+          <div class="hint"><kbd>Space</kbd> flip &nbsp;·&nbsp; <kbd>←</kbd> <kbd>→</kbd> move &nbsp;·&nbsp; <kbd>1</kbd>–<kbd>4</kbd> grade</div>
         </div>
       </div>
       <div class="face back">

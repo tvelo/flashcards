@@ -798,14 +798,17 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
             <div class="topic" id="cardTopicB">Topic</div>
             <div class="difficulty" id="cardMetaB">Answer</div>
           </div>
-          <div class="compare-box">
-            <div class="compare-card" id="yourAnswerBox">
-  <strong>Your answer</strong>
-  <p id="typedAnswerView">—</p>
-</div><div class="compare-card" id="officialAnswerBox">
-  <strong>Official answer</strong>
-  <p class="a" id="cardA"></p>
+          <div class="compare-box" id="compareBox">
+  <div class="compare-card" id="yourAnswerBox">
+    <strong>Your answer</strong>
+    <p id="typedAnswerView">—</p>
+  </div>
+  <div class="compare-card" id="officialAnswerBox">
+    <strong>Official answer</strong>
+    <p class="a" id="cardA"></p>
+  </div>
 </div>
+<p class="a" id="cardASolo" style="text-align:center; white-space:pre-wrap;"></p>
           </div>
         </div>
       </div>
@@ -1088,7 +1091,8 @@ function updateProfileUI() {
   document.getElementById('answerInput').placeholder = typeMode ? 'Type your answer here…' : 'Type mode is off';
 document.getElementById('yourAnswerBox').style.display = typeMode ? '' : 'none';
 document.getElementById('officialAnswerBox').style.display = typeMode ? '' : 'none';
-  document.querySelector('.compare-box').style.display = typeMode ? 'grid' : 'block';
+document.getElementById('compareBox').style.display = typeMode ? 'grid' : 'none';
+document.getElementById('cardASolo').style.display = typeMode ? 'none' : 'block';
 }
 
 function setTypeMode(on){
@@ -1362,7 +1366,8 @@ function render() {
   const s = cardState(c);
 
   document.getElementById('cardQ').textContent      = c.q;
-  document.getElementById('cardA').textContent      = c.a;
+ document.getElementById('cardA').textContent      = c.a;
+document.getElementById('cardASolo').textContent  = c.a;
   document.getElementById('cardTopic').textContent  = c.t;
   document.getElementById('cardTopicB').textContent = c.t;
   document.getElementById('cardMeta').textContent   = `Seen ${s.seen} × · Ease ${s.ease.toFixed(2)}`;

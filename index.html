@@ -775,7 +775,7 @@ async function loadReviews() {
   if (!profile) return;
   streak = profile.streak || 0;
 
-  const { data, error } = await db.from('reviews').select('*').eq('profile_id', profile.id);
+  const { data, error } = await db.from('reviews').select('*').eq('profile_name', activeProfileName);
   if (error) throw error;
 
   // Reverse map: card UUID → cid string
@@ -802,24 +802,34 @@ async function loadReviews() {
 }
 
 async function upsertReview(card, s) {
-  const profile = profileMap[activeProfileName];
-  const cardId  = cardIdMap[cid(card)];
-  if (!profile || !cardId) return;
+  const cardId = cardIdMap[cid(card)];
+  if (!cardId) return;
 
   const { error } = await db.from('reviews').upsert({
-    profile_id:    profile.id,
-    card_id:       cardId,
-    ease:          s.ease,
+    profile_name: activeProfileName,
+    card_id: cardId,
+    ease: s.ease,
     interval_days: s.interval,
-    reps:          s.reps,
-    lapses:        s.lapses,
-    due:           s.due,
-    seen:          s.seen,
-    mastered:      s.mastered,
+    reps: s.reps,
+    lapses: s.lapses,
+    due: s.due,
+    seen: s.seen,
+    mastered: s.mastered,
     last_reviewed: s.last,
-    updated_at:    new Date().toISOString()
-  }, { onConflict:'profile_id,card_id' });
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'profile_name,card_id' });
+
   if (error) console.error('Review upsert:', error);
+
+  const profile = profileMap[activeProfileName];
+  if (profile) {
+    await db.from('profiles')
+      .update({ streak, last_study: new Date().toDateString() })
+      .eq('id', profile.id);
+
+    profile.streak = streak;
+  }
+}
 
   // Persist streak to profile row
   await db.from('profiles')
@@ -855,7 +865,7 @@ async function init() {
     if (e && e.code === '42P01') {
       showSetupModal();
     }
-    setSyncStatus('error', 'Offline mode');
+   setSyncStatus('error', 'Sync error');
   }
 }
 
@@ -1054,18 +1064,21 @@ function grade(score) {
 
 async function resetProgress() {
   if (!confirm(`Reset all progress for ${activeProfileName}? This cannot be undone.`)) return;
+
   const profile = profileMap[activeProfileName];
+
   if (supabaseReady && profile) {
     setSyncStatus('loading', 'Resetting…');
-    await db.from('reviews').delete().eq('profile_id', profile.id);
-    await db.from('profiles').update({ streak:0, last_study:'' }).eq('id', profile.id);
+    await db.from('reviews').delete().eq('profile_name', activeProfileName);
+    await db.from('profiles').update({ streak: 0, last_study: '' }).eq('id', profile.id);
   }
+
   localStorage.removeItem(lk('reviews'));
   localStorage.removeItem(lk('streak'));
   reviewsCache = {};
-  streak       = 0;
-  flipped      = false;
-  currentId    = null;
+  streak = 0;
+  flipped = false;
+  currentId = null;
   setSyncStatus('ok');
   buildDeck();
   updateReviewQueue();

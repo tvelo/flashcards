@@ -7,92 +7,98 @@
 <link rel="manifest" href="manifest.json" />
 <style>
 :root{
-  --bg: #0b0f17;
-  --panel: rgba(20, 26, 38, 0.82);
-  --panel-2: rgba(28, 36, 52, 0.88);
-  --text: #edf2ff;
-  --muted: #9aa8c7;
-  --line: rgba(255,255,255,0.10);
-  --line-2: rgba(255,255,255,0.14);
-  --good: #5bd68a;
-  --bad: #ff6b6b;
-  --accent: #7aa8ff;
-  --accent-2: #9a7aff;
-  --shadow: 0 18px 55px rgba(0,0,0,.35);
-  --radius: 22px;
-  --radius-sm: 14px;
-  --tap: 48px;
-  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --bg:#0b0f17;
+  --bg-2:#0e1420;
+  --panel:rgba(20, 26, 38, 0.82);
+  --panel-2:rgba(28, 36, 52, 0.88);
+  --text:#edf2ff;
+  --muted:#9aa8c7;
+  --line:rgba(255,255,255,0.10);
+  --line-2:rgba(255,255,255,0.14);
+  --good:#5bd68a;
+  --bad:#ff6b6b;
+  --accent:#7aa8ff;
+  --accent-2:#9a7aff;
+  --shadow:0 18px 55px rgba(0,0,0,.35);
+  --radius:22px;
+  --radius-sm:14px;
+  --tap:48px;
+  --safe-bottom:env(safe-area-inset-bottom, 0px);
 }
 *{box-sizing:border-box}
 html,body{height:100%}
 body{
   margin:0;
-  font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
-
-  background:
-    radial-gradient(
-      circle at top,
-      rgba(122,168,255,.14) 0%,
-      rgba(122,168,255,.08) 25%,
-      rgba(122,168,255,0) 70%
-    ),
-    radial-gradient(
-      circle at 20% 20%,
-      rgba(154,122,255,.10) 0%,
-      rgba(154,122,255,.04) 20%,
-      rgba(154,122,255,0) 60%
-    ),
-    var(--bg);
-
-  background-color: var(--bg);
-  background-attachment: fixed;
-
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
   color:var(--text);
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(circle at top, rgba(122,168,255,.14) 0%, rgba(122,168,255,.08) 25%, rgba(122,168,255,0) 70%),
+    radial-gradient(circle at 20% 20%, rgba(154,122,255,.10) 0%, rgba(154,122,255,.04) 20%, rgba(154,122,255,0) 60%),
+    var(--bg);
+  background-color:var(--bg);
+  background-attachment:fixed;
 }
-button, select, input { font: inherit; }
-button {
+button,input,textarea,select{font:inherit}
+button{
   border:0;
-  border-radius: 16px;
-  min-height: var(--tap);
-  padding: 0 16px;
-  background: linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
-  color: var(--text);
-  border: 1px solid var(--line);
-  box-shadow: 0 6px 20px rgba(0,0,0,.15);
+  border-radius:16px;
+  min-height:var(--tap);
+  padding:0 16px;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  color:var(--text);
+  border:1px solid var(--line);
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
   cursor:pointer;
-  touch-action: manipulation;
+  touch-action:manipulation;
 }
-button:active { transform: translateY(1px) scale(.99); }
-button.secondary { background: transparent; }
-button.good { border-color: rgba(91,214,138,.35); color: #d8ffe7; }
-button.bad { border-color: rgba(255,107,107,.35); color: #ffd9d9; }
-select {
-  min-height: var(--tap);
-  padding: 0 14px;
-  border-radius: 16px;
-  border: 1px solid var(--line);
-  background: rgba(255,255,255,.05);
-  color: var(--text);
-  width: 100%;
+button:active{transform:translateY(1px) scale(.99)}
+button.secondary{background:transparent}
+button.good{border-color:rgba(91,214,138,.35); color:#d8ffe7}
+button.bad{border-color:rgba(255,107,107,.35); color:#ffd9d9}
+button.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 4px 18px rgba(122,168,255,.35);
+}
+select,textarea,input{
+  border:1px solid var(--line);
+  color:var(--text);
+  background:rgba(255,255,255,.05);
+}
+select{
+  min-height:var(--tap);
+  padding:0 14px;
+  border-radius:16px;
+  width:100%;
+}
+textarea{
+  width:100%;
+  min-height:104px;
+  resize:vertical;
+  border-radius:18px;
+  padding:14px 16px;
+  line-height:1.5;
+  background:rgba(255,255,255,.05);
+  outline:none;
+}
+textarea:focus,select:focus,input:focus,button:focus-visible{
+  outline:2px solid rgba(122,168,255,.35);
+  outline-offset:2px;
 }
 .wrap{
-  max-width: 900px;
-  margin: 0 auto;
-  padding: 16px 14px calc(92px + var(--safe-bottom));
-    position: relative;
-  isolation: isolate;
+  max-width:900px;
+  margin:0 auto;
+  padding:16px 14px calc(96px + var(--safe-bottom));
+  position:relative;
+  isolation:isolate;
 }
-  .card, .face {
-  transform: translateZ(0);
-  will-change: transform;
+.card,.face{
+  transform:translateZ(0);
+  will-change:transform;
 }
- 
-  
-
-/* ── Profile Bar ─────────────────────────────── */
 .profile-bar{
   display:flex;
   align-items:center;
@@ -102,9 +108,8 @@ select {
   border-radius:var(--radius-sm);
   background:rgba(255,255,255,.04);
   border:1px solid var(--line);
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transform: translateZ(0);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
 }
 .profile-label{
   color:var(--muted);
@@ -112,10 +117,10 @@ select {
   white-space:nowrap;
   flex-shrink:0;
 }
-.profile-pills{ display:flex; gap:8px; }
+.profile-pills{display:flex; gap:8px; flex-wrap:wrap}
 .profile-pill{
   min-height:36px !important;
-  padding:0 22px !important;
+  padding:0 18px !important;
   border-radius:999px !important;
   font-size:14px !important;
   font-weight:700 !important;
@@ -123,14 +128,6 @@ select {
   border:1px solid var(--line) !important;
   color:var(--muted) !important;
   box-shadow:none !important;
-  transition:all .2s ease;
-  letter-spacing:.01em;
-}
-.profile-pill.active{
-  background:linear-gradient(135deg,var(--accent),var(--accent-2)) !important;
-  border-color:transparent !important;
-  color:#fff !important;
-  box-shadow:0 4px 18px rgba(122,168,255,.35) !important;
 }
 .sync-chip{
   margin-left:auto;
@@ -150,12 +147,11 @@ select {
   width:7px;height:7px;border-radius:50%;
   background:var(--muted);flex-shrink:0;
 }
-.sync-dot.ok{ background:var(--good); }
-.sync-dot.loading{ background:#f0c040; animation:sdpulse .9s ease-in-out infinite; }
-.sync-dot.error{ background:var(--bad); }
+.sync-dot.ok{background:var(--good)}
+.sync-dot.loading{background:#f0c040; animation:sdpulse .9s ease-in-out infinite}
+.sync-dot.error{background:var(--bad)}
 @keyframes sdpulse{0%,100%{opacity:1}50%{opacity:.25}}
 
-/* ── Header ──────────────────────────────────── */
 .header{
   display:flex;
   justify-content:space-between;
@@ -163,57 +159,86 @@ select {
   align-items:flex-start;
   margin-bottom:14px;
 }
-.title h1{font-size:clamp(22px,4vw,36px);line-height:1.05;margin:0 0 6px}
+.title h1{
+  font-size:clamp(22px,4vw,36px);
+  line-height:1.05;
+  margin:0 0 6px;
+}
 .title p{margin:0;color:var(--muted);max-width:60ch;line-height:1.45}
 .pill-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
 .pill{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:10px 12px;border-radius:999px;
-  background:rgba(255,255,255,.05);border:1px solid var(--line);
-  color:var(--muted);font-size:13px;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
 }
 .controls{
-  display:grid;grid-template-columns:1.2fr .8fr .8fr .8fr;
-  gap:10px;margin:16px 0 14px;
+  display:grid;
+  grid-template-columns:1.2fr .8fr .8fr .8fr .9fr;
+  gap:10px;
+  margin:16px 0 14px;
 }
-@media(max-width:720px){
-  .header{flex-direction:column;}
-  .pill-row{justify-content:flex-start;}
-  .controls{grid-template-columns:1fr 1fr;}
-  .profile-bar{flex-wrap:wrap;}
+@media(max-width:820px){
+  .controls{grid-template-columns:1fr 1fr 1fr}
+}
+@media(max-width:640px){
+  .header{flex-direction:column}
+  .pill-row{justify-content:flex-start}
+  .controls{grid-template-columns:1fr 1fr}
+  .profile-bar{flex-wrap:wrap}
 }
 .stats{
-  display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-bottom:14px;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:14px;
 }
 .stat{
-  padding:14px;border-radius:var(--radius-sm);
-  background:rgba(255,255,255,.05);border:1px solid var(--line);
+  padding:14px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
 }
 .stat .num{font-size:22px;font-weight:700;line-height:1}
 .stat .label{color:var(--muted);font-size:12px;margin-top:6px}
 @media(max-width:640px){
-  .stats{grid-template-columns:repeat(2,1fr);}
-  .actions{grid-template-columns:1fr 1fr;}
-  .actions button{min-height:50px;}
-  .card{min-height:54vh;}
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .actions{grid-template-columns:1fr 1fr}
+  .actions button{min-height:50px}
+  .card{min-height:58vh}
 }
 .progress{
-  margin-bottom:14px;padding:12px 14px;border-radius:var(--radius-sm);
-  background:rgba(255,255,255,.04);border:1px solid var(--line);
+  margin-bottom:14px;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
 }
 .progress-top{
-  display:flex;justify-content:space-between;gap:12px;
-  align-items:center;margin-bottom:10px;color:var(--muted);font-size:14px;
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:10px;
+  color:var(--muted);
+  font-size:14px;
 }
 .bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
 .fill{
-  height:100%;width:0%;
+  height:100%;
+  width:0%;
   background:linear-gradient(90deg,var(--accent),var(--accent-2));
-  border-radius:999px;transition:width .3s ease;
+  border-radius:999px;
+  transition:width .3s ease;
 }
 
-/* ── Card ────────────────────────────────────── */
-.card-shell{ perspective:1400px; margin:16px 0 14px; }
+/* card */
+.card-shell{perspective:1400px; margin:16px 0 14px}
 .card{
   position:relative;
   width:100%;
@@ -222,21 +247,22 @@ select {
   transition:transform .45s cubic-bezier(.2,.8,.2,1);
   border-radius:calc(var(--radius) + 4px);
 }
-.card.flipped{ transform:rotateY(180deg); }
+.card.flipped{transform:rotateY(180deg)}
 .face{
-  position:absolute;inset:0;
-  backface-visibility:hidden;-webkit-backface-visibility:hidden;
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
   border-radius:calc(var(--radius) + 4px);
   background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.05));
   border:1px solid var(--line-2);
   box-shadow:var(--shadow);
   padding:20px;
-  display:flex;flex-direction:column;
+  display:flex;
+  flex-direction:column;
   gap:12px;
 }
-.back{ transform:rotateY(180deg); }
-
-/* Centering fix — main content area grows to fill and centers its content */
+.back{transform:rotateY(180deg)}
 .face-body{
   flex:1;
   display:flex;
@@ -247,21 +273,31 @@ select {
   text-align:center;
 }
 .face-footer{
-  display:flex;flex-direction:column;gap:6px;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
   align-items:center;
 }
 .meta{
-  display:flex;gap:8px;flex-wrap:wrap;
-  align-items:center;justify-content:center;
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
   width:100%;
 }
 .topic{
-  display:inline-flex;align-items:center;gap:8px;
-  padding:7px 11px;border-radius:999px;
-  background:rgba(122,168,255,.12);border:1px solid rgba(122,168,255,.20);
-  font-size:12px;color:#dce7ff;
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(122,168,255,.12);
+  border:1px solid rgba(122,168,255,.20);
+  font-size:12px;
+  color:#dce7ff;
 }
-.difficulty{ font-size:12px;color:var(--muted); }
+.difficulty{font-size:12px;color:var(--muted)}
 .q{
   font-size:clamp(21px,4.7vw,33px);
   line-height:1.22;
@@ -279,28 +315,89 @@ select {
   text-align:center;
   max-width:72ch;
 }
-.hint{ color:var(--muted);font-size:13px;text-align:center; }
-.hint kbd {
-  display: inline-block;
-  margin: 0 2px;
+.hint{color:var(--muted);font-size:13px;text-align:center}
+.kbd{
+  display:inline-block;
+  margin:0 2px;
+  padding:2px 6px;
+  border:1px solid var(--line);
+  border-bottom-width:2px;
+  border-radius:6px;
+  background:rgba(255,255,255,.05);
+  color:var(--text);
+  font-size:12px;
 }
-/* ── Actions / Nav ───────────────────────────── */
-.actions{
-  display:grid;grid-template-columns:1fr 1fr 1fr 1fr;
-  gap:10px;margin-top:14px;
+.type-panel{
+  width:100%;
+  display:none;
+  gap:10px;
+  flex-direction:column;
 }
-.actions button{ padding:0 12px;min-height:54px;font-weight:600; }
-.bottom-nav{
-  position:sticky;bottom:calc(10px + var(--safe-bottom));
-  display:flex;gap:10px;justify-content:space-between;margin-top:14px;
-  padding:10px;border-radius:18px;background:rgba(10,14,22,.78);
-  backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:var(--shadow);
+.type-panel.show{display:flex}
+.type-panel .row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
 }
-.bottom-nav .group{ display:flex;gap:10px;flex:1; }
-.bottom-nav button{ flex:1; }
+.type-panel .row button{flex:1}
+.check-note{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.45;
+  text-align:left;
+}
+.compare-box{
+  width:100%;
+  display:grid;
+  gap:10px;
+  text-align:left;
+}
+.compare-card{
+  padding:12px 13px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+}
+.compare-card strong{
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  color:#dce7ff;
+  letter-spacing:.01em;
+  text-transform:uppercase;
+}
+.compare-card p{
+  margin:0;
+  color:var(--text);
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+.compare-card.muted p{color:var(--muted)}
 
-/* ── Study Guide ─────────────────────────────── */
-.study-guide{ margin:14px 0 16px; }
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.actions button{padding:0 12px;min-height:54px;font-weight:600}
+.bottom-nav{
+  position:sticky;
+  bottom:calc(10px + var(--safe-bottom));
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  margin-top:14px;
+  padding:10px;
+  border-radius:18px;
+  background:rgba(10,14,22,.78);
+  backdrop-filter:blur(14px);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.bottom-nav .group{display:flex;gap:10px;flex:1}
+.bottom-nav button{flex:1}
+.study-guide{margin:14px 0 16px}
 .study-guide details{
   border-radius:var(--radius-sm);
   border:1px solid var(--line);
@@ -308,53 +405,67 @@ select {
   padding:12px 14px;
 }
 .study-guide summary{
-  cursor:pointer;list-style:none;font-size:15px;font-weight:700;
-  display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;
+  list-style:none;
+  font-size:15px;
+  font-weight:700;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
 }
-.study-guide summary::-webkit-details-marker{display:none;}
+.study-guide summary::-webkit-details-marker{display:none}
 .study-guide summary::after{
-  content:'Tap to open';font-size:12px;color:var(--muted);font-weight:500;
+  content:'Tap to open';
+  font-size:12px;
+  color:var(--muted);
+  font-weight:500;
 }
 .study-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:12px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:12px;
 }
 .study-step{
-  padding:12px;border-radius:14px;border:1px solid var(--line);
-  background:rgba(255,255,255,.04);line-height:1.45;font-size:14px;
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  line-height:1.45;
+  font-size:14px;
 }
-.study-note{ margin-top:12px;color:var(--muted);font-size:13px;line-height:1.5; }
-@media(max-width:720px){ .study-grid{grid-template-columns:1fr;} }
+.study-note{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.5}
+.footer-note{margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5}
+@media(max-width:720px){.study-grid{grid-template-columns:1fr}}
 
-.footer-note{ margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5; }
-kbd{
-  padding:2px 6px;border:1px solid var(--line);border-bottom-width:2px;
-  border-radius:6px;background:rgba(255,255,255,.05);color:var(--text);font-size:12px;
-}
-
-/* ── SQL Setup Modal ─────────────────────────── */
 #setupModal{
-  display:none;position:fixed;inset:0;z-index:999;
-  background:rgba(0,0,0,.82);backdrop-filter:blur(10px);
-  align-items:center;justify-content:center;padding:16px;
-  animation:modalIn .2s ease;
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(10px);
+  align-items:center;
+  justify-content:center;
+  padding:16px;
 }
-@keyframes modalIn{from{opacity:0}to{opacity:1}}
-#setupModal.show{ display:flex; }
-
+#setupModal.show{display:flex}
 .sql-modal{
   background:linear-gradient(160deg,#0d1220,#0a0e1a);
   border:1px solid rgba(122,168,255,.18);
   border-radius:20px;
-  width:100%;max-width:740px;
+  width:100%;
+  max-width:740px;
   box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);
   max-height:92vh;
-  display:flex;flex-direction:column;
+  display:flex;
+  flex-direction:column;
   overflow:hidden;
 }
-
-/* header bar */
 .sql-modal-header{
-  display:flex;align-items:center;gap:12px;
+  display:flex;
+  align-items:center;
+  gap:12px;
   padding:18px 20px 14px;
   border-bottom:1px solid var(--line);
   flex-shrink:0;
@@ -366,31 +477,38 @@ kbd{
   display:flex;align-items:center;justify-content:center;
   font-size:18px;
 }
-.sql-modal-title{ flex:1; }
-.sql-modal-title h2{ margin:0;font-size:17px;font-weight:700;letter-spacing:-.01em; }
-.sql-modal-title p{ margin:3px 0 0;font-size:12px;color:var(--muted); }
+.sql-modal-title{flex:1}
+.sql-modal-title h2{margin:0;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.sql-modal-title p{margin:3px 0 0;font-size:12px;color:var(--muted)}
 .sql-modal-close{
   width:32px;height:32px;border-radius:8px;flex-shrink:0;
-  background:rgba(255,255,255,.06);border:1px solid var(--line);
-  color:var(--muted);font-size:18px;line-height:1;
-  display:flex;align-items:center;justify-content:center;
-  cursor:pointer;min-height:unset;padding:0;box-shadow:none;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:18px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  min-height:unset;
+  padding:0;
+  box-shadow:none;
 }
-.sql-modal-close:hover{ background:rgba(255,255,255,.1);color:var(--text); }
-
-/* steps */
+.sql-modal-close:hover{background:rgba(255,255,255,.1);color:var(--text)}
 .sql-modal-steps{
-  display:flex;gap:0;padding:14px 20px 12px;
+  display:flex;
+  gap:0;
+  padding:14px 20px 12px;
   border-bottom:1px solid var(--line);
   flex-shrink:0;
   overflow-x:auto;
 }
-.sql-step{
-  display:flex;align-items:center;gap:8px;flex-shrink:0;
-}
+.sql-step{display:flex;align-items:center;gap:8px;flex-shrink:0}
 .sql-step-num{
   width:22px;height:22px;border-radius:50%;flex-shrink:0;
-  background:rgba(255,255,255,.08);border:1px solid var(--line);
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--line);
   font-size:11px;font-weight:700;color:var(--muted);
   display:flex;align-items:center;justify-content:center;
   transition:all .25s ease;
@@ -400,50 +518,78 @@ kbd{
   border-color:transparent;color:#fff;
 }
 .sql-step.done .sql-step-num{
-  background:rgba(91,214,138,.15);border-color:rgba(91,214,138,.3);color:var(--good);
+  background:rgba(91,214,138,.15);
+  border-color:rgba(91,214,138,.3);
+  color:var(--good);
 }
-.sql-step-label{ font-size:12px;color:var(--muted);white-space:nowrap; }
-.sql-step.active .sql-step-label{ color:var(--text); }
-.sql-step.done .sql-step-label{ color:var(--good); }
-.sql-step-arrow{ margin:0 8px;color:rgba(255,255,255,.15);font-size:12px;flex-shrink:0; }
-
-/* editor area */
+.sql-step-label{font-size:12px;color:var(--muted);white-space:nowrap}
+.sql-step.active .sql-step-label{color:var(--text)}
+.sql-step.done .sql-step-label{color:var(--good)}
+.sql-step-arrow{margin:0 8px;color:rgba(255,255,255,.15);font-size:12px;flex-shrink:0}
 .sql-editor-wrap{
-  flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;
+  flex:1;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
 }
 .sql-editor-toolbar{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:8px 14px;background:rgba(0,0,0,.25);border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 14px;
+  background:rgba(0,0,0,.25);
+  border-bottom:1px solid var(--line);
+  gap:10px;
   flex-shrink:0;
 }
 .sql-editor-lang{
-  display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  color:var(--muted);
 }
 .sql-lang-dot{
   width:8px;height:8px;border-radius:50%;
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
 }
-.sql-editor-actions{ display:flex;gap:6px; }
+.sql-editor-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
 .sql-btn{
-  display:inline-flex;align-items:center;gap:5px;
-  padding:5px 11px;border-radius:7px;font-size:12px;font-weight:600;
-  border:1px solid var(--line);background:rgba(255,255,255,.06);
-  color:var(--text);cursor:pointer;min-height:unset;box-shadow:none;
-  transition:all .15s ease;
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 11px;
+  border-radius:7px;
+  font-size:12px;
+  font-weight:600;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  cursor:pointer;
+  min-height:unset;
+  box-shadow:none;
 }
-.sql-btn:hover{ background:rgba(255,255,255,.1); }
+.sql-btn:hover{background:rgba(255,255,255,.1)}
 .sql-btn.primary{
   background:linear-gradient(135deg,var(--accent),var(--accent-2));
-  border-color:transparent;color:#fff;
+  border-color:transparent;
+  color:#fff;
   box-shadow:0 4px 14px rgba(122,168,255,.3);
 }
-.sql-btn.primary:hover{ filter:brightness(1.1); }
-.sql-btn.success{ background:rgba(91,214,138,.15);border-color:rgba(91,214,138,.3);color:var(--good); }
-
+.sql-btn.success{
+  background:rgba(91,214,138,.15);
+  border-color:rgba(91,214,138,.3);
+  color:var(--good);
+}
 .sql-editor-body{
-  display:flex;flex:1;overflow:auto;min-height:0;
-  font-family:'JetBrains Mono',ui-monospace,monospace;
-  font-size:12.5px;line-height:1.7;
+  display:flex;
+  flex:1;
+  overflow:auto;
+  min-height:0;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12.5px;
+  line-height:1.7;
 }
 .sql-line-nums{
   padding:14px 0 14px 14px;
@@ -453,58 +599,53 @@ kbd{
   flex-shrink:0;
   min-width:38px;
 }
-.sql-line-nums span{ display:block; }
+.sql-line-nums span{display:block}
 .sql-code{
   padding:14px 14px 14px 10px;
   flex:1;
   color:#c9d8ff;
   white-space:pre;
 }
-/* syntax colours */
-.kw{ color:#7aa8ff; font-weight:600; }     /* keywords */
-.kw2{ color:#c792ea; }                      /* secondary keywords */
-.type{ color:#ffcb6b; }                     /* types */
-.fn{ color:#82aaff; }                       /* functions */
-.str{ color:#c3e88d; }                      /* strings */
-.cmt{ color:rgba(255,255,255,.28); font-style:italic; } /* comments */
-.ref{ color:#f78c6c; }                      /* references */
-.num{ color:#f78c6c; }
-
-/* footer */
+.kw{color:#7aa8ff;font-weight:600}
+.type{color:#ffcb6b}
+.fn{color:#82aaff}
+.str{color:#c3e88d}
+.cmt{color:rgba(255,255,255,.28);font-style:italic}
+.num{color:#f78c6c}
 .sql-modal-footer{
-  display:flex;align-items:center;justify-content:space-between;gap:10px;
-  padding:14px 20px;border-top:1px solid var(--line);flex-shrink:0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px 20px;
+  border-top:1px solid var(--line);
+  flex-shrink:0;
   flex-wrap:wrap;
 }
-.sql-footer-note{ font-size:12px;color:var(--muted);flex:1;min-width:120px; }
-.sql-footer-btns{ display:flex;gap:8px;flex-wrap:wrap; }
-
+.sql-footer-note{font-size:12px;color:var(--muted);flex:1;min-width:120px}
+.sql-footer-btns{display:flex;gap:8px;flex-wrap:wrap}
 @media(max-width:560px){
-  .sql-modal-steps{ gap:0; }
-  .sql-step-label{ display:none; }
-  .sql-modal-footer{ flex-direction:column;align-items:stretch; }
-  .sql-footer-btns{ flex-direction:column; }
-  .sql-btn{ justify-content:center; }
+  .sql-modal-steps{gap:0}
+  .sql-step-label{display:none}
+  .sql-modal-footer{flex-direction:column;align-items:stretch}
+  .sql-footer-btns{flex-direction:column}
+  .sql-btn{justify-content:center}
 }
 </style>
 </head>
 <body>
 
-<!-- SQL Setup Modal ── redesigned editor -->
 <div id="setupModal">
   <div class="sql-modal">
-
-    <!-- Header -->
     <div class="sql-modal-header">
       <div class="sql-modal-icon">🗄️</div>
       <div class="sql-modal-title">
         <h2>Database Setup Required</h2>
-        <p>Your Supabase tables don't exist yet — run the SQL below once to create them.</p>
+        <p>Your Supabase tables do not exist yet — run the SQL below once to create them.</p>
       </div>
       <button class="sql-modal-close" onclick="document.getElementById('setupModal').classList.remove('show')" aria-label="Close">✕</button>
     </div>
 
-    <!-- Step tracker -->
     <div class="sql-modal-steps">
       <div class="sql-step active" id="step1">
         <div class="sql-step-num">1</div>
@@ -527,20 +668,12 @@ kbd{
       </div>
     </div>
 
-    <!-- Editor -->
     <div class="sql-editor-wrap">
       <div class="sql-editor-toolbar">
-        <div class="sql-editor-lang">
-          <div class="sql-lang-dot"></div>
-          PostgreSQL · Supabase
-        </div>
+        <div class="sql-editor-lang"><div class="sql-lang-dot"></div>PostgreSQL · Supabase</div>
         <div class="sql-editor-actions">
-          <button class="sql-btn" id="openSupabaseBtn" onclick="window.open('https://supabase.com/dashboard/project/_/sql/new','_blank')">
-            ↗ Open SQL Editor
-          </button>
-          <button class="sql-btn primary" id="copyBtn" onclick="copySQL()">
-            ⎘ Copy SQL
-          </button>
+          <button class="sql-btn" id="openSupabaseBtn" onclick="window.open('https://supabase.com/dashboard/project/_/sql/new','_blank')">↗ Open SQL Editor</button>
+          <button class="sql-btn primary" id="copyBtn" onclick="copySQL()">⎘ Copy SQL</button>
         </div>
       </div>
       <div class="sql-editor-body">
@@ -549,23 +682,17 @@ kbd{
       </div>
     </div>
 
-    <!-- Footer -->
     <div class="sql-modal-footer">
-      <div class="sql-footer-note" id="sqlFooterNote">
-        Paste into <strong>Supabase → SQL Editor</strong> and click <strong>Run</strong>.
-      </div>
+      <div class="sql-footer-note" id="sqlFooterNote">Paste into <strong>Supabase → SQL Editor</strong> and click <strong>Run</strong>.</div>
       <div class="sql-footer-btns">
         <button class="sql-btn" onclick="document.getElementById('setupModal').classList.remove('show')">Dismiss</button>
         <button class="sql-btn primary" onclick="location.reload()">✓ Done, reload</button>
       </div>
     </div>
-
   </div>
 </div>
 
 <div class="wrap">
-
-  <!-- ── Profile Bar ── -->
   <div class="profile-bar">
     <span class="profile-label">Studying as</span>
     <div class="profile-pills">
@@ -581,12 +708,12 @@ kbd{
   <div class="header">
     <div class="title">
       <h1>AQA Psychology: Social Influence</h1>
-      <p>Built for active recall, spaced repetition, and mobile use. Try answering before you flip; then grade yourself so weak cards come back more often.</p>
+      <p>Built for active recall, spaced repetition, and mobile use. Type your answer, reveal, compare, then grade it yourself so weak cards return sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
       <div class="pill">Swipe ←/→ to move</div>
-      <div class="pill">Grade after recall</div>
+      <div class="pill">Type mode: optional</div>
     </div>
   </div>
 
@@ -594,11 +721,11 @@ kbd{
     <details>
       <summary>How to study with this deck</summary>
       <div class="study-grid">
-        <div class="study-step"><strong>1.</strong> Say the answer from memory before you flip.</div>
-        <div class="study-step"><strong>2.</strong> Check the answer only after you have tried.</div>
+        <div class="study-step"><strong>1.</strong> Say the answer from memory before you reveal it.</div>
+        <div class="study-step"><strong>2.</strong> Use type mode when you want to write your own answer first.</div>
         <div class="study-step"><strong>3.</strong> Grade honestly so weak cards come back sooner.</div>
       </div>
-      <div class="study-note">Best on phones: use one thumb to flip and the other to grade. Swipe left or right to move through cards quickly.</div>
+      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly.</div>
     </details>
   </section>
 
@@ -620,6 +747,7 @@ kbd{
       <option value="weak">Weak only</option>
       <option value="mixed">Mixed topics</option>
     </select>
+    <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
     <button id="shuffleBtn" class="secondary">Shuffle</button>
     <button id="resetBtn" class="secondary">Reset progress</button>
   </div>
@@ -648,19 +776,38 @@ kbd{
             <div class="difficulty" id="cardMeta">Think first · active recall</div>
           </div>
           <div class="q" id="cardQ">Loading…</div>
+
+          <div class="type-panel" id="typePanel">
+            <textarea id="answerInput" placeholder="Type your answer here…"></textarea>
+            <div class="row">
+              <button id="revealBtn" class="secondary">Reveal answer</button>
+              <button id="clearBtn" class="secondary">Clear</button>
+            </div>
+            <div class="check-note">Type mode is for your own answer first. After you reveal, compare it with the model answer and then grade it manually.</div>
+          </div>
         </div>
-                       <div class="face-footer">
-          <div class="hint">Tap the card to reveal the answer.</div>
-          <div class="hint"><kbd>Space</kbd> flip &nbsp;·&nbsp; <kbd>&larr;</kbd> <kbd>&rarr;</kbd> move &nbsp;·&nbsp; <kbd>1</kbd>–<kbd>4</kbd> grade</div>
+        <div class="face-footer">
+          <div class="hint" id="frontHint">Tap the card to reveal the answer.</div>
+          <div class="hint"><span class="kbd">Space</span> flip · <span class="kbd">←</span> <span class="kbd">→</span> move · <span class="kbd">1</span>–<span class="kbd">4</span> grade</div>
         </div>
       </div>
+
       <div class="face back">
         <div class="face-body">
           <div class="meta">
             <div class="topic" id="cardTopicB">Topic</div>
             <div class="difficulty" id="cardMetaB">Answer</div>
           </div>
-          <div class="a" id="cardA"></div>
+          <div class="compare-box">
+            <div class="compare-card">
+              <strong>Your answer</strong>
+              <p id="typedAnswerView">—</p>
+            </div>
+            <div class="compare-card">
+              <strong>Official answer</strong>
+              <p class="a" id="cardA"></p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -686,13 +833,11 @@ kbd{
   </div>
 </div>
 
-<!-- Supabase JS v2 -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
 /* ─────────────────────────────────────────────────────────────────────────
    SUPABASE SQL — run this ONCE in your Supabase SQL Editor
    ─────────────────────────────────────────────────────────────────────────
-
 create table if not exists profiles (
   id          uuid primary key default gen_random_uuid(),
   name        text unique not null,
@@ -730,11 +875,10 @@ alter table reviews  enable row level security;
 
 create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
 create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
-create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
+create policy "anon_all_reviews"   on reviews  for all to anon using (true) with check (true);
 
 insert into profiles (name) values ('Elisha'), ('Lmar')
   on conflict (name) do nothing;
-
 ───────────────────────────────────────────────────────────────────────── */
 
 const SQL_SETUP = `create table if not exists profiles (
@@ -774,12 +918,11 @@ alter table reviews  enable row level security;
 
 create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
 create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
-create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
+create policy "anon_all_reviews"   on reviews  for all to anon using (true) with check (true);
 
 insert into profiles (name) values ('Elisha'), ('Lmar')
   on conflict (name) do nothing;`;
 
-// ── Flashcard data ─────────────────────────────────────────────────────────
 const ALL_CARDS = [
   {t:"Conformity",q:"What is conformity?",a:"A change in behaviour due to external pressure from a real or imaginary group."},
   {t:"Conformity",q:"What is compliance?",a:"A change in behaviour in order to fit in — the shallowest form of conformity, linked to NSI."},
@@ -851,7 +994,7 @@ const ALL_CARDS = [
   {t:"Resistance",q:"What did Milgram find when introducing confederate teachers who stopped obeying?",a:"When one confederate dropped out at 150V and another at 210V, those who continued to 450V fell from 65% to just 10%."},
   {t:"Resistance",q:"What does Asch's unanimity variation show about social support?",a:"When one confederate agreed with the real participant, conformity fell from 32% to 5–6% — a single ally dramatically reduces conformity."},
   {t:"Resistance",q:"What did Allen and Levine find about social support?",a:"Even a confederate with poor eyesight who gave the correct answer still reduced conformity among real participants — the ally effect persists even when the ally's credibility is low."},
-  {t:"Resistance",q:"What is a limitation of social support as an explanation for resistance?",a:"It doesn't explain all resistance — Asch still found 5–6% conformity even when a dissenter was present."},
+  {t:"Resistance",q:"What is a limitation of social support as an explanation for resistance?",a:"It does not explain all resistance — Asch still found 5–6% conformity even when a dissenter was present."},
   {t:"Resistance",q:"What is an internal locus of control (LOC)?",a:"The belief that one's experiences and outcomes are due to one's own actions and decisions."},
   {t:"Resistance",q:"What is an external locus of control (LOC)?",a:"The belief that one's experiences are due to external factors outside one's control (luck, fate, others)."},
   {t:"Resistance",q:"What did Holland (1967) find about LOC and obedience?",a:"37% of participants with an internal LOC resisted Milgram's study, compared to only 23% with an external LOC."},
@@ -860,7 +1003,7 @@ const ALL_CARDS = [
 
   {t:"Social Change",q:"What is social change?",a:"When the views or behaviours of a minority are accepted and adopted into mainstream society."},
   {t:"Social Change",q:"What is the full process of social change?",a:"Deep processing → Consistency → Commitment → Flexibility → Snowball effect → Social cryptoamnesia → Conformity → Obedience."},
-  {t:"Social Change",q:"What is deep processing in social change?",a:"The minority's consistent message forces the majority to think more carefully about the issue, even if they don't immediately change their view."},
+  {t:"Social Change",q:"What is deep processing in social change?",a:"The minority's consistent message forces the majority to think more carefully about the issue, even if they do not immediately change their view."},
   {t:"Social Change",q:"What is the snowball effect in social change?",a:"Once a small number of majority members are converted, more follow rapidly — the movement gains momentum."},
   {t:"Social Change",q:"What is social cryptoamnesia?",a:"When society adopts the minority's view but forgets that it was originally a minority position — the change feels like it 'always was' the norm."},
   {t:"Social Change",q:"What is the argumentative principle in social change?",a:"When a minority makes sacrifices for their cause, their message gains legitimacy — the sacrifice signals genuine belief."},
@@ -890,27 +1033,42 @@ const ALL_CARDS = [
   {t:"Minority",q:"What is the overall criticism of minority influence research?",a:"Most studies lack mundane realism — the artificial lab settings do not reflect how minority influence actually operates in society."},
 ];
 
-// ── Supabase Config ────────────────────────────────────────────────────────
 const SUPABASE_URL = 'https://chwnfwfjgjoadkvmmkdi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNod25md2ZqZ2pvYWRrdm1ta2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTUzMDksImV4cCI6MjA5NDA5MTMwOX0.tzO3b2wQbabbJ1pQzTSgZzlxUTubDMM_DhfY2TR8fyk';
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-// ── App State ──────────────────────────────────────────────────────────────
-let profileMap   = {};   // name → { id, streak, last_study }
-let cardIdMap    = {};   // "topic|question" → supabase card UUID
-let reviewsCache = {};   // "topic|question" → SR state object
+let profileMap = {};
+let cardIdMap = {};
+let reviewsCache = {};
 let supabaseReady = false;
-
 let activeProfileName = localStorage.getItem('aqa_active_profile') || 'Elisha';
-let deck        = [];
-let idx         = 0;
-let flipped     = false;
-let currentId   = null;
-let reviewQueue = [];
-let streak      = 0;
+let deck = [];
+let idx = 0;
+let flipped = false;
+let currentId = null;
+let streak = 0;
 let touchStartX = 0, touchStartY = 0;
+let typeMode = localStorage.getItem('aqa_type_mode') === '1';
+let typedAnswers = loadTypedAnswers();
 
-// ── Sync Status UI ─────────────────────────────────────────────────────────
+function loadTypedAnswers(){
+  try { return JSON.parse(localStorage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
+  catch { return {}; }
+}
+function saveTypedAnswers(){
+  try { localStorage.setItem(`aqa_${activeProfileName.toLowerCase()}_typed`, JSON.stringify(typedAnswers)); } catch {}
+}
+function typedKey(card){ return `${card.t}|${card.q}`; }
+function getTypedAnswer(card){ return typedAnswers[typedKey(card)] || ''; }
+function setTypedAnswer(card, value){
+  typedAnswers[typedKey(card)] = value;
+  saveTypedAnswers();
+}
+function clearTypedAnswer(card){
+  delete typedAnswers[typedKey(card)];
+  saveTypedAnswers();
+}
+
 function setSyncStatus(state, label) {
   const dot  = document.getElementById('syncDot');
   const text = document.getElementById('syncText');
@@ -919,21 +1077,37 @@ function setSyncStatus(state, label) {
   text.textContent = label || defaults[state] || state;
 }
 
-// ── Profile UI ─────────────────────────────────────────────────────────────
 function updateProfileUI() {
   document.getElementById('btnElisha').classList.toggle('active', activeProfileName === 'Elisha');
   document.getElementById('btnLmar').classList.toggle('active', activeProfileName === 'Lmar');
+  document.getElementById('typeToggle').classList.toggle('active', typeMode);
+  document.getElementById('typeToggle').setAttribute('aria-pressed', String(typeMode));
+  document.getElementById('typeToggle').textContent = `Type mode: ${typeMode ? 'On' : 'Off'}`;
+  document.getElementById('typePanel').classList.toggle('show', typeMode);
+  document.getElementById('frontHint').textContent = typeMode ? 'Type your answer first, then reveal it.' : 'Tap the card to reveal the answer.';
+  document.getElementById('flipBtn').textContent = typeMode ? 'Reveal' : 'Flip';
+  document.getElementById('answerInput').placeholder = typeMode ? 'Type your answer here…' : 'Type mode is off';
+}
+
+function setTypeMode(on){
+  typeMode = !!on;
+  localStorage.setItem('aqa_type_mode', typeMode ? '1' : '0');
+  updateProfileUI();
+  populateTypingArea();
 }
 
 async function switchProfile(name) {
   if (name === activeProfileName) return;
   activeProfileName = name;
   localStorage.setItem('aqa_active_profile', name);
-  updateProfileUI();
+  typedAnswers = loadTypedAnswers();
   reviewsCache = loadLocalReviews();
-  streak       = loadLocalStreak();
+  streak = loadLocalStreak();
   flipped = false; currentId = null;
-  buildDeck(); updateReviewQueue();
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
   if (supabaseReady) {
     setSyncStatus('loading', 'Loading…');
     try {
@@ -947,14 +1121,12 @@ async function switchProfile(name) {
   }
 }
 
-// ── Local Storage Helpers ──────────────────────────────────────────────────
 function lk(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${suffix}`; }
-function saveLocalReviews()  { try { localStorage.setItem(lk('reviews'), JSON.stringify(reviewsCache)); } catch{} }
+function saveLocalReviews()  { try { localStorage.setItem(lk('reviews'), JSON.stringify(reviewsCache)); } catch {} }
 function loadLocalReviews()  { try { return JSON.parse(localStorage.getItem(lk('reviews'))) || {}; } catch { return {}; } }
-function saveLocalStreak()   { localStorage.setItem(lk('streak'), String(streak)); }
-function loadLocalStreak()   { return parseInt(localStorage.getItem(lk('streak'))) || 0; }
+function saveLocalStreak()   { try { localStorage.setItem(lk('streak'), String(streak)); } catch {} }
+function loadLocalStreak()   { try { return parseInt(localStorage.getItem(lk('streak'))) || 0; } catch { return 0; } }
 
-// ── Supabase: Profiles ─────────────────────────────────────────────────────
 async function loadProfiles() {
   const { data, error } = await db.from('profiles').select('*');
   if (error) throw error;
@@ -969,7 +1141,6 @@ async function loadProfiles() {
   }
 }
 
-// ── Supabase: Cards ────────────────────────────────────────────────────────
 async function loadOrSeedCards() {
   const { count, error } = await db.from('cards').select('*', { count:'exact', head:true });
   if (error) throw error;
@@ -986,13 +1157,11 @@ async function loadOrSeedCards() {
   data.forEach(c => { cardIdMap[`${c.topic}|${c.question}`] = c.id; });
 }
 
-// ── Supabase: Reviews ──────────────────────────────────────────────────────
 async function loadReviews() {
   const profile = profileMap[activeProfileName];
   if (!profile) return;
   streak = profile.streak || 0;
 
-  // FIX 1: query by profile_id (FK), not profile_name (doesn't exist on reviews table)
   const { data, error } = await db.from('reviews').select('*').eq('profile_id', profile.id);
   if (error) throw error;
 
@@ -1003,14 +1172,14 @@ async function loadReviews() {
   (data || []).forEach(r => {
     const key = rev[r.card_id];
     if (key) reviewsCache[key] = {
-      ease:     r.ease,
+      ease: r.ease,
       interval: r.interval_days,
-      reps:     r.reps,
-      lapses:   r.lapses,
-      due:      r.due,
-      seen:     r.seen,
+      reps: r.reps,
+      lapses: r.lapses,
+      due: r.due,
+      seen: r.seen,
       mastered: r.mastered,
-      last:     r.last_reviewed
+      last: r.last_reviewed
     };
   });
 
@@ -1021,11 +1190,9 @@ async function loadReviews() {
 async function upsertReview(card, s) {
   const cardId = cardIdMap[cid(card)];
   if (!cardId) return;
-
   const profile = profileMap[activeProfileName];
   if (!profile) return;
 
-  // FIX 2 (already correct in your file): uses profile_id and correct onConflict key
   const { error } = await db.from('reviews').upsert({
     profile_id: profile.id,
     card_id: cardId,
@@ -1042,7 +1209,6 @@ async function upsertReview(card, s) {
 
   if (error) console.error('Review upsert:', error);
 
-  // FIX 3: removed the orphaned duplicate block that was here — this is the only streak save
   await db.from('profiles')
     .update({ streak, last_study: new Date().toDateString() })
     .eq('id', profile.id);
@@ -1050,84 +1216,23 @@ async function upsertReview(card, s) {
   profileMap[activeProfileName].streak = streak;
 }
 
-// ── Init ───────────────────────────────────────────────────────────────────
-async function init() {
-  updateProfileUI();
-
-  reviewsCache = loadLocalReviews();
-  streak       = loadLocalStreak();
-  buildDeck();
-  updateReviewQueue();
-
-  setSyncStatus('loading', 'Connecting…');
-  try {
-    await loadProfiles();
-    await loadOrSeedCards();
-    await loadReviews();
-    supabaseReady = true;
-    setSyncStatus('ok');
-    buildDeck();
-    updateReviewQueue();
-  } catch(e) {
-    console.error('Supabase unavailable, running from local cache:', e);
-    if (e && e.code === '42P01') {
-      showSetupModal();
-    }
-    setSyncStatus('error', 'Sync error');
-  }
-}
-
 function showSetupModal() {
-  // ── Syntax-highlight the SQL ──────────────────────────────────────────
   function highlight(sql) {
-    const keywords = ['CREATE','TABLE','IF','NOT','EXISTS','ALTER','INSERT','INTO',
-      'VALUES','ON','CONFLICT','DO','NOTHING','DEFAULT','UNIQUE','REFERENCES',
-      'DELETE','CASCADE','FOR','ALL','TO','USING','WITH','CHECK','ENABLE',
-      'ROW','LEVEL','SECURITY','POLICY'];
-    const types    = ['UUID','TEXT','INT','FLOAT','BOOLEAN','BIGINT','TIMESTAMPTZ'];
-    const fns      = ['gen_random_uuid','now'];
-
-    // Escape HTML first
+    const keywords = ['CREATE','TABLE','IF','NOT','EXISTS','ALTER','INSERT','INTO','VALUES','ON','CONFLICT','DO','NOTHING','DEFAULT','UNIQUE','REFERENCES','DELETE','CASCADE','FOR','ALL','TO','USING','WITH','CHECK','ENABLE','ROW','LEVEL','SECURITY','POLICY'];
+    const types = ['UUID','TEXT','INT','FLOAT','BOOLEAN','BIGINT','TIMESTAMPTZ'];
+    const fns = ['gen_random_uuid','now'];
     let h = sql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-
-    // Comments (-- ...)
     h = h.replace(/(--[^\n]*)/g,'<span class="cmt">$1</span>');
-
-    // String literals
-    h = h.replace(/'([^']*)'/g,'<span class="str">\'$1\'</span>');
-
-    // Types
-    types.forEach(t => {
-      h = h.replace(new RegExp(`\\b(${t})\\b`,'gi'), '<span class="type">$1</span>');
-    });
-
-    // Functions
-    fns.forEach(f => {
-      h = h.replace(new RegExp(`\\b(${f})\\b`,'gi'), '<span class="fn">$1</span>');
-    });
-
-    // Primary keywords
-    keywords.forEach(k => {
-      h = h.replace(new RegExp(`\\b(${k})\\b`,'gi'), '<span class="kw">$1</span>');
-    });
-
-    // Numbers
+    h = h.replace(/'([^']*)'/g,"<span class=\"str\">'$1'</span>");
+    types.forEach(t => { h = h.replace(new RegExp(`\\b(${t})\\b`,'gi'), '<span class="type">$1</span>'); });
+    fns.forEach(f => { h = h.replace(new RegExp(`\\b(${f})\\b`,'gi'), '<span class="fn">$1</span>'); });
+    keywords.forEach(k => { h = h.replace(new RegExp(`\\b(${k})\\b`,'gi'), '<span class="kw">$1</span>'); });
     h = h.replace(/\b(\d+)\b/g,'<span class="num">$1</span>');
-
     return h;
   }
-
-  const block   = document.getElementById('sqlBlock');
-  const lineNums = document.getElementById('sqlLineNums');
-
-  block.innerHTML = highlight(SQL_SETUP);
-
-  // Line numbers
+  document.getElementById('sqlBlock').innerHTML = highlight(SQL_SETUP);
   const lines = SQL_SETUP.split('\n').length;
-  lineNums.innerHTML = Array.from({length: lines}, (_, i) =>
-    `<span>${i + 1}</span>`
-  ).join('');
-
+  document.getElementById('sqlLineNums').innerHTML = Array.from({length: lines}, (_, i) => `<span>${i + 1}</span>`).join('');
   document.getElementById('setupModal').classList.add('show');
 }
 
@@ -1137,14 +1242,10 @@ function copySQL() {
     btn.textContent = '✓ Copied!';
     btn.classList.add('success');
     btn.classList.remove('primary');
-
-    // Advance step tracker
     document.getElementById('step1').classList.remove('active');
     document.getElementById('step1').classList.add('done');
     document.getElementById('step2').classList.add('active');
-    document.getElementById('sqlFooterNote').innerHTML =
-      'Now open the Supabase SQL Editor, paste, and click <strong>Run</strong>.';
-
+    document.getElementById('sqlFooterNote').innerHTML = 'Now open the Supabase SQL Editor, paste, and click <strong>Run</strong>.';
     setTimeout(() => {
       btn.innerHTML = '⎘ Copy SQL';
       btn.classList.remove('success');
@@ -1153,7 +1254,6 @@ function copySQL() {
   });
 }
 
-// ── Core SR Helpers ────────────────────────────────────────────────────────
 function cid(card) { return `${card.t}|${card.q}`; }
 
 function cardState(card) {
@@ -1177,7 +1277,6 @@ function shuffle(arr) {
   return arr;
 }
 
-// ── Deck Builder ───────────────────────────────────────────────────────────
 function buildDeck() {
   const topic = document.getElementById('topicSel').value;
   const mode  = document.getElementById('modeSel').value;
@@ -1213,27 +1312,9 @@ function currentCard() { return deck[idx]; }
 
 function updateReviewQueue() {
   const now = Date.now();
-  reviewQueue = deck.filter(c => cardState(c).due <= now);
+  const reviewQueue = deck.filter(c => cardState(c).due <= now);
   reviewQueue.sort((a, b) => cardState(a).due - cardState(b).due);
-}
-
-// ── Render ─────────────────────────────────────────────────────────────────
-function render() {
-  if (!deck.length) return;
-  currentId    = cid(currentCard());
-  const c      = currentCard();
-  const s      = cardState(c);
-
-  document.getElementById('cardQ').textContent      = c.q;
-  document.getElementById('cardA').textContent      = c.a;
-  document.getElementById('cardTopic').textContent  = c.t;
-  document.getElementById('cardTopicB').textContent = c.t;
-  document.getElementById('cardMeta').textContent   = `Seen ${s.seen} × · Ease ${s.ease.toFixed(2)}`;
-  document.getElementById('cardMetaB').textContent  = s.mastered ? 'Mastered ✓' : 'Answer';
-  document.getElementById('progLabel').textContent  = `${reviewedToday()} reviewed today`;
-  document.getElementById('nextDue').textContent    = `Next review: ${nextDueText()}`;
-  document.getElementById('cardInner').classList.toggle('flipped', flipped);
-  updateStats();
+  return reviewQueue;
 }
 
 function reviewedToday() {
@@ -1245,7 +1326,7 @@ function reviewedToday() {
 }
 
 function nextDueText() {
-  const now    = Date.now();
+  const now = Date.now();
   const future = ALL_CARDS.map(c => cardState(c).due).filter(ts => ts > now).sort((a, b) => a - b);
   return future.length ? formatDate(future[0]) : 'Now';
 }
@@ -1260,13 +1341,42 @@ function updateStats() {
   document.getElementById('sMastered').textContent = mastered;
   document.getElementById('sStreak').textContent   = streak;
   const pct = total ? Math.min(100, Math.round((reviewedToday() / total) * 100)) : 0;
-  document.getElementById('progFill').style.width  = `${pct}%`;
+  document.getElementById('progFill').style.width   = `${pct}%`;
 }
 
-// ── Card Actions ───────────────────────────────────────────────────────────
+function populateTypingArea() {
+  const c = deck.length ? currentCard() : null;
+  const input = document.getElementById('answerInput');
+  const view = document.getElementById('typedAnswerView');
+  if (!c) return;
+  input.value = getTypedAnswer(c);
+  view.textContent = input.value.trim() ? input.value : '—';
+}
+
+function render() {
+  if (!deck.length) return;
+  currentId = cid(currentCard());
+  const c = currentCard();
+  const s = cardState(c);
+
+  document.getElementById('cardQ').textContent      = c.q;
+  document.getElementById('cardA').textContent      = c.a;
+  document.getElementById('cardTopic').textContent  = c.t;
+  document.getElementById('cardTopicB').textContent = c.t;
+  document.getElementById('cardMeta').textContent   = `Seen ${s.seen} × · Ease ${s.ease.toFixed(2)}`;
+  document.getElementById('cardMetaB').textContent  = s.mastered ? 'Mastered ✓' : 'Answer';
+  document.getElementById('progLabel').textContent   = `${reviewedToday()} reviewed today`;
+  document.getElementById('nextDue').textContent     = `Next review: ${nextDueText()}`;
+  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+  document.getElementById('typedAnswerView').textContent = getTypedAnswer(c).trim() ? getTypedAnswer(c) : '—';
+  document.getElementById('answerInput').value = getTypedAnswer(c);
+  updateStats();
+}
+
 function flipCard() {
   flipped = !flipped;
   document.getElementById('cardInner').classList.toggle('flipped', flipped);
+  if (typeMode) populateTypingArea();
 }
 
 function navigate(dir) {
@@ -1274,6 +1384,10 @@ function navigate(dir) {
   idx = (idx + dir + deck.length) % deck.length;
   flipped = false;
   render();
+  if (typeMode) {
+    const input = document.getElementById('answerInput');
+    setTimeout(() => input.focus({ preventScroll:true }), 50);
+  }
 }
 
 function grade(score) {
@@ -1301,17 +1415,17 @@ function grade(score) {
   } else if (g === 2) {
     s.reps    += 1;
     s.ease     = Math.min(3.2, s.ease + 0.05);
-    if      (s.reps === 1) s.interval = 1;
+    if (s.reps === 1) s.interval = 1;
     else if (s.reps === 2) s.interval = 3;
-    else                   s.interval = Math.round(Math.max(1, s.interval) * s.ease);
+    else s.interval = Math.round(Math.max(1, s.interval) * s.ease);
     s.due      = now + s.interval * 86400000;
     streak    += 1;
   } else {
     s.reps    += 1;
     s.ease     = Math.min(3.5, s.ease + 0.12);
-    if      (s.reps === 1) s.interval = 2;
+    if (s.reps === 1) s.interval = 2;
     else if (s.reps === 2) s.interval = 5;
-    else                   s.interval = Math.round(Math.max(1, s.interval) * s.ease * 1.35);
+    else s.interval = Math.round(Math.max(1, s.interval) * s.ease * 1.35);
     s.due      = now + s.interval * 86400000;
     s.mastered = s.reps >= 4 && s.ease >= 2.9 && s.lapses === 0;
     streak    += 1;
@@ -1328,27 +1442,29 @@ function grade(score) {
       .catch(e => { console.error(e); setSyncStatus('error'); });
   }
 
+  clearTypedAnswer(c);
   flipped = false;
   idx = (idx < deck.length - 1) ? idx + 1 : 0;
   updateReviewQueue();
   render();
+  if (typeMode) document.getElementById('answerInput').focus({ preventScroll:true });
 }
 
 async function resetProgress() {
   if (!confirm(`Reset all progress for ${activeProfileName}? This cannot be undone.`)) return;
 
   const profile = profileMap[activeProfileName];
-
   if (supabaseReady && profile) {
     setSyncStatus('loading', 'Resetting…');
-    // FIX 3: was .eq('profile_name', activeProfileName) — reviews has no such column
     await db.from('reviews').delete().eq('profile_id', profile.id);
     await db.from('profiles').update({ streak: 0, last_study: '' }).eq('id', profile.id);
   }
 
   localStorage.removeItem(lk('reviews'));
   localStorage.removeItem(lk('streak'));
+  localStorage.removeItem(`aqa_${activeProfileName.toLowerCase()}_typed`);
   reviewsCache = {};
+  typedAnswers = {};
   streak = 0;
   flipped = false;
   currentId = null;
@@ -1357,10 +1473,37 @@ async function resetProgress() {
   updateReviewQueue();
 }
 
-// ── Input Handlers ─────────────────────────────────────────────────────────
+async function init() {
+  updateProfileUI();
+  reviewsCache = loadLocalReviews();
+  streak = loadLocalStreak();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+
+  setSyncStatus('loading', 'Connecting…');
+  try {
+    await loadProfiles();
+    await loadOrSeedCards();
+    await loadReviews();
+    supabaseReady = true;
+    setSyncStatus('ok');
+    buildDeck();
+    updateReviewQueue();
+    populateTypingArea();
+  } catch(e) {
+    console.error('Supabase unavailable, running from local cache:', e);
+    if (e && e.code === '42P01') showSetupModal();
+    setSyncStatus('error', 'Sync error');
+  }
+}
+
 function onKey(e) {
+  const activeTag = document.activeElement && document.activeElement.tagName;
+  const typing = activeTag === 'TEXTAREA' || activeTag === 'INPUT';
+  if (typing && e.key !== 'Escape') return;
   if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
-  else if (e.key === 'ArrowLeft')  navigate(-1);
+  else if (e.key === 'ArrowLeft') navigate(-1);
   else if (e.key === 'ArrowRight') navigate(1);
   else if (e.key === '1') grade('again');
   else if (e.key === '2') grade('hard');
@@ -1376,15 +1519,15 @@ cardEl.addEventListener('touchstart', e => {
   touchStartX = t.clientX; touchStartY = t.clientY;
 }, { passive:true });
 cardEl.addEventListener('touchend', e => {
-  const t  = e.changedTouches[0];
+  const t = e.changedTouches[0];
   const dx = t.clientX - touchStartX;
   const dy = t.clientY - touchStartY;
   if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) navigate(dx < 0 ? 1 : -1);
 }, { passive:true });
 
-document.getElementById('topicSel').addEventListener('change', () => { flipped = false; currentId = null; buildDeck(); });
-document.getElementById('modeSel').addEventListener('change',  () => { flipped = false; currentId = null; buildDeck(); });
-document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle([...deck]); idx = 0; flipped = false; render(); });
+document.getElementById('topicSel').addEventListener('change', () => { flipped = false; currentId = null; buildDeck(); populateTypingArea(); });
+document.getElementById('modeSel').addEventListener('change',  () => { flipped = false; currentId = null; buildDeck(); populateTypingArea(); });
+document.getElementById('shuffleBtn').addEventListener('click', () => { deck = shuffle([...deck]); idx = 0; flipped = false; render(); populateTypingArea(); });
 document.getElementById('resetBtn').addEventListener('click', resetProgress);
 document.getElementById('prevBtn').addEventListener('click',   () => navigate(-1));
 document.getElementById('nextBtn').addEventListener('click',   () => navigate(1));
@@ -1393,6 +1536,37 @@ document.getElementById('againBtn').addEventListener('click',  () => grade('agai
 document.getElementById('hardBtn').addEventListener('click',   () => grade('hard'));
 document.getElementById('goodBtn').addEventListener('click',   () => grade('good'));
 document.getElementById('easyBtn').addEventListener('click',   () => grade('easy'));
+document.getElementById('typeToggle').addEventListener('click', () => setTypeMode(!typeMode));
+
+const answerInput = document.getElementById('answerInput');
+const revealBtn = document.getElementById('revealBtn');
+const clearBtn = document.getElementById('clearBtn');
+
+answerInput.addEventListener('click', e => e.stopPropagation());
+answerInput.addEventListener('keydown', e => {
+  e.stopPropagation();
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+    e.preventDefault();
+    flipCard();
+  }
+});
+answerInput.addEventListener('input', () => {
+  if (!deck.length) return;
+  const c = currentCard();
+  setTypedAnswer(c, answerInput.value);
+  document.getElementById('typedAnswerView').textContent = answerInput.value.trim() ? answerInput.value : '—';
+});
+revealBtn.addEventListener('click', e => { e.stopPropagation(); flipCard(); });
+clearBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  if (!deck.length) return;
+  answerInput.value = '';
+  setTypedAnswer(currentCard(), '');
+  document.getElementById('typedAnswerView').textContent = '—';
+  answerInput.focus({ preventScroll:true });
+});
+document.getElementById('typePanel').addEventListener('click', e => e.stopPropagation());
+
 window.addEventListener('keydown', onKey);
 
 init();

@@ -802,11 +802,10 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
             <div class="compare-card" id="yourAnswerBox">
   <strong>Your answer</strong>
   <p id="typedAnswerView">—</p>
+</div><div class="compare-card" id="officialAnswerBox">
+  <strong>Official answer</strong>
+  <p class="a" id="cardA"></p>
 </div>
-            <div class="compare-card">
-              <strong>Official answer</strong>
-              <p class="a" id="cardA"></p>
-            </div>
           </div>
         </div>
       </div>
@@ -1087,7 +1086,9 @@ function updateProfileUI() {
   document.getElementById('frontHint').textContent = typeMode ? 'Type your answer first, then reveal it.' : 'Tap the card to reveal the answer.';
   document.getElementById('flipBtn').textContent = typeMode ? 'Reveal' : 'Flip';
   document.getElementById('answerInput').placeholder = typeMode ? 'Type your answer here…' : 'Type mode is off';
-   document.getElementById('yourAnswerBox').style.display = typeMode ? '' : 'none';  // ← NEW LINE
+document.getElementById('yourAnswerBox').style.display = typeMode ? '' : 'none';
+document.getElementById('officialAnswerBox').style.display = typeMode ? '' : 'none';
+  document.querySelector('.compare-box').style.display = typeMode ? 'grid' : 'block';
 }
 
 function setTypeMode(on){

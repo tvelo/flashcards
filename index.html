@@ -306,39 +306,232 @@ kbd{
 /* ── SQL Setup Modal ─────────────────────────── */
 #setupModal{
   display:none;position:fixed;inset:0;z-index:999;
-  background:rgba(0,0,0,.75);backdrop-filter:blur(6px);
-  align-items:center;justify-content:center;padding:20px;
+  background:rgba(0,0,0,.82);backdrop-filter:blur(10px);
+  align-items:center;justify-content:center;padding:16px;
+  animation:modalIn .2s ease;
 }
+@keyframes modalIn{from{opacity:0}to{opacity:1}}
 #setupModal.show{ display:flex; }
-.modal-box{
-  background:#111827;border:1px solid var(--line-2);
-  border-radius:var(--radius);padding:24px;max-width:680px;width:100%;
-  box-shadow:var(--shadow);max-height:90vh;overflow-y:auto;
+
+.sql-modal{
+  background:linear-gradient(160deg,#0d1220,#0a0e1a);
+  border:1px solid rgba(122,168,255,.18);
+  border-radius:20px;
+  width:100%;max-width:740px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);
+  max-height:92vh;
+  display:flex;flex-direction:column;
+  overflow:hidden;
 }
-.modal-box h2{ margin:0 0 8px;font-size:20px; }
-.modal-box p{ margin:0 0 14px;color:var(--muted);font-size:14px;line-height:1.5; }
-.sql-block{
-  background:rgba(0,0,0,.4);border:1px solid var(--line);border-radius:10px;
-  padding:14px;font-family:monospace;font-size:12px;line-height:1.6;
-  color:#a8d8a8;overflow-x:auto;white-space:pre;margin-bottom:16px;
+
+/* header bar */
+.sql-modal-header{
+  display:flex;align-items:center;gap:12px;
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
 }
-.modal-actions{ display:flex;gap:10px;flex-wrap:wrap; }
-.modal-actions button{ flex:1;min-width:120px; }
+.sql-modal-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#1e3a5f,#0d2340);
+  border:1px solid rgba(122,168,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.sql-modal-title{ flex:1; }
+.sql-modal-title h2{ margin:0;font-size:17px;font-weight:700;letter-spacing:-.01em; }
+.sql-modal-title p{ margin:3px 0 0;font-size:12px;color:var(--muted); }
+.sql-modal-close{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:rgba(255,255,255,.06);border:1px solid var(--line);
+  color:var(--muted);font-size:18px;line-height:1;
+  display:flex;align-items:center;justify-content:center;
+  cursor:pointer;min-height:unset;padding:0;box-shadow:none;
+}
+.sql-modal-close:hover{ background:rgba(255,255,255,.1);color:var(--text); }
+
+/* steps */
+.sql-modal-steps{
+  display:flex;gap:0;padding:14px 20px 12px;
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
+  overflow-x:auto;
+}
+.sql-step{
+  display:flex;align-items:center;gap:8px;flex-shrink:0;
+}
+.sql-step-num{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.08);border:1px solid var(--line);
+  font-size:11px;font-weight:700;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s ease;
+}
+.sql-step.active .sql-step-num{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-color:transparent;color:#fff;
+}
+.sql-step.done .sql-step-num{
+  background:rgba(91,214,138,.15);border-color:rgba(91,214,138,.3);color:var(--good);
+}
+.sql-step-label{ font-size:12px;color:var(--muted);white-space:nowrap; }
+.sql-step.active .sql-step-label{ color:var(--text); }
+.sql-step.done .sql-step-label{ color:var(--good); }
+.sql-step-arrow{ margin:0 8px;color:rgba(255,255,255,.15);font-size:12px;flex-shrink:0; }
+
+/* editor area */
+.sql-editor-wrap{
+  flex:1;overflow:hidden;display:flex;flex-direction:column;min-height:0;
+}
+.sql-editor-toolbar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:8px 14px;background:rgba(0,0,0,.25);border-bottom:1px solid var(--line);
+  flex-shrink:0;
+}
+.sql-editor-lang{
+  display:flex;align-items:center;gap:6px;font-size:11px;color:var(--muted);
+}
+.sql-lang-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+}
+.sql-editor-actions{ display:flex;gap:6px; }
+.sql-btn{
+  display:inline-flex;align-items:center;gap:5px;
+  padding:5px 11px;border-radius:7px;font-size:12px;font-weight:600;
+  border:1px solid var(--line);background:rgba(255,255,255,.06);
+  color:var(--text);cursor:pointer;min-height:unset;box-shadow:none;
+  transition:all .15s ease;
+}
+.sql-btn:hover{ background:rgba(255,255,255,.1); }
+.sql-btn.primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-color:transparent;color:#fff;
+  box-shadow:0 4px 14px rgba(122,168,255,.3);
+}
+.sql-btn.primary:hover{ filter:brightness(1.1); }
+.sql-btn.success{ background:rgba(91,214,138,.15);border-color:rgba(91,214,138,.3);color:var(--good); }
+
+.sql-editor-body{
+  display:flex;flex:1;overflow:auto;min-height:0;
+  font-family:'JetBrains Mono',ui-monospace,monospace;
+  font-size:12.5px;line-height:1.7;
+}
+.sql-line-nums{
+  padding:14px 0 14px 14px;
+  color:rgba(255,255,255,.18);
+  text-align:right;
+  user-select:none;
+  flex-shrink:0;
+  min-width:38px;
+}
+.sql-line-nums span{ display:block; }
+.sql-code{
+  padding:14px 14px 14px 10px;
+  flex:1;
+  color:#c9d8ff;
+  white-space:pre;
+}
+/* syntax colours */
+.kw{ color:#7aa8ff; font-weight:600; }     /* keywords */
+.kw2{ color:#c792ea; }                      /* secondary keywords */
+.type{ color:#ffcb6b; }                     /* types */
+.fn{ color:#82aaff; }                       /* functions */
+.str{ color:#c3e88d; }                      /* strings */
+.cmt{ color:rgba(255,255,255,.28); font-style:italic; } /* comments */
+.ref{ color:#f78c6c; }                      /* references */
+.num{ color:#f78c6c; }
+
+/* footer */
+.sql-modal-footer{
+  display:flex;align-items:center;justify-content:space-between;gap:10px;
+  padding:14px 20px;border-top:1px solid var(--line);flex-shrink:0;
+  flex-wrap:wrap;
+}
+.sql-footer-note{ font-size:12px;color:var(--muted);flex:1;min-width:120px; }
+.sql-footer-btns{ display:flex;gap:8px;flex-wrap:wrap; }
+
+@media(max-width:560px){
+  .sql-modal-steps{ gap:0; }
+  .sql-step-label{ display:none; }
+  .sql-modal-footer{ flex-direction:column;align-items:stretch; }
+  .sql-footer-btns{ flex-direction:column; }
+  .sql-btn{ justify-content:center; }
+}
 </style>
 </head>
 <body>
 
-<!-- SQL Setup Modal — shown automatically if Supabase tables are missing -->
+<!-- SQL Setup Modal ── redesigned editor -->
 <div id="setupModal">
-  <div class="modal-box">
-    <h2>⚙️ One-time Supabase setup</h2>
-    <p>Your database tables don't exist yet. Copy the SQL below, paste it into your <strong>Supabase → SQL Editor</strong>, and click <em>Run</em>. Then come back and tap <strong>Done, reload</strong>.</p>
-    <div class="sql-block" id="sqlBlock"></div>
-    <div class="modal-actions">
-      <button onclick="copySQL()" id="copyBtn">Copy SQL</button>
-      <button onclick="location.reload()">Done, reload</button>
-      <button class="secondary" onclick="document.getElementById('setupModal').classList.remove('show')">Dismiss</button>
+  <div class="sql-modal">
+
+    <!-- Header -->
+    <div class="sql-modal-header">
+      <div class="sql-modal-icon">🗄️</div>
+      <div class="sql-modal-title">
+        <h2>Database Setup Required</h2>
+        <p>Your Supabase tables don't exist yet — run the SQL below once to create them.</p>
+      </div>
+      <button class="sql-modal-close" onclick="document.getElementById('setupModal').classList.remove('show')" aria-label="Close">✕</button>
     </div>
+
+    <!-- Step tracker -->
+    <div class="sql-modal-steps">
+      <div class="sql-step active" id="step1">
+        <div class="sql-step-num">1</div>
+        <div class="sql-step-label">Copy SQL</div>
+      </div>
+      <div class="sql-step-arrow">›</div>
+      <div class="sql-step" id="step2">
+        <div class="sql-step-num">2</div>
+        <div class="sql-step-label">Open SQL Editor</div>
+      </div>
+      <div class="sql-step-arrow">›</div>
+      <div class="sql-step" id="step3">
+        <div class="sql-step-num">3</div>
+        <div class="sql-step-label">Paste &amp; Run</div>
+      </div>
+      <div class="sql-step-arrow">›</div>
+      <div class="sql-step" id="step4">
+        <div class="sql-step-num">4</div>
+        <div class="sql-step-label">Done!</div>
+      </div>
+    </div>
+
+    <!-- Editor -->
+    <div class="sql-editor-wrap">
+      <div class="sql-editor-toolbar">
+        <div class="sql-editor-lang">
+          <div class="sql-lang-dot"></div>
+          PostgreSQL · Supabase
+        </div>
+        <div class="sql-editor-actions">
+          <button class="sql-btn" id="openSupabaseBtn" onclick="window.open('https://supabase.com/dashboard/project/_/sql/new','_blank')">
+            ↗ Open SQL Editor
+          </button>
+          <button class="sql-btn primary" id="copyBtn" onclick="copySQL()">
+            ⎘ Copy SQL
+          </button>
+        </div>
+      </div>
+      <div class="sql-editor-body">
+        <div class="sql-line-nums" id="sqlLineNums"></div>
+        <div class="sql-code" id="sqlBlock"></div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="sql-modal-footer">
+      <div class="sql-footer-note" id="sqlFooterNote">
+        Paste into <strong>Supabase → SQL Editor</strong> and click <strong>Run</strong>.
+      </div>
+      <div class="sql-footer-btns">
+        <button class="sql-btn" onclick="document.getElementById('setupModal').classList.remove('show')">Dismiss</button>
+        <button class="sql-btn primary" onclick="location.reload()">✓ Done, reload</button>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -857,14 +1050,78 @@ async function init() {
 }
 
 function showSetupModal() {
-  document.getElementById('sqlBlock').textContent = SQL_SETUP;
+  // ── Syntax-highlight the SQL ──────────────────────────────────────────
+  function highlight(sql) {
+    const keywords = ['CREATE','TABLE','IF','NOT','EXISTS','ALTER','INSERT','INTO',
+      'VALUES','ON','CONFLICT','DO','NOTHING','DEFAULT','UNIQUE','REFERENCES',
+      'DELETE','CASCADE','FOR','ALL','TO','USING','WITH','CHECK','ENABLE',
+      'ROW','LEVEL','SECURITY','POLICY'];
+    const types    = ['UUID','TEXT','INT','FLOAT','BOOLEAN','BIGINT','TIMESTAMPTZ'];
+    const fns      = ['gen_random_uuid','now'];
+
+    // Escape HTML first
+    let h = sql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+    // Comments (-- ...)
+    h = h.replace(/(--[^\n]*)/g,'<span class="cmt">$1</span>');
+
+    // String literals
+    h = h.replace(/'([^']*)'/g,'<span class="str">\'$1\'</span>');
+
+    // Types
+    types.forEach(t => {
+      h = h.replace(new RegExp(`\\b(${t})\\b`,'gi'), '<span class="type">$1</span>');
+    });
+
+    // Functions
+    fns.forEach(f => {
+      h = h.replace(new RegExp(`\\b(${f})\\b`,'gi'), '<span class="fn">$1</span>');
+    });
+
+    // Primary keywords
+    keywords.forEach(k => {
+      h = h.replace(new RegExp(`\\b(${k})\\b`,'gi'), '<span class="kw">$1</span>');
+    });
+
+    // Numbers
+    h = h.replace(/\b(\d+)\b/g,'<span class="num">$1</span>');
+
+    return h;
+  }
+
+  const block   = document.getElementById('sqlBlock');
+  const lineNums = document.getElementById('sqlLineNums');
+
+  block.innerHTML = highlight(SQL_SETUP);
+
+  // Line numbers
+  const lines = SQL_SETUP.split('\n').length;
+  lineNums.innerHTML = Array.from({length: lines}, (_, i) =>
+    `<span>${i + 1}</span>`
+  ).join('');
+
   document.getElementById('setupModal').classList.add('show');
 }
 
 function copySQL() {
   navigator.clipboard.writeText(SQL_SETUP).then(() => {
-    document.getElementById('copyBtn').textContent = 'Copied ✓';
-    setTimeout(() => document.getElementById('copyBtn').textContent = 'Copy SQL', 2000);
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('success');
+    btn.classList.remove('primary');
+
+    // Advance step tracker
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step1').classList.add('done');
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('sqlFooterNote').innerHTML =
+      'Now open the Supabase SQL Editor, paste, and click <strong>Run</strong>.';
+
+    setTimeout(() => {
+      btn.innerHTML = '⎘ Copy SQL';
+      btn.classList.remove('success');
+      btn.classList.add('primary');
+    }, 3000);
   });
 }
 

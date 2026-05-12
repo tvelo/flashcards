@@ -1,0 +1,2328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>AQA Psychology Flashcards</title>
+<link rel="manifest" href="manifest.json" />
+<style>
+:root{
+  --bg:#0b0f17;
+  --bg-2:#0e1420;
+  --panel:rgba(20, 26, 38, 0.82);
+  --panel-2:rgba(28, 36, 52, 0.88);
+  --text:#edf2ff;
+  --muted:#9aa8c7;
+  --line:rgba(255,255,255,0.10);
+  --line-2:rgba(255,255,255,0.14);
+  --good:#5bd68a;
+  --bad:#ff6b6b;
+  --accent:#7aa8ff;
+  --accent-2:#9a7aff;
+  --shadow:0 18px 55px rgba(0,0,0,.35);
+  --radius:22px;
+  --radius-sm:14px;
+  --tap:48px;
+  --safe-bottom:env(safe-area-inset-bottom, 0px);
+}
+*{box-sizing:border-box}
+html,body{height:100%}
+body{
+  margin:0;
+  font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text);
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
+  background:
+    radial-gradient(circle at top, rgba(122,168,255,.14) 0%, rgba(122,168,255,.08) 25%, rgba(122,168,255,0) 70%),
+    radial-gradient(circle at 20% 20%, rgba(154,122,255,.10) 0%, rgba(154,122,255,.04) 20%, rgba(154,122,255,0) 60%),
+    var(--bg);
+  background-color:var(--bg);
+  background-attachment:fixed;
+}
+button,input,textarea,select{font:inherit}
+button{
+  border:0;
+  border-radius:16px;
+  min-height:var(--tap);
+  padding:0 16px;
+  background:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.04));
+  color:var(--text);
+  border:1px solid var(--line);
+  box-shadow:0 6px 20px rgba(0,0,0,.15);
+  cursor:pointer;
+  touch-action:manipulation;
+}
+button:active{transform:translateY(1px) scale(.99)}
+button.secondary{background:transparent}
+button.good{border-color:rgba(91,214,138,.35); color:#d8ffe7}
+button.bad{border-color:rgba(255,107,107,.35); color:#ffd9d9}
+button.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 4px 18px rgba(122,168,255,.35);
+}
+select,textarea,input{
+  border:1px solid var(--line);
+  color:var(--text);
+  background:rgba(255,255,255,.05);
+}
+select{
+  min-height:var(--tap);
+  padding:0 14px;
+  border-radius:16px;
+  width:100%;
+}
+textarea{
+  width:100%;
+  min-height:104px;
+  resize:vertical;
+  border-radius:18px;
+  padding:14px 16px;
+  line-height:1.5;
+  background:rgba(255,255,255,.05);
+  outline:none;
+}
+textarea:focus,select:focus,input:focus,button:focus-visible{
+  outline:2px solid rgba(122,168,255,.35);
+  outline-offset:2px;
+}
+.wrap{
+  max-width:900px;
+  margin:0 auto;
+  padding:16px 14px calc(96px + var(--safe-bottom));
+  position:relative;
+  isolation:isolate;
+}
+.card,.face{
+  transform:translateZ(0);
+  will-change:transform;
+}
+.profile-bar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin-bottom:18px;
+  padding:10px 16px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.profile-label{
+  color:var(--muted);
+  font-size:13px;
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.profile-pills{display:flex; gap:8px; flex-wrap:wrap}
+.profile-pill{
+  min-height:36px !important;
+  padding:0 18px !important;
+  border-radius:999px !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  background:transparent !important;
+  border:1px solid var(--line) !important;
+  color:var(--muted) !important;
+  box-shadow:none !important;
+}
+.sync-chip{
+  margin-left:auto;
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  font-size:12px;
+  color:var(--muted);
+  padding:5px 11px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.03);
+  white-space:nowrap;
+  flex-shrink:0;
+}
+.sync-dot{
+  width:7px;height:7px;border-radius:50%;
+  background:var(--muted);flex-shrink:0;
+}
+.sync-dot.ok{background:var(--good)}
+.sync-dot.loading{background:#f0c040; animation:sdpulse .9s ease-in-out infinite}
+.sync-dot.error{background:var(--bad)}
+@keyframes sdpulse{0%,100%{opacity:1}50%{opacity:.25}}
+
+.header{
+  display:flex;
+  justify-content:space-between;
+  gap:16px;
+  align-items:flex-start;
+  margin-bottom:14px;
+}
+.title h1{
+  font-size:clamp(22px,4vw,36px);
+  line-height:1.05;
+  margin:0 0 6px;
+}
+.title p{margin:0;color:var(--muted);max-width:60ch;line-height:1.45}
+.pill-row{display:flex;flex-wrap:wrap;gap:8px;justify-content:flex-end}
+.pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:10px 12px;
+  border-radius:999px;
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+}
+.controls{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+  gap:10px;
+  margin:16px 0 14px;
+}
+.filter-panel{
+  margin:16px 0 12px;
+  padding:14px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+}
+.filter-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:12px;
+  margin-bottom:12px;
+}
+.filter-top strong{
+  display:block;
+  font-size:14px;
+  margin-bottom:4px;
+}
+.filter-top p{
+  margin:0;
+  color:var(--muted);
+  font-size:13px;
+  line-height:1.45;
+}
+.filter-summary{
+  font-size:12px;
+  color:#dce7ff;
+  padding:8px 10px;
+  border-radius:999px;
+  border:1px solid rgba(122,168,255,.20);
+  background:rgba(122,168,255,.10);
+  white-space:nowrap;
+}
+.topic-grid{
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:10px;
+}
+.check-pill{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:54px;
+  padding:12px 14px;
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  cursor:pointer;
+  transition:border-color .2s ease, background .2s ease, transform .2s ease;
+}
+.check-pill:hover{
+  border-color:rgba(122,168,255,.26);
+  transform:translateY(-1px);
+}
+.check-pill.is-selected{
+  border-color:rgba(122,168,255,.36);
+  background:rgba(122,168,255,.11);
+}
+.check-pill input{
+  appearance:none;
+  -webkit-appearance:none;
+  width:18px;
+  height:18px;
+  margin:0;
+  border-radius:6px;
+  border:1px solid var(--line-2);
+  background:rgba(255,255,255,.03);
+  position:relative;
+  flex-shrink:0;
+}
+.check-pill input:checked{
+  border-color:transparent;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+}
+.check-pill input:checked::after{
+  content:'✓';
+  position:absolute;
+  inset:0;
+  display:grid;
+  place-items:center;
+  color:#fff;
+  font-size:12px;
+  font-weight:700;
+}
+.check-pill strong{
+  display:block;
+  font-size:14px;
+}
+.check-pill span{
+  display:block;
+  color:var(--muted);
+  font-size:12px;
+  margin-top:2px;
+}
+@media(max-width:820px){
+  .controls{grid-template-columns:1fr 1fr 1fr}
+  .topic-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:640px){
+  .header{flex-direction:column}
+  .pill-row{justify-content:flex-start}
+  .controls{grid-template-columns:1fr 1fr}
+  .profile-bar{flex-wrap:wrap}
+  .filter-top{flex-direction:column}
+  .filter-summary{white-space:normal}
+  .topic-grid{grid-template-columns:1fr}
+}
+.stats{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:10px;
+  margin-bottom:14px;
+}
+.stat{
+  padding:14px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--line);
+}
+.stat .num{font-size:22px;font-weight:700;line-height:1}
+.stat .label{color:var(--muted);font-size:12px;margin-top:6px}
+@media(max-width:640px){
+  .stats{grid-template-columns:repeat(2,1fr)}
+  .actions{grid-template-columns:1fr 1fr}
+  .actions button{min-height:50px}
+  .card{min-height:58vh}
+}
+.progress{
+  margin-bottom:14px;
+  padding:12px 14px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+}
+.progress-top{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+  margin-bottom:10px;
+  color:var(--muted);
+  font-size:14px;
+}
+.bar{height:10px;border-radius:999px;background:rgba(255,255,255,.08);overflow:hidden}
+.fill{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent),var(--accent-2));
+  border-radius:999px;
+  transition:width .3s ease;
+}
+
+/* card */
+.card-shell{perspective:1400px; margin:16px 0 14px}
+.card{
+  position:relative;
+  width:100%;
+  min-height:58vh;
+  transform-style:preserve-3d;
+  transition:transform .45s cubic-bezier(.2,.8,.2,1);
+  border-radius:calc(var(--radius) + 4px);
+}
+.card.flipped{transform:rotateY(180deg)}
+.face{
+  position:absolute;
+  inset:0;
+  backface-visibility:hidden;
+  -webkit-backface-visibility:hidden;
+  border-radius:calc(var(--radius) + 4px);
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.05));
+  border:1px solid var(--line-2);
+  box-shadow:var(--shadow);
+  padding:20px;
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+}
+.back{transform:rotateY(180deg)}
+.face-body{
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:16px;
+  text-align:center;
+}
+.face-footer{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+  align-items:center;
+}
+.meta{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  align-items:center;
+  justify-content:center;
+  width:100%;
+}
+.topic{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  padding:7px 11px;
+  border-radius:999px;
+  background:rgba(122,168,255,.12);
+  border:1px solid rgba(122,168,255,.20);
+  font-size:12px;
+  color:#dce7ff;
+}
+.difficulty{font-size:12px;color:var(--muted)}
+.q{
+  font-size:clamp(21px,4.7vw,33px);
+  line-height:1.22;
+  font-weight:700;
+  letter-spacing:-.02em;
+  margin:0;
+  text-align:center;
+  max-width:72ch;
+}
+.a{
+  font-size:clamp(17px,3.7vw,23px);
+  line-height:1.52;
+  margin:0;
+  white-space:pre-wrap;
+  text-align:center;
+  max-width:72ch;
+}
+.hint{color:var(--muted);font-size:13px;text-align:center}
+.kbd{
+  display:inline-block;
+  margin:0 2px;
+  padding:2px 6px;
+  border:1px solid var(--line);
+  border-bottom-width:2px;
+  border-radius:6px;
+  background:rgba(255,255,255,.05);
+  color:var(--text);
+  font-size:12px;
+}
+.type-panel{
+  width:100%;
+  display:none;
+  gap:10px;
+  flex-direction:column;
+}
+.type-panel.show{display:flex}
+.type-panel .row{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+}
+.type-panel .row button{flex:1}
+.check-note{
+  font-size:12px;
+  color:var(--muted);
+  line-height:1.45;
+  text-align:left;
+}
+.compare-box{
+  width:100%;
+  display:grid;
+  gap:10px;
+  text-align:left;
+}
+.compare-card{
+  padding:12px 13px;
+  border-radius:16px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+}
+.compare-card strong{
+  display:block;
+  margin-bottom:6px;
+  font-size:12px;
+  color:#dce7ff;
+  letter-spacing:.01em;
+  text-transform:uppercase;
+}
+.compare-card p{
+  margin:0;
+  color:var(--text);
+  line-height:1.5;
+  white-space:pre-wrap;
+}
+.compare-card.muted p{color:var(--muted)}
+
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr 1fr 1fr;
+  gap:10px;
+  margin-top:14px;
+}
+.actions button{padding:0 12px;min-height:54px;font-weight:600}
+.bottom-nav{
+  position:sticky;
+  bottom:calc(10px + var(--safe-bottom));
+  display:flex;
+  gap:10px;
+  justify-content:space-between;
+  margin-top:14px;
+  padding:10px;
+  border-radius:18px;
+  background:rgba(10,14,22,.78);
+  backdrop-filter:blur(14px);
+  border:1px solid var(--line);
+  box-shadow:var(--shadow);
+}
+.bottom-nav .group{display:flex;gap:10px;flex:1}
+.bottom-nav button{flex:1}
+.study-guide{margin:14px 0 16px}
+.study-guide details{
+  border-radius:var(--radius-sm);
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.05);
+  padding:12px 14px;
+}
+.study-guide summary{
+  cursor:pointer;
+  list-style:none;
+  font-size:15px;
+  font-weight:700;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+.study-guide summary::-webkit-details-marker{display:none}
+.study-guide summary::after{
+  content:'Tap to open';
+  font-size:12px;
+  color:var(--muted);
+  font-weight:500;
+}
+.study-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:10px;
+  margin-top:12px;
+}
+.study-step{
+  padding:12px;
+  border-radius:14px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  line-height:1.45;
+  font-size:14px;
+}
+.study-note{margin-top:12px;color:var(--muted);font-size:13px;line-height:1.5}
+.footer-note{margin-top:10px;color:var(--muted);font-size:13px;line-height:1.5}
+@media(max-width:720px){.study-grid{grid-template-columns:1fr}}
+
+#setupModal{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:999;
+  background:rgba(0,0,0,.82);
+  backdrop-filter:blur(10px);
+  align-items:center;
+  justify-content:center;
+  padding:16px;
+}
+#setupModal.show{display:flex}
+.sql-modal{
+  background:linear-gradient(160deg,#0d1220,#0a0e1a);
+  border:1px solid rgba(122,168,255,.18);
+  border-radius:20px;
+  width:100%;
+  max-width:740px;
+  box-shadow:0 30px 80px rgba(0,0,0,.6),0 0 0 1px rgba(255,255,255,.04);
+  max-height:92vh;
+  display:flex;
+  flex-direction:column;
+  overflow:hidden;
+}
+.sql-modal-header{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:18px 20px 14px;
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
+}
+.sql-modal-icon{
+  width:36px;height:36px;border-radius:10px;flex-shrink:0;
+  background:linear-gradient(135deg,#1e3a5f,#0d2340);
+  border:1px solid rgba(122,168,255,.25);
+  display:flex;align-items:center;justify-content:center;
+  font-size:18px;
+}
+.sql-modal-title{flex:1}
+.sql-modal-title h2{margin:0;font-size:17px;font-weight:700;letter-spacing:-.01em}
+.sql-modal-title p{margin:3px 0 0;font-size:12px;color:var(--muted)}
+.sql-modal-close{
+  width:32px;height:32px;border-radius:8px;flex-shrink:0;
+  background:rgba(255,255,255,.06);
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:18px;
+  line-height:1;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  cursor:pointer;
+  min-height:unset;
+  padding:0;
+  box-shadow:none;
+}
+.sql-modal-close:hover{background:rgba(255,255,255,.1);color:var(--text)}
+.sql-modal-steps{
+  display:flex;
+  gap:0;
+  padding:14px 20px 12px;
+  border-bottom:1px solid var(--line);
+  flex-shrink:0;
+  overflow-x:auto;
+}
+.sql-step{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.sql-step-num{
+  width:22px;height:22px;border-radius:50%;flex-shrink:0;
+  background:rgba(255,255,255,.08);
+  border:1px solid var(--line);
+  font-size:11px;font-weight:700;color:var(--muted);
+  display:flex;align-items:center;justify-content:center;
+  transition:all .25s ease;
+}
+.sql-step.active .sql-step-num{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-color:transparent;color:#fff;
+}
+.sql-step.done .sql-step-num{
+  background:rgba(91,214,138,.15);
+  border-color:rgba(91,214,138,.3);
+  color:var(--good);
+}
+.sql-step-label{font-size:12px;color:var(--muted);white-space:nowrap}
+.sql-step.active .sql-step-label{color:var(--text)}
+.sql-step.done .sql-step-label{color:var(--good)}
+.sql-step-arrow{margin:0 8px;color:rgba(255,255,255,.15);font-size:12px;flex-shrink:0}
+.sql-editor-wrap{
+  flex:1;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+  min-height:0;
+}
+.sql-editor-toolbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:8px 14px;
+  background:rgba(0,0,0,.25);
+  border-bottom:1px solid var(--line);
+  gap:10px;
+  flex-shrink:0;
+}
+.sql-editor-lang{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  font-size:11px;
+  color:var(--muted);
+}
+.sql-lang-dot{
+  width:8px;height:8px;border-radius:50%;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+}
+.sql-editor-actions{display:flex;gap:6px;flex-wrap:wrap;justify-content:flex-end}
+.sql-btn{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  padding:5px 11px;
+  border-radius:7px;
+  font-size:12px;
+  font-weight:600;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.06);
+  color:var(--text);
+  cursor:pointer;
+  min-height:unset;
+  box-shadow:none;
+}
+.sql-btn:hover{background:rgba(255,255,255,.1)}
+.sql-btn.primary{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2));
+  border-color:transparent;
+  color:#fff;
+  box-shadow:0 4px 14px rgba(122,168,255,.3);
+}
+.sql-btn.success{
+  background:rgba(91,214,138,.15);
+  border-color:rgba(91,214,138,.3);
+  color:var(--good);
+}
+.sql-editor-body{
+  display:flex;
+  flex:1;
+  overflow:auto;
+  min-height:0;
+  font-family:ui-monospace,SFMono-Regular,Menlo,monospace;
+  font-size:12.5px;
+  line-height:1.7;
+}
+.sql-line-nums{
+  padding:14px 0 14px 14px;
+  color:rgba(255,255,255,.18);
+  text-align:right;
+  user-select:none;
+  flex-shrink:0;
+  min-width:38px;
+}
+.sql-line-nums span{display:block}
+.sql-code{
+  padding:14px 14px 14px 10px;
+  flex:1;
+  color:#c9d8ff;
+  white-space:pre;
+}
+.kw{color:#7aa8ff;font-weight:600}
+.type{color:#ffcb6b}
+.fn{color:#82aaff}
+.str{color:#c3e88d}
+.cmt{color:rgba(255,255,255,.28);font-style:italic}
+.num{color:#f78c6c}
+.sql-modal-footer{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:14px 20px;
+  border-top:1px solid var(--line);
+  flex-shrink:0;
+  flex-wrap:wrap;
+}
+.sql-footer-note{font-size:12px;color:var(--muted);flex:1;min-width:120px}
+.sql-footer-btns{display:flex;gap:8px;flex-wrap:wrap}
+@media(max-width:560px){
+  .sql-modal-steps{gap:0}
+  .sql-step-label{display:none}
+  .sql-modal-footer{flex-direction:column;align-items:stretch}
+  .sql-footer-btns{flex-direction:column}
+  .sql-btn{justify-content:center}
+}
+</style>
+</head>
+<body>
+
+<div id="setupModal">
+  <div class="sql-modal">
+    <div class="sql-modal-header">
+      <div class="sql-modal-icon">🗄️</div>
+      <div class="sql-modal-title">
+        <h2>Database Setup Required</h2>
+        <p>Your Supabase tables do not exist yet — run the SQL below once to create them.</p>
+      </div>
+      <button class="sql-modal-close" onclick="document.getElementById('setupModal').classList.remove('show')" aria-label="Close">✕</button>
+    </div>
+
+    <div class="sql-modal-steps">
+      <div class="sql-step active" id="step1">
+        <div class="sql-step-num">1</div>
+        <div class="sql-step-label">Copy SQL</div>
+      </div>
+      <div class="sql-step-arrow">›</div>
+      <div class="sql-step" id="step2">
+        <div class="sql-step-num">2</div>
+        <div class="sql-step-label">Open SQL Editor</div>
+      </div>
+      <div class="sql-step-arrow">›</div>
+      <div class="sql-step" id="step3">
+        <div class="sql-step-num">3</div>
+        <div class="sql-step-label">Paste &amp; Run</div>
+      </div>
+      <div class="sql-step-arrow">›</div>
+      <div class="sql-step" id="step4">
+        <div class="sql-step-num">4</div>
+        <div class="sql-step-label">Done!</div>
+      </div>
+    </div>
+
+    <div class="sql-editor-wrap">
+      <div class="sql-editor-toolbar">
+        <div class="sql-editor-lang"><div class="sql-lang-dot"></div>PostgreSQL · Supabase</div>
+        <div class="sql-editor-actions">
+          <button class="sql-btn" id="openSupabaseBtn" onclick="window.open('https://supabase.com/dashboard/project/_/sql/new','_blank')">↗ Open SQL Editor</button>
+          <button class="sql-btn primary" id="copyBtn" onclick="copySQL()">⎘ Copy SQL</button>
+        </div>
+      </div>
+      <div class="sql-editor-body">
+        <div class="sql-line-nums" id="sqlLineNums"></div>
+        <div class="sql-code" id="sqlBlock"></div>
+      </div>
+    </div>
+
+    <div class="sql-modal-footer">
+      <div class="sql-footer-note" id="sqlFooterNote">Paste into <strong>Supabase → SQL Editor</strong> and click <strong>Run</strong>.</div>
+      <div class="sql-footer-btns">
+        <button class="sql-btn" onclick="document.getElementById('setupModal').classList.remove('show')">Dismiss</button>
+        <button class="sql-btn primary" onclick="location.reload()">✓ Done, reload</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="wrap">
+  <div class="profile-bar">
+    <span class="profile-label">Studying as</span>
+    <div class="profile-pills">
+      <button class="profile-pill" id="btnElisha" onclick="switchProfile('Elisha')">Elisha</button>
+      <button class="profile-pill" id="btnLmar" onclick="switchProfile('Lmar')">Lmar</button>
+    </div>
+    <div class="sync-chip">
+      <div class="sync-dot loading" id="syncDot"></div>
+      <span id="syncText">Connecting…</span>
+    </div>
+  </div>
+
+  <div class="header">
+    <div class="title">
+      <h1>AQA Psychology Flashcards</h1>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Mix topics, switch on condensed sprint decks, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
+    </div>
+    <div class="pill-row">
+      <div class="pill">Tap card to flip</div>
+      <div class="pill">Swipe ←/→ to move</div>
+      <div class="pill">Mix multiple topics</div>
+    </div>
+  </div>
+
+  <section class="study-guide" aria-label="How to study with this deck">
+    <details>
+      <summary>How to study with this deck</summary>
+      <div class="study-grid">
+        <div class="study-step"><strong>1.</strong> Say the answer from memory before you reveal it.</div>
+        <div class="study-step"><strong>2.</strong> Use type mode when you want to write your own answer first.</div>
+        <div class="study-step"><strong>3.</strong> Grade honestly so weak cards come back sooner.</div>
+      </div>
+      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly.</div>
+    </details>
+  </section>
+
+  <section class="filter-panel" aria-label="Topic selector">
+    <div class="filter-top">
+      <div>
+        <strong>Topic selector</strong>
+        <p>Tick one or more AQA topics to build your deck. If nothing has been remembered yet, it defaults to Social Influence.</p>
+      </div>
+      <div class="filter-summary" id="topicSummary">Social Influence</div>
+    </div>
+    <div class="topic-grid" id="topicFilter"></div>
+  </section>
+
+  <div class="controls">
+    <select id="modeSel" aria-label="Study mode">
+      <option value="all">Study all</option>
+      <option value="due">Due only</option>
+      <option value="weak">Weak only</option>
+      <option value="mixed">Mixed topics</option>
+    </select>
+    <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
+    <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
+    <button id="shuffleBtn" class="secondary">Shuffle</button>
+    <button id="resetBtn" class="secondary">Reset progress</button>
+  </div>
+
+  <div class="stats">
+    <div class="stat"><div class="num" id="sTotal">0</div><div class="label">Cards in deck</div></div>
+    <div class="stat"><div class="num" id="sDue">0</div><div class="label">Due now</div></div>
+    <div class="stat"><div class="num" id="sMastered">0</div><div class="label">Mastered</div></div>
+    <div class="stat"><div class="num" id="sStreak">0</div><div class="label">Correct streak</div></div>
+  </div>
+
+  <div class="progress">
+    <div class="progress-top">
+      <div id="progLabel">0 reviewed today</div>
+      <div id="nextDue">Next review: —</div>
+    </div>
+    <div class="bar"><div class="fill" id="progFill"></div></div>
+  </div>
+
+  <div class="card-shell">
+    <div class="card" id="cardInner" role="button" tabindex="0" aria-label="Flashcard. Tap or press space to flip.">
+      <div class="face front">
+        <div class="face-body">
+          <div class="meta">
+            <div class="topic" id="cardTopic">Topic</div>
+            <div class="difficulty" id="cardMeta">Think first · active recall</div>
+          </div>
+          <div class="q" id="cardQ">Loading…</div>
+
+          <div class="type-panel" id="typePanel">
+            <textarea id="answerInput" placeholder="Type your answer here…"></textarea>
+            <div class="row">
+              <button id="revealBtn" class="secondary">Reveal answer</button>
+              <button id="clearBtn" class="secondary">Clear</button>
+            </div>
+            <div class="check-note">Type mode is for your own answer first. After you reveal, compare it with the model answer and then grade it manually.</div>
+          </div>
+        </div>
+        <div class="face-footer">
+          <div class="hint" id="frontHint">Tap the card to reveal the answer.</div>
+          <div class="hint"><span class="kbd">Space</span> flip · <span class="kbd">←</span> <span class="kbd">→</span> move · <span class="kbd">1</span>–<span class="kbd">4</span> grade</div>
+        </div>
+      </div>
+
+      <div class="face back">
+        <div class="face-body">
+          <div class="meta">
+            <div class="topic" id="cardTopicB">Topic</div>
+            <div class="difficulty" id="cardMetaB">Answer</div>
+          </div>
+          <div class="compare-box" id="compareBox">
+  <div class="compare-card" id="yourAnswerBox">
+    <strong>Your answer</strong>
+    <p id="typedAnswerView">—</p>
+  </div>
+  <div class="compare-card" id="officialAnswerBox">
+    <strong>Official answer</strong>
+    <p class="a" id="cardA"></p>
+  </div>
+</div>
+<p class="a" id="cardASolo" style="text-align:center; white-space:pre-wrap;"></p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="actions">
+    <button class="bad" id="againBtn">Again</button>
+    <button id="hardBtn">Hard</button>
+    <button class="good" id="goodBtn">Good</button>
+    <button id="easyBtn">Easy</button>
+  </div>
+
+  <div class="bottom-nav">
+    <div class="group">
+      <button id="prevBtn" class="secondary">← Prev</button>
+      <button id="flipBtn" class="secondary">Flip</button>
+      <button id="nextBtn" class="secondary">Next →</button>
+    </div>
+  </div>
+
+  <div class="footer-note">
+    Progress syncs to Supabase separately for each profile. The full Psychology deck now lives in this file, while card IDs are synced so new topic packs can be added without losing review history.
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
+<script>
+/* ─────────────────────────────────────────────────────────────────────────
+   SUPABASE SQL — run this ONCE in your Supabase SQL Editor
+   ─────────────────────────────────────────────────────────────────────────
+create table if not exists profiles (
+  id          uuid primary key default gen_random_uuid(),
+  name        text unique not null,
+  streak      int  default 0,
+  last_study  text default ''
+);
+
+create table if not exists cards (
+  id         uuid primary key default gen_random_uuid(),
+  topic      text not null,
+  question   text not null,
+  answer     text not null,
+  created_at timestamptz default now()
+);
+
+create table if not exists reviews (
+  id            uuid primary key default gen_random_uuid(),
+  profile_id    uuid references profiles(id) on delete cascade,
+  card_id       uuid references cards(id)    on delete cascade,
+  ease          float   default 2.5,
+  interval_days int     default 0,
+  reps          int     default 0,
+  lapses        int     default 0,
+  due           bigint  default 0,
+  seen          int     default 0,
+  mastered      boolean default false,
+  last_reviewed bigint  default 0,
+  updated_at    timestamptz default now(),
+  unique(profile_id, card_id)
+);
+
+alter table profiles enable row level security;
+alter table cards    enable row level security;
+alter table reviews  enable row level security;
+
+create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
+create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
+create policy "anon_all_reviews"   on reviews  for all to anon using (true) with check (true);
+
+insert into profiles (name) values ('Elisha'), ('Lmar')
+  on conflict (name) do nothing;
+───────────────────────────────────────────────────────────────────────── */
+
+const SQL_SETUP = `create extension if not exists pgcrypto;
+
+create table if not exists profiles (
+  id         uuid primary key default gen_random_uuid(),
+  name       text unique not null,
+  streak     int  default 0,
+  last_study text default ''
+);
+
+create table if not exists cards (
+  id         uuid primary key default gen_random_uuid(),
+  topic      text not null,
+  question   text not null,
+  answer     text not null,
+  created_at timestamptz default now()
+);
+
+alter table cards add column if not exists slug text;
+alter table cards add column if not exists unit text default '';
+alter table cards add column if not exists variant text default 'full';
+alter table cards add column if not exists updated_at timestamptz default now();
+create unique index if not exists cards_slug_idx on cards(slug);
+
+create table if not exists reviews (
+  id            uuid primary key default gen_random_uuid(),
+  profile_id    uuid references profiles(id) on delete cascade,
+  card_id       uuid references cards(id)    on delete cascade,
+  ease          float   default 2.5,
+  interval_days int     default 0,
+  reps          int     default 0,
+  lapses        int     default 0,
+  due           bigint  default 0,
+  seen          int     default 0,
+  mastered      boolean default false,
+  last_reviewed bigint  default 0,
+  updated_at    timestamptz default now(),
+  unique(profile_id, card_id)
+);
+
+alter table profiles enable row level security;
+alter table cards    enable row level security;
+alter table reviews  enable row level security;
+
+drop policy if exists "anon_all_profiles" on profiles;
+drop policy if exists "anon_all_cards" on cards;
+drop policy if exists "anon_all_reviews" on reviews;
+
+create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
+create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
+create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
+
+insert into profiles (name) values ('Elisha'), ('Lmar')
+  on conflict (name) do nothing;`;
+
+function slugify(value) {
+  return value
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function card(unit, variant, topic, question, answer, options = {}) {
+  return {
+    unit,
+    variant,
+    t: topic,
+    q: question,
+    a: answer,
+    slug: options.slug || slugify([unit, variant, topic, question].join("-")),
+    legacyKey: options.legacyKey || null
+  };
+}
+
+const SOCIAL_INFLUENCE_FULL_BASE = [
+  {t:"Conformity",q:"What is conformity?",a:"A change in behaviour due to external pressure from a real or imaginary group."},
+  {t:"Conformity",q:"What is compliance?",a:"A change in behaviour in order to fit in — the shallowest form of conformity, linked to NSI."},
+  {t:"Conformity",q:"What is identification?",a:"Adopting the behaviours of a group despite internal beliefs. It lasts only as long as the interaction with that group."},
+  {t:"Conformity",q:"What is internalisation?",a:"A permanent change in both external and internal beliefs due to a group. Driven by the desire to be correct — linked to ISI."},
+  {t:"Conformity",q:"What is Normative Social Influence (NSI)?",a:"The weakest form of conformity — a change in behaviour in order to fit in and avoid rejection. Leads to compliance."},
+  {t:"Conformity",q:"What is Informational Social Influence (ISI)?",a:"The strongest form of conformity — a change in behaviour in order to be right, when you believe the group has better information. Leads to internalisation."},
+  {t:"Conformity",q:"Which type of conformity does NSI produce, and which does ISI produce?",a:"NSI → compliance. ISI → internalisation."},
+  {t:"Conformity",q:"What Asch evidence supports NSI as a separate process?",a:"When answers were written privately, conformity fell from 75% to 12.5% — removing the social pressure (NSI) drastically reduced conformity."},
+  {t:"Conformity",q:"What Asch evidence supports ISI as a separate process?",a:"When task difficulty increased, conformity rose — participants were more uncertain and looked to others to be correct (ISI)."},
+  {t:"Conformity",q:"What dispositional criticism applies to conformity explanations?",a:"They ignore internal locus of control — individual differences in personality mean not everyone conforms equally."},
+  {t:"Conformity",q:"What is a key methodological weakness of the NSI/ISI distinction?",a:"It is very difficult to distinguish between NSI and ISI in practice — both may operate simultaneously."},
+
+  {t:"Asch",q:"What was the aim of Asch's line study?",a:"To investigate whether individuals would conform to a group even when the task was unambiguous and the answer was clearly wrong."},
+  {t:"Asch",q:"What was the method of Asch's line study?",a:"123 male American participants. A line study with 8–12 confederates and 1 real participant. 8 critical trials (confederates gave wrong answers) and 4 real trials."},
+  {t:"Asch",q:"What were the findings of Asch's line study?",a:"On critical trials, conformity occurred at least 32% of the time. 72% of participants conformed at least once."},
+  {t:"Asch",q:"What was the conclusion of Asch's line study?",a:"Individuals still conformed even when the task was unambiguous — situational pressure from a unanimous majority drives conformity."},
+  {t:"Asch",q:"What happened to conformity as group size increased in Asch's variations?",a:"Conformity peaked with 3 confederates, then plateaued — larger groups did not produce more conformity."},
+  {t:"Asch",q:"What happened when unanimity was broken in Asch's study?",a:"Conformity fell from 32% to 5–6% when even one confederate agreed with the real participant."},
+  {t:"Asch",q:"What happened to conformity when task difficulty increased in Asch's study?",a:"Conformity rose — participants were less certain and relied on the group for information (ISI)."},
+  {t:"Asch",q:"What is a strength of Asch's line study?",a:"It was a lab study with high internal validity due to tightly controlled conditions (same confederates, same lines, same procedure)."},
+  {t:"Asch",q:"What did Perry and Spencer (1984) find, and what does it suggest about Asch?",a:"British participants conformed only 1 out of 346 times — suggesting Asch's results may reflect Cold War America rather than a universal tendency (temporal validity issue)."},
+  {t:"Asch",q:"What is the ethnocentric bias criticism of Asch?",a:"The sample was American males only — findings cannot be generalised to other cultures or genders."},
+  {t:"Asch",q:"What is the ecological validity criticism of Asch?",a:"Judging line lengths in a lab has little similarity to real-world conformity situations."},
+  {t:"Asch",q:"What is the beta bias criticism of Asch?",a:"The all-male sample ignores potential gender differences in conformity — findings may not apply to women."},
+
+  {t:"Zimbardo",q:"What are social roles?",a:"A pattern of behaviour and attributes associated with a particular role in society."},
+  {t:"Zimbardo",q:"What did Zimbardo believe about the cause of conformity?",a:"That conformity is due to situational factors (the role assigned), not dispositional factors (personality)."},
+  {t:"Zimbardo",q:"What was the aim of Zimbardo's prison study?",a:"To investigate whether individuals would conform to assigned social roles — prisoner or guard."},
+  {t:"Zimbardo",q:"What was the method of Zimbardo's prison study?",a:"Paid advertisement; 24 healthy male participants with no criminal record, randomly assigned as prisoner (uniform + number) or guard (uniform + sunglasses)."},
+  {t:"Zimbardo",q:"What were the findings of Zimbardo's prison study?",a:"Guards became sadistic; prisoners became obedient and weak. The study was stopped after 6 days — it was meant to last 2 weeks."},
+  {t:"Zimbardo",q:"What was the conclusion of Zimbardo's prison study?",a:"Participants conformed to their assigned social roles rather than acting on personal disposition."},
+  {t:"Zimbardo",q:"What is a strength of Zimbardo's participant selection?",a:"All participants were screened as mentally healthy with no criminal record, controlling for dispositional factors."},
+  {t:"Zimbardo",q:"What real-world application does Zimbardo's study have?",a:"It provides insight into behaviour in real prisons and informs prison reform policy."},
+  {t:"Zimbardo",q:"What did Reicher and Haslam find when they replicated Zimbardo?",a:"Only 1/3 of guards turned sadistic — suggesting situational factors alone do not fully explain the behaviour."},
+  {t:"Zimbardo",q:"What is the main ethical criticism of Zimbardo's study?",a:"Prisoners were subjected to significant psychological harm, raising serious concerns about participant welfare."},
+
+  {t:"Milgram",q:"What was the aim of Milgram's obedience study?",a:"To investigate whether individuals would obey an authority figure even when doing so caused harm to another person."},
+  {t:"Milgram",q:"What was the method of Milgram's study?",a:"40 male Americans recruited via advert at Yale University. Assigned the teacher role; a confederate was the learner. Participants administered fake shocks up to 450V, prompted by the researcher."},
+  {t:"Milgram",q:"What were the findings of Milgram's study?",a:"100% of participants obeyed up to 300V. 65% continued to the maximum 450V."},
+  {t:"Milgram",q:"What was the conclusion of Milgram's study?",a:"People obey authority figures even when they do not want to and even when they believe they are causing serious harm."},
+  {t:"Milgram",q:"What is an autonomous state?",a:"When an individual feels solely responsible for their own actions and their consequences."},
+  {t:"Milgram",q:"What is an agentic state?",a:"When an individual attributes their actions to an authority figure and follows orders, reducing personal responsibility."},
+  {t:"Milgram",q:"What is an agentic shift?",a:"The transition from an autonomous state to an agentic state when in the presence of an authority figure."},
+  {t:"Milgram",q:"How did location affect obedience in Milgram's variations?",a:"Moving from Yale University to a run-down building reduced obedience from 65% to 47.5%."},
+  {t:"Milgram",q:"How did proximity affect obedience in Milgram's variations?",a:"When instructions were given over the phone rather than in person, obedience dropped from 65% to 21%."},
+  {t:"Milgram",q:"How did uniform affect obedience in Milgram's variations?",a:"When the researcher wore casual clothes instead of a lab coat, obedience fell from 65% to 20%."},
+  {t:"Milgram",q:"What is a strength of Milgram's study in terms of validity?",a:"High internal validity — the controlled lab setting allowed a clear causal relationship between authority and obedience to be established."},
+  {t:"Milgram",q:"What does Hofling's nurse study add to Milgram's findings?",a:"It provides real-world support — nurses obeyed a doctor's instructions even when they violated protocol, demonstrating obedience to authority outside the lab."},
+  {t:"Milgram",q:"What is the main ethical criticism of Milgram's study?",a:"Participants were deceived and subjected to significant psychological distress, violating ethical guidelines."},
+  {t:"Milgram",q:"What is the ecological validity criticism of Milgram's study?",a:"The artificial lab setting may not reflect real-world obedience situations."},
+  {t:"Milgram",q:"What did Orne and Holland argue about Milgram?",a:"The artificial nature of the task led participants to act on demand characteristics rather than genuine obedience."},
+  {t:"Milgram",q:"What does the fact that not everyone obeyed in Milgram suggest?",a:"Other factors — such as dispositional variables — also influence obedience, meaning situational explanations alone are insufficient."},
+
+  {t:"Adorno",q:"What is an authoritarian personality?",a:"A personality type characterised by dogmatic fixed views, high respect for authority, and low respect for those of lower status. Associated with greater obedience."},
+  {t:"Adorno",q:"What did Adorno believe causes an authoritarian personality?",a:"A harsh upbringing — individuals raised with strict, punitive parenting are more likely to develop it."},
+  {t:"Adorno",q:"What was the aim of Adorno's study?",a:"To investigate whether a specific personality type was linked to obedience."},
+  {t:"Adorno",q:"What was the method of Adorno's study?",a:"2000 male American participants surveyed using the F-scale on obedience, conformity, respect for class, political views, views on race, and social norms."},
+  {t:"Adorno",q:"What were the findings of Adorno's study?",a:"Those who scored high on the F-scale (authoritarian) showed low respect for lower classes, dogmatic views, and high respect for upper classes."},
+  {t:"Adorno",q:"What was the conclusion of Adorno's study?",a:"Personality type is linked to obedience — the authoritarian personality predicts greater deference to authority."},
+  {t:"Adorno",q:"What did Milgram and Elms (1966) find that supports Adorno?",a:"The majority of participants who obeyed up to 450V in Milgram's study were found to have authoritarian personalities."},
+  {t:"Adorno",q:"What is a strength of Adorno's theory in terms of explanation?",a:"It accounts for dispositional factors in obedience — explaining why individuals differ in their obedience levels."},
+  {t:"Adorno",q:"What is a methodological criticism of Adorno's F-scale?",a:"The survey was one-directional, creating response bias — participants may have aimed for a high score, inflating apparent authoritarianism."},
+  {t:"Adorno",q:"What does Adorno's authoritarian personality theory fail to explain?",a:"Majority obedience — most people who obeyed Milgram did not have authoritarian personalities, so it cannot be the sole explanation."},
+
+  {t:"Resistance",q:"What is social support in the context of resistance to social influence?",a:"The presence of another individual who rejects the majority, which counters the pressure to conform by diffusing the sense of responsibility."},
+  {t:"Resistance",q:"How does social support aid resistance to conformity?",a:"When another individual rejects the majority view, it allows others to feel safe doing the same — they no longer feel alone in dissenting."},
+  {t:"Resistance",q:"How does social support aid resistance to obedience?",a:"Having a role model who actively defies authority gives others permission to do the same."},
+  {t:"Resistance",q:"What did Milgram find when introducing confederate teachers who stopped obeying?",a:"When one confederate dropped out at 150V and another at 210V, those who continued to 450V fell from 65% to just 10%."},
+  {t:"Resistance",q:"What does Asch's unanimity variation show about social support?",a:"When one confederate agreed with the real participant, conformity fell from 32% to 5–6% — a single ally dramatically reduces conformity."},
+  {t:"Resistance",q:"What did Allen and Levine find about social support?",a:"Even a confederate with poor eyesight who gave the correct answer still reduced conformity among real participants — the ally effect persists even when the ally's credibility is low."},
+  {t:"Resistance",q:"What is a limitation of social support as an explanation for resistance?",a:"It does not explain all resistance — Asch still found 5–6% conformity even when a dissenter was present."},
+  {t:"Resistance",q:"What is an internal locus of control (LOC)?",a:"The belief that one's experiences and outcomes are due to one's own actions and decisions."},
+  {t:"Resistance",q:"What is an external locus of control (LOC)?",a:"The belief that one's experiences are due to external factors outside one's control (luck, fate, others)."},
+  {t:"Resistance",q:"What did Holland (1967) find about LOC and obedience?",a:"37% of participants with an internal LOC resisted Milgram's study, compared to only 23% with an external LOC."},
+  {t:"Resistance",q:"What did Twenge (2004) find that challenges LOC theory?",a:"Over 40 years, people have become more external in LOC but have also become more resistant to authority — contradicting the prediction that external LOC leads to less resistance."},
+  {t:"Resistance",q:"What are two limitations of LOC as an explanation of resistance?",a:"It ignores situational factors; and LOC effects are context-dependent — people may behave differently in familiar vs unfamiliar environments."},
+
+  {t:"Social Change",q:"What is social change?",a:"When the views or behaviours of a minority are accepted and adopted into mainstream society."},
+  {t:"Social Change",q:"What is the full process of social change?",a:"Deep processing → Consistency → Commitment → Flexibility → Snowball effect → Social cryptoamnesia → Conformity → Obedience."},
+  {t:"Social Change",q:"What is deep processing in social change?",a:"The minority's consistent message forces the majority to think more carefully about the issue, even if they do not immediately change their view."},
+  {t:"Social Change",q:"What is the snowball effect in social change?",a:"Once a small number of majority members are converted, more follow rapidly — the movement gains momentum."},
+  {t:"Social Change",q:"What is social cryptoamnesia?",a:"When society adopts the minority's view but forgets that it was originally a minority position — the change feels like it 'always was' the norm."},
+  {t:"Social Change",q:"What is the argumentative principle in social change?",a:"When a minority makes sacrifices for their cause, their message gains legitimacy — the sacrifice signals genuine belief."},
+  {t:"Social Change",q:"What is gradual commitment in social change?",a:"Majority members incrementally commit more to the minority's position over time, rather than changing all at once."},
+  {t:"Social Change",q:"How does social change lead to conformity and obedience?",a:"Once the minority view becomes mainstream, others conform to it (NSI) and institutions enforce it — producing obedience to the new norm."},
+  {t:"Social Change",q:"What real-world example supports social change through consistency?",a:"The civil rights movement — consistent messaging and action over time shifted mainstream societal attitudes."},
+  {t:"Social Change",q:"What real-world example supports social change through flexibility?",a:"The LGBTQ+ movement — willingness to compromise on specific demands while maintaining core goals helped win majority support."},
+  {t:"Social Change",q:"What did Nolan (2008) find that links NSI to social change?",a:"People were more likely to reduce their energy consumption if they believed their neighbours were doing so — demonstrating NSI as a mechanism for behavioural change."},
+  {t:"Social Change",q:"What is a limitation of social change research?",a:"It is very difficult to establish cause and effect — researchers can only use case studies, not controlled experiments with proper comparison groups."},
+
+  {t:"Minority",q:"What is minority influence?",a:"When the views of a majority are changed by a minority group, through persuasion rather than numerical power."},
+  {t:"Minority",q:"What is diachronic consistency in minority influence?",a:"The minority maintaining the same message consistently over time — showing they are committed and not easily swayed."},
+  {t:"Minority",q:"What is synchronic consistency in minority influence?",a:"All members of the minority group holding and expressing the same view — presenting a unified front."},
+  {t:"Minority",q:"What is commitment in minority influence?",a:"The minority being willing to sacrifice for their cause — which signals genuine belief and makes the message more legitimate (argumentative principle)."},
+  {t:"Minority",q:"What is flexibility in minority influence?",a:"The minority not being completely rigid — willing to compromise on some points while maintaining their core position."},
+  {t:"Minority",q:"What was the aim of Moscovici's (1969) study?",a:"To investigate whether consistency in a minority affects the degree of influence they exert on a majority."},
+  {t:"Minority",q:"What was the method of Moscovici's (1969) study?",a:"4 real participants and 2 confederates were shown 36 blue slides of varying shades. Consistent condition: confederates said 'green' for all 36 slides. Inconsistent condition: confederates said 'green' for only 24 slides."},
+  {t:"Minority",q:"What were the findings of Moscovici's study?",a:"Consistent condition: 8.4% conformity. Inconsistent condition: 1.25%. Overall, 32% conformed at least once in the consistent condition."},
+  {t:"Minority",q:"What is a strength of Moscovici's study?",a:"It was a controlled lab study with high internal validity."},
+  {t:"Minority",q:"What are the criticisms of Moscovici's study?",a:"Gynocentric sample (all female); lack of mundane realism; and the percentage difference between conditions was very small."},
+  {t:"Minority",q:"What was the aim of Nemeth's (1974) study?",a:"To investigate whether flexibility was more important than consistency in producing minority influence."},
+  {t:"Minority",q:"What was the method of Nemeth's (1974) study?",a:"A mock jury deciding compensation for a ski accident. 3 confederates and 1 real participant. Inflexible condition: confederates were adamant about a low payout. Flexible condition: confederates were willing to go slightly higher."},
+  {t:"Minority",q:"What were the findings and conclusion of Nemeth's study?",a:"Real participants reduced their compensation amount more in the flexible condition. Conclusion: flexibility is more important than consistency in minority influence."},
+  {t:"Minority",q:"What are the strengths of Nemeth's study?",a:"Controlled lab study with high internal validity; clearly demonstrates the importance of flexibility in minority influence."},
+  {t:"Minority",q:"What are the criticisms of Nemeth's study?",a:"Lack of mundane realism and low ecological validity — a mock jury in a lab is far removed from real-world minority influence."},
+  {t:"Minority",q:"What overall real-world evidence supports minority influence research?",a:"The LGBTQ+ movement — demonstrated both consistency over time and flexibility in demands, successfully shifting mainstream attitudes."},
+  {t:"Minority",q:"What is the overall criticism of minority influence research?",a:"Most studies lack mundane realism — the artificial lab settings do not reflect how minority influence actually operates in society."}
+];
+
+const SOCIAL_INFLUENCE_FULL = SOCIAL_INFLUENCE_FULL_BASE.map(c =>
+  card("Social Influence", "full", c.t, c.q, c.a, { legacyKey: `${c.t}|${c.q}` })
+);
+
+const SOCIAL_INFLUENCE_CONDENSED = [
+  card("Social Influence", "condensed", "Conformity", "Sprint: define conformity in one line.", "Conformity is a change in behaviour caused by real or imagined group pressure."),
+  card("Social Influence", "condensed", "Conformity", "Sprint: compliance vs identification vs internalisation.", "Compliance is public only, identification is temporary acceptance while with the group, and internalisation is a genuine lasting change."),
+  card("Social Influence", "condensed", "Conformity", "Sprint: NSI vs ISI.", "NSI is conforming to fit in and avoid rejection; ISI is conforming because the group seems right."),
+  card("Social Influence", "condensed", "Asch", "Sprint: core findings from Asch.", "About 32% conformed on critical trials and 75% conformed at least once, showing majority pressure matters."),
+  card("Social Influence", "condensed", "Asch", "Sprint: three Asch variations to remember.", "Conformity peaked at three confederates, dropped sharply when unanimity was broken, and rose when the task became harder."),
+  card("Social Influence", "condensed", "Zimbardo", "Sprint: what did Zimbardo's prison study suggest?", "People quickly conformed to assigned social roles, supporting a situational explanation of behaviour."),
+  card("Social Influence", "condensed", "Milgram", "Sprint: key Milgram figure.", "65% obeyed all the way to 450V, showing strong obedience to authority."),
+  card("Social Influence", "condensed", "Milgram", "Sprint: three Milgram variations.", "Obedience fell with lower authority status, greater distance from the researcher, and weaker setting prestige."),
+  card("Social Influence", "condensed", "Milgram", "Sprint: agentic state and agentic shift.", "In an agentic state people see themselves as acting for authority; the shift into that state reduces personal responsibility."),
+  card("Social Influence", "condensed", "Adorno", "Sprint: authoritarian personality in one sentence.", "It is a dispositional explanation of obedience linked to strict upbringing, respect for authority, and dogmatic thinking."),
+  card("Social Influence", "condensed", "Resistance", "Sprint: social support as resistance.", "A dissenting ally breaks unanimity and makes resistance to conformity or obedience more likely."),
+  card("Social Influence", "condensed", "Resistance", "Sprint: locus of control and resistance.", "People with an internal locus of control are generally more likely to resist social influence."),
+  card("Social Influence", "condensed", "Minority", "Sprint: what three features make minority influence work?", "Consistency, commitment, and flexibility."),
+  card("Social Influence", "condensed", "Minority", "Sprint: Moscovici's key finding.", "A consistent minority was more influential than an inconsistent one, supporting the role of consistency."),
+  card("Social Influence", "condensed", "Minority", "Sprint: Nemeth's key finding.", "A flexible minority can be more persuasive than a rigid one."),
+  card("Social Influence", "condensed", "Social Change", "Sprint: process of social change.", "Minority influence creates deep processing, gains momentum through the snowball effect, then becomes the new norm."),
+  card("Social Influence", "condensed", "Evaluation", "Sprint: one general strength of social influence research.", "Many studies are controlled lab experiments, so cause and effect can be tested clearly."),
+  card("Social Influence", "condensed", "Evaluation", "Sprint: one general limitation of social influence research.", "Many studies are artificial and may lack ecological validity."),
+  card("Social Influence", "condensed", "Asch", "Sprint: why does Asch support NSI?", "Private answers cut conformity sharply, showing social pressure to fit in mattered."),
+  card("Social Influence", "condensed", "Conformity", "Sprint: why does task difficulty increase conformity?", "Greater uncertainty increases reliance on others, so ISI becomes stronger."),
+  card("Social Influence", "condensed", "Milgram", "Sprint: what does Hofling add to obedience research?", "It gives real-world support by showing obedience to authority outside the lab."),
+  card("Social Influence", "condensed", "Evaluation", "Sprint: why is cultural context important in social influence studies?", "Levels of conformity and obedience can vary by time and culture, so findings are not always universal.")
+];
+
+const MEMORY_FULL = [
+  card("Memory", "full", "Memory Systems", "What are the three features used to compare memory stores?", "Duration is how long information lasts, capacity is how much can be stored, and encoding is how information is stored."),
+  card("Memory", "full", "Memory Systems", "What are the three stores in the multi-store model?", "The sensory register, short-term memory, and long-term memory."),
+  card("Memory", "full", "Memory Systems", "What are the characteristics of the sensory register?", "It has a duration of about 0.25 to 2 seconds, very large capacity, and sense-specific encoding."),
+  card("Memory", "full", "Memory Systems", "What are the characteristics of short-term memory?", "STM lasts about 18 to 30 seconds, holds about 5 to 9 items or chunks, and mainly encodes acoustically."),
+  card("Memory", "full", "Memory Systems", "What are the characteristics of long-term memory?", "LTM has potentially unlimited duration, unlimited capacity, and mainly semantic encoding."),
+  card("Memory", "full", "Memory Systems", "What did Miller's digit span research suggest about STM capacity?", "People can usually recall around 5 to 9 chunks, supporting a limited STM capacity."),
+  card("Memory", "full", "Memory Systems", "What did Cohen argue about STM capacity?", "Research suggests STM may hold only about 4 chunks, so Miller may have overestimated capacity."),
+  card("Memory", "full", "Memory Systems", "What did Jacobs find about age and digit span?", "Recall improves with age: younger children recalled fewer chunks than older teenagers."),
+  card("Memory", "full", "Memory Systems", "What did Bahrick find about long-term memory duration?", "People could remember a high percentage of classmates even after many years, supporting very long LTM duration."),
+  card("Memory", "full", "Encoding", "What did Baddeley find about STM encoding?", "Participants recalled acoustically similar words less well than dissimilar words, suggesting STM is mainly acoustic."),
+  card("Memory", "full", "Encoding", "What did Baddeley find about LTM encoding?", "Participants recalled semantically similar words less well in LTM tasks, suggesting LTM is mainly semantic."),
+  card("Memory", "full", "Encoding", "What is a limitation of memory store research based on word lists?", "It often uses artificial testing, so it may not reflect memory in everyday life."),
+
+  card("Memory", "full", "Multi-Store Model", "Who proposed the multi-store model and what does it describe?", "Atkinson and Shiffrin proposed it in 1968 as a linear model of memory with separate stores."),
+  card("Memory", "full", "Multi-Store Model", "What is the sequence of the multi-store model?", "External stimuli enter the sensory register, attention transfers information to STM, maintenance rehearsal keeps it in STM, and prolonged rehearsal transfers it to LTM."),
+  card("Memory", "full", "Multi-Store Model", "What is maintenance rehearsal?", "Repeating information to keep it in STM and increase the chance it transfers to LTM."),
+  card("Memory", "full", "Multi-Store Model", "What is elaborate rehearsal?", "Processing information for meaning so it can be stored more effectively in LTM."),
+  card("Memory", "full", "Multi-Store Model", "What is one criticism of the multi-store model?", "It is overly simplistic because it treats STM and LTM as unitary stores with one function each."),
+  card("Memory", "full", "Multi-Store Model", "What did Logie suggest about STM and LTM?", "STM may depend on LTM more than the multi-store model suggests."),
+  card("Memory", "full", "Multi-Store Model", "How does patient HM support the multi-store model?", "After damage to the hippocampus he could not form new long-term memories but could still recall older memories, showing STM and LTM are separate."),
+  card("Memory", "full", "Multi-Store Model", "What strength from research supports the multi-store model?", "Lab studies on duration, capacity, and encoding show clear differences between stores."),
+
+  card("Memory", "full", "Working Memory Model", "Who proposed the working memory model and why?", "Baddeley and Hitch proposed it in 1974 to show STM is made of several components, not one single store."),
+  card("Memory", "full", "Working Memory Model", "What is the central executive?", "The control system that directs attention and coordinates the slave systems."),
+  card("Memory", "full", "Working Memory Model", "What is the phonological loop?", "The part of STM that deals with auditory information and the order of information."),
+  card("Memory", "full", "Working Memory Model", "What are the two parts of the phonological loop?", "The phonological store holds heard words and the articulatory process rehearses them."),
+  card("Memory", "full", "Working Memory Model", "What is the visuospatial sketchpad?", "The STM component that temporarily stores visual and spatial information."),
+  card("Memory", "full", "Working Memory Model", "What are the two parts of the visuospatial sketchpad?", "The visual cache stores form and colour, and the inner scribe deals with spatial layout and movement."),
+  card("Memory", "full", "Working Memory Model", "What is the episodic buffer?", "A temporary store that integrates information from different components and links STM with LTM."),
+  card("Memory", "full", "Working Memory Model", "What evidence from dual-task performance supports the working memory model?", "People find it harder to do two verbal tasks together than one verbal and one visual task, suggesting separate systems."),
+  card("Memory", "full", "Working Memory Model", "How does patient KF support the working memory model?", "KF had poor auditory STM but relatively normal visual STM, suggesting separate STM subsystems."),
+  card("Memory", "full", "Working Memory Model", "What are two limitations of the working memory model?", "Some evidence comes from artificial testing and some support is based on unusual brain-damaged cases."),
+
+  card("Memory", "full", "Types of LTM", "What is episodic memory?", "Memory for personal events and experiences; it is declarative and conscious."),
+  card("Memory", "full", "Types of LTM", "What is semantic memory?", "Memory for facts, meanings, and knowledge about the world; it is declarative and conscious."),
+  card("Memory", "full", "Types of LTM", "What is procedural memory?", "Memory for skills and actions, such as riding a bike; it is non-declarative and often unconscious."),
+  card("Memory", "full", "Types of LTM", "Which brain areas are linked to episodic, semantic, and procedural memory?", "Episodic is linked to the hippocampus and frontal lobes, semantic to the temporal lobe, and procedural to the cerebellum."),
+  card("Memory", "full", "Types of LTM", "How does patient HM support different types of LTM?", "He could learn new procedural skills even though he struggled to form new episodic memories."),
+  card("Memory", "full", "Types of LTM", "What is a limitation of evidence for different LTM stores?", "Much of it comes from brain-damaged patients, so it may not fully generalise."),
+
+  card("Memory", "full", "Forgetting: Interference", "What is retroactive interference?", "When new information causes forgetting of old information."),
+  card("Memory", "full", "Forgetting: Interference", "What is proactive interference?", "When old information causes forgetting of new information."),
+  card("Memory", "full", "Forgetting: Interference", "What did Baddeley and Hitch find in their rugby player study?", "Recall of teams played was worse the more other games had been played since, supporting interference."),
+  card("Memory", "full", "Forgetting: Interference", "What did Underwood conclude about proactive interference?", "Recall gets worse the further down a list an item is because earlier learning interferes with later learning."),
+  card("Memory", "full", "Forgetting: Interference", "How can advertising support interference theory?", "Seeing rival adverts close together can reduce recall and recognition for both messages."),
+  card("Memory", "full", "Forgetting: Interference", "What is one limitation of interference research?", "It often relies on artificial tasks like word lists, which may not reflect everyday forgetting."),
+  card("Memory", "full", "Forgetting: Interference", "What did Kane and Engle find about working memory and proactive interference?", "People with greater working memory capacity were less affected, showing individual differences matter."),
+  card("Memory", "full", "Forgetting: Interference", "Why can interference not explain all forgetting?", "It only explains forgetting when similar memories compete under specific conditions."),
+
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What does retrieval failure mean?", "Information is available in memory but cannot be accessed because the right cues are missing."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What is a cue?", "A reminder that helps retrieve stored information."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What is the encoding specificity principle?", "Recall is better when cues present at retrieval match cues present at encoding."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What is a context-dependent cue?", "A cue based on the external environment being the same at learning and recall."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What did Godden and Baddeley find with scuba divers?", "Recall was best when learning and recall happened in the same place, either both underwater or both on land."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What is a state-dependent cue?", "A cue based on being in the same internal state at learning and recall."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What did Goodwin find about state-dependent cues?", "Recall was better when participants were in the same state, such as drunk or sober, at learning and recall."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What real-world application supports retrieval failure research?", "Recall in exams can improve when cues from learning are recreated or when familiar teachers are present."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What did Tulving and Psotka show about cues and interference?", "Providing cues could reduce the effects of interference, showing memories may still be stored."),
+  card("Memory", "full", "Forgetting: Retrieval Failure", "What is a limitation of cue-dependent forgetting?", "People still forget even when cues are available, so it cannot explain all forgetting."),
+
+  card("Memory", "full", "EWT: Misleading Information", "What is eyewitness testimony?", "A witness's memory of an event, often used in criminal investigations."),
+  card("Memory", "full", "EWT: Misleading Information", "What is misleading information?", "Incorrect information introduced after an event that distorts memory of that event."),
+  card("Memory", "full", "EWT: Misleading Information", "What is a leading question?", "A question phrased in a way that suggests the desired answer."),
+  card("Memory", "full", "EWT: Misleading Information", "What did Loftus and Palmer find about leading questions?", "More intense verbs like 'smashed' led to higher speed estimates than milder verbs like 'contacted'."),
+  card("Memory", "full", "EWT: Misleading Information", "What is post-event discussion?", "Talking about an event with other witnesses after it has happened."),
+  card("Memory", "full", "EWT: Misleading Information", "What did Gabbert find about post-event discussion?", "Participants who discussed the event were far more likely to recall incorrect information."),
+  card("Memory", "full", "EWT: Misleading Information", "What is the conformity effect in eyewitness testimony?", "Witnesses may adopt details from others' accounts so their own memory becomes less accurate."),
+  card("Memory", "full", "EWT: Misleading Information", "How can repeated interviews reduce EWT accuracy?", "Narratives can become skewed as witnesses are repeatedly exposed to suggestions from interviewers."),
+  card("Memory", "full", "EWT: Misleading Information", "What did Braun and colleagues show about false memories?", "Misleading advertising can create false memories, such as impossible events being 'remembered'."),
+  card("Memory", "full", "EWT: Misleading Information", "What is one practical application of misleading information research?", "It has influenced police interviewing and court procedures to reduce false testimony."),
+  card("Memory", "full", "EWT: Misleading Information", "What is a limitation of misleading information research?", "Many studies are lab studies and may lack the emotional realism of real crimes."),
+
+  card("Memory", "full", "EWT: Anxiety", "What is weapon focus?", "When attention is drawn to a weapon, reducing recall of other details."),
+  card("Memory", "full", "EWT: Anxiety", "What did Johnson and Scott find about weapon focus?", "Participants who saw a knife recalled the person less accurately than those who saw a pen."),
+  card("Memory", "full", "EWT: Anxiety", "Why might anxiety reduce EWT accuracy?", "High anxiety narrows attention so witnesses focus on the central threat instead of peripheral details."),
+  card("Memory", "full", "EWT: Anxiety", "What evidence suggests anxiety can improve recall?", "Real witnesses, especially victims, can sometimes remember key details very well."),
+  card("Memory", "full", "EWT: Anxiety", "What did Christianson and Hubinette find?", "Real-life bank robbery victims often had better recall than bystanders."),
+  card("Memory", "full", "EWT: Anxiety", "What does the Yerkes-Dodson law suggest about anxiety and memory?", "Moderate anxiety tends to produce the best performance, while very low or very high anxiety can reduce accuracy."),
+  card("Memory", "full", "EWT: Anxiety", "What did Pickel argue about weapon focus findings?", "Surprise may explain poorer accuracy rather than threat alone."),
+  card("Memory", "full", "EWT: Anxiety", "What is one limitation of anxiety research?", "Individual differences mean anxiety does not affect every witness in exactly the same way.")
+];
+
+const MEMORY_CONDENSED = [
+  card("Memory", "condensed", "Memory Systems", "Sprint: compare sensory register, STM, and LTM using duration, capacity, and encoding.", "Sensory register is very brief with huge capacity and sense-specific coding; STM lasts around 18 to 30 seconds with limited capacity and mainly acoustic coding; LTM is potentially permanent, unlimited, and mainly semantic."),
+  card("Memory", "condensed", "Memory Systems", "Sprint: Miller vs Cohen on STM capacity.", "Miller suggested 5 to 9 chunks, while later evidence like Cohen suggests STM may really hold closer to 4 chunks."),
+  card("Memory", "condensed", "Encoding", "Sprint: Baddeley's key encoding finding.", "STM is mainly acoustic and LTM is mainly semantic."),
+  card("Memory", "condensed", "Multi-Store Model", "Sprint: sequence of the multi-store model.", "Attention moves information from sensory register to STM, rehearsal keeps it there, and prolonged rehearsal transfers it to LTM."),
+  card("Memory", "condensed", "Multi-Store Model", "Sprint: one strength and one weakness of the multi-store model.", "It is supported by research on different stores, but it is too simplistic because STM and LTM are not unitary."),
+  card("Memory", "condensed", "Multi-Store Model", "Sprint: how does HM support separate memory stores?", "HM could not form new long-term memories after hippocampal damage, showing STM and LTM are separable."),
+  card("Memory", "condensed", "Working Memory Model", "Sprint: four parts of the working memory model.", "Central executive, phonological loop, visuospatial sketchpad, and episodic buffer."),
+  card("Memory", "condensed", "Working Memory Model", "Sprint: phonological loop and visuospatial sketchpad in one line each.", "The phonological loop handles sound-based information, while the visuospatial sketchpad handles visual and spatial information."),
+  card("Memory", "condensed", "Working Memory Model", "Sprint: what does patient KF show?", "Auditory STM and visual STM can be affected separately, supporting separate STM components."),
+  card("Memory", "condensed", "Types of LTM", "Sprint: episodic vs semantic vs procedural memory.", "Episodic is personal events, semantic is facts and meanings, and procedural is skills."),
+  card("Memory", "condensed", "Types of LTM", "Sprint: one brain area for each LTM type.", "Episodic links to hippocampus and frontal lobe, semantic to the temporal lobe, and procedural to the cerebellum."),
+  card("Memory", "condensed", "Types of LTM", "Sprint: how does HM support different LTMs?", "He struggled to form new episodic memories but could still learn procedural skills."),
+  card("Memory", "condensed", "Forgetting: Interference", "Sprint: proactive vs retroactive interference.", "Proactive is old information disrupting new learning; retroactive is new information disrupting older memories."),
+  card("Memory", "condensed", "Forgetting: Interference", "Sprint: rugby player study takeaway.", "The more similar information learned in between, the worse recall becomes, supporting interference."),
+  card("Memory", "condensed", "Forgetting: Retrieval Failure", "Sprint: encoding specificity principle.", "Recall works best when cues at retrieval match cues present at encoding."),
+  card("Memory", "condensed", "Forgetting: Retrieval Failure", "Sprint: Godden and Baddeley study.", "Divers recalled best when learning and recall happened in the same context."),
+  card("Memory", "condensed", "Forgetting: Retrieval Failure", "Sprint: state-dependent cue finding.", "Recall is better when the internal state at recall matches the state during learning."),
+  card("Memory", "condensed", "EWT: Misleading Information", "Sprint: Loftus and Palmer finding.", "The wording of a question changed speed estimates, showing leading questions can distort memory."),
+  card("Memory", "condensed", "EWT: Misleading Information", "Sprint: Gabbert's post-event discussion finding.", "Discussion with another witness increased recall of incorrect details."),
+  card("Memory", "condensed", "EWT: Misleading Information", "Sprint: one strength and one weakness of misleading information research.", "It has useful applications for police interviewing, but many studies lack ecological validity."),
+  card("Memory", "condensed", "EWT: Anxiety", "Sprint: weapon focus effect.", "A weapon draws attention away from other details, so recall of the person or scene can become less accurate."),
+  card("Memory", "condensed", "EWT: Anxiety", "Sprint: Yerkes-Dodson law.", "Moderate anxiety may help performance, but very high anxiety can reduce eyewitness accuracy.")
+];
+
+const ATTACHMENT_FULL = [
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What is attachment?", "An emotional bond between two people that endures over time."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What is reciprocity?", "Turn-taking interaction in which caregiver and infant respond to each other's signals."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What is interactional synchrony?", "When an infant mirrors the actions and emotions of the caregiver."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What was the aim of Meltzoff and Moore's study?", "To investigate interactional synchrony in very young infants."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What was the procedure in Meltzoff and Moore's study?", "Infants around 12 to 21 days old observed adult facial expressions or gestures, and their responses were recorded."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What did Meltzoff and Moore find?", "Infants copied some adult gestures and expressions, suggesting early interactional synchrony."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What did Meltzoff and Moore conclude?", "Interactional synchrony appears to be innate rather than learned."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What is one criticism of Meltzoff and Moore?", "The behaviour may have been simple reflexes rather than true imitation."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What is another criticism of caregiver-infant interaction research?", "Observer bias and replication issues make reliability harder to judge."),
+  card("Attachment", "full", "Caregiver-Infant Interactions", "What did Isabella find about synchrony?", "Higher levels of synchrony were linked to more secure attachment."),
+
+  card("Attachment", "full", "Stages of Attachment", "What are Schaffer and Emerson's four stages of attachment?", "Asocial, indiscriminate attachments, discriminate attachment, and multiple attachments."),
+  card("Attachment", "full", "Stages of Attachment", "What happens in the asocial stage?", "From about 0 to 2 months, infants respond similarly to objects and people."),
+  card("Attachment", "full", "Stages of Attachment", "What happens in the indiscriminate attachment stage?", "From about 2 to 6 months, infants prefer human company but accept comfort from many people."),
+  card("Attachment", "full", "Stages of Attachment", "What happens in the discriminate attachment stage?", "From about 7 months, infants show a clear preference for one main attachment figure and show separation anxiety."),
+  card("Attachment", "full", "Stages of Attachment", "What happens in the multiple attachments stage?", "After about 1 year, infants form several attachments beyond the primary one."),
+  card("Attachment", "full", "Stages of Attachment", "What was the aim of Schaffer and Emerson's study?", "To examine how attachments form in the first year of life."),
+  card("Attachment", "full", "Stages of Attachment", "What was the method of Schaffer and Emerson's study?", "They followed 60 infants from working-class Glasgow families and interviewed mothers regularly about separation and stranger anxiety."),
+  card("Attachment", "full", "Stages of Attachment", "What did Schaffer and Emerson find?", "About half the infants showed separation anxiety by 7 months and many had multiple attachments by 10 months."),
+  card("Attachment", "full", "Stages of Attachment", "What is a strength of Schaffer and Emerson's study?", "It has good ecological validity because it studied real attachments in everyday life."),
+  card("Attachment", "full", "Stages of Attachment", "What are two limitations of Schaffer and Emerson's study?", "It had limited population validity and relied on mothers' reports, which may be biased."),
+
+  card("Attachment", "full", "Role of the Father", "What role are fathers often described as having in attachment research?", "They are often a secondary attachment figure and a primary playmate."),
+  card("Attachment", "full", "Role of the Father", "What was the aim of Grossmann's study on fathers?", "To investigate the long-term importance of fathers in child development."),
+  card("Attachment", "full", "Role of the Father", "What did Grossmann find about mothers and fathers?", "Both mattered, but mothers were more important for nurturing while fathers were linked more to play and stimulation."),
+  card("Attachment", "full", "Role of the Father", "What did Field find about primary caregiver fathers?", "When fathers were the main caregiver they behaved similarly to mothers."),
+  card("Attachment", "full", "Role of the Father", "What is one limitation of father research?", "Findings are mixed, so there is no single universal father role."),
+  card("Attachment", "full", "Role of the Father", "Why are cultural differences important when studying fathers?", "The role of fathers varies across cultures, such as in societies where fathers are much more involved in daily care."),
+
+  card("Attachment", "full", "Animal Studies", "What is imprinting?", "Rapid attachment to the first moving object seen during a critical period after birth."),
+  card("Attachment", "full", "Animal Studies", "What was the aim of Lorenz's study?", "To investigate imprinting in birds."),
+  card("Attachment", "full", "Animal Studies", "What did Lorenz do in his imprinting study?", "Some goslings hatched with the mother, while others hatched in an incubator and first saw Lorenz."),
+  card("Attachment", "full", "Animal Studies", "What did Lorenz find?", "Incubator-hatched goslings followed Lorenz instead of the mother, showing imprinting to the first moving object."),
+  card("Attachment", "full", "Animal Studies", "What did Lorenz conclude?", "Imprinting is an innate form of attachment that happens in a critical period."),
+  card("Attachment", "full", "Animal Studies", "What are two limitations of Lorenz's study?", "Findings from birds may not generalise to humans, and later evidence suggests imprinting is not always completely permanent."),
+  card("Attachment", "full", "Animal Studies", "What was the aim of Harlow's study?", "To investigate whether contact comfort or food was more important in attachment."),
+  card("Attachment", "full", "Animal Studies", "What did Harlow do with his rhesus monkeys?", "Baby monkeys were given wire surrogate mothers and soft cloth surrogate mothers, with food provided by one of them."),
+  card("Attachment", "full", "Animal Studies", "What did Harlow find?", "Monkeys spent more time with the cloth mother and ran to it for comfort even when the wire mother provided food."),
+  card("Attachment", "full", "Animal Studies", "What did Harlow conclude?", "Contact comfort is more important than feeding in attachment formation."),
+  card("Attachment", "full", "Animal Studies", "What real-world application comes from Harlow's work?", "It influenced child care and orphanage practices by stressing the need for emotional comfort."),
+  card("Attachment", "full", "Animal Studies", "What are two criticisms of Harlow's study?", "It may not fully generalise to humans and it raised major ethical concerns because the monkeys suffered severe distress."),
+
+  card("Attachment", "full", "Social Learning Theory", "Why is social learning theory sometimes called cupboard love?", "Because it argues attachment forms because the caregiver is associated with feeding."),
+  card("Attachment", "full", "Social Learning Theory", "How does classical conditioning explain attachment?", "The mother starts as a neutral stimulus but becomes associated with food and so produces pleasure and comfort."),
+  card("Attachment", "full", "Social Learning Theory", "How does operant conditioning explain attachment from the infant's side?", "Crying is positively reinforced when the baby is fed, so the infant repeats behaviour that brings food."),
+  card("Attachment", "full", "Social Learning Theory", "How does operant conditioning explain attachment from the caregiver's side?", "Feeding removes crying, so the caregiver is negatively reinforced and more likely to feed again."),
+  card("Attachment", "full", "Social Learning Theory", "Why does Harlow challenge social learning theory?", "Monkeys preferred comfort over food, so feeding alone cannot explain attachment."),
+  card("Attachment", "full", "Social Learning Theory", "Why do Schaffer and Emerson challenge social learning theory?", "Infants often formed primary attachments with caregivers who were not always the main feeder."),
+  card("Attachment", "full", "Social Learning Theory", "What is one criticism of social learning theory?", "It is reductionist because it ignores important social and emotional factors such as interaction and social releasers."),
+
+  card("Attachment", "full", "Bowlby", "Why did Bowlby see attachment as adaptive?", "Because attachment increases an infant's chances of survival."),
+  card("Attachment", "full", "Bowlby", "What are social releasers?", "Innate baby behaviours and features, like crying or the baby face, that trigger caregiving."),
+  card("Attachment", "full", "Bowlby", "What is Bowlby's critical period?", "Attachment should form between about 6 months and 3 years or later development may be damaged."),
+  card("Attachment", "full", "Bowlby", "What is monotropy?", "The idea that one special primary attachment is more important than all others."),
+  card("Attachment", "full", "Bowlby", "What is the internal working model?", "A mental template for future relationships based on the child's first attachment."),
+  card("Attachment", "full", "Bowlby", "How do Lorenz and Harlow support Bowlby?", "Lorenz supports a critical period and Harlow supports the importance of comfort as a secure base."),
+  card("Attachment", "full", "Bowlby", "What criticism comes from Schaffer and Emerson for Bowlby?", "Many infants formed multiple attachments, which challenges strict monotropy."),
+  card("Attachment", "full", "Bowlby", "What is one social sensitivity issue with Bowlby's theory?", "It can appear to blame mothers and underplay the role of fathers and wider care."),
+
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What was the aim of the Strange Situation?", "To assess the quality of infant attachment through separation anxiety, stranger anxiety, reunion behaviour, and exploration."),
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What was the procedure of the Strange Situation?", "Mother and infant were observed through a series of short episodes involving play, separation, reunion, and a stranger."),
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What are the four behaviours used to classify attachment in the Strange Situation?", "Separation anxiety, stranger anxiety, reunion behaviour, and willingness to explore."),
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What characterises secure attachment?", "Moderate separation and stranger anxiety, joyful reunion, and using the caregiver as a safe base."),
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What characterises insecure-avoidant attachment?", "Low separation and stranger anxiety, little interest in reunion, and independent exploration."),
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What characterises insecure-resistant attachment?", "High separation and stranger anxiety, clinginess, and difficulty being comforted on reunion."),
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What is a strength of the Strange Situation?", "It is standardised and has high reliability."),
+  card("Attachment", "full", "Ainsworth's Strange Situation", "What are two criticisms of the Strange Situation?", "It is artificial and may be culturally biased because behaviour can mean different things in different cultures."),
+
+  card("Attachment", "full", "Cultural Variations", "What did van IJzendoorn and Kroonenberg investigate?", "Cross-cultural variations in attachment types."),
+  card("Attachment", "full", "Cultural Variations", "What was the method used by van IJzendoorn and Kroonenberg?", "A meta-analysis of 32 studies across several countries involving over 2000 infants."),
+  card("Attachment", "full", "Cultural Variations", "What was the main finding on secure attachment in cross-cultural research?", "Secure attachment was the most common type in most cultures."),
+  card("Attachment", "full", "Cultural Variations", "Which insecure types were more common in some cultures?", "Insecure-resistant was more common in collectivist cultures such as Japan and Israel, while insecure-avoidant was more common in some individualist cultures such as Germany."),
+  card("Attachment", "full", "Cultural Variations", "What is one strength of van IJzendoorn and Kroonenberg?", "It used a large combined sample, making findings more reliable."),
+  card("Attachment", "full", "Cultural Variations", "What are two criticisms of this cross-cultural research?", "There were larger differences within cultures than between them, and the Strange Situation may be ethnocentric."),
+
+  card("Attachment", "full", "Maternal Deprivation", "What is maternal deprivation?", "Long-term separation from the primary attachment figure during the critical period."),
+  card("Attachment", "full", "Maternal Deprivation", "What three long-term effects did Bowlby predict from maternal deprivation?", "Affectionless psychopathy, lower intelligence, and difficulties in later relationships."),
+  card("Attachment", "full", "Maternal Deprivation", "What was the aim of Bowlby's 44 thieves study?", "To investigate whether affectionless psychopathy was linked to early separation from the mother."),
+  card("Attachment", "full", "Maternal Deprivation", "What did Bowlby find in the 44 thieves study?", "Many thieves classed as affectionless psychopaths had experienced early prolonged separation, unlike the control group."),
+  card("Attachment", "full", "Maternal Deprivation", "What did Bowlby conclude from the 44 thieves study?", "Maternal deprivation may be linked to affectionless psychopathy."),
+  card("Attachment", "full", "Maternal Deprivation", "What is one application of Bowlby's deprivation theory?", "It encouraged hospitals and care settings to allow more parent-child contact."),
+  card("Attachment", "full", "Maternal Deprivation", "What criticism did Rutter make of Bowlby?", "Bowlby confused deprivation with privation, which are not the same thing."),
+  card("Attachment", "full", "Maternal Deprivation", "Why is the 44 thieves study methodologically limited?", "It is correlational, so it cannot prove early separation caused later problems."),
+
+  card("Attachment", "full", "Institutionalisation", "What is institutionalisation?", "Growing up in an institution with low emotional care, low stimulation, and limited individual attention."),
+  card("Attachment", "full", "Institutionalisation", "What kinds of effects can institutionalisation produce?", "Affectionless behaviour, delayed development, social problems, dependency, depression, and aggression."),
+  card("Attachment", "full", "Institutionalisation", "What was the aim of Rutter's Romanian orphan study?", "To investigate the effects of early institutional care on development after adoption."),
+  card("Attachment", "full", "Institutionalisation", "What did Rutter find about Romanian adoptees?", "Many children showed social, physical, and cognitive difficulties, but those adopted very early often recovered far better."),
+  card("Attachment", "full", "Institutionalisation", "What did Rutter conclude?", "Institutionalisation can seriously affect development, especially when it lasts beyond the critical period."),
+  card("Attachment", "full", "Institutionalisation", "What is one practical application of Rutter's findings?", "Orphans are now adopted much earlier and care quality is monitored more closely."),
+  card("Attachment", "full", "Institutionalisation", "What is one limitation of Rutter's study?", "It focused on Romanian orphans, so findings may not generalise to every institutional setting."),
+
+  card("Attachment", "full", "Influence of Early Attachment", "How does Bowlby link early attachment to later relationships?", "The internal working model shapes expectations and behaviour in later friendships, love, and parenting."),
+  card("Attachment", "full", "Influence of Early Attachment", "What did Kerns find about secure attachment in childhood?", "Securely attached children tend to have better peer relationships."),
+  card("Attachment", "full", "Influence of Early Attachment", "What did Hazan and Shaver find in the love quiz?", "Securely attached adults tended to have trusting long-term relationships, while insecure types showed more jealousy or clinginess."),
+  card("Attachment", "full", "Influence of Early Attachment", "What did Bailey find about parenting and attachment?", "Attachment styles often appeared to run from grandparents to parents to children."),
+  card("Attachment", "full", "Influence of Early Attachment", "What is one criticism of research linking early attachment to later outcomes?", "It can be overly deterministic because later experiences also shape relationships."),
+  card("Attachment", "full", "Influence of Early Attachment", "What is another criticism of this research?", "Much of it is correlational and may rely on retrospective self-report.")
+];
+
+const ATTACHMENT_CONDENSED = [
+  card("Attachment", "condensed", "Caregiver-Infant Interactions", "Sprint: define reciprocity and interactional synchrony.", "Reciprocity is turn-taking between infant and caregiver, while interactional synchrony is when the infant mirrors the caregiver's actions or emotions."),
+  card("Attachment", "condensed", "Caregiver-Infant Interactions", "Sprint: Meltzoff and Moore takeaway.", "Very young infants imitated adult gestures, suggesting synchrony may be innate."),
+  card("Attachment", "condensed", "Stages of Attachment", "Sprint: four stages of attachment.", "Asocial, indiscriminate, discriminate, and multiple attachments."),
+  card("Attachment", "condensed", "Stages of Attachment", "Sprint: what did Schaffer and Emerson show?", "Attachments develop in stages and multiple attachments usually appear after the first main attachment."),
+  card("Attachment", "condensed", "Role of the Father", "Sprint: simple role of the father.", "Fathers are often important play and stimulation figures, though roles vary a lot across families and cultures."),
+  card("Attachment", "condensed", "Animal Studies", "Sprint: Lorenz in one line.", "Lorenz showed imprinting on the first moving object during a critical period."),
+  card("Attachment", "condensed", "Animal Studies", "Sprint: Harlow in one line.", "Harlow showed contact comfort matters more than food for attachment."),
+  card("Attachment", "condensed", "Social Learning Theory", "Sprint: why is attachment called cupboard love here?", "Because the caregiver becomes associated with food and reward."),
+  card("Attachment", "condensed", "Social Learning Theory", "Sprint: one reason SLT is limited.", "Harlow and Schaffer show attachment is not simply based on feeding."),
+  card("Attachment", "condensed", "Bowlby", "Sprint: five Bowlby keywords.", "Adaptive, social releasers, critical period, monotropy, and internal working model."),
+  card("Attachment", "condensed", "Bowlby", "Sprint: what is the internal working model?", "A template from early attachment that shapes later relationships."),
+  card("Attachment", "condensed", "Ainsworth's Strange Situation", "Sprint: four Strange Situation behaviours.", "Separation anxiety, stranger anxiety, reunion behaviour, and exploration."),
+  card("Attachment", "condensed", "Ainsworth's Strange Situation", "Sprint: Type B secure attachment.", "Moderate anxiety on separation, happiness on reunion, and using the caregiver as a safe base."),
+  card("Attachment", "condensed", "Ainsworth's Strange Situation", "Sprint: Type A vs Type C.", "Avoidant infants show low anxiety and little reunion seeking; resistant infants show high anxiety and are hard to comfort."),
+  card("Attachment", "condensed", "Cultural Variations", "Sprint: van IJzendoorn and Kroonenberg conclusion.", "Secure attachment is common worldwide, but cultures vary in the insecure type most often seen."),
+  card("Attachment", "condensed", "Maternal Deprivation", "Sprint: Bowlby's predicted effects of deprivation.", "Affectionless psychopathy, lower IQ, and difficulty forming later relationships."),
+  card("Attachment", "condensed", "Maternal Deprivation", "Sprint: 44 thieves study finding.", "Affectionless thieves were much more likely to have experienced prolonged early separation."),
+  card("Attachment", "condensed", "Institutionalisation", "Sprint: what does institutionalisation mean?", "Growing up in care with poor emotional and cognitive stimulation."),
+  card("Attachment", "condensed", "Institutionalisation", "Sprint: Rutter's Romanian orphan finding.", "Early adoption greatly reduced the long-term effects of institutional care."),
+  card("Attachment", "condensed", "Influence of Early Attachment", "Sprint: Kerns finding.", "Securely attached children usually have healthier peer relationships."),
+  card("Attachment", "condensed", "Influence of Early Attachment", "Sprint: Hazan and Shaver finding.", "Adult romantic relationships often reflect early attachment style."),
+  card("Attachment", "condensed", "Evaluation", "Sprint: one general limitation of attachment research.", "A lot of evidence is correlational, so it cannot prove early attachment directly causes later outcomes.")
+];
+
+const PSYCHOPATHOLOGY_FULL = [
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is statistical infrequency?", "Behaviour is seen as abnormal when it is very rare or unusual in the population."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is one limitation of statistical infrequency?", "Some rare behaviours are desirable, so rarity alone does not equal abnormality."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is deviation from social norms?", "Behaviour is abnormal if it breaks the accepted standards of a society."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is one limitation of deviation from social norms?", "Norms depend on culture, context, and time, so the definition is relative."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is failure to function adequately?", "A person is abnormal if they cannot cope with everyday life and their behaviour harms themselves or others."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is one limitation of failure to function adequately?", "It is subjective because what counts as dysfunction depends on judgement."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is deviation from ideal mental health?", "Abnormality is seen as failing to meet Jahoda's criteria for positive mental health."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What are Jahoda's six criteria for ideal mental health?", "Self-actualisation, autonomy, self-esteem, accurate perception of reality, mastery of the environment, and integration."),
+  card("Psychopathology", "full", "Definitions of Abnormality", "What is one criticism of ideal mental health?", "The criteria are unrealistic because very few people meet all of them all the time."),
+
+  card("Psychopathology", "full", "Phobias", "What is a phobia?", "An irrational fear of an object or situation that leads to avoidance."),
+  card("Psychopathology", "full", "Phobias", "What are the emotional characteristics of phobias?", "Anxiety and distress."),
+  card("Psychopathology", "full", "Phobias", "What are the behavioural characteristics of phobias?", "Avoidance, panic, freezing, or fainting."),
+  card("Psychopathology", "full", "Phobias", "What are the cognitive characteristics of phobias?", "Irrational beliefs and selective attention to the feared stimulus."),
+
+  card("Psychopathology", "full", "Depression", "What is depression?", "A mood disorder involving persistent low mood and related emotional, behavioural, and cognitive symptoms."),
+  card("Psychopathology", "full", "Depression", "What are the emotional characteristics of depression?", "Sadness, low self-worth, anger, and reduced pleasure."),
+  card("Psychopathology", "full", "Depression", "What are the behavioural characteristics of depression?", "Changes in sleep, appetite, activity levels, and often withdrawal or tiredness."),
+  card("Psychopathology", "full", "Depression", "What are the cognitive characteristics of depression?", "Negative thoughts, guilt, low self-esteem, and Beck's negative triad."),
+
+  card("Psychopathology", "full", "OCD", "What is OCD?", "An anxiety-related disorder involving obsessions and compulsions."),
+  card("Psychopathology", "full", "OCD", "What are the emotional characteristics of OCD?", "Anxiety, distress, disgust, and shame."),
+  card("Psychopathology", "full", "OCD", "What are the behavioural characteristics of OCD?", "Repetitive compulsions and avoidance behaviours."),
+  card("Psychopathology", "full", "OCD", "What are the cognitive characteristics of OCD?", "Obsessive intrusive thoughts and awareness that the behaviour may be irrational."),
+
+  card("Psychopathology", "full", "Phobias: Behavioural Explanation", "What is the two-process model of phobias?", "Phobias are acquired by classical conditioning and maintained by operant conditioning."),
+  card("Psychopathology", "full", "Phobias: Behavioural Explanation", "How does classical conditioning explain phobias?", "A neutral stimulus becomes associated with fear after being paired with an unconditioned stimulus."),
+  card("Psychopathology", "full", "Phobias: Behavioural Explanation", "How does operant conditioning maintain phobias?", "Avoiding the feared object reduces anxiety, so avoidance is negatively reinforced."),
+  card("Psychopathology", "full", "Phobias: Behavioural Explanation", "What is biological preparedness?", "An evolutionary idea that people are more ready to fear stimuli that threatened survival in the past."),
+  card("Psychopathology", "full", "Phobias: Behavioural Explanation", "What is a strength of the behavioural explanation of phobias?", "It explains both how phobias can start and how they continue."),
+  card("Psychopathology", "full", "Phobias: Behavioural Explanation", "What is one limitation of the behavioural explanation of phobias?", "Many people have traumatic experiences without developing phobias, so conditioning cannot explain every case."),
+  card("Psychopathology", "full", "Phobias: Behavioural Explanation", "What is another limitation of the behavioural explanation of phobias?", "It ignores cognitive factors such as irrational beliefs."),
+
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What is systematic desensitisation?", "A behavioural therapy that gradually exposes someone to a fear hierarchy while they stay relaxed."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What is counterconditioning in systematic desensitisation?", "Replacing the old fear response with a new relaxation response."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What is flooding?", "Immediate exposure to the feared object or situation without gradual build-up."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What is the rationale behind flooding?", "Fear cannot be maintained forever, so prolonged exposure should eventually reduce anxiety."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What did Choy and colleagues find about treating phobias?", "Flooding can be very effective, and some evidence suggests it may work faster than systematic desensitisation."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What did Humphrey suggest about behavioural therapies?", "They can sometimes be self-administered."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What are two strengths of behavioural treatments for phobias?", "They can be effective and often cheaper or quicker than other approaches."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What are two limitations of flooding?", "It can be highly traumatic and it does not suit everyone."),
+  card("Psychopathology", "full", "Phobias: Behavioural Treatment", "What is one limitation of systematic desensitisation?", "It can take time because the person must move through a hierarchy step by step."),
+
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What does Ellis's ABC model propose?", "Depression is caused by irrational beliefs about activating events rather than the events themselves."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What do the letters A, B, and C stand for in Ellis's ABC model?", "A is activating event, B is belief, and C is consequence."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What is musturbatory thinking in Ellis's theory?", "Rigid irrational demands such as 'I must be approved' or 'I must succeed or I am worthless'."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What is Beck's negative triad?", "Negative views of the self, the world, and the future."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "How does Beck explain the origin of depression?", "Negative childhood experiences create dysfunctional schemas that bias thinking."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What research support comes from Hammen and Krantz?", "Depressed participants showed more logical thinking errors, supporting the role of distorted cognition."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What is one strength of cognitive explanations of depression?", "They led directly to successful therapies such as CBT and REBT."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What is one limitation of cognitive explanations of depression?", "Sometimes irrational beliefs may be a symptom of depression rather than the cause."),
+  card("Psychopathology", "full", "Depression: Cognitive Explanation", "What did Alloy and Abramson suggest?", "Depressed people may sometimes make more realistic judgements than non-depressed people, challenging the idea that they are always irrational."),
+
+  card("Psychopathology", "full", "Depression: Cognitive Treatment", "What is REBT?", "Rational emotive behaviour therapy, a form of CBT developed by Ellis to challenge irrational beliefs."),
+  card("Psychopathology", "full", "Depression: Cognitive Treatment", "What do D, E, and F add to Ellis's ABC model in therapy?", "Disputing irrational beliefs, the effect of disputing them, and the new feelings that result."),
+  card("Psychopathology", "full", "Depression: Cognitive Treatment", "How does homework work in REBT?", "Clients test their irrational beliefs against reality between sessions."),
+  card("Psychopathology", "full", "Depression: Cognitive Treatment", "What is unconditional positive regard in REBT?", "The therapist accepts the client as worthwhile to help challenge low self-worth."),
+  card("Psychopathology", "full", "Depression: Cognitive Treatment", "What is behavioural activation?", "Encouraging activity and engagement so the person experiences more reinforcement and achievement."),
+  card("Psychopathology", "full", "Depression: Cognitive Treatment", "What is one strength of REBT?", "It can be effective and may have lower relapse than drug therapy."),
+  card("Psychopathology", "full", "Depression: Cognitive Treatment", "What is one limitation of REBT?", "It requires commitment and effort, which some depressed clients may find difficult."),
+
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What is the genetic explanation of OCD?", "Specific genes may create a vulnerability to OCD, especially when combined with stress."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What does the COMT gene do in OCD explanations?", "It affects dopamine regulation; low COMT activity may be linked to higher dopamine."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What does the SERT gene do in OCD explanations?", "It affects serotonin transport, and malfunction may contribute to OCD."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What is the diathesis-stress model in OCD?", "A person inherits a vulnerability that is triggered by environmental stress."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "How are neurotransmitters involved in OCD?", "Low serotonin and high dopamine are thought to contribute to OCD symptoms."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "Which brain areas are often implicated in OCD?", "The orbitofrontal cortex and parts of the basal ganglia."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What evidence from twin research supports a genetic view of OCD?", "Concordance is higher in identical twins than in non-identical twins."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What evidence did Ozaki provide?", "Mutations in the SERT gene were found in families with OCD."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What evidence from brain imaging supports neural explanations of OCD?", "PET scans show unusually high activity in relevant frontal and basal ganglia circuits."),
+  card("Psychopathology", "full", "OCD: Biological Explanation", "What is a limitation of the biological explanation of OCD?", "Genes cannot be the whole story because concordance in identical twins is not 100 percent."),
+
+  card("Psychopathology", "full", "OCD: Biological Treatment", "What are SSRIs?", "Selective serotonin reuptake inhibitors that increase serotonin availability in the synapse."),
+  card("Psychopathology", "full", "OCD: Biological Treatment", "How do SSRIs help OCD?", "They regulate mood and reduce anxiety, which can lessen obsessions and compulsions."),
+  card("Psychopathology", "full", "OCD: Biological Treatment", "What are tricyclics?", "Antidepressants that also block serotonin reuptake but can affect other neurotransmitters and cause more side effects."),
+  card("Psychopathology", "full", "OCD: Biological Treatment", "What are benzodiazepines?", "Anti-anxiety drugs that enhance GABA activity and reduce central nervous system arousal."),
+  card("Psychopathology", "full", "OCD: Biological Treatment", "How does GABA explain the action of benzodiazepines?", "GABA makes neurons less likely to fire, so increasing its effect lowers anxiety."),
+  card("Psychopathology", "full", "OCD: Biological Treatment", "What did Soomro find about drug therapy for OCD?", "Drug treatments were more effective than placebos in reducing symptoms."),
+  card("Psychopathology", "full", "OCD: Biological Treatment", "What are two strengths of drug therapy for OCD?", "It requires little effort from the patient and is often cost-effective."),
+  card("Psychopathology", "full", "OCD: Biological Treatment", "What is one limitation of drug therapy for OCD?", "Many studies are short term, so long-term effectiveness is less clear.")
+];
+
+const PSYCHOPATHOLOGY_CONDENSED = [
+  card("Psychopathology", "condensed", "Definitions of Abnormality", "Sprint: four definitions of abnormality.", "Statistical infrequency, deviation from social norms, failure to function adequately, and deviation from ideal mental health."),
+  card("Psychopathology", "condensed", "Definitions of Abnormality", "Sprint: Jahoda's ideal mental health criteria in one line.", "Self-actualisation, autonomy, self-esteem, accurate perception of reality, mastery of the environment, and integration."),
+  card("Psychopathology", "condensed", "Definitions of Abnormality", "Sprint: one shared limitation of many definitions of abnormality.", "They are culturally relative and depend on judgement."),
+  card("Psychopathology", "condensed", "Phobias", "Sprint: emotional, behavioural, and cognitive features of phobias.", "Fear and anxiety, avoidance or panic, and irrational beliefs about danger."),
+  card("Psychopathology", "condensed", "Depression", "Sprint: emotional, behavioural, and cognitive features of depression.", "Low mood and anger, disturbed sleep or appetite and withdrawal, plus negative thinking and guilt."),
+  card("Psychopathology", "condensed", "OCD", "Sprint: emotional, behavioural, and cognitive features of OCD.", "Anxiety and disgust, compulsive repetitive behaviour, and intrusive obsessive thoughts."),
+  card("Psychopathology", "condensed", "Phobias: Behavioural Explanation", "Sprint: two-process model.", "Phobias are learned through classical conditioning and maintained by operant conditioning."),
+  card("Psychopathology", "condensed", "Phobias: Behavioural Explanation", "Sprint: what is negative reinforcement in phobias?", "Avoiding the feared object removes anxiety, so avoidance gets stronger."),
+  card("Psychopathology", "condensed", "Phobias: Behavioural Explanation", "Sprint: one criticism of the behavioural explanation of phobias.", "Not everyone who has a bad experience develops a phobia."),
+  card("Psychopathology", "condensed", "Phobias: Behavioural Treatment", "Sprint: systematic desensitisation in one line.", "The patient moves up a fear hierarchy while staying relaxed, replacing fear with calm."),
+  card("Psychopathology", "condensed", "Phobias: Behavioural Treatment", "Sprint: flooding in one line.", "The patient is exposed fully to the feared stimulus until anxiety reduces."),
+  card("Psychopathology", "condensed", "Phobias: Behavioural Treatment", "Sprint: one strength and one weakness of flooding.", "It can be fast and effective, but it can also be traumatic and unsuitable for some people."),
+  card("Psychopathology", "condensed", "Depression: Cognitive Explanation", "Sprint: Ellis ABC model.", "It says beliefs about events, not the events themselves, create depression."),
+  card("Psychopathology", "condensed", "Depression: Cognitive Explanation", "Sprint: Beck's negative triad.", "Negative views of the self, world, and future."),
+  card("Psychopathology", "condensed", "Depression: Cognitive Explanation", "Sprint: one strength and one limitation of cognitive explanations.", "They led to effective therapy, but distorted thinking may sometimes be an effect rather than the cause."),
+  card("Psychopathology", "condensed", "Depression: Cognitive Treatment", "Sprint: REBT ABCDEF.", "Therapy disputes irrational beliefs, changes their effects, and improves feelings."),
+  card("Psychopathology", "condensed", "Depression: Cognitive Treatment", "Sprint: two techniques used in REBT.", "Homework tasks and unconditional positive regard."),
+  card("Psychopathology", "condensed", "OCD: Biological Explanation", "Sprint: COMT, SERT, and diathesis-stress.", "COMT and SERT are candidate genes, and OCD may appear when inherited vulnerability is triggered by stress."),
+  card("Psychopathology", "condensed", "OCD: Biological Explanation", "Sprint: neurotransmitters in OCD.", "Low serotonin and high dopamine are often linked to OCD."),
+  card("Psychopathology", "condensed", "OCD: Biological Explanation", "Sprint: brain circuits in OCD.", "The orbitofrontal cortex and basal ganglia are often overactive or dysfunctional."),
+  card("Psychopathology", "condensed", "OCD: Biological Treatment", "Sprint: what do SSRIs do?", "They increase serotonin availability and reduce anxiety-related OCD symptoms."),
+  card("Psychopathology", "condensed", "OCD: Biological Treatment", "Sprint: tricyclics vs benzodiazepines.", "Tricyclics raise serotonin but can have more side effects; benzodiazepines reduce anxiety by increasing GABA."),
+  card("Psychopathology", "condensed", "OCD: Biological Treatment", "Sprint: one strength and one limitation of drug therapy for OCD.", "It is easy and cost-effective, but long-term effectiveness is less clear.")
+];
+
+const ALL_CARDS = [
+  ...SOCIAL_INFLUENCE_FULL,
+  ...SOCIAL_INFLUENCE_CONDENSED,
+  ...MEMORY_FULL,
+  ...MEMORY_CONDENSED,
+  ...ATTACHMENT_FULL,
+  ...ATTACHMENT_CONDENSED,
+  ...PSYCHOPATHOLOGY_FULL,
+  ...PSYCHOPATHOLOGY_CONDENSED
+];
+
+const SUPABASE_URL = 'https://chwnfwfjgjoadkvmmkdi.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNod25md2ZqZ2pvYWRrdm1ta2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTUzMDksImV4cCI6MjA5NDA5MTMwOX0.tzO3b2wQbabbJ1pQzTSgZzlxUTubDMM_DhfY2TR8fyk';
+const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+const UNIT_META = [
+  { name: "Social Influence", note: "Conformity, obedience, minority influence" },
+  { name: "Memory", note: "Stores, models, forgetting, and EWT" },
+  { name: "Attachment", note: "Caregiver bonds and relationship development" },
+  { name: "Psychopathology", note: "Definitions, phobias, depression, and OCD" }
+];
+const UNIT_NAMES = UNIT_META.map(unit => unit.name);
+const DEFAULT_UNITS = ["Social Influence"];
+
+let profileMap = {};
+let cardIdMap = {};
+let reviewsCache = {};
+let supabaseReady = false;
+let extendedCardSchema = false;
+let activeProfileName = localStorage.getItem('aqa_active_profile') || 'Elisha';
+let deck = [];
+let idx = 0;
+let flipped = false;
+let currentId = null;
+let streak = 0;
+let touchStartX = 0, touchStartY = 0;
+let typeMode = localStorage.getItem('aqa_type_mode') === '1';
+let condensedMode = loadCondensedMode();
+let selectedUnits = loadSelectedUnits();
+let typedAnswers = loadTypedAnswers();
+
+function lk(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${suffix}`; }
+function cid(cardData) { return cardData.legacyKey || cardData.slug; }
+
+function loadCondensedMode() {
+  return localStorage.getItem(lk('condensed_mode')) === '1';
+}
+function saveCondensedMode() {
+  try { localStorage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
+}
+function loadSelectedUnits() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(lk('selected_units')));
+    const valid = Array.isArray(saved) ? saved.filter(unit => UNIT_NAMES.includes(unit)) : [];
+    return valid.length ? valid : [...DEFAULT_UNITS];
+  } catch {
+    return [...DEFAULT_UNITS];
+  }
+}
+function saveSelectedUnits() {
+  try { localStorage.setItem(lk('selected_units'), JSON.stringify(selectedUnits)); } catch {}
+}
+function loadTypedAnswers() {
+  try { return JSON.parse(localStorage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
+  catch { return {}; }
+}
+function saveTypedAnswers() {
+  try { localStorage.setItem(`aqa_${activeProfileName.toLowerCase()}_typed`, JSON.stringify(typedAnswers)); } catch {}
+}
+function typedKey(cardData) { return cid(cardData); }
+function getTypedAnswer(cardData) { return typedAnswers[typedKey(cardData)] || ''; }
+function setTypedAnswer(cardData, value) {
+  typedAnswers[typedKey(cardData)] = value;
+  saveTypedAnswers();
+}
+function clearTypedAnswer(cardData) {
+  delete typedAnswers[typedKey(cardData)];
+  saveTypedAnswers();
+}
+
+function saveLocalReviews()  { try { localStorage.setItem(lk('reviews'), JSON.stringify(reviewsCache)); } catch {} }
+function loadLocalReviews()  { try { return JSON.parse(localStorage.getItem(lk('reviews'))) || {}; } catch { return {}; } }
+function saveLocalStreak()   { try { localStorage.setItem(lk('streak'), String(streak)); } catch {} }
+function loadLocalStreak()   { try { return parseInt(localStorage.getItem(lk('streak'))) || 0; } catch { return 0; } }
+
+function setSyncStatus(state, label) {
+  const dot = document.getElementById('syncDot');
+  const text = document.getElementById('syncText');
+  dot.className = 'sync-dot ' + state;
+  const defaults = { ok:'Synced', loading:'Syncing…', error:'Offline mode' };
+  text.textContent = label || defaults[state] || state;
+}
+
+function topicSummaryText() {
+  const label = selectedUnits.length === 1 ? selectedUnits[0] : `${selectedUnits.length} topics`;
+  return `${label} · ${condensedMode ? 'Condensed sprint' : 'Full deck'}`;
+}
+
+function renderTopicFilters() {
+  const host = document.getElementById('topicFilter');
+  host.innerHTML = UNIT_META.map(unit => {
+    const checked = selectedUnits.includes(unit.name);
+    return `
+      <label class="check-pill ${checked ? 'is-selected' : ''}">
+        <input type="checkbox" value="${unit.name}" ${checked ? 'checked' : ''} />
+        <div>
+          <strong>${unit.name}</strong>
+          <span>${unit.note}</span>
+        </div>
+      </label>
+    `;
+  }).join('');
+
+  document.getElementById('topicSummary').textContent = topicSummaryText();
+
+  host.querySelectorAll('input[type="checkbox"]').forEach(input => {
+    input.addEventListener('change', () => {
+      const checked = [...host.querySelectorAll('input[type="checkbox"]:checked')].map(node => node.value);
+      selectedUnits = checked.length ? checked : [...DEFAULT_UNITS];
+      saveSelectedUnits();
+      renderTopicFilters();
+      flipped = false;
+      currentId = null;
+      buildDeck();
+      updateReviewQueue();
+      populateTypingArea();
+    });
+  });
+}
+
+function updateProfileUI() {
+  document.getElementById('btnElisha').classList.toggle('active', activeProfileName === 'Elisha');
+  document.getElementById('btnLmar').classList.toggle('active', activeProfileName === 'Lmar');
+  document.getElementById('condensedToggle').classList.toggle('active', condensedMode);
+  document.getElementById('condensedToggle').setAttribute('aria-pressed', String(condensedMode));
+  document.getElementById('condensedToggle').textContent = `Condensed: ${condensedMode ? 'On' : 'Off'}`;
+  document.getElementById('typeToggle').classList.toggle('active', typeMode);
+  document.getElementById('typeToggle').setAttribute('aria-pressed', String(typeMode));
+  document.getElementById('typeToggle').textContent = `Type mode: ${typeMode ? 'On' : 'Off'}`;
+  document.getElementById('typePanel').classList.toggle('show', typeMode);
+  document.getElementById('frontHint').textContent = typeMode ? 'Type your answer first, then reveal it.' : 'Tap the card to reveal the answer.';
+  document.getElementById('flipBtn').textContent = typeMode ? 'Reveal' : 'Flip';
+  document.getElementById('answerInput').placeholder = typeMode ? 'Type your answer here…' : 'Type mode is off';
+  document.getElementById('yourAnswerBox').style.display = typeMode ? '' : 'none';
+  document.getElementById('officialAnswerBox').style.display = typeMode ? '' : 'none';
+  document.getElementById('compareBox').style.display = typeMode ? 'grid' : 'none';
+  document.getElementById('cardASolo').style.display = typeMode ? 'none' : 'block';
+  renderTopicFilters();
+}
+
+function setTypeMode(on) {
+  typeMode = !!on;
+  localStorage.setItem('aqa_type_mode', typeMode ? '1' : '0');
+  updateProfileUI();
+  populateTypingArea();
+}
+
+function setCondensedMode(on) {
+  condensedMode = !!on;
+  saveCondensedMode();
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+}
+
+async function switchProfile(name) {
+  if (name === activeProfileName) return;
+  activeProfileName = name;
+  localStorage.setItem('aqa_active_profile', name);
+  condensedMode = loadCondensedMode();
+  selectedUnits = loadSelectedUnits();
+  typedAnswers = loadTypedAnswers();
+  reviewsCache = loadLocalReviews();
+  streak = loadLocalStreak();
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+  if (supabaseReady) {
+    setSyncStatus('loading', 'Loading…');
+    try {
+      await loadReviews();
+      buildDeck();
+      updateReviewQueue();
+      setSyncStatus('ok');
+    } catch (error) {
+      console.error(error);
+      setSyncStatus('error');
+    }
+  }
+}
+
+async function loadProfiles() {
+  const { data, error } = await db.from('profiles').select('*');
+  if (error) throw error;
+  if (!data || data.length === 0) {
+    const { data: inserted, error: insertError } = await db.from('profiles')
+      .insert([{ name:'Elisha', streak:0 }, { name:'Lmar', streak:0 }])
+      .select();
+    if (insertError) throw insertError;
+    inserted.forEach(profile => { profileMap[profile.name] = profile; });
+    return;
+  }
+  data.forEach(profile => { profileMap[profile.name] = profile; });
+}
+
+function isMissingCardColumn(error) {
+  const text = `${error?.message || ''} ${error?.details || ''} ${error?.hint || ''}`.toLowerCase();
+  return text.includes('slug') || text.includes('variant') || text.includes('unit') || error?.code === '42703';
+}
+function chunkArray(items, size = 50) {
+  const chunks = [];
+  for (let i = 0; i < items.length; i += size) chunks.push(items.slice(i, i + size));
+  return chunks;
+}
+function basicCardPayload(cardData) {
+  return { topic: cardData.t, question: cardData.q, answer: cardData.a };
+}
+function extendedCardPayload(cardData) {
+  return {
+    slug: cardData.slug,
+    unit: cardData.unit,
+    topic: cardData.t,
+    variant: cardData.variant,
+    question: cardData.q,
+    answer: cardData.a,
+    updated_at: new Date().toISOString()
+  };
+}
+function needsCardUpdate(row, cardData) {
+  if (extendedCardSchema) {
+    return row.slug !== cardData.slug ||
+      row.unit !== cardData.unit ||
+      row.variant !== cardData.variant ||
+      row.topic !== cardData.t ||
+      row.question !== cardData.q ||
+      row.answer !== cardData.a;
+  }
+  return row.topic !== cardData.t || row.question !== cardData.q || row.answer !== cardData.a;
+}
+
+async function fetchCardRows() {
+  const extended = await db.from('cards').select('id,slug,unit,topic,variant,question,answer');
+  if (!extended.error) {
+    extendedCardSchema = true;
+    return extended.data || [];
+  }
+  if (!isMissingCardColumn(extended.error)) throw extended.error;
+
+  const legacy = await db.from('cards').select('id,topic,question,answer');
+  if (legacy.error) throw legacy.error;
+  extendedCardSchema = false;
+  return legacy.data || [];
+}
+
+async function syncCardCatalog() {
+  const rows = await fetchCardRows();
+  const bySlug = new Map();
+  const byLegacy = new Map();
+
+  rows.forEach(row => {
+    if (row.slug) bySlug.set(row.slug, row);
+    byLegacy.set(`${row.topic}|${row.question}`, row);
+  });
+
+  const inserts = [];
+  const updates = [];
+
+  ALL_CARDS.forEach(cardData => {
+    const existing = bySlug.get(cardData.slug) || byLegacy.get(`${cardData.t}|${cardData.q}`);
+    if (!existing) {
+      inserts.push(extendedCardSchema ? extendedCardPayload(cardData) : basicCardPayload(cardData));
+      return;
+    }
+    if (needsCardUpdate(existing, cardData)) {
+      updates.push({
+        id: existing.id,
+        ...(extendedCardSchema ? extendedCardPayload(cardData) : basicCardPayload(cardData))
+      });
+    }
+  });
+
+  for (const batch of chunkArray(inserts)) {
+    if (!batch.length) continue;
+    const { error } = await db.from('cards').insert(batch);
+    if (error) throw error;
+  }
+
+  for (const batch of chunkArray(updates)) {
+    if (!batch.length) continue;
+    if (extendedCardSchema) {
+      const { error } = await db.from('cards').upsert(batch);
+      if (error) throw error;
+      continue;
+    }
+    for (const row of batch) {
+      const { error } = await db.from('cards')
+        .update({ topic: row.topic, question: row.question, answer: row.answer })
+        .eq('id', row.id);
+      if (error) throw error;
+    }
+  }
+
+  const refreshed = await fetchCardRows();
+  const localBySlug = new Map(ALL_CARDS.map(cardData => [cardData.slug, cardData]));
+  cardIdMap = {};
+
+  refreshed.forEach(row => {
+    let local = row.slug ? localBySlug.get(row.slug) : null;
+    if (!local) {
+      local = ALL_CARDS.find(cardData => cardData.t === row.topic && cardData.q === row.question) || null;
+    }
+    if (local) cardIdMap[cid(local)] = row.id;
+  });
+}
+
+async function loadReviews() {
+  const profile = profileMap[activeProfileName];
+  if (!profile) return;
+  streak = profile.streak || 0;
+
+  const { data, error } = await db.from('reviews').select('*').eq('profile_id', profile.id);
+  if (error) throw error;
+
+  const reverseMap = {};
+  Object.entries(cardIdMap).forEach(([key, value]) => { reverseMap[value] = key; });
+
+  reviewsCache = {};
+  (data || []).forEach(review => {
+    const key = reverseMap[review.card_id];
+    if (!key) return;
+    reviewsCache[key] = {
+      ease: review.ease,
+      interval: review.interval_days,
+      reps: review.reps,
+      lapses: review.lapses,
+      due: review.due,
+      seen: review.seen,
+      mastered: review.mastered,
+      last: review.last_reviewed
+    };
+  });
+
+  saveLocalReviews();
+  saveLocalStreak();
+}
+
+async function upsertReview(cardData, state) {
+  const cardId = cardIdMap[cid(cardData)];
+  if (!cardId) return;
+  const profile = profileMap[activeProfileName];
+  if (!profile) return;
+
+  const { error } = await db.from('reviews').upsert({
+    profile_id: profile.id,
+    card_id: cardId,
+    ease: state.ease,
+    interval_days: state.interval,
+    reps: state.reps,
+    lapses: state.lapses,
+    due: state.due,
+    seen: state.seen,
+    mastered: state.mastered,
+    last_reviewed: state.last,
+    updated_at: new Date().toISOString()
+  }, { onConflict: 'profile_id,card_id' });
+
+  if (error) console.error('Review upsert:', error);
+
+  await db.from('profiles')
+    .update({ streak, last_study: new Date().toDateString() })
+    .eq('id', profile.id);
+
+  profileMap[activeProfileName].streak = streak;
+}
+
+function showSetupModal() {
+  function highlight(sql) {
+    const keywords = ['CREATE','TABLE','IF','NOT','EXISTS','ALTER','ADD','COLUMN','DROP','INSERT','INTO','VALUES','ON','CONFLICT','DO','NOTHING','DEFAULT','UNIQUE','INDEX','REFERENCES','DELETE','CASCADE','FOR','ALL','TO','USING','WITH','CHECK','ENABLE','ROW','LEVEL','SECURITY','POLICY','EXTENSION'];
+    const types = ['UUID','TEXT','INT','FLOAT','BOOLEAN','BIGINT','TIMESTAMPTZ'];
+    const fns = ['gen_random_uuid','now'];
+    let html = sql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    html = html.replace(/(--[^\n]*)/g,'<span class="cmt">$1</span>');
+    html = html.replace(/'([^']*)'/g, "<span class=\"str\">'$1'</span>");
+    types.forEach(type => { html = html.replace(new RegExp(`\\b(${type})\\b`, 'gi'), '<span class="type">$1</span>'); });
+    fns.forEach(fn => { html = html.replace(new RegExp(`\\b(${fn})\\b`, 'gi'), '<span class="fn">$1</span>'); });
+    keywords.forEach(keyword => { html = html.replace(new RegExp(`\\b(${keyword})\\b`, 'gi'), '<span class="kw">$1</span>'); });
+    html = html.replace(/\b(\d+)\b/g,'<span class="num">$1</span>');
+    return html;
+  }
+
+  document.getElementById('sqlBlock').innerHTML = highlight(SQL_SETUP);
+  const lines = SQL_SETUP.split('\n').length;
+  document.getElementById('sqlLineNums').innerHTML = Array.from({ length: lines }, (_, index) => `<span>${index + 1}</span>`).join('');
+  document.getElementById('setupModal').classList.add('show');
+}
+
+function copySQL() {
+  navigator.clipboard.writeText(SQL_SETUP).then(() => {
+    const btn = document.getElementById('copyBtn');
+    btn.textContent = '✓ Copied!';
+    btn.classList.add('success');
+    btn.classList.remove('primary');
+    document.getElementById('step1').classList.remove('active');
+    document.getElementById('step1').classList.add('done');
+    document.getElementById('step2').classList.add('active');
+    document.getElementById('sqlFooterNote').innerHTML = 'Now open the Supabase SQL Editor, paste, and click <strong>Run</strong>.';
+    setTimeout(() => {
+      btn.innerHTML = '⎘ Copy SQL';
+      btn.classList.remove('success');
+      btn.classList.add('primary');
+    }, 3000);
+  });
+}
+
+function cardState(cardData) {
+  const id = cid(cardData);
+  if (!reviewsCache[id]) {
+    reviewsCache[id] = { ease:2.5, interval:0, reps:0, lapses:0, due:0, seen:0, mastered:false, last:0 };
+  }
+  return reviewsCache[id];
+}
+
+function formatDate(ts) {
+  if (!ts) return '—';
+  return new Date(ts).toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
+}
+
+function activeCatalog() {
+  return ALL_CARDS.filter(cardData =>
+    cardData.variant === (condensedMode ? 'condensed' : 'full') &&
+    selectedUnits.includes(cardData.unit)
+  );
+}
+
+function currentCard() { return deck[idx]; }
+
+function updateReviewQueue() {
+  const now = Date.now();
+  const reviewQueue = deck.filter(cardData => cardState(cardData).due <= now);
+  reviewQueue.sort((a, b) => cardState(a).due - cardState(b).due);
+  return reviewQueue;
+}
+
+function reviewedToday() {
+  const today = new Date().toDateString();
+  return activeCatalog().filter(cardData => {
+    const state = cardState(cardData);
+    return state.last && new Date(state.last).toDateString() === today;
+  }).length;
+}
+
+function nextDueText() {
+  const now = Date.now();
+  const future = activeCatalog().map(cardData => cardState(cardData).due).filter(ts => ts > now).sort((a, b) => a - b);
+  return future.length ? formatDate(future[0]) : 'Now';
+}
+
+function updateStats() {
+  const now = Date.now();
+  const total = deck.length;
+  const due = deck.filter(cardData => cardState(cardData).due <= now).length;
+  const mastered = activeCatalog().filter(cardData => cardState(cardData).mastered).length;
+  document.getElementById('sTotal').textContent = total;
+  document.getElementById('sDue').textContent = due;
+  document.getElementById('sMastered').textContent = mastered;
+  document.getElementById('sStreak').textContent = streak;
+  const pct = total ? Math.min(100, Math.round((reviewedToday() / total) * 100)) : 0;
+  document.getElementById('progFill').style.width = `${pct}%`;
+}
+
+function populateTypingArea() {
+  const cardData = deck.length ? currentCard() : null;
+  const input = document.getElementById('answerInput');
+  const view = document.getElementById('typedAnswerView');
+  if (!cardData) {
+    input.value = '';
+    view.textContent = '—';
+    return;
+  }
+  input.value = getTypedAnswer(cardData);
+  view.textContent = input.value.trim() ? input.value : '—';
+}
+
+function renderEmptyState() {
+  deck = [];
+  idx = 0;
+  currentId = null;
+  document.getElementById('cardQ').textContent = 'No cards match these filters yet.';
+  document.getElementById('cardA').textContent = 'Try another study mode or turn off condensed mode.';
+  document.getElementById('cardASolo').textContent = 'Try another study mode or turn off condensed mode.';
+  document.getElementById('cardTopic').textContent = 'Deck';
+  document.getElementById('cardTopicB').textContent = 'Deck';
+  document.getElementById('cardMeta').textContent = 'Adjust the filters above';
+  document.getElementById('cardMetaB').textContent = 'No answer';
+  document.getElementById('progLabel').textContent = '0 reviewed today';
+  document.getElementById('nextDue').textContent = 'Next review: —';
+  document.getElementById('typedAnswerView').textContent = '—';
+  document.getElementById('answerInput').value = '';
+  document.getElementById('cardInner').classList.remove('flipped');
+  flipped = false;
+  updateStats();
+}
+
+function buildDeck() {
+  const mode = document.getElementById('modeSel').value;
+  const now = Date.now();
+  const source = activeCatalog();
+  let cards = [...source];
+
+  if (mode === 'due') {
+    cards = cards.filter(cardData => cardState(cardData).due <= now);
+  } else if (mode === 'weak') {
+    cards = cards.filter(cardData => {
+      const state = cardState(cardData);
+      return state.lapses > 0 || state.ease < 2.35 || state.reps < 3;
+    });
+  } else if (mode === 'mixed') {
+    cards = shuffle([...cards]);
+  }
+
+  deck = cards.length ? cards : [...source];
+  if (!deck.length) {
+    renderEmptyState();
+    return;
+  }
+
+  if (currentId) {
+    const pos = deck.findIndex(cardData => cid(cardData) === currentId);
+    idx = pos >= 0 ? pos : 0;
+  } else {
+    idx = 0;
+  }
+  render();
+}
+
+function render() {
+  if (!deck.length) {
+    renderEmptyState();
+    return;
+  }
+
+  currentId = cid(currentCard());
+  const cardData = currentCard();
+  const state = cardState(cardData);
+
+  document.getElementById('cardQ').textContent = cardData.q;
+  document.getElementById('cardA').textContent = cardData.a;
+  document.getElementById('cardASolo').textContent = cardData.a;
+  document.getElementById('cardTopic').textContent = cardData.unit;
+  document.getElementById('cardTopicB').textContent = cardData.unit;
+  document.getElementById('cardMeta').textContent = `${cardData.t} · Seen ${state.seen}x · Ease ${state.ease.toFixed(2)}`;
+  document.getElementById('cardMetaB').textContent = `${cardData.t} · ${state.mastered ? 'Mastered ✓' : condensedMode ? 'Sprint answer' : 'Model answer'}`;
+  document.getElementById('progLabel').textContent = `${reviewedToday()} reviewed today`;
+  document.getElementById('nextDue').textContent = `Next review: ${nextDueText()}`;
+  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+  document.getElementById('typedAnswerView').textContent = getTypedAnswer(cardData).trim() ? getTypedAnswer(cardData) : '—';
+  document.getElementById('answerInput').value = getTypedAnswer(cardData);
+  updateStats();
+}
+
+function flipCard() {
+  flipped = !flipped;
+  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+  if (typeMode) populateTypingArea();
+}
+
+function navigate(dir) {
+  if (!deck.length) return;
+  idx = (idx + dir + deck.length) % deck.length;
+  flipped = false;
+  render();
+  if (typeMode) {
+    const input = document.getElementById('answerInput');
+    setTimeout(() => input.focus({ preventScroll:true }), 50);
+  }
+}
+
+function grade(score) {
+  if (!deck.length) return;
+  const cardData = currentCard();
+  const state = cardState(cardData);
+  const now = Date.now();
+  state.seen += 1;
+  state.last = now;
+
+  const gradeValue = { again:0, hard:1, good:2, easy:3 }[score];
+
+  if (gradeValue === 0) {
+    state.lapses += 1;
+    state.reps = 0;
+    state.ease = Math.max(1.3, state.ease - 0.20);
+    state.interval = 1;
+    state.due = now + 10 * 60 * 1000;
+    streak = 0;
+  } else if (gradeValue === 1) {
+    state.reps = Math.max(1, state.reps);
+    state.ease = Math.max(1.3, state.ease - 0.05);
+    state.interval = Math.max(1, Math.round(Math.max(1, state.interval) * 1.25));
+    state.due = now + state.interval * 86400000;
+    streak += 1;
+  } else if (gradeValue === 2) {
+    state.reps += 1;
+    state.ease = Math.min(3.2, state.ease + 0.05);
+    if (state.reps === 1) state.interval = 1;
+    else if (state.reps === 2) state.interval = 3;
+    else state.interval = Math.round(Math.max(1, state.interval) * state.ease);
+    state.due = now + state.interval * 86400000;
+    streak += 1;
+  } else {
+    state.reps += 1;
+    state.ease = Math.min(3.5, state.ease + 0.12);
+    if (state.reps === 1) state.interval = 2;
+    else if (state.reps === 2) state.interval = 5;
+    else state.interval = Math.round(Math.max(1, state.interval) * state.ease * 1.35);
+    state.due = now + state.interval * 86400000;
+    state.mastered = state.reps >= 4 && state.ease >= 2.9 && state.lapses === 0;
+    streak += 1;
+  }
+
+  reviewsCache[cid(cardData)] = state;
+  saveLocalReviews();
+  saveLocalStreak();
+
+  if (supabaseReady) {
+    setSyncStatus('loading', 'Saving…');
+    upsertReview(cardData, state)
+      .then(() => setSyncStatus('ok'))
+      .catch(error => { console.error(error); setSyncStatus('error'); });
+  }
+
+  clearTypedAnswer(cardData);
+  flipped = false;
+  idx = (idx < deck.length - 1) ? idx + 1 : 0;
+  updateReviewQueue();
+  render();
+  if (typeMode) document.getElementById('answerInput').focus({ preventScroll:true });
+}
+
+async function resetProgress() {
+  if (!confirm(`Reset all progress for ${activeProfileName}? This cannot be undone.`)) return;
+
+  const profile = profileMap[activeProfileName];
+  if (supabaseReady && profile) {
+    setSyncStatus('loading', 'Resetting…');
+    await db.from('reviews').delete().eq('profile_id', profile.id);
+    await db.from('profiles').update({ streak: 0, last_study: '' }).eq('id', profile.id);
+  }
+
+  localStorage.removeItem(lk('reviews'));
+  localStorage.removeItem(lk('streak'));
+  localStorage.removeItem(`aqa_${activeProfileName.toLowerCase()}_typed`);
+  reviewsCache = {};
+  typedAnswers = {};
+  streak = 0;
+  flipped = false;
+  currentId = null;
+  setSyncStatus(supabaseReady ? 'ok' : 'error');
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+}
+
+async function init() {
+  updateProfileUI();
+  reviewsCache = loadLocalReviews();
+  streak = loadLocalStreak();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+
+  setSyncStatus('loading', 'Connecting…');
+  try {
+    await loadProfiles();
+    await syncCardCatalog();
+    await loadReviews();
+    supabaseReady = true;
+    setSyncStatus('ok');
+    buildDeck();
+    updateReviewQueue();
+    populateTypingArea();
+  } catch (error) {
+    console.error('Supabase unavailable, running from local cache:', error);
+    if (error && error.code === '42P01') showSetupModal();
+    setSyncStatus('error', 'Sync error');
+  }
+}
+
+function onKey(e) {
+  const activeTag = document.activeElement && document.activeElement.tagName;
+  const typing = activeTag === 'TEXTAREA' || activeTag === 'INPUT';
+  if (typing && e.key !== 'Escape') return;
+  if (e.key === ' ' || e.key === 'Enter') { e.preventDefault(); flipCard(); }
+  else if (e.key === 'ArrowLeft') navigate(-1);
+  else if (e.key === 'ArrowRight') navigate(1);
+  else if (e.key === '1') grade('again');
+  else if (e.key === '2') grade('hard');
+  else if (e.key === '3') grade('good');
+  else if (e.key === '4') grade('easy');
+}
+
+const cardEl = document.getElementById('cardInner');
+cardEl.addEventListener('click', flipCard);
+cardEl.addEventListener('keydown', onKey);
+cardEl.addEventListener('touchstart', e => {
+  const touch = e.changedTouches[0];
+  touchStartX = touch.clientX;
+  touchStartY = touch.clientY;
+}, { passive:true });
+cardEl.addEventListener('touchend', e => {
+  const touch = e.changedTouches[0];
+  const dx = touch.clientX - touchStartX;
+  const dy = touch.clientY - touchStartY;
+  if (Math.abs(dx) > 55 && Math.abs(dx) > Math.abs(dy)) navigate(dx < 0 ? 1 : -1);
+}, { passive:true });
+
+document.getElementById('modeSel').addEventListener('change', () => {
+  flipped = false;
+  currentId = null;
+  buildDeck();
+  populateTypingArea();
+});
+document.getElementById('condensedToggle').addEventListener('click', () => setCondensedMode(!condensedMode));
+document.getElementById('shuffleBtn').addEventListener('click', () => {
+  deck = shuffle([...deck]);
+  idx = 0;
+  flipped = false;
+  render();
+  populateTypingArea();
+});
+document.getElementById('resetBtn').addEventListener('click', resetProgress);
+document.getElementById('prevBtn').addEventListener('click', () => navigate(-1));
+document.getElementById('nextBtn').addEventListener('click', () => navigate(1));
+document.getElementById('flipBtn').addEventListener('click', flipCard);
+document.getElementById('againBtn').addEventListener('click', () => grade('again'));
+document.getElementById('hardBtn').addEventListener('click', () => grade('hard'));
+document.getElementById('goodBtn').addEventListener('click', () => grade('good'));
+document.getElementById('easyBtn').addEventListener('click', () => grade('easy'));
+document.getElementById('typeToggle').addEventListener('click', () => setTypeMode(!typeMode));
+
+const answerInput = document.getElementById('answerInput');
+const revealBtn = document.getElementById('revealBtn');
+const clearBtn = document.getElementById('clearBtn');
+
+answerInput.addEventListener('click', e => e.stopPropagation());
+answerInput.addEventListener('keydown', e => {
+  e.stopPropagation();
+  if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
+    e.preventDefault();
+    flipCard();
+  }
+});
+answerInput.addEventListener('input', () => {
+  if (!deck.length) return;
+  const cardData = currentCard();
+  setTypedAnswer(cardData, answerInput.value);
+  document.getElementById('typedAnswerView').textContent = answerInput.value.trim() ? answerInput.value : '—';
+});
+revealBtn.addEventListener('click', e => { e.stopPropagation(); flipCard(); });
+clearBtn.addEventListener('click', e => {
+  e.stopPropagation();
+  if (!deck.length) return;
+  answerInput.value = '';
+  setTypedAnswer(currentCard(), '');
+  document.getElementById('typedAnswerView').textContent = '—';
+  answerInput.focus({ preventScroll:true });
+});
+document.getElementById('typePanel').addEventListener('click', e => e.stopPropagation());
+
+window.addEventListener('keydown', onKey);
+
+init();
+</script>
+</body>
+</html>

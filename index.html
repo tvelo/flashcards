@@ -128,6 +128,14 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   border:1px solid var(--line) !important;
   color:var(--muted) !important;
   box-shadow:none !important;
+  transition:background .2s ease, color .2s ease, border-color .2s ease, box-shadow .2s ease, transform .2s ease;
+}
+.profile-pill.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2)) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+  box-shadow:0 10px 24px rgba(122,168,255,.28) !important;
+  transform:translateY(-1px);
 }
 .subject-bar{
   display:flex;
@@ -1394,6 +1402,17 @@ const UNIT_TO_GROUP = {
   'Theory & Methods': 'Research Methods + Methods in Context'
 };
 
+const GROUP_META_BY_SUBJECT = {
+  Sociology: [
+    { name: 'Education', note: 'Functionalism, Marxism, class, ethnicity, policy' },
+    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' }
+  ],
+  Economics: [
+    { name: 'Theme 2', note: 'UK performance, policy and inequality' },
+    { name: 'Theme 4', note: 'Globalisation, trade and development' }
+  ]
+};
+
 let profileMap = {};
 let cardIdMap = {};
 let reviewsCache = {};
@@ -1413,16 +1432,6 @@ let selectedGroups = loadSelectedGroups();
 let selectedTopics = loadSelectedTopics();
 let typedAnswers = loadTypedAnswers();
 
-const GROUP_META_BY_SUBJECT = {
-  Sociology: [
-    { name: 'Education', note: 'Functionalism, Marxism, class, ethnicity, policy' },
-    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' }
-  ],
-  Economics: [
-    { name: 'Theme 2', note: 'UK performance, policy and inequality' },
-    { name: 'Theme 4', note: 'Globalisation, trade and development' }
-  ]
-};
 
 function lk(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${suffix}`; }
 function cid(cardData) { return cardData.legacyKey || cardData.slug; }
@@ -1446,7 +1455,8 @@ function saveSelectedSubject() {
   try { localStorage.setItem(lk('subject'), selectedSubject); } catch {}
 }
 function groupsForSubject(subject) {
-  return Object.keys(GROUP_META_BY_SUBJECT[subject] || {});
+  const meta = (typeof GROUP_META_BY_SUBJECT !== 'undefined' && GROUP_META_BY_SUBJECT[subject]) ? GROUP_META_BY_SUBJECT[subject] : [];
+  return meta.map(item => item.name);
 }
 function defaultGroupsForSubject(subject) {
   return groupsForSubject(subject);
@@ -1454,12 +1464,14 @@ function defaultGroupsForSubject(subject) {
 function loadSelectedGroups() {
   try {
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_groups')));
-    const valid = Array.isArray(saved) ? saved.filter(group => groupsForSubject(selectedSubject).includes(group)) : [];
+    const validGroups = groupsForSubject(selectedSubject);
+    const valid = Array.isArray(saved) ? saved.filter(group => validGroups.includes(group)) : [];
     return valid.length ? valid : defaultGroupsForSubject(selectedSubject);
   } catch {
     return defaultGroupsForSubject(selectedSubject);
   }
 }
+
 function saveSelectedGroups() {
   try { localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
 }
@@ -1551,6 +1563,83 @@ function loadLocalReviews()  { try { return JSON.parse(localStorage.getItem(lk('
 function saveLocalStreak()   { try { localStorage.setItem(lk('streak'), String(streak)); } catch {} }
 function loadLocalStreak()   { try { return parseInt(localStorage.getItem(lk('streak'))) || 0; } catch { return 0; } }
 
+async function loadReviews() {
+  const profile = profileMap[activeProfileName];
+  if (!profile) return;
+  const { data, error } = await db.from('reviews').select('*').eq('profile_id', profile.id);
+  if (error) throw error;
+
+  const byDbId = new Map(Object.entries(cardIdMap).map(([localKey, dbId]) => [dbId, localKey]));
+  const nextCache = loadLocalReviews();
+
+  (data || []).forEach(row => {
+    const localKey = byDbId.get(row.card_id);
+    if (!localKey) return;
+    nextCache[localKey] = {
+      ease: typeof row.ease === 'number' ? row.ease : 2.5,
+      interval: row.interval_days || 0,
+      reps: row.reps || 0,
+      lapses: row.lapses || 0,
+      due: row.due || 0,
+      seen: row.seen || 0,
+      mastered: !!row.mastered,
+      last: row.last_reviewed || 0
+    };
+  });
+
+  reviewsCache = nextCache;
+  saveLocalReviews();
+}
+
+async function upsertReview(cardData, state) {
+  const profile = profileMap[activeProfileName];
+  if (!profile) return;
+  const cardId = cardIdMap[cid(cardData)];
+  if (!cardId) return;
+
+  const payload = {
+    profile_id: profile.id,
+    card_id: cardId,
+    ease: state.ease,
+    interval_days: state.interval,
+    reps: state.reps,
+    lapses: state.lapses,
+    due: state.due,
+    seen: state.seen,
+    mastered: !!state.mastered,
+    last_reviewed: state.last
+  };
+
+  const { error } = await db.from('reviews').upsert(payload, { onConflict: 'profile_id,card_id' });
+  if (error) throw error;
+}
+
+function cardState(cardData) {
+  const key = cid(cardData);
+  if (!reviewsCache[key]) {
+    reviewsCache[key] = {
+      ease: 2.5,
+      interval: 0,
+      reps: 0,
+      lapses: 0,
+      due: 0,
+      seen: 0,
+      mastered: false,
+      last: 0
+    };
+  }
+  const state = reviewsCache[key];
+  if (typeof state.last === 'undefined') state.last = 0;
+  if (typeof state.interval === 'undefined') state.interval = 0;
+  if (typeof state.reps === 'undefined') state.reps = 0;
+  if (typeof state.lapses === 'undefined') state.lapses = 0;
+  if (typeof state.due === 'undefined') state.due = 0;
+  if (typeof state.seen === 'undefined') state.seen = 0;
+  if (typeof state.ease !== 'number') state.ease = 2.5;
+  if (typeof state.mastered === 'undefined') state.mastered = false;
+  return state;
+}
+
 function setSyncStatus(state, label) {
   const dot = document.getElementById('syncDot');
   const text = document.getElementById('syncText');
@@ -1588,7 +1677,7 @@ function renderTopicFilters() {
   const host = document.getElementById('topicFilter');
   const groups = groupsForSubject(selectedSubject);
   host.innerHTML = groups.map(groupName => {
-    const meta = (GROUP_META_BY_SUBJECT[selectedSubject] || []).find(item => item.name === groupName) || { note: '' };
+    const meta = ((GROUP_META_BY_SUBJECT[selectedSubject] || []).find(item => item.name === groupName)) || { note: '' };
     const topics = availableTopicsForGroup(groupName);
     const checkedTopics = selectedTopicsForGroup(groupName);
     return `
@@ -1857,17 +1946,16 @@ function activeCatalog() {
     return cardSubject(cardData) === selectedSubject;
   });
 
-  if (!cards.length) {
-    return ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
-  }
-
-  return cards.filter(cardData => {
+  const filtered = cards.filter(cardData => {
     const groupName = cardGroup(cardData);
     const groupOk = selectedGroups.includes(groupName);
     if (!groupOk) return false;
     const topics = selectedTopicsForGroup(groupName);
     return topics.includes(cardData.t);
   });
+
+  if (filtered.length) return filtered;
+  return cards.length ? cards : ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
 }
 
 function currentCard() { return deck[idx]; }
@@ -1924,8 +2012,8 @@ function renderEmptyState() {
   idx = 0;
   currentId = null;
   document.getElementById('cardQ').textContent = 'No cards match these filters yet.';
-  document.getElementById('cardA').textContent = 'The app will fall back to the current subject deck if your saved filters are stale.';
-  document.getElementById('cardASolo').textContent = 'The app will fall back to the current subject deck if your saved filters are stale.';
+  document.getElementById('cardA').textContent = 'Reset the subject filters above if you want to see a different deck.';
+  document.getElementById('cardASolo').textContent = 'Reset the subject filters above if you want to see a different deck.';
   document.getElementById('cardTopic').textContent = 'Deck';
   document.getElementById('cardTopicB').textContent = 'Deck';
   document.getElementById('cardMeta').textContent = 'Adjust the filters above';
@@ -1946,6 +2034,7 @@ function buildDeck() {
 
   let source = activeCatalog();
   if (!source.length) {
+    // Self-heal from any stale saved filters by falling back to the active subject deck.
     source = ALL_CARDS.filter(cardData => cardSubject(cardData) === selectedSubject && cardData.variant === (condensedMode ? 'condensed' : 'full'));
   }
   if (!source.length) {
@@ -2122,22 +2211,37 @@ async function init() {
   populateTypingArea();
 
   setSyncStatus('loading', 'Connecting…');
-  try {
-    await loadProfiles();
-    await syncCardCatalog();
-    await loadReviews();
-    supabaseReady = true;
-    setSyncStatus('ok');
-    normalizeSelections();
-    buildDeck();
-    updateReviewQueue();
-    populateTypingArea();
-  } catch (error) {
-    console.error('Supabase unavailable, running from local cache:', error);
-    if (error && error.code === '42P01') showSetupModal();
-    setSyncStatus('error', 'Sync error');
+
+  const boot = (async () => {
+    try {
+      await loadProfiles();
+      await syncCardCatalog();
+      await loadReviews();
+      supabaseReady = true;
+      setSyncStatus('ok');
+    } catch (error) {
+      console.error('Supabase unavailable, running from local cache:', error);
+      if (error && error.code === '42P01') showSetupModal();
+      supabaseReady = false;
+      setSyncStatus('error', 'Offline mode');
+    } finally {
+      normalizeSelections();
+      buildDeck();
+      updateReviewQueue();
+      populateTypingArea();
+    }
+  })();
+
+  await Promise.race([
+    boot,
+    new Promise(resolve => setTimeout(resolve, 1800))
+  ]);
+
+  if (!supabaseReady) {
+    setSyncStatus('error', 'Local mode');
   }
 }
+
 
 function onKey(e) {
   const answerInputEl = document.getElementById('answerInput');

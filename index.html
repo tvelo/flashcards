@@ -807,12 +807,12 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   <div class="header">
     <div class="title">
       <h1>AQA Sociology Paper 1 Flashcards</h1>
-      <p>Built for active recall, spaced repetition, and fast exam prep. Mix the Paper 1 topics, switch on condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Keep Education separate from Research Methods + Methods in Context, switch on condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
       <div class="pill">Swipe ←/→ to move</div>
-      <div class="pill">Mix Paper 1 topics</div>
+      <div class="pill">Split by topic</div>
     </div>
   </div>
 
@@ -820,11 +820,11 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
     <details>
       <summary>How to study with this deck</summary>
       <div class="study-grid">
-        <div class="study-step"><strong>1.</strong> Say the answer from memory before you reveal it.</div>
-        <div class="study-step"><strong>2.</strong> Use type mode when you want to write your own answer first.</div>
-        <div class="study-step"><strong>3.</strong> Grade honestly so weak cards come back sooner.</div>
+        <div class="study-step"><strong>1.</strong> Use the top-level area buttons to focus on Education or Research Methods + Methods in Context.</div>
+        <div class="study-step"><strong>2.</strong> Pick the exact subtopic chunks you want so 25-marker practice stays targeted.</div>
+        <div class="study-step"><strong>3.</strong> Use type mode when you want to write your own answer first.</div>
       </div>
-      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly.</div>
+      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly. The deck follows the AQA Paper 1 structure so 25-marker revision stays focused.</div>
     </details>
   </section>
 
@@ -832,11 +832,11 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
     <div class="filter-top">
       <div>
         <strong>Topic selector</strong>
-        <p>Tick one or more AQA topics to build your deck. If nothing has been remembered yet, it defaults to Education.</p>
+        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate.</p>
       </div>
-      <div class="filter-summary" id="topicSummary">Paper 1 topics</div>
+      <div class="filter-summary" id="topicSummary">Education + Research Methods</div>
     </div>
-    <div class="topic-grid" id="topicFilter"></div>
+    <div id="topicFilter"></div>
   </section>
 
   <div class="controls">
@@ -1157,30 +1157,30 @@ const EDUCATION_CONDENSED = [
 ];
 
 const METHODS_IN_CONTEXT_FULL = [
-  card("Methods in Context", "full", "Education research", "What is Methods in Context?", "An exam focus where you apply research methods to the specific setting of education."),
-  card("Methods in Context", "full", "Education research", "Why is access a key issue in school research?", "Researchers often need permission from gatekeepers such as heads, local authorities and parents."),
-  card("Methods in Context", "full", "Questionnaires", "Why can questionnaires work well in education research?", "They are cheap, quick and useful for reaching large numbers of pupils or parents."),
-  card("Methods in Context", "full", "Questionnaires", "What is a problem with questionnaires in schools?", "Younger pupils may struggle with wording or literacy, reducing validity."),
-  card("Methods in Context", "full", "Interviews", "Why can interviews be useful in education research?", "They allow researchers to probe answers and gather detailed information about experiences and attitudes."),
-  card("Methods in Context", "full", "Interviews", "What is a problem with interviews in schools?", "Power differences between adults and children can create social desirability bias or reluctance to speak openly."),
-  card("Methods in Context", "full", "Observation", "Why can observation be useful in education research?", "It can capture real classroom behaviour, interactions and routines rather than just reported behaviour."),
-  card("Methods in Context", "full", "Observation", "What is a problem with observation in schools?", "The presence of the researcher can change behaviour, and covert observation raises major ethical issues."),
-  card("Methods in Context", "full", "Official statistics", "Why are official statistics useful in education research?", "They provide large-scale data on attainment, exclusions, attendance and attendance patterns."),
-  card("Methods in Context", "full", "Official statistics", "What is a limitation of official statistics in education?", "They may reflect institutional practices, missing data or different definitions rather than pure reality."),
-  card("Methods in Context", "full", "Documents", "Why are documents useful in education research?", "School policies, lesson materials and inspection reports can reveal values, priorities and official messages."),
-  card("Methods in Context", "full", "Documents", "What is a limitation of documents in education research?", "They are often produced for another purpose, so their meaning may not match what pupils actually experience."),
-  card("Methods in Context", "full", "Sampling", "Why is sampling important in education research?", "Researchers need a sample that reflects different ages, year groups, schools and backgrounds."),
-  card("Methods in Context", "full", "Ethics", "What ethical issues matter most in research with children?", "Informed consent, parental permission, assent, confidentiality and safeguarding are especially important."),
-  card("Methods in Context", "full", "Validity", "Why is validity important in education research?", "Researchers need to know whether they are capturing the real experiences of pupils and teachers."),
-  card("Methods in Context", "full", "Practical issues", "What practical problems can education researchers face?", "Timetables, school routines, exam pressure, disruptive lessons and access restrictions can all limit research."),
-  card("Methods in Context", "full", "Triangulation", "What is triangulation?", "Using more than one method or source to improve the overall quality and balance of research."),
+  card("Research Methods + Methods in Context", "full", "Education research", "What is Research Methods + Methods in Context?", "An exam focus where you apply research methods to the specific setting of education."),
+  card("Research Methods + Methods in Context", "full", "Education research", "Why is access a key issue in school research?", "Researchers often need permission from gatekeepers such as heads, local authorities and parents."),
+  card("Research Methods + Methods in Context", "full", "Questionnaires", "Why can questionnaires work well in education research?", "They are cheap, quick and useful for reaching large numbers of pupils or parents."),
+  card("Research Methods + Methods in Context", "full", "Questionnaires", "What is a problem with questionnaires in schools?", "Younger pupils may struggle with wording or literacy, reducing validity."),
+  card("Research Methods + Methods in Context", "full", "Interviews", "Why can interviews be useful in education research?", "They allow researchers to probe answers and gather detailed information about experiences and attitudes."),
+  card("Research Methods + Methods in Context", "full", "Interviews", "What is a problem with interviews in schools?", "Power differences between adults and children can create social desirability bias or reluctance to speak openly."),
+  card("Research Methods + Methods in Context", "full", "Observation", "Why can observation be useful in education research?", "It can capture real classroom behaviour, interactions and routines rather than just reported behaviour."),
+  card("Research Methods + Methods in Context", "full", "Observation", "What is a problem with observation in schools?", "The presence of the researcher can change behaviour, and covert observation raises major ethical issues."),
+  card("Research Methods + Methods in Context", "full", "Official statistics", "Why are official statistics useful in education research?", "They provide large-scale data on attainment, exclusions, attendance and attendance patterns."),
+  card("Research Methods + Methods in Context", "full", "Official statistics", "What is a limitation of official statistics in education?", "They may reflect institutional practices, missing data or different definitions rather than pure reality."),
+  card("Research Methods + Methods in Context", "full", "Documents", "Why are documents useful in education research?", "School policies, lesson materials and inspection reports can reveal values, priorities and official messages."),
+  card("Research Methods + Methods in Context", "full", "Documents", "What is a limitation of documents in education research?", "They are often produced for another purpose, so their meaning may not match what pupils actually experience."),
+  card("Research Methods + Methods in Context", "full", "Sampling", "Why is sampling important in education research?", "Researchers need a sample that reflects different ages, year groups, schools and backgrounds."),
+  card("Research Methods + Methods in Context", "full", "Ethics", "What ethical issues matter most in research with children?", "Informed consent, parental permission, assent, confidentiality and safeguarding are especially important."),
+  card("Research Methods + Methods in Context", "full", "Validity", "Why is validity important in education research?", "Researchers need to know whether they are capturing the real experiences of pupils and teachers."),
+  card("Research Methods + Methods in Context", "full", "Practical issues", "What practical problems can education researchers face?", "Timetables, school routines, exam pressure, disruptive lessons and access restrictions can all limit research."),
+  card("Research Methods + Methods in Context", "full", "Triangulation", "What is triangulation?", "Using more than one method or source to improve the overall quality and balance of research."),
 ];
 
 const METHODS_IN_CONTEXT_CONDENSED = [
-  card("Methods in Context", "condensed", "Education research", "Methods in Context", "Always apply the method to schools, pupils and teachers.\n\nMention access, gatekeepers, age, literacy, power differences, safeguarding and disruption to lessons."),
-  card("Methods in Context", "condensed", "Methods", "Questionnaires, interviews and observation", "Questionnaires are quick but can be misunderstood.\nInterviews are detailed but power imbalances matter.\nObservation can capture real behaviour but raises ethics and reactivity issues."),
-  card("Methods in Context", "condensed", "Documents and statistics", "Documents and statistics", "Documents can reveal policy and school culture.\nOfficial statistics are broad and comparative, but may hide bias in recording and definitions."),
-  card("Methods in Context", "condensed", "Evaluation", "How to evaluate methods in context", "Judge methods by validity, reliability, representativeness, ethics and practicality within the school setting."),
+  card("Research Methods + Methods in Context", "condensed", "Education research", "Research Methods + Methods in Context", "Always apply the method to schools, pupils and teachers.\n\nMention access, gatekeepers, age, literacy, power differences, safeguarding and disruption to lessons."),
+  card("Research Methods + Methods in Context", "condensed", "Methods", "Questionnaires, interviews and observation", "Questionnaires are quick but can be misunderstood.\nInterviews are detailed but power imbalances matter.\nObservation can capture real behaviour but raises ethics and reactivity issues."),
+  card("Research Methods + Methods in Context", "condensed", "Documents and statistics", "Documents and statistics", "Documents can reveal policy and school culture.\nOfficial statistics are broad and comparative, but may hide bias in recording and definitions."),
+  card("Research Methods + Methods in Context", "condensed", "Evaluation", "How to evaluate methods in context", "Judge methods by validity, reliability, representativeness, ethics and practicality within the school setting."),
 ];
 
 const THEORY_METHODS_FULL = [
@@ -1245,26 +1245,18 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 
-const UNIT_META = [
+const GROUP_META = [
   { name: "Education", note: "Functionalism, Marxism, gender, class, ethnicity, policies" },
-  { name: "Methods in Context", note: "Applying methods to schools and pupils" },
-  { name: "Theory & Methods", note: "Research methods, theory, and evaluation" }
+  { name: "Research Methods + Methods in Context", note: "Methods in context, research methods, theory and methods" }
 ];
 
-const UNIT_NAMES = UNIT_META.map(unit => unit.name);
-
-const DEFAULT_UNITS = ["Education", "Methods in Context", "Theory & Methods"];const SUPABASE_URL = 'https://chwnfwfjgjoadkvmmkdi.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNod25md2ZqZ2pvYWRrdm1ta2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTUzMDksImV4cCI6MjA5NDA5MTMwOX0.tzO3b2wQbabbJ1pQzTSgZzlxUTubDMM_DhfY2TR8fyk';
-const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-
-const UNIT_META = [
-  { name: "Social Influence", note: "Conformity, obedience, minority influence" },
-  { name: "Memory", note: "Stores, models, forgetting, and EWT" },
-  { name: "Attachment", note: "Caregiver bonds and relationship development" },
-  { name: "Psychopathology", note: "Definitions, phobias, depression, and OCD" }
-];
-const UNIT_NAMES = UNIT_META.map(unit => unit.name);
-const DEFAULT_UNITS = ["Social Influence"];
+const GROUP_NAMES = GROUP_META.map(unit => unit.name);
+const DEFAULT_GROUPS = [...GROUP_NAMES];
+const UNIT_TO_GROUP = {
+  'Education': 'Education',
+  'Research Methods + Methods in Context': 'Research Methods + Methods in Context',
+  'Theory & Methods': 'Research Methods + Methods in Context'
+};
 
 let profileMap = {};
 let cardIdMap = {};
@@ -1280,7 +1272,8 @@ let streak = 0;
 let touchStartX = 0, touchStartY = 0;
 let typeMode = localStorage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
-let selectedUnits = loadSelectedUnits();
+let selectedGroups = loadSelectedGroups();
+let selectedTopics = loadSelectedTopics();
 let typedAnswers = loadTypedAnswers();
 
 function lk(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${suffix}`; }
@@ -1292,17 +1285,28 @@ function loadCondensedMode() {
 function saveCondensedMode() {
   try { localStorage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
 }
-function loadSelectedUnits() {
+function loadSelectedGroups() {
   try {
-    const saved = JSON.parse(localStorage.getItem(lk('selected_units')));
-    const valid = Array.isArray(saved) ? saved.filter(unit => UNIT_NAMES.includes(unit)) : [];
-    return valid.length ? valid : [...DEFAULT_UNITS];
+    const saved = JSON.parse(localStorage.getItem(lk('selected_groups')));
+    const valid = Array.isArray(saved) ? saved.filter(group => GROUP_NAMES.includes(group)) : [];
+    return valid.length ? valid : [...DEFAULT_GROUPS];
   } catch {
-    return [...DEFAULT_UNITS];
+    return [...DEFAULT_GROUPS];
   }
 }
-function saveSelectedUnits() {
-  try { localStorage.setItem(lk('selected_units'), JSON.stringify(selectedUnits)); } catch {}
+function saveSelectedGroups() {
+  try { localStorage.setItem(lk('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
+}
+function loadSelectedTopics() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(lk('selected_topics')));
+    return saved && typeof saved === 'object' ? saved : {};
+  } catch {
+    return {};
+  }
+}
+function saveSelectedTopics() {
+  try { localStorage.setItem(lk('selected_topics'), JSON.stringify(selectedTopics)); } catch {}
 }
 function loadTypedAnswers() {
   try { return JSON.parse(localStorage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
@@ -1312,6 +1316,32 @@ function saveTypedAnswers() {
   try { localStorage.setItem(`aqa_${activeProfileName.toLowerCase()}_typed`, JSON.stringify(typedAnswers)); } catch {}
 }
 function typedKey(cardData) { return cid(cardData); }
+function cardGroup(cardData) {
+  const unit = String(cardData.unit || '');
+  if (unit === 'Education') return 'Education';
+  if (unit.includes('Research Methods') || unit.includes('Methods in Context') || unit.includes('Theory & Methods')) {
+    return 'Research Methods + Methods in Context';
+  }
+  return unit || 'Education';
+}
+function availableTopicsForGroup(groupName) {
+  return [...new Set(
+    ALL_CARDS
+      .filter(cardData => cardGroup(cardData) === groupName)
+      .map(cardData => cardData.t)
+  )];
+}
+function selectedTopicsForGroup(groupName) {
+  const available = availableTopicsForGroup(groupName);
+  const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
+  return saved.length ? saved : available;
+}
+function setSelectedTopicsForGroup(groupName, topics) {
+  const available = availableTopicsForGroup(groupName);
+  const cleaned = [...new Set(topics)].filter(topic => available.includes(topic));
+  selectedTopics[groupName] = cleaned.length ? cleaned : available;
+  saveSelectedTopics();
+}
 function getTypedAnswer(cardData) { return typedAnswers[typedKey(cardData)] || ''; }
 function setTypedAnswer(cardData, value) {
   typedAnswers[typedKey(cardData)] = value;
@@ -1336,32 +1366,62 @@ function setSyncStatus(state, label) {
 }
 
 function topicSummaryText() {
-  const label = selectedUnits.length === 1 ? selectedUnits[0] : `${selectedUnits.length} topics`;
-  return `${label} · ${condensedMode ? 'Condensed notes' : 'Full deck'}`;
+  const groupLabel = selectedGroups.length === 1 ? selectedGroups[0] : `${selectedGroups.length} areas`;
+  const chunkCount = selectedGroups.reduce((total, groupName) => total + selectedTopicsForGroup(groupName).length, 0);
+  return `${groupLabel} · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}`;
 }
 
 function renderTopicFilters() {
   const host = document.getElementById('topicFilter');
-  host.innerHTML = UNIT_META.map(unit => {
-    const checked = selectedUnits.includes(unit.name);
+  host.innerHTML = GROUP_META.map(group => {
+    const groupSelected = selectedGroups.includes(group.name);
+    const topics = availableTopicsForGroup(group.name);
+    const checkedTopics = selectedTopicsForGroup(group.name);
     return `
-      <label class="check-pill ${checked ? 'is-selected' : ''}">
-        <input type="checkbox" value="${unit.name}" ${checked ? 'checked' : ''} />
-        <div>
-          <strong>${unit.name}</strong>
-          <span>${unit.note}</span>
+      <section style="padding:14px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.04);">
+        <label class="check-pill ${groupSelected ? 'is-selected' : ''}" style="margin-bottom:12px;">
+          <input class="group-toggle" type="checkbox" value="${group.name}" ${groupSelected ? 'checked' : ''} />
+          <div>
+            <strong>${group.name}</strong>
+            <span>${group.note}</span>
+          </div>
+        </label>
+        <div class="topic-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));${groupSelected ? '' : 'opacity:.45;filter:saturate(.8);'}">
+          ${topics.map(topic => `
+            <label class="check-pill ${checkedTopics.includes(topic) ? 'is-selected' : ''}" style="${groupSelected ? '' : 'pointer-events:none;'}">
+              <input class="topic-toggle" data-group="${group.name}" type="checkbox" value="${topic}" ${checkedTopics.includes(topic) ? 'checked' : ''} ${groupSelected ? '' : 'disabled'} />
+              <div>
+                <strong>${topic}</strong>
+                <span>Chunk</span>
+              </div>
+            </label>
+          `).join('')}
         </div>
-      </label>
+      </section>
     `;
   }).join('');
 
   document.getElementById('topicSummary').textContent = topicSummaryText();
 
-  host.querySelectorAll('input[type="checkbox"]').forEach(input => {
+  host.querySelectorAll('input.group-toggle').forEach(input => {
     input.addEventListener('change', () => {
-      const checked = [...host.querySelectorAll('input[type="checkbox"]:checked')].map(node => node.value);
-      selectedUnits = checked.length ? checked : [...DEFAULT_UNITS];
-      saveSelectedUnits();
+      const checkedGroups = [...host.querySelectorAll('input.group-toggle:checked')].map(node => node.value);
+      selectedGroups = checkedGroups.length ? checkedGroups : [...DEFAULT_GROUPS];
+      saveSelectedGroups();
+      renderTopicFilters();
+      flipped = false;
+      currentId = null;
+      buildDeck();
+      updateReviewQueue();
+      populateTypingArea();
+    });
+  });
+
+  host.querySelectorAll('input.topic-toggle').forEach(input => {
+    input.addEventListener('change', () => {
+      const groupName = input.dataset.group;
+      const checked = [...host.querySelectorAll(`input.topic-toggle[data-group="${groupName}"]:checked`)].map(node => node.value);
+      setSelectedTopicsForGroup(groupName, checked);
       renderTopicFilters();
       flipped = false;
       currentId = null;
@@ -1415,7 +1475,8 @@ async function switchProfile(name) {
   activeProfileName = name;
   localStorage.setItem('aqa_active_profile', name);
   condensedMode = loadCondensedMode();
-  selectedUnits = loadSelectedUnits();
+  selectedGroups = loadSelectedGroups();
+  selectedTopics = loadSelectedTopics();
   typedAnswers = loadTypedAnswers();
   reviewsCache = loadLocalReviews();
   streak = loadLocalStreak();
@@ -1684,10 +1745,11 @@ function shuffle(arr) {
 }
 
 function activeCatalog() {
-  return ALL_CARDS.filter(cardData =>
-    cardData.variant === (condensedMode ? 'condensed' : 'full') &&
-    selectedUnits.includes(cardData.unit)
-  );
+  return ALL_CARDS.filter(cardData => {
+    if (cardData.variant !== (condensedMode ? 'condensed' : 'full')) return false;
+    const groupName = cardGroup(cardData);
+    return selectedGroups.includes(groupName) && selectedTopicsForGroup(groupName).includes(cardData.t);
+  });
 }
 
 function currentCard() { return deck[idx]; }

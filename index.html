@@ -129,6 +129,61 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   color:var(--muted) !important;
   box-shadow:none !important;
 }
+.subject-bar{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  margin:0 0 18px;
+  padding:10px 16px;
+  border-radius:var(--radius-sm);
+  background:rgba(255,255,255,.04);
+  border:1px solid var(--line);
+  backdrop-filter:blur(8px);
+  -webkit-backdrop-filter:blur(8px);
+}
+.subject-label{color:var(--muted);font-size:13px;white-space:nowrap;flex-shrink:0}
+.subject-pills{display:flex;gap:8px;flex-wrap:wrap}
+.subject-pill{
+  min-height:36px !important;
+  padding:0 18px !important;
+  border-radius:999px !important;
+  font-size:14px !important;
+  font-weight:700 !important;
+  background:transparent !important;
+  border:1px solid var(--line) !important;
+  color:var(--muted) !important;
+  box-shadow:none !important;
+}
+.subject-pill.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2)) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+}
+.topic-accordion{
+  border-radius:18px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  padding:0;
+  overflow:hidden;
+  margin-bottom:12px;
+}
+.topic-accordion summary{
+  cursor:pointer;
+  list-style:none;
+  padding:14px 16px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  font-weight:700;
+}
+.topic-accordion summary::-webkit-details-marker{display:none}
+.topic-accordion .summary-meta{font-size:12px;color:var(--muted);font-weight:500}
+.topic-accordion-body{padding:0 14px 14px}
+.topic-accordion .topic-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
+.topic-accordion .check-pill{min-height:56px}
+.topic-accordion .check-pill span{white-space:normal}
+
 .sync-chip{
   margin-left:auto;
   display:inline-flex;
@@ -797,6 +852,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
     <div class="profile-pills">
       <button class="profile-pill" id="btnElisha" onclick="switchProfile('Elisha')">Elisha</button>
       <button class="profile-pill" id="btnLmar" onclick="switchProfile('Lmar')">Lmar</button>
+      <button class="profile-pill" id="btnIsaac" onclick="switchProfile('Isaac')">Isaac</button>
     </div>
     <div class="sync-chip">
       <div class="sync-dot loading" id="syncDot"></div>
@@ -804,15 +860,23 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
     </div>
   </div>
 
+  <div class="subject-bar" aria-label="Subject selector">
+    <span class="subject-label">Subject</span>
+    <div class="subject-pills">
+      <button class="subject-pill" id="btnSociology" onclick="switchSubject('Sociology')">Sociology</button>
+      <button class="subject-pill" id="btnEconomics" onclick="switchSubject('Economics')">Economics</button>
+    </div>
+  </div>
+
   <div class="header">
     <div class="title">
-      <h1>AQA Sociology Paper 1 Flashcards</h1>
-      <p>Built for active recall, spaced repetition, and fast exam prep. Keep Education separate from Research Methods + Methods in Context, switch on condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
+      <h1>AQA Sociology + Economics Flashcards</h1>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
       <div class="pill">Swipe ←/→ to move</div>
-      <div class="pill">Split by topic</div>
+      <div class="pill">Subjects + topics</div>
     </div>
   </div>
 
@@ -834,7 +898,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
         <strong>Topic selector</strong>
         <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate.</p>
       </div>
-      <div class="filter-summary" id="topicSummary">Education + Research Methods</div>
+      <div class="filter-summary" id="topicSummary">Sociology</div>
     </div>
     <div id="topicFilter"></div>
   </section>
@@ -991,7 +1055,7 @@ create policy "anon_all_profiles" on profiles for all to anon using (true) with 
 create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
 create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
 
-insert into profiles (name) values ('Elisha'), ('Lmar')
+insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
   on conflict (name) do nothing;
 ───────────────────────────────────────────────────────────────────────── */
 
@@ -1046,7 +1110,7 @@ create policy "anon_all_profiles" on profiles for all to anon using (true) with 
 create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
 create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
 
-insert into profiles (name) values ('Elisha'), ('Lmar')
+insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
   on conflict (name) do nothing;`;
 
 function slugify(value) {
@@ -1226,13 +1290,85 @@ const THEORY_METHODS_CONDENSED = [
 
 
 
+const ECONOMICS_THEME2_FULL = [
+  card("Theme 2", "full", "UK economy performance", "What is gross domestic product (GDP)?", "The total value of goods and services produced in an economy over a period of time, usually a year."),
+  card("Theme 2", "full", "UK economy performance", "What is real GDP growth?", "An increase in the volume of output after adjusting for inflation."),
+  card("Theme 2", "full", "UK economy performance", "What does the unemployment rate measure?", "The proportion of the labour force that is out of work but actively seeking and available for work."),
+  card("Theme 2", "full", "UK economy performance", "What is inflation?", "A sustained rise in the general price level in an economy over time."),
+  card("Theme 2", "full", "UK economy performance", "What is the current account of the balance of payments?", "A record of trade in goods and services, primary income, secondary income and transfers with the rest of the world."),
+  card("Theme 2", "full", "UK economy performance", "What is productivity?", "Output per worker or per hour worked; higher productivity usually means higher living standards."),
+  card("Theme 2", "full", "UK economy performance", "Why is living standards not the same as GDP alone?", "Because GDP ignores distribution, unpaid work, environmental damage and quality of life."),
+  card("Theme 2", "full", "Macroeconomic objectives", "What are the main macroeconomic objectives?", "Low and stable inflation, low unemployment, sustainable growth, a healthy current account and reduced inequality."),
+  card("Theme 2", "full", "Macroeconomic objectives", "Why can macroeconomic objectives conflict?", "Policies that reduce inflation can raise unemployment, while policies that boost growth can worsen the current account or inflation."),
+  card("Theme 2", "full", "Labour market", "What is structural unemployment?", "Unemployment caused by a mismatch between workers' skills or locations and the jobs available."),
+  card("Theme 2", "full", "Labour market", "What is cyclical unemployment?", "Unemployment caused by a fall in demand for goods and services during a downturn."),
+  card("Theme 2", "full", "Labour market", "What is frictional unemployment?", "Short-term unemployment as people move between jobs or enter the labour market."),
+  card("Theme 2", "full", "Labour market", "What is supply-side policy?", "Policies aimed at improving the productive potential and efficiency of the economy."),
+  card("Theme 2", "full", "Labour market", "What is demand-side policy?", "Policies aimed at influencing aggregate demand, such as fiscal or monetary policy."),
+  card("Theme 2", "full", "Policies", "Why might monetary policy be used to control inflation?", "Higher interest rates can reduce borrowing and spending, lowering aggregate demand and inflationary pressure."),
+  card("Theme 2", "full", "Policies", "Why might fiscal policy be used to support growth?", "Higher government spending or lower taxes can increase aggregate demand and raise output and employment."),
+  card("Theme 2", "full", "Policies", "What is a supply-side policy benefit?", "It can raise long-run productive capacity and improve non-inflationary growth."),
+  card("Theme 2", "full", "Policies", "What is a common criticism of demand-side policy?", "It may be delayed, uncertain, and can create conflicts with other objectives like inflation or debt."),
+  card("Theme 2", "full", "Inequality", "How can the government reduce income inequality?", "Through progressive taxation, benefits, welfare spending and minimum wage policies."),
+  card("Theme 2", "full", "Inequality", "Why might inequality matter for macro performance?", "High inequality can reduce social cohesion, limit mobility and weaken long-run sustainable growth."),
+  card("Theme 2", "full", "Evaluation", "Evaluate the use of supply-side policies to improve UK performance.", "They can improve productivity and long-run growth, but they often take time, can be expensive, and may not solve cyclical problems quickly."),
+  card("Theme 2", "full", "Evaluation", "Evaluate policies to reduce inflation.", "Demand-side policies can lower inflation but may reduce growth and jobs; supply-side policies are slower but can be more sustainable."),
+  card("Theme 2", "full", "Evaluation", "Evaluate government intervention in the labour market.", "It can reduce unemployment and raise skills, but too much intervention can raise costs or create unintended side effects.")
+];
+
+const ECONOMICS_THEME2_CONDENSED = [
+  card("Theme 2", "condensed", "UK economy performance", "Theme 2: key indicators", "GDP shows output, inflation shows price change, unemployment shows spare labour, productivity shows efficiency, and the current account shows trade position."),
+  card("Theme 2", "condensed", "Macroeconomic objectives", "Theme 2: objectives and conflicts", "The main aims are low inflation, low unemployment, growth, balance of payments stability and lower inequality. These aims can conflict with each other."),
+  card("Theme 2", "condensed", "Labour market", "Theme 2: unemployment types", "Frictional unemployment is short-term job change; structural is a skills/location mismatch; cyclical is caused by low demand; some policies mainly target supply-side weaknesses."),
+  card("Theme 2", "condensed", "Policies", "Theme 2: policy choices", "Monetary policy uses interest rates; fiscal policy uses taxes and spending; supply-side policy improves long-run efficiency and productive capacity."),
+  card("Theme 2", "condensed", "Inequality", "Theme 2: inequality and evaluation", "Policies can reduce inequality through taxes, benefits and wages, but they may lower incentives or increase government borrowing."),
+  card("Theme 2", "condensed", "Evaluation", "Theme 2: essay judgement", "Best policy depends on the problem, the time period, and whether the aim is faster demand management or long-run supply-side improvement.")
+];
+
+const ECONOMICS_THEME4_FULL = [
+  card("Theme 4", "full", "Globalisation and trade", "What is globalisation?", "The growing integration of economies through trade, capital flows, migration, technology and multinational firms."),
+  card("Theme 4", "full", "Globalisation and trade", "What is comparative advantage?", "The ability to produce a good at a lower opportunity cost than another country."),
+  card("Theme 4", "full", "Globalisation and trade", "Why can free trade increase welfare?", "Countries specialise according to comparative advantage, which can raise output, lower prices and improve choice."),
+  card("Theme 4", "full", "Globalisation and trade", "What is protectionism?", "Government policies that restrict imports, such as tariffs, quotas, subsidies and regulations."),
+  card("Theme 4", "full", "Globalisation and trade", "Why might governments use protectionism?", "To protect infant industries, improve the current account, protect jobs or respond to unfair competition."),
+  card("Theme 4", "full", "Exchange rates", "What is an exchange rate?", "The price of one currency in terms of another currency."),
+  card("Theme 4", "full", "Exchange rates", "How can an appreciation affect the economy?", "Exports become more expensive and imports cheaper, which can reduce export demand but lower imported inflation."),
+  card("Theme 4", "full", "Exchange rates", "How can a depreciation affect the economy?", "Exports become cheaper and imports more expensive, which can improve competitiveness but raise imported inflation."),
+  card("Theme 4", "full", "Financial markets", "What is foreign direct investment (FDI)?", "When a firm based in one country invests in productive assets in another country, often by building or buying operations there."),
+  card("Theme 4", "full", "Financial markets", "Why are financial markets important in the global economy?", "They move savings to investment, help firms and governments borrow, and influence confidence, risk and exchange rates."),
+  card("Theme 4", "full", "Emerging and developing economies", "What is economic development?", "Improvements in living standards, health, education, income and wider quality of life."),
+  card("Theme 4", "full", "Emerging and developing economies", "Why is GDP per capita an incomplete measure of development?", "It ignores inequality, health, education, the informal economy and environmental quality."),
+  card("Theme 4", "full", "Emerging and developing economies", "What can limit growth in developing economies?", "Poor infrastructure, low savings, weak institutions, debt, political instability and low human capital."),
+  card("Theme 4", "full", "Emerging and developing economies", "How can aid and debt relief help development?", "They can finance infrastructure, health and education, but effectiveness depends on corruption, dependency and how the money is used."),
+  card("Theme 4", "full", "Macro policy in a global context", "How can globalisation affect macroeconomic policy?", "Open economies face stronger trade and capital flow effects, so policy choices must consider competitiveness, inflation and exchange rates."),
+  card("Theme 4", "full", "Macro policy in a global context", "Why might exchange rate stability matter?", "It can reduce uncertainty for firms and support trade and investment."),
+  card("Theme 4", "full", "Macro policy in a global context", "Why can free trade create winners and losers?", "Consumers and efficient exporters may gain, but uncompetitive firms and some workers may lose jobs or bargaining power."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the case for free trade.", "Free trade can raise efficiency and welfare, but it may expose weak industries, worsen inequality or cause adjustment costs."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the use of protectionism.", "It can protect jobs and strategic industries, but it can raise prices, reduce choice and invite retaliation."),
+  card("Theme 4", "full", "Evaluation", "Evaluate policies to promote development.", "There is no single best policy: outcomes depend on institutions, governance, external demand and whether support is short-term or structural."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the impact of globalisation on developing economies.", "It can bring investment, jobs and technology, but also volatility, dependency, unequal gains and environmental pressure.")
+];
+
+const ECONOMICS_THEME4_CONDENSED = [
+  card("Theme 4", "condensed", "Globalisation and trade", "Theme 4: globalisation", "Globalisation links economies through trade, finance, migration and multinational firms. It can raise efficiency but also create volatility and uneven gains."),
+  card("Theme 4", "condensed", "Globalisation and trade", "Theme 4: trade and protectionism", "Comparative advantage supports free trade, while protectionism may protect jobs or strategic industries but can raise prices and reduce welfare."),
+  card("Theme 4", "condensed", "Exchange rates", "Theme 4: exchange rates", "An appreciation helps control import prices but hurts exports; a depreciation boosts competitiveness but can add inflation."),
+  card("Theme 4", "condensed", "Financial markets", "Theme 4: finance and investment", "Financial markets and FDI can fund growth, but capital flows can be unstable and affect exchange rates."),
+  card("Theme 4", "condensed", "Emerging and developing economies", "Theme 4: development", "Development is broader than GDP. Aid, debt relief, human capital and institutions matter, but corruption and weak governance can limit progress."),
+  card("Theme 4", "condensed", "Evaluation", "Theme 4: essay judgement", "Judgement usually depends on the country, the time horizon and whether the goal is growth, stability, equality or external balance.")
+];
+
 const ALL_CARDS = [
   ...EDUCATION_FULL,
   ...EDUCATION_CONDENSED,
   ...METHODS_IN_CONTEXT_FULL,
   ...METHODS_IN_CONTEXT_CONDENSED,
   ...THEORY_METHODS_FULL,
-  ...THEORY_METHODS_CONDENSED
+  ...THEORY_METHODS_CONDENSED,
+  ...ECONOMICS_THEME2_FULL,
+  ...ECONOMICS_THEME2_CONDENSED,
+  ...ECONOMICS_THEME4_FULL,
+  ...ECONOMICS_THEME4_CONDENSED
 ];
 
 
@@ -1264,6 +1400,7 @@ let reviewsCache = {};
 let supabaseReady = false;
 let extendedCardSchema = false;
 let activeProfileName = localStorage.getItem('aqa_active_profile') || 'Elisha';
+let selectedSubject = loadSelectedSubject();
 let deck = [];
 let idx = 0;
 let flipped = false;
@@ -1276,8 +1413,20 @@ let selectedGroups = loadSelectedGroups();
 let selectedTopics = loadSelectedTopics();
 let typedAnswers = loadTypedAnswers();
 
+const GROUP_META_BY_SUBJECT = {
+  Sociology: [
+    { name: 'Education', note: 'Functionalism, Marxism, class, ethnicity, policy' },
+    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' }
+  ],
+  Economics: [
+    { name: 'Theme 2', note: 'UK performance, policy and inequality' },
+    { name: 'Theme 4', note: 'Globalisation, trade and development' }
+  ]
+};
+
 function lk(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${suffix}`; }
 function cid(cardData) { return cardData.legacyKey || cardData.slug; }
+function subjectKey(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${selectedSubject.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${suffix}`; }
 
 function loadCondensedMode() {
   return localStorage.getItem(lk('condensed_mode')) === '1';
@@ -1285,28 +1434,45 @@ function loadCondensedMode() {
 function saveCondensedMode() {
   try { localStorage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
 }
+function loadSelectedSubject() {
+  try {
+    const saved = localStorage.getItem(lk('subject'));
+    return saved === 'Economics' ? 'Economics' : 'Sociology';
+  } catch {
+    return 'Sociology';
+  }
+}
+function saveSelectedSubject() {
+  try { localStorage.setItem(lk('subject'), selectedSubject); } catch {}
+}
+function groupsForSubject(subject) {
+  return Object.keys(GROUP_META_BY_SUBJECT[subject] || {});
+}
+function defaultGroupsForSubject(subject) {
+  return groupsForSubject(subject);
+}
 function loadSelectedGroups() {
   try {
-    const saved = JSON.parse(localStorage.getItem(lk('selected_groups')));
-    const valid = Array.isArray(saved) ? saved.filter(group => GROUP_NAMES.includes(group)) : [];
-    return valid.length ? valid : [...DEFAULT_GROUPS];
+    const saved = JSON.parse(localStorage.getItem(subjectKey('selected_groups')));
+    const valid = Array.isArray(saved) ? saved.filter(group => groupsForSubject(selectedSubject).includes(group)) : [];
+    return valid.length ? valid : defaultGroupsForSubject(selectedSubject);
   } catch {
-    return [...DEFAULT_GROUPS];
+    return defaultGroupsForSubject(selectedSubject);
   }
 }
 function saveSelectedGroups() {
-  try { localStorage.setItem(lk('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
+  try { localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
 }
 function loadSelectedTopics() {
   try {
-    const saved = JSON.parse(localStorage.getItem(lk('selected_topics')));
+    const saved = JSON.parse(localStorage.getItem(subjectKey('selected_topics')));
     return saved && typeof saved === 'object' ? saved : {};
   } catch {
     return {};
   }
 }
 function saveSelectedTopics() {
-  try { localStorage.setItem(lk('selected_topics'), JSON.stringify(selectedTopics)); } catch {}
+  try { localStorage.setItem(subjectKey('selected_topics'), JSON.stringify(selectedTopics)); } catch {}
 }
 function loadTypedAnswers() {
   try { return JSON.parse(localStorage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
@@ -1319,15 +1485,20 @@ function typedKey(cardData) { return cid(cardData); }
 function cardGroup(cardData) {
   const unit = String(cardData.unit || '');
   if (unit === 'Education') return 'Education';
-  if (unit.includes('Research Methods') || unit.includes('Methods in Context') || unit.includes('Theory & Methods')) {
-    return 'Research Methods + Methods in Context';
-  }
+  if (unit === 'Research Methods + Methods in Context' || unit === 'Theory & Methods') return 'Research Methods + Methods in Context';
+  if (unit === 'Theme 2') return 'Theme 2';
+  if (unit === 'Theme 4') return 'Theme 4';
   return unit || 'Education';
+}
+function cardSubject(cardData) {
+  const group = cardGroup(cardData);
+  if (group === 'Theme 2' || group === 'Theme 4') return 'Economics';
+  return 'Sociology';
 }
 function availableTopicsForGroup(groupName) {
   return [...new Set(
     ALL_CARDS
-      .filter(cardData => cardGroup(cardData) === groupName)
+      .filter(cardData => cardSubject(cardData) === selectedSubject && cardGroup(cardData) === groupName)
       .map(cardData => cardData.t)
   )];
 }
@@ -1366,56 +1537,47 @@ function setSyncStatus(state, label) {
 }
 
 function topicSummaryText() {
-  const groupLabel = selectedGroups.length === 1 ? selectedGroups[0] : `${selectedGroups.length} areas`;
+  const groupLabel = selectedSubject;
   const chunkCount = selectedGroups.reduce((total, groupName) => total + selectedTopicsForGroup(groupName).length, 0);
-  return `${groupLabel} · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}`;
+  return `${groupLabel} · ${selectedGroups.length} sections · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}`;
+}
+
+function renderSubjectButtons() {
+  document.getElementById('btnSociology').classList.toggle('active', selectedSubject === 'Sociology');
+  document.getElementById('btnEconomics').classList.toggle('active', selectedSubject === 'Economics');
 }
 
 function renderTopicFilters() {
   const host = document.getElementById('topicFilter');
-  host.innerHTML = GROUP_META.map(group => {
-    const groupSelected = selectedGroups.includes(group.name);
-    const topics = availableTopicsForGroup(group.name);
-    const checkedTopics = selectedTopicsForGroup(group.name);
+  const groups = groupsForSubject(selectedSubject);
+  host.innerHTML = groups.map(groupName => {
+    const meta = (GROUP_META_BY_SUBJECT[selectedSubject] || []).find(item => item.name === groupName) || { note: '' };
+    const topics = availableTopicsForGroup(groupName);
+    const checkedTopics = selectedTopicsForGroup(groupName);
     return `
-      <section style="padding:14px;border-radius:18px;border:1px solid var(--line);background:rgba(255,255,255,.04);">
-        <label class="check-pill ${groupSelected ? 'is-selected' : ''}" style="margin-bottom:12px;">
-          <input class="group-toggle" type="checkbox" value="${group.name}" ${groupSelected ? 'checked' : ''} />
-          <div>
-            <strong>${group.name}</strong>
-            <span>${group.note}</span>
+      <details class="topic-accordion" open>
+        <summary>
+          <span>${groupName}</span>
+          <span class="summary-meta">${meta.note}</span>
+        </summary>
+        <div class="topic-accordion-body">
+          <div class="topic-grid">
+            ${topics.map(topic => `
+              <label class="check-pill ${checkedTopics.includes(topic) ? 'is-selected' : ''}">
+                <input class="topic-toggle" data-group="${groupName}" type="checkbox" value="${topic}" ${checkedTopics.includes(topic) ? 'checked' : ''} />
+                <div>
+                  <strong>${topic}</strong>
+                  <span>Chunk</span>
+                </div>
+              </label>
+            `).join('')}
           </div>
-        </label>
-        <div class="topic-grid" style="grid-template-columns:repeat(auto-fit,minmax(180px,1fr));${groupSelected ? '' : 'opacity:.45;filter:saturate(.8);'}">
-          ${topics.map(topic => `
-            <label class="check-pill ${checkedTopics.includes(topic) ? 'is-selected' : ''}" style="${groupSelected ? '' : 'pointer-events:none;'}">
-              <input class="topic-toggle" data-group="${group.name}" type="checkbox" value="${topic}" ${checkedTopics.includes(topic) ? 'checked' : ''} ${groupSelected ? '' : 'disabled'} />
-              <div>
-                <strong>${topic}</strong>
-                <span>Chunk</span>
-              </div>
-            </label>
-          `).join('')}
         </div>
-      </section>
+      </details>
     `;
   }).join('');
 
   document.getElementById('topicSummary').textContent = topicSummaryText();
-
-  host.querySelectorAll('input.group-toggle').forEach(input => {
-    input.addEventListener('change', () => {
-      const checkedGroups = [...host.querySelectorAll('input.group-toggle:checked')].map(node => node.value);
-      selectedGroups = checkedGroups.length ? checkedGroups : [...DEFAULT_GROUPS];
-      saveSelectedGroups();
-      renderTopicFilters();
-      flipped = false;
-      currentId = null;
-      buildDeck();
-      updateReviewQueue();
-      populateTypingArea();
-    });
-  });
 
   host.querySelectorAll('input.topic-toggle').forEach(input => {
     input.addEventListener('change', () => {
@@ -1435,6 +1597,8 @@ function renderTopicFilters() {
 function updateProfileUI() {
   document.getElementById('btnElisha').classList.toggle('active', activeProfileName === 'Elisha');
   document.getElementById('btnLmar').classList.toggle('active', activeProfileName === 'Lmar');
+  const btnIsaac = document.getElementById('btnIsaac');
+  if (btnIsaac) btnIsaac.classList.toggle('active', activeProfileName === 'Isaac');
   document.getElementById('condensedToggle').classList.toggle('active', condensedMode);
   document.getElementById('condensedToggle').setAttribute('aria-pressed', String(condensedMode));
   document.getElementById('condensedToggle').textContent = `Condensed: ${condensedMode ? 'On' : 'Off'}`;
@@ -1449,6 +1613,7 @@ function updateProfileUI() {
   document.getElementById('officialAnswerBox').style.display = typeMode ? '' : 'none';
   document.getElementById('compareBox').style.display = typeMode ? 'grid' : 'none';
   document.getElementById('cardASolo').style.display = typeMode ? 'none' : 'block';
+  renderSubjectButtons();
   renderTopicFilters();
 }
 
@@ -1474,6 +1639,7 @@ async function switchProfile(name) {
   if (name === activeProfileName) return;
   activeProfileName = name;
   localStorage.setItem('aqa_active_profile', name);
+  selectedSubject = loadSelectedSubject();
   condensedMode = loadCondensedMode();
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
@@ -1500,18 +1666,41 @@ async function switchProfile(name) {
   }
 }
 
+async function switchSubject(name) {
+  if (name === selectedSubject) return;
+  selectedSubject = name;
+  saveSelectedSubject();
+  selectedGroups = loadSelectedGroups();
+  selectedTopics = loadSelectedTopics();
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+}
+
 async function loadProfiles() {
+  const required = [
+    { name: 'Elisha', streak: 0 },
+    { name: 'Lmar', streak: 0 },
+    { name: 'Isaac', streak: 0 }
+  ];
   const { data, error } = await db.from('profiles').select('*');
   if (error) throw error;
   if (!data || data.length === 0) {
-    const { data: inserted, error: insertError } = await db.from('profiles')
-      .insert([{ name:'Elisha', streak:0 }, { name:'Lmar', streak:0 }])
-      .select();
+    const { data: inserted, error: insertError } = await db.from('profiles').insert(required).select();
     if (insertError) throw insertError;
     inserted.forEach(profile => { profileMap[profile.name] = profile; });
     return;
   }
   data.forEach(profile => { profileMap[profile.name] = profile; });
+  const existing = new Set(data.map(p => p.name));
+  const missing = required.filter(p => !existing.has(p.name));
+  if (missing.length) {
+    const { data: inserted, error: insertError } = await db.from('profiles').insert(missing).select();
+    if (!insertError && inserted) inserted.forEach(profile => { profileMap[profile.name] = profile; });
+  }
 }
 
 function isMissingCardColumn(error) {
@@ -1612,139 +1801,16 @@ async function syncCardCatalog() {
   }
 
   const refreshed = await fetchCardRows();
-  const localBySlug = new Map(ALL_CARDS.map(cardData => [cardData.slug, cardData]));
-  cardIdMap = {};
-
+  const localBySlug = new Map(ALL_CARDS.map(card => [card.slug, card]));
   refreshed.forEach(row => {
-    let local = row.slug ? localBySlug.get(row.slug) : null;
-    if (!local) {
-      local = ALL_CARDS.find(cardData => cardData.t === row.topic && cardData.q === row.question) || null;
-    }
-    if (local) cardIdMap[cid(local)] = row.id;
+    const local = localBySlug.get(row.slug) || ALL_CARDS.find(card => card.t === row.topic && card.q === row.question);
+    if (!local) return;
+    cardIdMap[cid(local)] = row.id;
   });
-}
-
-async function loadReviews() {
-  const profile = profileMap[activeProfileName];
-  if (!profile) return;
-  streak = profile.streak || 0;
-
-  const { data, error } = await db.from('reviews').select('*').eq('profile_id', profile.id);
-  if (error) throw error;
-
-  const reverseMap = {};
-  Object.entries(cardIdMap).forEach(([key, value]) => { reverseMap[value] = key; });
-
-  reviewsCache = {};
-  (data || []).forEach(review => {
-    const key = reverseMap[review.card_id];
-    if (!key) return;
-    reviewsCache[key] = {
-      ease: review.ease,
-      interval: review.interval_days,
-      reps: review.reps,
-      lapses: review.lapses,
-      due: review.due,
-      seen: review.seen,
-      mastered: review.mastered,
-      last: review.last_reviewed
-    };
-  });
-
-  saveLocalReviews();
-  saveLocalStreak();
-}
-
-async function upsertReview(cardData, state) {
-  const cardId = cardIdMap[cid(cardData)];
-  if (!cardId) return;
-  const profile = profileMap[activeProfileName];
-  if (!profile) return;
-
-  const { error } = await db.from('reviews').upsert({
-    profile_id: profile.id,
-    card_id: cardId,
-    ease: state.ease,
-    interval_days: state.interval,
-    reps: state.reps,
-    lapses: state.lapses,
-    due: state.due,
-    seen: state.seen,
-    mastered: state.mastered,
-    last_reviewed: state.last,
-    updated_at: new Date().toISOString()
-  }, { onConflict: 'profile_id,card_id' });
-
-  if (error) console.error('Review upsert:', error);
-
-  await db.from('profiles')
-    .update({ streak, last_study: new Date().toDateString() })
-    .eq('id', profile.id);
-
-  profileMap[activeProfileName].streak = streak;
-}
-
-function showSetupModal() {
-  function highlight(sql) {
-    const keywords = ['CREATE','TABLE','IF','NOT','EXISTS','ALTER','ADD','COLUMN','DROP','INSERT','INTO','VALUES','ON','CONFLICT','DO','NOTHING','DEFAULT','UNIQUE','INDEX','REFERENCES','DELETE','CASCADE','FOR','ALL','TO','USING','WITH','CHECK','ENABLE','ROW','LEVEL','SECURITY','POLICY','EXTENSION'];
-    const types = ['UUID','TEXT','INT','FLOAT','BOOLEAN','BIGINT','TIMESTAMPTZ'];
-    const fns = ['gen_random_uuid','now'];
-    let html = sql.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-    html = html.replace(/(--[^\n]*)/g,'<span class="cmt">$1</span>');
-    html = html.replace(/'([^']*)'/g, "<span class=\"str\">'$1'</span>");
-    types.forEach(type => { html = html.replace(new RegExp(`\\b(${type})\\b`, 'gi'), '<span class="type">$1</span>'); });
-    fns.forEach(fn => { html = html.replace(new RegExp(`\\b(${fn})\\b`, 'gi'), '<span class="fn">$1</span>'); });
-    keywords.forEach(keyword => { html = html.replace(new RegExp(`\\b(${keyword})\\b`, 'gi'), '<span class="kw">$1</span>'); });
-    html = html.replace(/\b(\d+)\b/g,'<span class="num">$1</span>');
-    return html;
-  }
-
-  document.getElementById('sqlBlock').innerHTML = highlight(SQL_SETUP);
-  const lines = SQL_SETUP.split('\n').length;
-  document.getElementById('sqlLineNums').innerHTML = Array.from({ length: lines }, (_, index) => `<span>${index + 1}</span>`).join('');
-  document.getElementById('setupModal').classList.add('show');
-}
-
-function copySQL() {
-  navigator.clipboard.writeText(SQL_SETUP).then(() => {
-    const btn = document.getElementById('copyBtn');
-    btn.textContent = '✓ Copied!';
-    btn.classList.add('success');
-    btn.classList.remove('primary');
-    document.getElementById('step1').classList.remove('active');
-    document.getElementById('step1').classList.add('done');
-    document.getElementById('step2').classList.add('active');
-    document.getElementById('sqlFooterNote').innerHTML = 'Now open the Supabase SQL Editor, paste, and click <strong>Run</strong>.';
-    setTimeout(() => {
-      btn.innerHTML = '⎘ Copy SQL';
-      btn.classList.remove('success');
-      btn.classList.add('primary');
-    }, 3000);
-  });
-}
-
-function cardState(cardData) {
-  const id = cid(cardData);
-  if (!reviewsCache[id]) {
-    reviewsCache[id] = { ease:2.5, interval:0, reps:0, lapses:0, due:0, seen:0, mastered:false, last:0 };
-  }
-  return reviewsCache[id];
-}
-
-function formatDate(ts) {
-  if (!ts) return '—';
-  return new Date(ts).toLocaleDateString(undefined, { weekday:'short', month:'short', day:'numeric' });
-}
-
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
 }
 
 function activeCatalog() {
+
   return ALL_CARDS.filter(cardData => {
     if (cardData.variant !== (condensedMode ? 'condensed' : 'full')) return false;
     const groupName = cardGroup(cardData);

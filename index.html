@@ -2397,91 +2397,34 @@ async function syncCardCatalog() {
     }
     if (needsCardUpdate(existing, cardData)) {
       updates.push({
-        id: existing.id, // We already have the ID, so we must upsert via ID
+        id: existing.id, // Mandatory for preventing 409s
         ...(extendedCardSchema ? extendedCardPayload(cardData) : basicCardPayload(cardData))
       });
     }
   });
 
-  // 1. Deduplicate inserts to prevent 409s if ALL_CARDS contains identical duplicates
-  const uniqueInserts = [];
-  const seenInsertKeys = new Set();
-  for (const row of inserts) {
-    const key = row.slug || `${row.topic}|${row.question}`;
-    if (!seenInsertKeys.has(key)) {
-      seenInsertKeys.add(key);
-      uniqueInserts.push(row);
-    }
-  }
-
+  // Batch inserts with a unique check to prevent collisions
+  const uniqueInserts = Array.from(new Map(inserts.map(i => [i.slug || `${i.topic}|${i.question}`, i])).values());
   for (const batch of chunkArray(uniqueInserts)) {
     if (!batch.length) continue;
-    if (extendedCardSchema) {
-      const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
-      if (error) {
-        if (isMissingUniqueConstraint(error)) {
-          for (const row of batch) {
-            const { error: ie } = await db.from('cards').insert([row]);
-            if (ie && ie.code !== '23505') throw ie; // Ignore 409 on individual fallback
-          }
-        } else {
-          throw error;
-        }
-      }
-    } else {
-      const { error } = await db.from('cards').insert(batch);
-      if (error && error.code !== '23505') throw error;
-    }
+    const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
+    if (error && error.code !== '23505') throw error;
   }
 
-  // 2. Deduplicate updates
-  const uniqueUpdates = [];
-  const seenUpdateIds = new Set();
-  for (const row of updates) {
-    if (!seenUpdateIds.has(row.id)) {
-      seenUpdateIds.add(row.id);
-      uniqueUpdates.push(row);
-    }
-  }
-
+  // Batch updates specifically targeting the Record ID
+  const uniqueUpdates = Array.from(new Map(updates.map(u => [u.id, u])).values());
   for (const batch of chunkArray(uniqueUpdates)) {
     if (!batch.length) continue;
-    if (extendedCardSchema) {
-      // FIX: Use onConflict: 'id' because we are passing the existing primary key
-      const { error } = await db.from('cards').upsert(batch, { onConflict: 'id' });
-      if (error) {
-        if (isMissingUniqueConstraint(error)) {
-          for (const row of batch) {
-            if (!row.id) continue;
-            const { error: ue } = await db.from('cards')
-              .update({ topic: row.topic, question: row.question, answer: row.answer,
-                        unit: row.unit, variant: row.variant, slug: row.slug,
-                        updated_at: row.updated_at })
-              .eq('id', row.id);
-            if (ue) throw ue;
-          }
-        } else {
-          throw error;
-        }
-      }
-      continue;
-    }
-    
-    // Legacy fallback
-    for (const row of batch) {
-      const { error } = await db.from('cards')
-        .update({ topic: row.topic, question: row.question, answer: row.answer })
-        .eq('id', row.id);
-      if (error) throw error;
-    }
+    // We target 'id' here to resolve the conflict for the specific profile record
+    const { error } = await db.from('cards').upsert(batch, { onConflict: 'id' });
+    if (error) throw error;
   }
 
+  // Refresh local mapping
   const refreshed = await fetchCardRows();
-  const localBySlug = new Map(ALL_CARDS.map(card => [card.slug, card]));
   refreshed.forEach(row => {
-    const local = localBySlug.get(row.slug) || ALL_CARDS.find(card => card.t === row.topic && card.q === row.question);
-    if (!local) return;
-    cardIdMap[cid(local)] = row.id;
+    const local = ALL_CARDS.find(card => card.slug === row.slug || (card.t === row.topic && card.q === row.question));
+    if (local) cardIdMap[cid(local)] = row.id;
   });
 }
 

@@ -191,6 +191,48 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 .topic-accordion .topic-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
 .topic-accordion .check-pill{min-height:56px}
 .topic-accordion .check-pill span{white-space:normal}
+.topic-summary-left{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+.topic-summary-left > span:first-child{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.summary-arrow{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  width:22px;
+  height:22px;
+  border-radius:999px;
+  border:1px solid var(--line);
+  color:var(--muted);
+  font-size:13px;
+  line-height:1;
+  flex-shrink:0;
+  transition:transform .2s ease, color .2s ease, border-color .2s ease, background .2s ease;
+}
+.topic-accordion[open] .summary-arrow{
+  transform:rotate(90deg);
+  color:var(--text);
+  border-color:rgba(122,168,255,.30);
+  background:rgba(122,168,255,.08);
+}
+.topic-summary-actions{
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+.mini-topic-btn{
+  min-height:32px !important;
+  padding:0 12px !important;
+  border-radius:999px !important;
+  font-size:12px !important;
+  box-shadow:none !important;
+}
 .topic-summary-left{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;flex:1}
 .topic-summary-left > span:first-child{font-size:15px;line-height:1.2}
 .topic-summary-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
@@ -1382,10 +1424,13 @@ const THEORY_METHODS_CONDENSED = [
 
 
 const SOCIOLOGY_PREDICTIONS_FULL = [
-  card("Predictions", "full", "Priority order", "What should I prioritise first for AQA Sociology Paper 1?", "1) Social class differences in achievement\n2) Gender differences in achievement\n3) Ethnic differences in achievement\n4) School processes: labelling, streaming, teacher expectations, subcultures, hidden curriculum\n5) Education policy: marketisation, privatisation, globalisation\n6) Theory and methods in context"),
-  card("Predictions", "full", "Likely essays", "Which 30-mark areas are most worth rehearsing?", "Social class differences in achievement\nGender differences in achievement\nEthnic differences in achievement\nMeritocracy / whether education is fair\nRole of education in transmitting ideas and values\nMarketisation / globalisation / policy changes"),
-  card("Predictions", "full", "Short questions", "Which shorter-question areas are very likely?", "Functions of education\nVocational education\nCompetition between pupils\nSchool processes affecting identity\nTwo ways schools affect achievement\nMethods questions on observation, questionnaires, interviews and secondary data"),
-  card("Predictions", "full", "Methods in context", "Which methods-in-context themes are very likely?", "Pupil exclusions\nParent involvement\nTeacher expectations\nPupil behaviour\nBullying\nMinority ethnic experiences\nSchool processes"),
+  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of social class differences in educational achievement.", "P1 Material deprivation: poverty, housing, diet and resources reduce attainment.\nTheorist/study: Douglas; Wilkinson and Pickett.\nP2 Cultural capital and language codes give middle-class pupils an advantage.\nTheorist/study: Bourdieu; Bernstein.\nP3 School processes such as labelling and streaming can widen class gaps.\nTheorist/study: Becker; Rosenthal and Jacobson; Lacey.\nJudgement: the strongest answers combine external deprivation with school processes."),
+  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of gender differences in educational achievement.", "P1 Changing ambitions and career opportunities have raised girls' achievement.\nTheorist/study: Sharpe.\nP2 Teacher expectations, coursework and equal opportunities can benefit girls.\nTheorist/study: Francis; Weiner; Mitsos and Browne.\nP3 Boys may be affected by laddish subcultures and masculinity pressures.\nTheorist/study: Francis; Mac an Ghaill.\nJudgement: gender gaps are shaped by both school change and peer culture."),
+  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of ethnic differences in educational achievement.", "P1 Material factors such as income, housing and resources can shape outcomes.\nTheorist/study: Modood.\nP2 Cultural and language factors can affect access to the curriculum.\nTheorist/study: Coard; Sewell.\nP3 School processes such as labelling, racism and setting can reinforce gaps.\nTheorist/study: Gillborn and Youdell; Becker.\nJudgement: the best answers show ethnicity is not just about culture, but also structure and schooling."),
+  card("Predictions", "full", "Mini test", "Evaluate the view that the education system is meritocratic.", "P1 Functionalists argue education sorts people fairly and rewards talent.\nTheorist/study: Parsons; Davis and Moore.\nP2 Marxists argue meritocracy is a myth because schooling reproduces class inequality.\nTheorist/study: Althusser; Bowles and Gintis; Bourdieu.\nP3 Feminists and ethnicity research show unequal expectations and labelling.\nTheorist/study: Weiner; Gillborn and Youdell.\nJudgement: meritocracy is an ideal more than a reality."),
+  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of the role of education in transmitting ideas and values.", "P1 Functionalists say education transmits shared norms and values.\nTheorist/study: Durkheim; Parsons.\nP2 Marxists argue the hidden curriculum transmits ruling-class ideology.\nTheorist/study: Althusser; Bowles and Gintis.\nP3 Feminists argue schooling can reproduce patriarchy through expectations and subject choices.\nTheorist/study: Weiner.\nJudgement: education transmits both consensus values and unequal power relations."),
+  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of school processes affecting pupil identity.", "P1 Labelling and self-fulfilling prophecy can shape pupil identities.\nTheorist/study: Becker; Rosenthal and Jacobson.\nP2 Streaming and differentiation can create pro-school or anti-school identities.\nTheorist/study: Lacey.\nP3 Resistance and subcultures can also shape identity and outcomes.\nTheorist/study: Willis.\nJudgement: identity is made through interaction with school processes and peer culture."),
+
   card("Predictions", "full", "4-mark questions", "How should I structure a 4-mark sociology answer?", "Give 2 clear points.\nEach point should be short and direct.\nNo waffle."),
   card("Predictions", "full", "6-mark questions", "How should I structure a 6-mark sociology answer?", "Give 3 points.\nDevelop each point slightly with explanation or an example.\nKeep it concise."),
   card("Predictions", "full", "10-mark item questions", "How should I structure a 10-mark item question?", "Use the item twice.\nLink each point directly to the item.\nAdd sociological knowledge and a short mini-judgment if you have time."),
@@ -1405,12 +1450,12 @@ const SOCIOLOGY_PREDICTIONS_FULL = [
 ];
 
 const SOCIOLOGY_PREDICTIONS_CONDENSED = [
-  card("Predictions", "condensed", "Priority order", "Predictions: what to prioritise first", "Class → Gender → Ethnicity → school processes → policy → methods in context."),
-  card("Predictions", "condensed", "Likely essays", "Predictions: likely 30-mark areas", "Class, gender, ethnicity, meritocracy, transmitting ideas and values, marketisation/globalisation."),
-  card("Predictions", "condensed", "Short questions", "Predictions: likely short areas", "Functions, vocational education, competition, identity, two ways schools affect achievement."),
-  card("Predictions", "condensed", "Methods in context", "Predictions: MIC themes", "Exclusions, parent involvement, teacher expectations, pupil behaviour, bullying, minority ethnic experiences."),
-  card("Predictions", "condensed", "Exam structures", "Predictions: answer structure", "4-mark = 2 points. 6-mark = 3 developed points. 10-mark = use the item twice. 20-mark = strengths vs limitations. 30-mark = 3-4 paragraphs plus a real conclusion."),
-  card("Predictions", "condensed", "Core sociologists", "Predictions: safest sociologists", "Bourdieu, Douglas, Bernstein, Mitsos and Browne, Sharpe, Francis, Weiner, Sewell, Gillborn and Youdell, Becker, Rosenthal and Jacobson, Lacey, Willis, Durkheim, Parsons, Davis and Moore, Althusser."),
+  card("Predictions", "condensed", "Mini test", "Class differences in achievement", "Material deprivation + cultural capital + school processes + judgment."),
+  card("Predictions", "condensed", "Mini test", "Gender differences in achievement", "Changing ambitions + teacher expectations + coursework/equal opportunities + masculinity."),
+  card("Predictions", "condensed", "Mini test", "Ethnic differences in achievement", "Material factors + culture/language + labelling/racism + judgment."),
+  card("Predictions", "condensed", "Mini test", "Meritocracy", "Functionalism vs Marxism vs feminism + evidence + judgment."),
+  card("Predictions", "condensed", "Mini test", "Education transmits ideas and values", "Consensus values + hidden curriculum + patriarchy + judgment."),
+  card("Predictions", "condensed", "Mini test", "School processes and identity", "Labelling + streaming + self-fulfilling prophecy + subcultures + judgment."),
   card("Predictions", "condensed", "Essay skeletons", "Predictions: best essay order", "Class: deprivation → cultural capital → school processes → wider factors.\nGender: changing ambitions → school factors → masculinity.\nEthnicity: material → cultural → school → external.\nMeritocracy: functionalism → Marxism → feminism → evidence → judgment."),
   card("Predictions", "condensed", "Timing and mistakes", "Predictions: timing and traps", "4/6/10/20/30 minute guide.\nAvoid no-evaluation essays, missing the item, weak conclusions and repeating points."),
   card("Predictions", "condensed", "One-night survival", "Predictions: one-night survival plan", "Memorise class, gender, ethnicity, meritocracy and six key sociologists; then plan essays, do one methods question, and finish by checking mistakes and timings.")
@@ -1572,6 +1617,38 @@ const ECONOMICS_PAPER2_PREP_FULL = [
   card("Paper 2 prep", "full", "Exam technique", "How should I structure a 20 or 25 marker in EconplusDal style?", "Knowledge: use 2-3 developed paragraphs.\nAnalysis: each paragraph should contain a chain of reasoning, not just a list.\nApplication: use a real example or country reference in every main paragraph.\nEvaluation: compare alternatives, explain conditions, and end with a decisive overall judgment."),
   card("Paper 2 prep", "full", "Exam technique", "How do EconplusDal-style packs help with essays?", "Knowledge: EconplusDal publishes Analysis and Evaluation Packs, plus separate Examples for Exams and Diagrams and Definitions packs.\nAnalysis: that structure means you revise definitions, diagrams, examples and evaluation as separate but linked skills.\nApplication: copy that split in your revision by learning a diagram, an example and a judgment for each topic.\nEvaluation: that is more efficient than only memorising definitions."),
   card("Paper 2 prep", "full", "Exam technique", "What should my final judgement sound like?", "Knowledge: do not end with 'it depends' only.\nAnalysis: state which side is stronger and why.\nApplication: refer to the size of the shock, time horizon, or whether the country is developed or emerging.\nEvaluation: a top answer narrows the conditions under which the policy works best."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for monetary policy?", "Use AD/AS or the money market / interest-rate transmission mechanism.
+AD shifts left when rates rise, reducing inflation but also growth.
+Application: rate hikes, QE, confidence effects."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for fiscal policy?", "Use AD/AS.
+Higher government spending or lower taxes shift AD right; austerity shifts AD left.
+Application: budget deficits, recession support and crowding out."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for the current account deficit?", "Use AD/AS, exchange rate, or circular flow depending on the focus.
+A stronger currency can worsen net exports, while a depreciation can improve them if conditions hold."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for economic growth?", "Use AD/AS and LRAS.
+Short-run growth comes from higher AD; long-run growth comes from LRAS shifting right.
+Application: investment, innovation, education and productivity."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for development?", "Use PPC, AD/AS or a poverty/inequality diagram depending on the focus.
+Application: growth, living standards, industrialisation and structural change."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for a trade war?", "Use tariff, import market, or AD/AS with net exports.
+Application: tariffs, retaliation, higher prices and lower trade volumes."),
+  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use the USA as evidence?", "Use the USA for a developed-economy comparison, Federal Reserve policy, productivity, inequality, trade deficits and global spillovers.
+Judgement: strongest when the question needs a large advanced economy with major world influence."),
+  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use China as evidence?", "Use China for an emerging-economy example, export-led growth, FDI, supply chains, exchange rates, inflation and development.
+Judgement: strongest when the question needs a fast-growing economy that affects the whole world."),
+  card("Paper 2 prep", "full", "Paper 2 evidence", "How do I compare the USA and China in essays?", "USA = developed, high productivity, big consumer market, Fed influence.
+China = emerging, manufacturing hub, export-led growth, global supply-chain power.
+Judgement: together they cover most macro and globalisation questions."),
+  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 10-marker into a top answer?", "Point: define the key term.
+Analysis: explain the chain of cause and effect.
+Application: add USA or China evidence.
+Evaluation: say when the effect is strongest or weakest."),
+  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 20/25-marker into a top answer?", "Use 2-3 developed paragraphs.
+Each paragraph should include knowledge, analysis, application and evaluation.
+Finish with a clear judgement about the most important factor."),
+  card("Paper 2 prep", "full", "Exam technique", "What common question types should I recognise fast?", "Definitions, explain questions, data-response questions, diagram questions and assess questions.
+Judgement: command words decide whether the answer should lean toward KAA or evaluation."),
+
 ];
 
 const ECONOMICS_PAPER2_PREP_CONDENSED = [
@@ -1581,6 +1658,11 @@ const ECONOMICS_PAPER2_PREP_CONDENSED = [
   card("Paper 2 prep", "condensed", "USA evidence", "USA in essays", "Advanced economy, Fed, productivity, inequality, trade and deficits."),
   card("Paper 2 prep", "condensed", "China evidence", "China in essays", "Emerging giant, exports, FDI, supply chains, exchange rates."),
   card("Paper 2 prep", "condensed", "Exam technique", "Paper 2 structure", "10/12 = K + A + A + brief E. 20/25 = 2-3 paragraphs, applications, judgment."),
+  card("Paper 2 prep", "condensed", "Diagram choice", "Monetary policy", "AD/AS or money market. Higher rates -> AD left."),
+  card("Paper 2 prep", "condensed", "Diagram choice", "Fiscal policy", "AD/AS. Higher G or lower taxes -> AD right."),
+  card("Paper 2 prep", "condensed", "Diagram choice", "Growth/development", "AD/AS + LRAS or PPC depending on focus."),
+  card("Paper 2 prep", "condensed", "Paper 2 evidence", "USA and China", "USA = developed giant. China = emerging giant. Use both flexibly."),
+
 ];
 
 const ALL_CARDS = [
@@ -1653,6 +1735,7 @@ let typeMode = localStorage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
 let selectedGroups = loadSelectedGroups();
 let selectedTopics = loadSelectedTopics();
+let topicClearFlags = loadTopicClearFlags();
 let typedAnswers = loadTypedAnswers();
 
 
@@ -1699,6 +1782,8 @@ function loadSelectedGroups() {
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_groups')));
     const validGroups = groupsForSubject(selectedSubject);
     const valid = Array.isArray(saved) ? saved.filter(group => validGroups.includes(group)) : [];
+    const cleared = JSON.parse(localStorage.getItem(subjectKey('selected_groups_cleared')) || 'null');
+    if (cleared === true) return [];
     return valid.length ? valid : defaultGroupsForSubject(selectedSubject);
   } catch {
     return defaultGroupsForSubject(selectedSubject);
@@ -1706,7 +1791,10 @@ function loadSelectedGroups() {
 }
 
 function saveSelectedGroups() {
-  try { localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
+  try {
+    localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups));
+    localStorage.setItem(subjectKey('selected_groups_cleared'), JSON.stringify(Array.isArray(selectedGroups) && selectedGroups.length === 0));
+  } catch {}
 }
 function loadSelectedTopics() {
   try {
@@ -1718,6 +1806,17 @@ function loadSelectedTopics() {
 }
 function saveSelectedTopics() {
   try { localStorage.setItem(subjectKey('selected_topics'), JSON.stringify(selectedTopics)); } catch {}
+}
+function loadTopicClearFlags() {
+  try {
+    const saved = JSON.parse(localStorage.getItem(subjectKey('topic_clear_flags')));
+    return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
+  } catch {
+    return {};
+  }
+}
+function saveTopicClearFlags() {
+  try { localStorage.setItem(subjectKey('topic_clear_flags'), JSON.stringify(topicClearFlags)); } catch {}
 }
 function loadTypedAnswers() {
   try { return JSON.parse(localStorage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
@@ -1750,47 +1849,73 @@ function availableTopicsForGroup(groupName) {
       .map(cardData => cardData.t)
   )];
 }
+function isGroupCleared(groupName) {
+  return !!topicClearFlags && !!topicClearFlags[groupName];
+}
+
+function setGroupCleared(groupName, cleared) {
+  if (!topicClearFlags || typeof topicClearFlags !== 'object' || Array.isArray(topicClearFlags)) {
+    topicClearFlags = {};
+  }
+  if (cleared) topicClearFlags[groupName] = true;
+  else delete topicClearFlags[groupName];
+  saveTopicClearFlags();
+}
+
 function selectedTopicsForGroup(groupName) {
   const available = availableTopicsForGroup(groupName);
+  if (isGroupCleared(groupName)) return [];
   if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) return available;
   const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-  return saved;
+  return saved.length ? saved : available;
 }
 
 function normalizeSelections() {
   const validGroups = groupsForSubject(selectedSubject);
-  if (!Array.isArray(selectedGroups) || !selectedGroups.length) {
+  if (!Array.isArray(selectedGroups)) {
     selectedGroups = [...validGroups];
   } else {
     selectedGroups = selectedGroups.filter(group => validGroups.includes(group));
-    if (!selectedGroups.length) selectedGroups = [...validGroups];
   }
 
   if (!selectedTopics || typeof selectedTopics !== 'object' || Array.isArray(selectedTopics)) {
     selectedTopics = {};
   }
+  if (!topicClearFlags || typeof topicClearFlags !== 'object' || Array.isArray(topicClearFlags)) {
+    topicClearFlags = {};
+  }
 
   validGroups.forEach(groupName => {
     const available = availableTopicsForGroup(groupName);
+    if (isGroupCleared(groupName)) {
+      selectedTopics[groupName] = [];
+      return;
+    }
     if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) {
       selectedTopics[groupName] = available;
       return;
     }
     const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-    selectedTopics[groupName] = saved;
+    selectedTopics[groupName] = saved.length ? saved : available;
   });
 
   Object.keys(selectedTopics).forEach(groupName => {
     if (!validGroups.includes(groupName)) delete selectedTopics[groupName];
   });
+  Object.keys(topicClearFlags).forEach(groupName => {
+    if (!validGroups.includes(groupName)) delete topicClearFlags[groupName];
+  });
 
   saveSelectedGroups();
   saveSelectedTopics();
+  saveTopicClearFlags();
+  saveTopicClearFlags();
 }
 function setSelectedTopicsForGroup(groupName, topics) {
   const available = availableTopicsForGroup(groupName);
   const cleaned = [...new Set(topics)].filter(topic => available.includes(topic));
   selectedTopics[groupName] = cleaned;
+  setGroupCleared(groupName, cleaned.length === 0);
   saveSelectedTopics();
 }
 
@@ -1807,7 +1932,8 @@ function togglePredictionsOnlyView() {
   if (!isPredictionsOnlyView()) {
     savePredictionSnapshot({
       selectedGroups: [...selectedGroups],
-      selectedTopics: JSON.parse(JSON.stringify(selectedTopics || {}))
+      selectedTopics: JSON.parse(JSON.stringify(selectedTopics || {})),
+      topicClearFlags: JSON.parse(JSON.stringify(topicClearFlags || {}))
     });
     selectedGroups = ['Predictions'];
     selectedTopics = { Predictions: availableTopicsForGroup('Predictions') };
@@ -1818,9 +1944,13 @@ function togglePredictionsOnlyView() {
       selectedTopics = snapshot.selectedTopics && typeof snapshot.selectedTopics === 'object' && !Array.isArray(snapshot.selectedTopics)
         ? snapshot.selectedTopics
         : {};
+      topicClearFlags = snapshot.topicClearFlags && typeof snapshot.topicClearFlags === 'object' && !Array.isArray(snapshot.topicClearFlags)
+        ? snapshot.topicClearFlags
+        : {};
     } else {
       selectedGroups = loadSelectedGroups();
       selectedTopics = loadSelectedTopics();
+      topicClearFlags = loadTopicClearFlags();
     }
     clearPredictionSnapshot();
   }
@@ -1974,7 +2104,7 @@ function renderTopicFilters() {
       <details class="topic-accordion" open>
         <summary>
           <div class="topic-summary-left">
-            <span>${groupName}</span>
+            <span><span class="summary-arrow">›</span>${groupName}</span>
             <span class="summary-meta">${meta.note}</span>
           </div>
           <div class="topic-summary-actions">

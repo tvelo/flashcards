@@ -1359,6 +1359,23 @@ const EDUCATION_FULL = [
   card("Education", "full", "Policies", "What is glocalisation?", "Global policies are adapted to local contexts rather than copied exactly."),
   card("Education", "full", "Policies", "What is a strength of policy explanations of education?", "They show how government decisions can shape opportunity, standards and inequality."),
   card("Education", "full", "Policies", "What is a criticism of policy explanations of education?", "They may overestimate the impact of policy and underplay class, gender, ethnicity and school-level processes."),
+  card("Education", "full", "New Right", "What is the New Right view of education?", "Education should prepare pupils for competition and raise standards through discipline, choice and a quasi-market."),
+  card("Education", "full", "New Right", "Why do New Right thinkers support marketisation?", "They argue that competition, parental choice and strong accountability make schools improve and perform better."),
+  card("Education", "full", "Gender", "What are the trends in gender and education?", "Girls generally achieve better results than boys, especially at GCSE, but the gap varies by subject, phase and school context."),
+  card("Education", "full", "Gender", "What are external factors in gender achievement?", "Changes in family life, feminism, employment patterns and girls' aspirations can help explain higher female attainment."),
+  card("Education", "full", "Gender", "What are internal processes in gender achievement?", "Teacher expectations, subject choice, the hidden curriculum and assessment methods can all shape boys' and girls' outcomes."),
+  card("Education", "full", "Class", "What are the trends in class and education?", "Middle-class pupils usually outperform working-class pupils, although there are differences within both groups and between schools."),
+  card("Education", "full", "Class", "What are the main external factors in class achievement?", "Material deprivation, cultural deprivation and differences in parental support can all reduce working-class attainment."),
+  card("Education", "full", "Ethnicity", "What are the trends in ethnicity and education?", "Attainment varies widely between ethnic groups, and outcomes are shaped by class, school practices and wider racism."),
+  card("Education", "full", "Ethnicity", "What are external factors in ethnicity achievement?", "Material deprivation, language, family support and migration history can influence how well pupils do in school."),
+  card("Education", "full", "Ethnicity", "What are internal processes in ethnicity achievement?", "Labelling, streaming, teacher expectations and educational triage can create or reinforce ethnic inequalities."),
+  card("Education", "full", "Selection", "What are selection policies in education?", "Selection policies sort pupils into sets, groups or schools using admissions rules, ability measures or behaviour expectations."),
+  card("Education", "full", "Marketisation and privatisation", "What is marketisation and privatisation in education?", "Marketisation makes schools compete for pupils, while privatisation increases the role of private providers and market-style management."),
+  card("Education", "full", "Policies", "What are equality policies in education?", "Equality policies try to reduce disadvantage, for example through pupil premium, compensatory programmes and support for underachieving groups."),
+  card("Education", "full", "Globalisation", "What is globalisation and education?", "Education is increasingly shaped by global competition, international comparisons and policy borrowing between countries."),
+  card("Education", "full", "Private and independent schools", "What are private and independent schools?", "They are fee-paying schools outside the state system, often with smaller classes, stronger resources and exam advantages."),
+  card("Education", "full", "Private and independent schools", "Why do private and independent schools matter?", "They can reproduce class inequality through access to better resources, social networks and highly selective admissions."),
+
 ];
  
 const EDUCATION_CONDENSED = [
@@ -1369,10 +1386,19 @@ const EDUCATION_CONDENSED = [
   card("Education", "condensed", "Ethnicity", "Ethnicity and achievement", "Attainment is shaped by class, racism and school processes.\n\nKey ideas: material deprivation, cultural difference, institutional racism, labelling and educational triage."),
   card("Education", "condensed", "Policies", "Marketisation and policy", "Marketisation increases competition between schools.\n\nParentocracy, league tables, OFSTED, formula funding, academies and free schools all change how schools operate.\n\nCream skimming and silt skimming are key criticisms."),
   card("Education", "condensed", "Globalisation", "Globalisation and education", "Education policy is increasingly international.\n\nBall: policy borrowing.\nRitzer: McDonaldisation.\nRobertson: glocalisation."),
-];
- 
-
-const METHODS_IN_CONTEXT_FULL = [
+  card("Education", "condensed", "New Right", "New Right", "Education should raise standards through competition, discipline, choice and a quasi-market.\n\nFocus on marketisation, parental choice and accountability."),
+  card("Education", "condensed", "Gender", "Gender trends", "Girls usually outperform boys, but the gap changes by subject and year group.\n\nThink: aspirations, feminism, teacher expectations and subject choice."),
+  card("Education", "condensed", "Gender", "External factors — gender", "External changes include feminism, family roles, women’s employment and shifts in girls’ ambitions."),
+  card("Education", "condensed", "Gender", "Internal processes — gender", "Internal factors include teacher labelling, the hidden curriculum, coursework and subject stereotyping."),
+  card("Education", "condensed", "Ethnicity", "Ethnicity trends", "Ethnic attainment varies a lot.\n\nAlways link outcomes to class, racism, migration history and school processes."),
+  card("Education", "condensed", "Ethnicity", "External factors — ethnicity", "External factors include material deprivation, language, parental support and migration-related differences."),
+  card("Education", "condensed", "Ethnicity", "Internal processes — ethnicity", "Internal factors include labelling, streaming, teacher expectations and educational triage."),
+  card("Education", "condensed", "Selection", "Selection policies", "Selection policies sort pupils by ability, behaviour or admissions rules.\n\nThey can shape who gets into the best classes or schools."),
+  card("Education", "condensed", "Marketisation and privatisation", "Marketisation and privatisation", "Marketisation makes schools compete.\n\nPrivatisation increases private influence, parental choice and pressure to perform."),
+  card("Education", "condensed", "Policies", "Equality policies", "Equality policies aim to reduce disadvantage through support programmes and extra funding.\n\nExamples: pupil premium and compensatory support."),
+  card("Education", "condensed", "Globalisation", "Globalisation and education", "Globalisation pushes policy borrowing and international comparison.\n\nLink to global competition and standardised measures."),
+  card("Education", "condensed", "Private and independent schools", "Private and independent schools", "Fee-paying schools often have smaller classes, stronger resources and better networks.\n\nThey can widen class inequality."),
+]; [
   card("Research Methods + Methods in Context", "full", "Education research", "What is Research Methods + Methods in Context?", "An exam focus where you apply research methods to the specific setting of education."),
   card("Research Methods + Methods in Context", "full", "Education research", "Why is access a key issue in school research?", "Researchers often need permission from gatekeepers such as heads, local authorities and parents."),
   card("Research Methods + Methods in Context", "full", "Questionnaires", "Why can questionnaires work well in education research?", "They are cheap, quick and useful for reaching large numbers of pupils or parents."),
@@ -1707,7 +1733,7 @@ const UNIT_TO_GROUP = {
 
 const GROUP_META_BY_SUBJECT = {
   Sociology: [
-    { name: 'Education', note: 'Functionalism, Marxism, class, ethnicity, policy' },
+    { name: 'Education', note: 'Functionalism, Marxism, New Right, class, gender, ethnicity, selection, marketisation, policies, globalisation' },
     { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' },
     { name: 'Predictions', note: 'Likely questions, mini tests and cram sheets' }
   ],
@@ -1888,7 +1914,11 @@ function selectedTopicsForGroup(groupName) {
   if (isGroupCleared(groupName)) return [];
   if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) return available;
   const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-  return saved;
+  const merged = [...saved];
+  available.forEach(topic => {
+    if (!merged.includes(topic)) merged.push(topic);
+  });
+  return merged;
 }
 
 /* ── FIX 3: normalizeSelections ───────────────────────────────────────────

@@ -2397,23 +2397,32 @@ async function syncCardCatalog() {
     }
     if (needsCardUpdate(existing, cardData)) {
       updates.push({
-        id: existing.id,
+        id: existing.id, // We already have the ID, so we must upsert via ID
         ...(extendedCardSchema ? extendedCardPayload(cardData) : basicCardPayload(cardData))
       });
     }
   });
 
-  for (const batch of chunkArray(inserts)) {
+  // 1. Deduplicate inserts to prevent 409s if ALL_CARDS contains identical duplicates
+  const uniqueInserts = [];
+  const seenInsertKeys = new Set();
+  for (const row of inserts) {
+    const key = row.slug || `${row.topic}|${row.question}`;
+    if (!seenInsertKeys.has(key)) {
+      seenInsertKeys.add(key);
+      uniqueInserts.push(row);
+    }
+  }
+
+  for (const batch of chunkArray(uniqueInserts)) {
     if (!batch.length) continue;
     if (extendedCardSchema) {
       const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
       if (error) {
         if (isMissingUniqueConstraint(error)) {
-          // Slug unique index is missing – fall back to individual inserts,
-          // ignoring unique-violation errors so existing rows are preserved.
           for (const row of batch) {
             const { error: ie } = await db.from('cards').insert([row]);
-            if (ie && ie.code !== '23505') throw ie;
+            if (ie && ie.code !== '23505') throw ie; // Ignore 409 on individual fallback
           }
         } else {
           throw error;
@@ -2421,17 +2430,27 @@ async function syncCardCatalog() {
       }
     } else {
       const { error } = await db.from('cards').insert(batch);
-      if (error) throw error;
+      if (error && error.code !== '23505') throw error;
     }
   }
 
-  for (const batch of chunkArray(updates)) {
+  // 2. Deduplicate updates
+  const uniqueUpdates = [];
+  const seenUpdateIds = new Set();
+  for (const row of updates) {
+    if (!seenUpdateIds.has(row.id)) {
+      seenUpdateIds.add(row.id);
+      uniqueUpdates.push(row);
+    }
+  }
+
+  for (const batch of chunkArray(uniqueUpdates)) {
     if (!batch.length) continue;
     if (extendedCardSchema) {
-      const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
+      // FIX: Use onConflict: 'id' because we are passing the existing primary key
+      const { error } = await db.from('cards').upsert(batch, { onConflict: 'id' });
       if (error) {
         if (isMissingUniqueConstraint(error)) {
-          // Fallback: update each row by id instead
           for (const row of batch) {
             if (!row.id) continue;
             const { error: ue } = await db.from('cards')
@@ -2447,6 +2466,8 @@ async function syncCardCatalog() {
       }
       continue;
     }
+    
+    // Legacy fallback
     for (const row of batch) {
       const { error } = await db.from('cards')
         .update({ topic: row.topic, question: row.question, answer: row.answer })

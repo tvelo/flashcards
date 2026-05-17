@@ -1442,8 +1442,6 @@ const THEORY_METHODS_CONDENSED = [
 
 
 const SOCIOLOGY_PREDICTIONS_FULL = [
-  /* Prediction cards use Point + sociologist in brackets for each paragraph. */
-  /* Prediction cards use Point + theorist in brackets for each paragraph. */
   card("Predictions", "full", "Mini test", "Evaluate sociological explanations of social class differences in educational achievement.", "Point: Material deprivation (Douglas / Wilkinson and Pickett).\nExplain: poverty, poor housing, diet and lack of resources reduce attainment.\n\nPoint: Cultural capital and language codes (Bourdieu / Bernstein).\nExplain: middle-class language, habits and knowledge match school expectations.\n\nPoint: Labelling and streaming (Becker / Rosenthal and Jacobson / Lacey).\nExplain: teacher expectations can create self-fulfilling prophecies and set pupils onto different achievement paths.\n\nJudgement: the strongest answers link external deprivation with school processes."),
   card("Predictions", "full", "Mini test", "Evaluate sociological explanations of gender differences in educational achievement.", "Point: Changing ambitions and career opportunities (Sharpe).\nExplain: girls' aspirations and future plans have risen as society changed.\n\nPoint: Teacher expectations, coursework and equal opportunities (Francis / Weiner / Mitsos and Browne).\nExplain: schools can reward organisation and reduce older gender barriers.\n\nPoint: Masculinity and laddish subcultures (Francis / Mac an Ghaill).\nExplain: boys may reject success if it seems unmasculine.\n\nJudgement: gender gaps are shaped by both school change and peer culture."),
   card("Predictions", "full", "Mini test", "Evaluate sociological explanations of ethnic differences in educational achievement.", "Point: Material deprivation (Modood).\nExplain: poverty, housing and fewer resources can lower attainment.\n\nPoint: Culture and language (Coard / Sewell).\nExplain: language barriers and family-school cultural differences can affect access to the curriculum.\n\nPoint: Labelling, racism and setting (Gillborn and Youdell / Becker).\nExplain: teachers and schools can make unequal expectations become real outcomes.\n\nJudgement: the best answers show ethnicity is shaped by structure, culture and school processes."),
@@ -1566,7 +1564,7 @@ const ECONOMICS_THEME4_FULL = [
   card("Theme 4", "full", "Globalisation and trade", "How can globalisation affect inequality?", "It can create gains from trade and investment, but also widen gaps between regions, sectors and skill groups."),
   card("Theme 4", "full", "Trade and competitiveness", "What is the terms of trade?", "The ratio of export prices to import prices."),
   card("Theme 4", "full", "Trade and competitiveness", "Why are terms of trade important?", "They affect the purchasing power of export earnings and can influence living standards and the current account."),
-  card("Theme 4", "full", "Trade and competitiveness", "What is international competitiveness?", "The ability of a country’s firms to sell successfully against foreign rivals on price and non-price factors."),
+  card("Theme 4", "full", "Trade and competitiveness", "What is international competitiveness?", "The ability of a country's firms to sell successfully against foreign rivals on price and non-price factors."),
   card("Theme 4", "full", "Trade and competitiveness", "How can productivity improve competitiveness?", "Higher output per worker lowers unit costs and can improve quality, price and reliability."),
   card("Theme 4", "full", "Exchange rates", "What is an exchange rate?", "The price of one currency in terms of another currency."),
   card("Theme 4", "full", "Exchange rates", "What is an appreciation?", "A rise in the value of a currency relative to others."),
@@ -1637,37 +1635,18 @@ const ECONOMICS_PAPER2_PREP_FULL = [
   card("Paper 2 prep", "full", "Exam technique", "How should I structure a 20 or 25 marker in EconplusDal style?", "Knowledge: use 2-3 developed paragraphs.\\nAnalysis: each paragraph should contain a chain of reasoning, not just a list.\\nApplication: use a real example or country reference in every main paragraph.\\nEvaluation: compare alternatives, explain conditions, and end with a decisive overall judgment."),
   card("Paper 2 prep", "full", "Exam technique", "How do EconplusDal-style packs help with essays?", "Knowledge: EconplusDal publishes Analysis and Evaluation Packs, plus separate Examples for Exams and Diagrams and Definitions packs.\\nAnalysis: that structure means you revise definitions, diagrams, examples and evaluation as separate but linked skills.\\nApplication: copy that split in your revision by learning a diagram, an example and a judgment for each topic.\\nEvaluation: that is more efficient than only memorising definitions."),
   card("Paper 2 prep", "full", "Exam technique", "What should my final judgement sound like?", "Knowledge: do not end with 'it depends' only.\\nAnalysis: state which side is stronger and why.\\nApplication: refer to the size of the shock, time horizon, or whether the country is developed or emerging.\\nEvaluation: a top answer narrows the conditions under which the policy works best."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for monetary policy?", `Use AD/AS or the money market / interest-rate transmission mechanism.
-AD shifts left when rates rise, reducing inflation but also growth.
-Application: rate hikes, QE, confidence effects.`),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for fiscal policy?", `Use AD/AS.
-Higher government spending or lower taxes shift AD right; austerity shifts AD left.
-Application: budget deficits, recession support and crowding out.`),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for the current account deficit?", `Use AD/AS, exchange rate, or circular flow depending on the focus.
-A stronger currency can worsen net exports, while a depreciation can improve them if conditions hold.`),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for economic growth?", `Use AD/AS and LRAS.
-Short-run growth comes from higher AD; long-run growth comes from LRAS shifting right.
-Application: investment, innovation, education and productivity.`),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for development?", `Use PPC, AD/AS or a poverty/inequality diagram depending on the focus.
-Application: growth, living standards, industrialisation and structural change.`),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for a trade war?", `Use tariff, import market, or AD/AS with net exports.
-Application: tariffs, retaliation, higher prices and lower trade volumes.`),
-  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use the USA as evidence?", `Use the USA for a developed-economy comparison, Federal Reserve policy, productivity, inequality, trade deficits and global spillovers.
-Judgement: strongest when the question needs a large advanced economy with major world influence.`),
-  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use China as evidence?", `Use China for an emerging-economy example, export-led growth, FDI, supply chains, exchange rates, inflation and development.
-Judgement: strongest when the question needs a fast-growing economy that affects the whole world.`),
-  card("Paper 2 prep", "full", "Paper 2 evidence", "How do I compare the USA and China in essays?", `USA = developed, high productivity, big consumer market, Fed influence.
-China = emerging, manufacturing hub, export-led growth, global supply-chain power.
-Judgement: together they cover most macro and globalisation questions.`),
-  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 10-marker into a top answer?", `Point: define the key term.
-Analysis: explain the chain of cause and effect.
-Application: add USA or China evidence.
-Evaluation: say when the effect is strongest or weakest.`),
-  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 20/25-marker into a top answer?", `Use 2-3 developed paragraphs.
-Each paragraph should include knowledge, analysis, application and evaluation.
-Finish with a clear judgement about the most important factor.`),
-  card("Paper 2 prep", "full", "Exam technique", "What common question types should I recognise fast?", `Definitions, explain questions, data-response questions, diagram questions and assess questions.
-Judgement: command words decide whether the answer should lean toward KAA or evaluation.`),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for monetary policy?", "Use AD/AS or the money market / interest-rate transmission mechanism.\nAD shifts left when rates rise, reducing inflation but also growth.\nApplication: rate hikes, QE, confidence effects."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for fiscal policy?", "Use AD/AS.\nHigher government spending or lower taxes shift AD right; austerity shifts AD left.\nApplication: budget deficits, recession support and crowding out."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for the current account deficit?", "Use AD/AS, exchange rate, or circular flow depending on the focus.\nA stronger currency can worsen net exports, while a depreciation can improve them if conditions hold."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for economic growth?", "Use AD/AS and LRAS.\nShort-run growth comes from higher AD; long-run growth comes from LRAS shifting right.\nApplication: investment, innovation, education and productivity."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for development?", "Use PPC, AD/AS or a poverty/inequality diagram depending on the focus.\nApplication: growth, living standards, industrialisation and structural change."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for a trade war?", "Use tariff, import market, or AD/AS with net exports.\nApplication: tariffs, retaliation, higher prices and lower trade volumes."),
+  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use the USA as evidence?", "Use the USA for a developed-economy comparison, Federal Reserve policy, productivity, inequality, trade deficits and global spillovers.\nJudgement: strongest when the question needs a large advanced economy with major world influence."),
+  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use China as evidence?", "Use China for an emerging-economy example, export-led growth, FDI, supply chains, exchange rates, inflation and development.\nJudgement: strongest when the question needs a fast-growing economy that affects the whole world."),
+  card("Paper 2 prep", "full", "Paper 2 evidence", "How do I compare the USA and China in essays?", "USA = developed, high productivity, big consumer market, Fed influence.\nChina = emerging, manufacturing hub, export-led growth, global supply-chain power.\nJudgement: together they cover most macro and globalisation questions."),
+  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 10-marker into a top answer?", "Point: define the key term.\nAnalysis: explain the chain of cause and effect.\nApplication: add USA or China evidence.\nEvaluation: say when the effect is strongest or weakest."),
+  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 20/25-marker into a top answer?", "Use 2-3 developed paragraphs.\nEach paragraph should include knowledge, analysis, application and evaluation.\nFinish with a clear judgement about the most important factor."),
+  card("Paper 2 prep", "full", "Exam technique", "What common question types should I recognise fast?", "Definitions, explain questions, data-response questions, diagram questions and assess questions.\nJudgement: command words decide whether the answer should lean toward KAA or evaluation."),
 
 ];
 
@@ -1797,25 +1776,36 @@ function groupsForSubject(subject) {
 function defaultGroupsForSubject(subject) {
   return groupsForSubject(subject);
 }
+
+/* ── FIX 1: loadSelectedGroups ────────────────────────────────────────────
+   The old version wrote a `selected_groups_cleared` flag to localStorage
+   whenever selectedGroups was empty (which happened silently on every
+   subject-switch because the old subject's groups filtered to nothing).
+   On next load it short-circuited to [] and the deck never recovered.
+   Fix: drop the cleared branch entirely and just use the saved array,
+   falling back to defaults when empty.
+   ───────────────────────────────────────────────────────────────────────── */
 function loadSelectedGroups() {
   try {
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_groups')));
     const validGroups = groupsForSubject(selectedSubject);
     const valid = Array.isArray(saved) ? saved.filter(group => validGroups.includes(group)) : [];
-    const cleared = JSON.parse(localStorage.getItem(subjectKey('selected_groups_cleared')) || 'null');
-    if (cleared === true) return [];
     return valid.length ? valid : defaultGroupsForSubject(selectedSubject);
   } catch {
     return defaultGroupsForSubject(selectedSubject);
   }
 }
 
+/* ── FIX 2: saveSelectedGroups ────────────────────────────────────────────
+   No longer writes the `selected_groups_cleared` flag that caused
+   future loads to return [] even when groups should be active.
+   ───────────────────────────────────────────────────────────────────────── */
 function saveSelectedGroups() {
   try {
     localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups));
-    localStorage.setItem(subjectKey('selected_groups_cleared'), JSON.stringify(Array.isArray(selectedGroups) && selectedGroups.length === 0));
   } catch {}
 }
+
 function loadSelectedTopics() {
   try {
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_topics')));
@@ -1882,16 +1872,12 @@ function setGroupCleared(groupName, cleared) {
   saveTopicClearFlags();
 }
 
-// Sets the selected topics for a group and syncs cleared state + localStorage.
-// This function was missing in the previous version, causing all topic filter
-// interactions (checkboxes, All / None buttons) to throw a ReferenceError.
 function setSelectedTopicsForGroup(groupName, topics) {
   if (!selectedTopics || typeof selectedTopics !== 'object' || Array.isArray(selectedTopics)) {
     selectedTopics = {};
   }
   const arr = Array.isArray(topics) ? topics : [];
   selectedTopics[groupName] = arr;
-  // Mirror cleared-state so normalizeSelections() respects the user's choice
   setGroupCleared(groupName, arr.length === 0);
   saveSelectedTopics();
 }
@@ -1904,12 +1890,23 @@ function selectedTopicsForGroup(groupName) {
   return saved;
 }
 
+/* ── FIX 3: normalizeSelections ───────────────────────────────────────────
+   Two changes:
+   a) After filtering selectedGroups, guard against an empty result by
+      restoring defaults. This prevents stale subject-switch data from
+      permanently hiding all cards.
+   b) REMOVED the block that unconditionally deleted
+      topicClearFlags['Paper 2 prep'], which made it impossible to ever
+      toggle that section off via the "None" button.
+   ───────────────────────────────────────────────────────────────────────── */
 function normalizeSelections() {
   const validGroups = groupsForSubject(selectedSubject);
   if (!Array.isArray(selectedGroups)) {
     selectedGroups = [...validGroups];
   } else {
     selectedGroups = selectedGroups.filter(group => validGroups.includes(group));
+    // Guard: stale data from a subject-switch leaves an empty array — restore defaults
+    if (!selectedGroups.length) selectedGroups = [...validGroups];
   }
 
   if (!selectedTopics || typeof selectedTopics !== 'object' || Array.isArray(selectedTopics)) {
@@ -1919,10 +1916,8 @@ function normalizeSelections() {
     topicClearFlags = {};
   }
 
-  // Repair stale Economics flags from older versions so Paper 2 prep always loads.
-  if (selectedSubject === 'Economics' && topicClearFlags['Paper 2 prep']) {
-    delete topicClearFlags['Paper 2 prep'];
-  }
+  // NOTE: The old forced-repair block for 'Paper 2 prep' has been removed.
+  // It prevented users from toggling that section off.
 
   validGroups.forEach(groupName => {
     const available = availableTopicsForGroup(groupName);
@@ -1937,9 +1932,6 @@ function normalizeSelections() {
     const saved = Array.isArray(selectedTopics[groupName])
       ? selectedTopics[groupName].filter(topic => available.includes(topic))
       : [];
-    // Guard: if saved is empty but the group is NOT explicitly cleared,
-    // restore all available topics so a stale empty array never silently
-    // hides cards.
     selectedTopics[groupName] = saved.length > 0 ? saved : available;
   });
 
@@ -2257,6 +2249,7 @@ async function switchProfile(name) {
   condensedMode = loadCondensedMode();
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
+  topicClearFlags = loadTopicClearFlags();
   typedAnswers = loadTypedAnswers();
   reviewsCache = loadLocalReviews();
   streak = loadLocalStreak();
@@ -2287,6 +2280,7 @@ async function switchSubject(name) {
   saveSelectedSubject();
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
+  topicClearFlags = loadTopicClearFlags();
   normalizeSelections();
   flipped = false;
   currentId = null;
@@ -2324,8 +2318,6 @@ function isMissingCardColumn(error) {
   return text.includes('slug') || text.includes('variant') || text.includes('unit') || error?.code === '42703';
 }
 
-// Returns true when the upsert fails because the slug column has no unique
-// constraint in Postgres (PostgREST surfaces this as code 42P10).
 function isMissingUniqueConstraint(error) {
   return error?.code === '42P10' || (
     `${error?.message || ''}`.toLowerCase().includes('no unique or exclusion constraint')
@@ -2397,13 +2389,12 @@ async function syncCardCatalog() {
     }
     if (needsCardUpdate(existing, cardData)) {
       updates.push({
-        id: existing.id, // Mandatory for preventing 409s
+        id: existing.id,
         ...(extendedCardSchema ? extendedCardPayload(cardData) : basicCardPayload(cardData))
       });
     }
   });
 
-  // Batch inserts with a unique check to prevent collisions
   const uniqueInserts = Array.from(new Map(inserts.map(i => [i.slug || `${i.topic}|${i.question}`, i])).values());
   for (const batch of chunkArray(uniqueInserts)) {
     if (!batch.length) continue;
@@ -2411,16 +2402,13 @@ async function syncCardCatalog() {
     if (error && error.code !== '23505') throw error;
   }
 
-  // Batch updates specifically targeting the Record ID
   const uniqueUpdates = Array.from(new Map(updates.map(u => [u.id, u])).values());
   for (const batch of chunkArray(uniqueUpdates)) {
     if (!batch.length) continue;
-    // We target 'id' here to resolve the conflict for the specific profile record
     const { error } = await db.from('cards').upsert(batch, { onConflict: 'id' });
     if (error) throw error;
   }
 
-  // Refresh local mapping
   const refreshed = await fetchCardRows();
   refreshed.forEach(row => {
     const local = ALL_CARDS.find(card => card.slug === row.slug || (card.t === row.topic && card.q === row.question));
@@ -2466,6 +2454,17 @@ function nextDueText() {
   const now = Date.now();
   const future = activeCatalog().map(cardData => cardState(cardData).due).filter(ts => ts > now).sort((a, b) => a - b);
   return future.length ? formatDate(future[0]) : 'Now';
+}
+
+function formatDate(ts) {
+  const d = new Date(ts);
+  const now = new Date();
+  const diffMs = d - now;
+  const diffMins = Math.round(diffMs / 60000);
+  if (diffMins < 60) return `${diffMins}m`;
+  const diffHours = Math.round(diffMins / 60);
+  if (diffHours < 24) return `${diffHours}h`;
+  return d.toLocaleDateString();
 }
 
 function updateStats() {
@@ -2514,12 +2513,12 @@ function renderEmptyState() {
   updateStats();
 }
 
-function hasCardsForCurrentView() {
-  return ALL_CARDS.some(cardData => cardSubject(cardData) === selectedSubject && cardData.variant === (condensedMode ? 'condensed' : 'full'));
-}
-
-function repairEmptySelectionState() {
-  return false;
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+  return arr;
 }
 
 function buildDeck() {
@@ -2706,15 +2705,12 @@ async function init() {
       setSyncStatus('ok');
     } catch (error) {
       console.error('Supabase unavailable, running from local cache:', error);
-      // Show setup modal for missing tables (42P01) OR missing unique index (42P10)
       if (error && (error.code === '42P01' || isMissingUniqueConstraint(error))) {
         showSetupModal();
       }
       supabaseReady = false;
       setSyncStatus('error', 'Offline mode');
     } finally {
-      // Always rebuild the deck after Supabase settles (success or failure)
-      // so cards are guaranteed to appear even in full local/offline mode.
       normalizeSelections();
       buildDeck();
       updateReviewQueue();

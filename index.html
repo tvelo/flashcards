@@ -1253,6 +1253,15 @@ function slugify(value) {
     .replace(/^-+|-+$/g, "");
 }
 
+function simpleHash(str) {
+  let hash = 0;
+  for (let i = 0; i < str.length; i++) {
+    hash = ((hash << 5) - hash) + str.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash).toString(36);
+}
+
 function card(unit, variant, topic, question, answer, options = {}) {
   return {
     unit,
@@ -1260,7 +1269,7 @@ function card(unit, variant, topic, question, answer, options = {}) {
     t: topic,
     q: question,
     a: answer,
-    slug: options.slug || slugify([unit, variant, topic, question].join("-")),
+    slug: options.slug || `${slugify([unit, variant, topic, question, answer].join("-"))}-${simpleHash(`${unit}|${variant}|${topic}|${question}|${answer}`)}`,
     legacyKey: options.legacyKey || null
   };
 }
@@ -2361,14 +2370,19 @@ async function syncCardCatalog() {
 
   for (const batch of chunkArray(inserts)) {
     if (!batch.length) continue;
-    const { error } = await db.from('cards').insert(batch);
-    if (error) throw error;
+    if (extendedCardSchema) {
+      const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
+      if (error) throw error;
+    } else {
+      const { error } = await db.from('cards').insert(batch);
+      if (error) throw error;
+    }
   }
 
   for (const batch of chunkArray(updates)) {
     if (!batch.length) continue;
     if (extendedCardSchema) {
-      const { error } = await db.from('cards').upsert(batch);
+      const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
       if (error) throw error;
       continue;
     }
@@ -2475,12 +2489,35 @@ function renderEmptyState() {
   updateStats();
 }
 
+function hasCardsForCurrentView() {
+  return ALL_CARDS.some(cardData => cardSubject(cardData) === selectedSubject && cardData.variant === (condensedMode ? 'condensed' : 'full'));
+}
+
+function repairEmptySelectionState() {
+  if (!hasCardsForCurrentView()) return false;
+  const cards = activeCatalog();
+  if (cards.length > 0) return false;
+
+  selectedGroups = defaultGroupsForSubject(selectedSubject);
+  selectedTopics = {};
+  topicClearFlags = {};
+  saveSelectedGroups();
+  saveSelectedTopics();
+  saveTopicClearFlags();
+  return true;
+}
+
 function buildDeck() {
   const mode = document.getElementById('modeSel').value;
   const now = Date.now();
   normalizeSelections();
 
   let cards = [...activeCatalog()];
+
+  if (!cards.length && repairEmptySelectionState()) {
+    normalizeSelections();
+    cards = [...activeCatalog()];
+  }
 
   if (mode === 'due') {
     cards = cards.filter(cardData => cardState(cardData).due <= now);

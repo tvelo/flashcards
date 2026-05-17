@@ -261,7 +261,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 }
 .controls{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns:repeat(6,minmax(0,1fr));
   gap:10px;
   margin:16px 0 14px;
 }
@@ -950,7 +950,7 @@ html[data-subject="Economics"] .profile-pill.active {
   <div class="header">
     <div class="title">
       <h1>AQA Sociology + Edexcel Economics Flashcards</h1>
-      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Economics follows the Edexcel A-level Economics A Theme 2 and Theme 4 structure. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Economics follows the Edexcel A-level Economics A Theme 2 and Theme 4 structure, with an extra Paper 2 prep pack for diagrams, evidence and exam technique. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
@@ -975,7 +975,7 @@ html[data-subject="Economics"] .profile-pill.active {
     <div class="filter-top">
       <div>
         <strong>Topic selector</strong>
-        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate. Economics is split into Edexcel Theme 2 and Theme 4.</p>
+        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate. Economics is split into Edexcel Theme 2, Theme 4 and Paper 2 prep.</p>
       </div>
       <div class="filter-summary" id="topicSummary">Sociology</div>
     </div>
@@ -990,6 +990,7 @@ html[data-subject="Economics"] .profile-pill.active {
       <option value="mixed">Mixed topics</option>
     </select>
     <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
+    <button id="predictionsToggle" class="secondary" aria-pressed="false">Predictions only: Off</button>
     <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
     <button id="shuffleBtn" class="secondary">Shuffle</button>
     <button id="resetBtn" class="secondary">Reset progress</button>
@@ -1141,56 +1142,67 @@ insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
 const SQL_SETUP = `create extension if not exists pgcrypto;
 
 create table if not exists profiles (
-  id         uuid primary key default gen_random_uuid(),
-  name       text unique not null,
-  streak     int  default 0,
-  last_study text default ''
+  id          uuid primary key default gen_random_uuid(),
+  name        text unique not null,
+  streak      integer not null default 0,
+  last_study  text not null default ''
+);
+
+create table if not exists decks (
+  id          uuid primary key default gen_random_uuid(),
+  user_id     uuid,
+  title       text not null,
+  description text,
+  created_at  timestamptz not null default now()
 );
 
 create table if not exists cards (
   id         uuid primary key default gen_random_uuid(),
+  slug       text not null,
+  unit       text not null,
   topic      text not null,
+  variant    text not null default 'full',
   question   text not null,
   answer     text not null,
-  created_at timestamptz default now()
+  created_at timestamptz not null default now(),
+  updated_at timestamptz not null default now()
 );
 
-alter table cards add column if not exists slug text;
-alter table cards add column if not exists unit text default '';
-alter table cards add column if not exists variant text default 'full';
-alter table cards add column if not exists updated_at timestamptz default now();
 create unique index if not exists cards_slug_idx on cards(slug);
 
 create table if not exists reviews (
   id            uuid primary key default gen_random_uuid(),
-  profile_id    uuid references profiles(id) on delete cascade,
-  card_id       uuid references cards(id)    on delete cascade,
-  ease          float   default 2.5,
-  interval_days int     default 0,
-  reps          int     default 0,
-  lapses        int     default 0,
-  due           bigint  default 0,
-  seen          int     default 0,
-  mastered      boolean default false,
-  last_reviewed bigint  default 0,
-  updated_at    timestamptz default now(),
+  profile_id    uuid not null references profiles(id) on delete cascade,
+  card_id       uuid not null references cards(id) on delete cascade,
+  ease          double precision not null default 2.5,
+  interval_days integer not null default 0,
+  reps          integer not null default 0,
+  lapses        integer not null default 0,
+  due           bigint not null default 0,
+  seen          integer not null default 0,
+  mastered      boolean not null default false,
+  last_reviewed bigint not null default 0,
+  updated_at    timestamptz not null default now(),
   unique(profile_id, card_id)
 );
 
 alter table profiles enable row level security;
+alter table decks    enable row level security;
 alter table cards    enable row level security;
 alter table reviews  enable row level security;
 
 drop policy if exists "anon_all_profiles" on profiles;
+drop policy if exists "anon_all_decks" on decks;
 drop policy if exists "anon_all_cards" on cards;
 drop policy if exists "anon_all_reviews" on reviews;
 
 create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
+create policy "anon_all_decks"    on decks    for all to anon using (true) with check (true);
 create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
 create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
 
-insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
-  on conflict (name) do nothing;`;
+insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac')
+  on conflict (name) do nothing;`
 
 function slugify(value) {
   return value
@@ -1369,6 +1381,41 @@ const THEORY_METHODS_CONDENSED = [
 
 
 
+const SOCIOLOGY_PREDICTIONS_FULL = [
+  card("Predictions", "full", "Priority order", "What should I prioritise first for AQA Sociology Paper 1?", "1) Social class differences in achievement\n2) Gender differences in achievement\n3) Ethnic differences in achievement\n4) School processes: labelling, streaming, teacher expectations, subcultures, hidden curriculum\n5) Education policy: marketisation, privatisation, globalisation\n6) Theory and methods in context"),
+  card("Predictions", "full", "Likely essays", "Which 30-mark areas are most worth rehearsing?", "Social class differences in achievement\nGender differences in achievement\nEthnic differences in achievement\nMeritocracy / whether education is fair\nRole of education in transmitting ideas and values\nMarketisation / globalisation / policy changes"),
+  card("Predictions", "full", "Short questions", "Which shorter-question areas are very likely?", "Functions of education\nVocational education\nCompetition between pupils\nSchool processes affecting identity\nTwo ways schools affect achievement\nMethods questions on observation, questionnaires, interviews and secondary data"),
+  card("Predictions", "full", "Methods in context", "Which methods-in-context themes are very likely?", "Pupil exclusions\nParent involvement\nTeacher expectations\nPupil behaviour\nBullying\nMinority ethnic experiences\nSchool processes"),
+  card("Predictions", "full", "4-mark questions", "How should I structure a 4-mark sociology answer?", "Give 2 clear points.\nEach point should be short and direct.\nNo waffle."),
+  card("Predictions", "full", "6-mark questions", "How should I structure a 6-mark sociology answer?", "Give 3 points.\nDevelop each point slightly with explanation or an example.\nKeep it concise."),
+  card("Predictions", "full", "10-mark item questions", "How should I structure a 10-mark item question?", "Use the item twice.\nLink each point directly to the item.\nAdd sociological knowledge and a short mini-judgment if you have time."),
+  card("Predictions", "full", "20-mark methods questions", "How should I structure a 20-mark methods question?", "Balance strengths and limitations.\nUse evaluation throughout.\nFinish with a judgment about which method fits the context best."),
+  card("Predictions", "full", "30-mark essays", "How should I structure a 30-mark essay?", "Intro: define the issue and give a line of argument.\nParagraphs: 3-4 main points with sociological evidence.\nInclude comparison and evaluation.\nEnd with a direct conclusion that answers the question."),
+  card("Predictions", "full", "Key sociologists", "Which sociologists and ideas are safest to know?", "Class: Bourdieu, Douglas, Wilkinson and Pickett, Bernstein.\nGender: Mitsos and Browne, Sharpe, Francis, Weiner.\nEthnicity: Sewell, Gillborn and Youdell, Ball, Coard, Modood.\nSchool processes: Becker, Rosenthal and Jacobson, Lacey, Willis, Bowles and Gintis.\nFunctions/theory: Durkheim, Parsons, Davis and Moore, Althusser, Bourdieu."),
+  card("Predictions", "full", "Class essay plan", "What is the best essay skeleton for social class differences in achievement?", "Material deprivation.\nCultural deprivation / cultural capital.\nSchool factors such as labelling, setting, streaming and pupil subcultures.\nWider factors such as housing, family background, class language and private tuition.\nConclusion: external and internal factors usually interact."),
+  card("Predictions", "full", "Gender essay plan", "What is the best essay skeleton for gender differences in achievement?", "External changes: girls' changing ambitions and career options.\nSchool factors: teacher expectations, subject choice, coursework and equal opportunities.\nMasculinity and peer pressure for boys.\nConclusion: class and ethnicity also shape gender patterns."),
+  card("Predictions", "full", "Ethnicity essay plan", "What is the best essay skeleton for ethnic differences in achievement?", "Material factors.\nCultural factors.\nSchool factors: labelling, racism, setting and expectations.\nExternal factors: language, poverty and home background.\nConclusion: not all ethnic groups experience school in the same way."),
+  card("Predictions", "full", "Meritocracy essay plan", "What is the best essay skeleton for a meritocracy question?", "Functionalist view: education sorts people fairly.\nMarxist critique: hidden curriculum and reproduction of class inequality.\nFeminist critique: patriarchy and gendered expectations.\nEthnic and class evidence against fairness.\nConclusion: meritocracy is an ideal, not a full description of reality."),
+  card("Predictions", "full", "Functions essay plan", "What is the best essay skeleton for the functions of education?", "Socialisation and value consensus.\nRole allocation and skills for the economy.\nSocial cohesion and nationalism.\nCritiques from Marxists and feminists.\nConclusion: education does more than transmit knowledge, but it also reproduces inequality."),
+  card("Predictions", "full", "Common mistakes", "What are the common mistakes that lose marks?", "Writing everything you know instead of answering the exact question.\nForgetting to use the item in 10-mark questions.\nGiving description with no evaluation in 20- and 30-mark questions.\nNot naming sociologists or studies.\nRepeating the same point.\nWeak conclusions.\nSpending too long on one question."),
+  card("Predictions", "full", "Top-band answers", "What do top-band answers do?", "Use accurate sociological knowledge.\nApply the item properly.\nDevelop points with explanation.\nCompare views and make judgment.\nSound decisive at the end."),
+  card("Predictions", "full", "Timing guide", "What is the exam timing guide?", "4 marks: 4-5 minutes.\n6 marks: 6-8 minutes.\n10 marks: 12-15 minutes.\n20 marks: 20-25 minutes.\n30 marks: 35-40 minutes.\nLeave a few minutes at the end to check spelling, item use and conclusions."),
+  card("Predictions", "full", "One-night plan", "What is the one-night survival plan?", "First 45 minutes: class, gender, ethnicity, meritocracy, 6 key sociologists.\nNext 45 minutes: plan class, gender, ethnicity and meritocracy 30-markers.\nNext 30 minutes: do one methods question and one 10-marker.\nFinal 20 minutes: common mistakes and timing guide."),
+  card("Predictions", "full", "Final reminders", "What are the ultra-short final reminders?", "Use the item.\nMake a judgment.\nName sociologists.\nKeep answers focused.\nDo not panic if a question looks unfamiliar.")
+];
+
+const SOCIOLOGY_PREDICTIONS_CONDENSED = [
+  card("Predictions", "condensed", "Priority order", "Predictions: what to prioritise first", "Class → Gender → Ethnicity → school processes → policy → methods in context."),
+  card("Predictions", "condensed", "Likely essays", "Predictions: likely 30-mark areas", "Class, gender, ethnicity, meritocracy, transmitting ideas and values, marketisation/globalisation."),
+  card("Predictions", "condensed", "Short questions", "Predictions: likely short areas", "Functions, vocational education, competition, identity, two ways schools affect achievement."),
+  card("Predictions", "condensed", "Methods in context", "Predictions: MIC themes", "Exclusions, parent involvement, teacher expectations, pupil behaviour, bullying, minority ethnic experiences."),
+  card("Predictions", "condensed", "Exam structures", "Predictions: answer structure", "4-mark = 2 points. 6-mark = 3 developed points. 10-mark = use the item twice. 20-mark = strengths vs limitations. 30-mark = 3-4 paragraphs plus a real conclusion."),
+  card("Predictions", "condensed", "Core sociologists", "Predictions: safest sociologists", "Bourdieu, Douglas, Bernstein, Mitsos and Browne, Sharpe, Francis, Weiner, Sewell, Gillborn and Youdell, Becker, Rosenthal and Jacobson, Lacey, Willis, Durkheim, Parsons, Davis and Moore, Althusser."),
+  card("Predictions", "condensed", "Essay skeletons", "Predictions: best essay order", "Class: deprivation → cultural capital → school processes → wider factors.\nGender: changing ambitions → school factors → masculinity.\nEthnicity: material → cultural → school → external.\nMeritocracy: functionalism → Marxism → feminism → evidence → judgment."),
+  card("Predictions", "condensed", "Timing and mistakes", "Predictions: timing and traps", "4/6/10/20/30 minute guide.\nAvoid no-evaluation essays, missing the item, weak conclusions and repeating points."),
+  card("Predictions", "condensed", "One-night survival", "Predictions: one-night survival plan", "Memorise class, gender, ethnicity, meritocracy and six key sociologists; then plan essays, do one methods question, and finish by checking mistakes and timings.")
+];
+
 const ECONOMICS_THEME2_FULL = [
   card("Theme 2", "full", "Measures of economic performance", "What does GDP measure?", "The total value of output produced in an economy over a period, usually a year."),
   card("Theme 2", "full", "Measures of economic performance", "Why is real GDP more useful than nominal GDP?", "Real GDP removes the effect of inflation, so it shows changes in output more accurately."),
@@ -1497,6 +1544,45 @@ const ECONOMICS_THEME4_CONDENSED = [
   card("Theme 4", "condensed", "Development", "Theme 4: development", "Development is wider than GDP per head. Use health, education, inequality, institutions and sustainability. Aid, debt relief, trade and investment can help, but governance matters."),
   card("Theme 4", "condensed", "Evaluation", "Theme 4: evaluation and judgement", "Best answers compare short run vs long run, winners vs losers, price vs non-price effects, and whether the country needs growth, stability, equity or external balance.")
 ];
+
+
+const ECONOMICS_PAPER2_PREP_FULL = [
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for demand-pull inflation?", "Use AD/AS.\nAD shifts right, price level rises, real output may rise in the short run.\nApplication: strong consumer confidence, lower interest rates or higher government spending."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for cost-push inflation?", "Use AD/AS.\nSRAS shifts left, price level rises and real output falls.\nApplication: energy price spikes, wage pressure or imported inflation."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for a recessionary output gap?", "Use AD/AS.\nAD shifts left so actual output falls below potential output.\nEvaluation: the size of the gap matters because spare capacity can reduce inflationary pressure."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for supply-side policy?", "Usually AD/AS with LRAS shifting right.\nIt shows higher productive potential, lower inflationary pressure and higher long-run growth.\nApplication: better education, infrastructure and productivity."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for exchange rates?", "Use the foreign exchange market.\nA depreciation is a leftward shift in demand for the currency or a rightward shift in supply.\nApplication: it can improve net exports if Marshall-Lerner conditions hold."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for protectionism?", "Use an import market or tariff/quota diagram.\nA tariff raises the domestic price of imports and reduces import volume.\nEvaluation: it may protect domestic jobs but can raise prices."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for comparative advantage?", "Use PPCs or a trade specialisation diagram.\nIt shows gains from specialising where opportunity cost is lowest.\nApplication: useful for explaining why countries trade."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for inequality?", "Use a Lorenz curve and Gini coefficient.\nIt shows the distribution of income or wealth.\nEvaluation: it measures distribution, not the causes of inequality."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for unemployment?", "Use AD/AS for demand-deficient unemployment or labour market diagrams for real wage unemployment.\nApplication: the best diagram depends on whether the problem is cyclical or structural."),
+  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for the current account?", "Use AD/AS or the circular flow to show net exports effects, and an exchange rate diagram when the question is about competitiveness.\nEvaluation: current account problems usually need more than one diagram."),
+  card("Paper 2 prep", "full", "USA evidence", "Why is the USA such a powerful evidence country for Edexcel Economics?", "Knowledge: it is a huge advanced economy with major influence on global output, trade and finance.\nAnalysis: US monetary policy, demand shocks and inflation often transmit across the world.\nApplication: use the USA for questions on inflation, interest rates, deficits, globalisation and market confidence.\nEvaluation: it is strongest for developed-economy comparison because it has deep capital markets and a large service sector."),
+  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for inflation and interest-rate questions?", "Knowledge: the US Federal Reserve is a key global policy maker.\nAnalysis: higher rates reduce borrowing and AD, which can lower inflation but slow growth.\nApplication: use the USA to discuss inflation targeting, rate rises and recession risk.\nEvaluation: it is a strong example because US decisions affect global finance, not just the domestic economy."),
+  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for growth and productivity questions?", "Knowledge: the USA is often used as a benchmark for high productivity and innovation.\nAnalysis: strong productivity supports higher real wages, investment and long-run growth.\nApplication: use it for supply-side policy, living standards and competitiveness.\nEvaluation: it is useful because it shows that growth is not only about AD, but also about productive potential."),
+  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for inequality questions?", "Knowledge: the USA has well-known income and wealth inequality.\nAnalysis: inequality can weaken social cohesion and reduce the effectiveness of growth in raising living standards.\nApplication: use it when discussing Gini, poverty, labour market outcomes or regional divides.\nEvaluation: it is especially useful because it shows GDP can rise while inequality remains high."),
+  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for globalisation and trade questions?", "Knowledge: the USA is central to global trade, financial markets and multinational firms.\nAnalysis: tariffs or trade wars can disrupt supply chains and reduce global efficiency.\nApplication: use it for protectionism, deglobalisation and exchange rate questions.\nEvaluation: it works well because the USA can be used as both a developed economy and a policy shock source."),
+  card("Paper 2 prep", "full", "China evidence", "Why is China such a powerful evidence country for Edexcel Economics?", "Knowledge: China is a huge emerging economy and a key manufacturing and trade power.\nAnalysis: its growth affects global supply chains, commodity demand and export markets.\nApplication: use it for questions on development, globalisation, FDI, exchange rates and trade.\nEvaluation: it is one of the most flexible examples because it links macroeconomics, development and globalisation."),
+  card("Paper 2 prep", "full", "China evidence", "How can I use China for growth and development questions?", "Knowledge: China has used export-led growth, investment and industrial policy to raise output rapidly.\nAnalysis: this shows how supply-side factors and capital deepening can drive growth.\nApplication: use it for development, productivity, infrastructure and poverty reduction.\nEvaluation: it is useful because it shows growth can be fast, but may be uneven across regions and sectors."),
+  card("Paper 2 prep", "full", "China evidence", "How can I use China for global trade and supply-chain questions?", "Knowledge: China is deeply embedded in world manufacturing and trade flows.\nAnalysis: shocks in China can ripple through world prices, shipping, exports and input costs.\nApplication: use it for globalisation, protectionism, shortages and current account questions.\nEvaluation: it is especially strong evidence for interdependence in the world economy."),
+  card("Paper 2 prep", "full", "China evidence", "How can I use China for exchange-rate questions?", "Knowledge: China has often managed its exchange rate more actively than a free-floating currency.\nAnalysis: exchange-rate policy can support exports, control capital flows or reduce volatility.\nApplication: use it for competitiveness, trade balances and capital controls.\nEvaluation: it is useful because it shows that exchange rates are also policy tools, not just market outcomes."),
+  card("Paper 2 prep", "full", "China evidence", "How can I use China for inflation or deflation questions?", "Knowledge: China has faced periods of very different price pressures.\nAnalysis: weak demand, overcapacity or slower exports can create disinflationary pressure.\nApplication: use it for AD/AS, global demand shocks and policy responses.\nEvaluation: it shows that macro policy has to respond differently depending on whether the shock is demand or supply driven."),
+  card("Paper 2 prep", "full", "Exam technique", "What are the most common Edexcel Paper 2 question types?", "Knowledge: short definitions, explain questions, data-response questions, diagram questions and assess questions appear repeatedly.\nAnalysis: each type rewards a different mix of knowledge, application, analysis and evaluation.\nApplication: use the question stem to decide whether to prioritise KAA or evaluation.\nEvaluation: top answers stay tightly focused on the command word."),
+  card("Paper 2 prep", "full", "Exam technique", "How should I structure a 10 or 12 marker in EconplusDal style?", "Knowledge: start with a clear point and define the key term.\nAnalysis: explain the chain from cause to effect in 2-3 steps.\nApplication: add a country, policy or market example.\nEvaluation: finish with a brief judgment about when the point matters most."),
+  card("Paper 2 prep", "full", "Exam technique", "How should I structure a 20 or 25 marker in EconplusDal style?", "Knowledge: use 2-3 developed paragraphs.\nAnalysis: each paragraph should contain a chain of reasoning, not just a list.\nApplication: use a real example or country reference in every main paragraph.\nEvaluation: compare alternatives, explain conditions, and end with a decisive overall judgment."),
+  card("Paper 2 prep", "full", "Exam technique", "How do EconplusDal-style packs help with essays?", "Knowledge: EconplusDal publishes Analysis and Evaluation Packs, plus separate Examples for Exams and Diagrams and Definitions packs.\nAnalysis: that structure means you revise definitions, diagrams, examples and evaluation as separate but linked skills.\nApplication: copy that split in your revision by learning a diagram, an example and a judgment for each topic.\nEvaluation: that is more efficient than only memorising definitions."),
+  card("Paper 2 prep", "full", "Exam technique", "What should my final judgement sound like?", "Knowledge: do not end with 'it depends' only.\nAnalysis: state which side is stronger and why.\nApplication: refer to the size of the shock, time horizon, or whether the country is developed or emerging.\nEvaluation: a top answer narrows the conditions under which the policy works best."),
+];
+
+const ECONOMICS_PAPER2_PREP_CONDENSED = [
+  card("Paper 2 prep", "condensed", "Diagram choice", "Demand-pull inflation", "AD/AS. AD right, PL up, Y may rise short run."),
+  card("Paper 2 prep", "condensed", "Diagram choice", "Cost-push inflation", "AD/AS. SRAS left, PL up, Y down."),
+  card("Paper 2 prep", "condensed", "Diagram choice", "Exchange rates", "Foreign exchange market. Depreciation or appreciation."),
+  card("Paper 2 prep", "condensed", "USA evidence", "USA in essays", "Advanced economy, Fed, productivity, inequality, trade and deficits."),
+  card("Paper 2 prep", "condensed", "China evidence", "China in essays", "Emerging giant, exports, FDI, supply chains, exchange rates."),
+  card("Paper 2 prep", "condensed", "Exam technique", "Paper 2 structure", "10/12 = K + A + A + brief E. 20/25 = 2-3 paragraphs, applications, judgment."),
+];
+
 const ALL_CARDS = [
   ...EDUCATION_FULL,
   ...EDUCATION_CONDENSED,
@@ -1504,10 +1590,14 @@ const ALL_CARDS = [
   ...METHODS_IN_CONTEXT_CONDENSED,
   ...THEORY_METHODS_FULL,
   ...THEORY_METHODS_CONDENSED,
+  ...SOCIOLOGY_PREDICTIONS_FULL,
+  ...SOCIOLOGY_PREDICTIONS_CONDENSED,
   ...ECONOMICS_THEME2_FULL,
   ...ECONOMICS_THEME2_CONDENSED,
   ...ECONOMICS_THEME4_FULL,
-  ...ECONOMICS_THEME4_CONDENSED
+  ...ECONOMICS_THEME4_CONDENSED,
+  ...ECONOMICS_PAPER2_PREP_FULL,
+  ...ECONOMICS_PAPER2_PREP_CONDENSED
 ];
 
 
@@ -1536,11 +1626,13 @@ const UNIT_TO_GROUP = {
 const GROUP_META_BY_SUBJECT = {
   Sociology: [
     { name: 'Education', note: 'Functionalism, Marxism, class, ethnicity, policy' },
-    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' }
+    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' },
+    { name: 'Predictions', note: 'Likely questions, mini tests and cram sheets' }
   ],
   Economics: [
     { name: 'Theme 2', note: 'UK performance, policy and inequality' },
-    { name: 'Theme 4', note: 'Globalisation, trade and development' }
+    { name: 'Theme 4', note: 'Globalisation, trade and development' },
+    { name: 'Paper 2 prep', note: 'Diagrams, evidence packs, KAA and judgement' }
   ]
 };
 
@@ -1573,6 +1665,16 @@ function loadCondensedMode() {
 }
 function saveCondensedMode() {
   try { localStorage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
+}
+function loadPredictionSnapshot() {
+  try { return JSON.parse(localStorage.getItem(subjectKey('prediction_snapshot'))); }
+  catch { return null; }
+}
+function savePredictionSnapshot(snapshot) {
+  try { localStorage.setItem(subjectKey('prediction_snapshot'), JSON.stringify(snapshot)); } catch {}
+}
+function clearPredictionSnapshot() {
+  try { localStorage.removeItem(subjectKey('prediction_snapshot')); } catch {}
 }
 function loadSelectedSubject() {
   try {
@@ -1629,16 +1731,19 @@ function cardGroup(cardData) {
   const unit = String(cardData.unit || '');
   if (unit === 'Education') return 'Education';
   if (unit === 'Research Methods + Methods in Context' || unit === 'Theory & Methods') return 'Research Methods + Methods in Context';
+  if (unit === 'Predictions') return 'Predictions';
   if (unit === 'Theme 2') return 'Theme 2';
   if (unit === 'Theme 4') return 'Theme 4';
+  if (unit === 'Paper 2 prep') return 'Paper 2 prep';
   return unit || 'Education';
 }
 function cardSubject(cardData) {
   const group = cardGroup(cardData);
-  if (group === 'Theme 2' || group === 'Theme 4') return 'Economics';
+  if (group === 'Theme 2' || group === 'Theme 4' || group === 'Paper 2 prep') return 'Economics';
   return 'Sociology';
 }
 function availableTopicsForGroup(groupName) {
+
   return [...new Set(
     ALL_CARDS
       .filter(cardData => cardSubject(cardData) === selectedSubject && cardGroup(cardData) === groupName)
@@ -1687,6 +1792,48 @@ function setSelectedTopicsForGroup(groupName, topics) {
   const cleaned = [...new Set(topics)].filter(topic => available.includes(topic));
   selectedTopics[groupName] = cleaned;
   saveSelectedTopics();
+}
+
+function isPredictionsOnlyView() {
+  return selectedSubject === 'Sociology' &&
+    Array.isArray(selectedGroups) &&
+    selectedGroups.length === 1 &&
+    selectedGroups[0] === 'Predictions';
+}
+
+function togglePredictionsOnlyView() {
+  if (selectedSubject !== 'Sociology') return;
+
+  if (!isPredictionsOnlyView()) {
+    savePredictionSnapshot({
+      selectedGroups: [...selectedGroups],
+      selectedTopics: JSON.parse(JSON.stringify(selectedTopics || {}))
+    });
+    selectedGroups = ['Predictions'];
+    selectedTopics = { Predictions: availableTopicsForGroup('Predictions') };
+  } else {
+    const snapshot = loadPredictionSnapshot();
+    if (snapshot && Array.isArray(snapshot.selectedGroups) && snapshot.selectedGroups.length) {
+      selectedGroups = snapshot.selectedGroups;
+      selectedTopics = snapshot.selectedTopics && typeof snapshot.selectedTopics === 'object' && !Array.isArray(snapshot.selectedTopics)
+        ? snapshot.selectedTopics
+        : {};
+    } else {
+      selectedGroups = loadSelectedGroups();
+      selectedTopics = loadSelectedTopics();
+    }
+    clearPredictionSnapshot();
+  }
+
+  normalizeSelections();
+  saveSelectedGroups();
+  saveSelectedTopics();
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
 }
 function getTypedAnswer(cardData) { return typedAnswers[typedKey(cardData)] || ''; }
 function setTypedAnswer(cardData, value) {
@@ -1793,7 +1940,8 @@ function topicSummaryText() {
   const fallbackGroups = groupsForSubject(selectedSubject);
   const chunkCount = fallbackGroups.reduce((total, groupName) => total + selectedTopicsForGroup(groupName).length, 0);
   const sectionCount = fallbackGroups.length || selectedGroups.length || 0;
-  return `${groupLabel} · ${sectionCount} sections · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}`;
+  const predictionTag = isPredictionsOnlyView() ? ' · Predictions only' : '';
+  return `${groupLabel} · ${sectionCount} sections · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}${predictionTag}`;
 }
 
 function renderSubjectButtons() {
@@ -2440,6 +2588,7 @@ document.getElementById('modeSel').addEventListener('change', () => {
   populateTypingArea();
 });
 document.getElementById('condensedToggle').addEventListener('click', () => setCondensedMode(!condensedMode));
+document.getElementById('predictionsToggle')?.addEventListener('click', () => togglePredictionsOnlyView());
 document.getElementById('shuffleBtn').addEventListener('click', () => {
   deck = shuffle([...deck]);
   idx = 0;

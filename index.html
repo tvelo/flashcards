@@ -191,6 +191,25 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 .topic-accordion .topic-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
 .topic-accordion .check-pill{min-height:56px}
 .topic-accordion .check-pill span{white-space:normal}
+.topic-summary-left{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;flex:1}
+.topic-summary-left > span:first-child{font-size:15px;line-height:1.2}
+.topic-summary-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
+.mini-topic-btn{
+  min-height:32px !important;
+  padding:0 12px !important;
+  border-radius:999px !important;
+  font-size:12px !important;
+  font-weight:700 !important;
+  background:rgba(255,255,255,.04) !important;
+  border:1px solid var(--line) !important;
+  color:var(--muted) !important;
+  box-shadow:none !important;
+}
+.mini-topic-btn.active{
+  background:linear-gradient(135deg,var(--accent),var(--accent-2)) !important;
+  border-color:transparent !important;
+  color:#fff !important;
+}
 
 .sync-chip{
   margin-left:auto;
@@ -793,6 +812,58 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   .sql-footer-btns{flex-direction:column}
   .sql-btn{justify-content:center}
 }
+
+/* ── Subject colour themes ──────────────────────────────────────────── */
+body {
+  transition: background-color 0.45s ease;
+}
+/* Sociology: default blue-purple (root vars, no override needed) */
+
+/* Economics: emerald-teal shift */
+html[data-subject="Economics"] {
+  --accent:#34d399;
+  --accent-2:#10b981;
+}
+html[data-subject="Economics"] body {
+  background:
+    radial-gradient(circle at top, rgba(52,211,153,.12) 0%, rgba(52,211,153,.06) 25%, rgba(52,211,153,0) 70%),
+    radial-gradient(circle at 20% 20%, rgba(16,185,129,.08) 0%, rgba(16,185,129,.03) 20%, rgba(16,185,129,0) 60%),
+    #0a110e;
+  background-color:#0a110e;
+  background-attachment:fixed;
+}
+html[data-subject="Economics"] .profile-pill.active,
+html[data-subject="Economics"] .subject-pill.active,
+html[data-subject="Economics"] button.active,
+html[data-subject="Economics"] .check-pill input:checked,
+html[data-subject="Economics"] .fill,
+html[data-subject="Economics"] .sql-step.active .sql-step-num {
+  background:linear-gradient(135deg,#34d399,#10b981) !important;
+}
+html[data-subject="Economics"] .topic {
+  background:rgba(52,211,153,.12);
+  border-color:rgba(52,211,153,.22);
+  color:#a7f3d0;
+}
+html[data-subject="Economics"] .filter-summary {
+  border-color:rgba(52,211,153,.22);
+  background:rgba(52,211,153,.10);
+  color:#a7f3d0;
+}
+html[data-subject="Economics"] .check-pill.is-selected {
+  border-color:rgba(52,211,153,.36);
+  background:rgba(52,211,153,.10);
+}
+html[data-subject="Economics"] .sql-lang-dot {
+  background:linear-gradient(135deg,#34d399,#10b981);
+}
+html[data-subject="Economics"] .sql-btn.primary {
+  background:linear-gradient(135deg,#34d399,#10b981);
+  box-shadow:0 4px 14px rgba(52,211,153,.3);
+}
+html[data-subject="Economics"] .profile-pill.active {
+  box-shadow:0 10px 24px rgba(52,211,153,.28) !important;
+}
 </style>
 </head>
 <body>
@@ -878,8 +949,8 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 
   <div class="header">
     <div class="title">
-      <h1>AQA Sociology + Economics Flashcards</h1>
-      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
+      <h1>AQA Sociology + Edexcel Economics Flashcards</h1>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Economics follows the Edexcel A-level Economics A Theme 2 and Theme 4 structure. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
@@ -892,11 +963,11 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
     <details>
       <summary>How to study with this deck</summary>
       <div class="study-grid">
-        <div class="study-step"><strong>1.</strong> Use the top-level area buttons to focus on Education or Research Methods + Methods in Context.</div>
+        <div class="study-step"><strong>1.</strong> Use the top-level area buttons to focus on Education or Research Methods + Methods in Context, or switch to Economics for Edexcel Theme 2 and Theme 4.</div>
         <div class="study-step"><strong>2.</strong> Pick the exact subtopic chunks you want so 25-marker practice stays targeted.</div>
         <div class="study-step"><strong>3.</strong> Use type mode when you want to write your own answer first.</div>
       </div>
-      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly. The deck follows the AQA Paper 1 structure so 25-marker revision stays focused.</div>
+      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly. The subject decks follow their own specs so revision stays focused.</div>
     </details>
   </section>
 
@@ -904,7 +975,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
     <div class="filter-top">
       <div>
         <strong>Topic selector</strong>
-        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate.</p>
+        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate. Economics is split into Edexcel Theme 2 and Theme 4.</p>
       </div>
       <div class="filter-summary" id="topicSummary">Sociology</div>
     </div>
@@ -1003,7 +1074,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   </div>
 
   <div class="footer-note">
-    Progress syncs to Supabase separately for each profile. The full Sociology Paper 1 deck now lives in this file, while card IDs are synced so new topic packs can be added without losing review history.
+    Progress syncs to Supabase separately for each profile. Sociology and Edexcel Economics now live in the same file, while card IDs are synced so new topic packs can be added without losing review history.
   </div>
 </div>
 
@@ -1299,73 +1370,133 @@ const THEORY_METHODS_CONDENSED = [
 
 
 const ECONOMICS_THEME2_FULL = [
-  card("Theme 2", "full", "UK economy performance", "What is gross domestic product (GDP)?", "The total value of goods and services produced in an economy over a period of time, usually a year."),
-  card("Theme 2", "full", "UK economy performance", "What is real GDP growth?", "An increase in the volume of output after adjusting for inflation."),
-  card("Theme 2", "full", "UK economy performance", "What does the unemployment rate measure?", "The proportion of the labour force that is out of work but actively seeking and available for work."),
-  card("Theme 2", "full", "UK economy performance", "What is inflation?", "A sustained rise in the general price level in an economy over time."),
-  card("Theme 2", "full", "UK economy performance", "What is the current account of the balance of payments?", "A record of trade in goods and services, primary income, secondary income and transfers with the rest of the world."),
-  card("Theme 2", "full", "UK economy performance", "What is productivity?", "Output per worker or per hour worked; higher productivity usually means higher living standards."),
-  card("Theme 2", "full", "UK economy performance", "Why is living standards not the same as GDP alone?", "Because GDP ignores distribution, unpaid work, environmental damage and quality of life."),
-  card("Theme 2", "full", "Macroeconomic objectives", "What are the main macroeconomic objectives?", "Low and stable inflation, low unemployment, sustainable growth, a healthy current account and reduced inequality."),
-  card("Theme 2", "full", "Macroeconomic objectives", "Why can macroeconomic objectives conflict?", "Policies that reduce inflation can raise unemployment, while policies that boost growth can worsen the current account or inflation."),
-  card("Theme 2", "full", "Labour market", "What is structural unemployment?", "Unemployment caused by a mismatch between workers' skills or locations and the jobs available."),
-  card("Theme 2", "full", "Labour market", "What is cyclical unemployment?", "Unemployment caused by a fall in demand for goods and services during a downturn."),
-  card("Theme 2", "full", "Labour market", "What is frictional unemployment?", "Short-term unemployment as people move between jobs or enter the labour market."),
-  card("Theme 2", "full", "Labour market", "What is supply-side policy?", "Policies aimed at improving the productive potential and efficiency of the economy."),
-  card("Theme 2", "full", "Labour market", "What is demand-side policy?", "Policies aimed at influencing aggregate demand, such as fiscal or monetary policy."),
-  card("Theme 2", "full", "Policies", "Why might monetary policy be used to control inflation?", "Higher interest rates can reduce borrowing and spending, lowering aggregate demand and inflationary pressure."),
-  card("Theme 2", "full", "Policies", "Why might fiscal policy be used to support growth?", "Higher government spending or lower taxes can increase aggregate demand and raise output and employment."),
-  card("Theme 2", "full", "Policies", "What is a supply-side policy benefit?", "It can raise long-run productive capacity and improve non-inflationary growth."),
-  card("Theme 2", "full", "Policies", "What is a common criticism of demand-side policy?", "It may be delayed, uncertain, and can create conflicts with other objectives like inflation or debt."),
-  card("Theme 2", "full", "Inequality", "How can the government reduce income inequality?", "Through progressive taxation, benefits, welfare spending and minimum wage policies."),
-  card("Theme 2", "full", "Inequality", "Why might inequality matter for macro performance?", "High inequality can reduce social cohesion, limit mobility and weaken long-run sustainable growth."),
-  card("Theme 2", "full", "Evaluation", "Evaluate the use of supply-side policies to improve UK performance.", "They can improve productivity and long-run growth, but they often take time, can be expensive, and may not solve cyclical problems quickly."),
-  card("Theme 2", "full", "Evaluation", "Evaluate policies to reduce inflation.", "Demand-side policies can lower inflation but may reduce growth and jobs; supply-side policies are slower but can be more sustainable."),
-  card("Theme 2", "full", "Evaluation", "Evaluate government intervention in the labour market.", "It can reduce unemployment and raise skills, but too much intervention can raise costs or create unintended side effects.")
+  card("Theme 2", "full", "Measures of economic performance", "What does GDP measure?", "The total value of output produced in an economy over a period, usually a year."),
+  card("Theme 2", "full", "Measures of economic performance", "Why is real GDP more useful than nominal GDP?", "Real GDP removes the effect of inflation, so it shows changes in output more accurately."),
+  card("Theme 2", "full", "Measures of economic performance", "What does the unemployment rate measure?", "The proportion of the labour force without work who are actively seeking and available for work."),
+  card("Theme 2", "full", "Measures of economic performance", "What does inflation measure?", "The sustained rise in the general price level over time."),
+  card("Theme 2", "full", "Measures of economic performance", "What is the current account?", "A record of trade in goods and services, primary income and transfers with the rest of the world."),
+  card("Theme 2", "full", "Measures of economic performance", "What is productivity?", "Output per worker or per hour worked; it is a key driver of competitiveness and living standards."),
+  card("Theme 2", "full", "Measures of economic performance", "Why is GDP per head not a full measure of living standards?", "It ignores inequality, leisure, health, the environment, unpaid work and quality of life."),
+  card("Theme 2", "full", "Measures of economic performance", "What is the Phillips curve used to show?", "The short-run inverse relationship between unemployment and inflation, though it can shift over time."),
+  card("Theme 2", "full", "Aggregate demand", "What is aggregate demand?", "The total demand for goods and services in an economy at a given price level."),
+  card("Theme 2", "full", "Aggregate demand", "What are the components of aggregate demand?", "Consumption, investment, government spending and net exports."),
+  card("Theme 2", "full", "Aggregate demand", "What happens when consumer confidence rises?", "Consumption usually rises, shifting AD right and increasing output and possibly inflation."),
+  card("Theme 2", "full", "Aggregate demand", "How does a fall in interest rates affect AD?", "Borrowing becomes cheaper, saving falls and spending rises, so AD shifts right."),
+  card("Theme 2", "full", "Aggregate demand", "How does a depreciation affect AD?", "Net exports may rise as exports become cheaper and imports more expensive, increasing AD."),
+  card("Theme 2", "full", "Aggregate demand", "What is the multiplier?", "The process by which an initial change in spending causes a larger final change in national income."),
+  card("Theme 2", "full", "Aggregate demand", "Why is the multiplier important?", "It magnifies the effect of government spending, investment or export changes on output and jobs."),
+  card("Theme 2", "full", "Aggregate supply", "What is aggregate supply?", "The total output firms are willing and able to supply at different price levels."),
+  card("Theme 2", "full", "Aggregate supply", "What is the difference between SRAS and LRAS?", "SRAS can change with costs and spare capacity; LRAS reflects productive potential and the economy's long-run capacity."),
+  card("Theme 2", "full", "Aggregate supply", "What shifts short-run aggregate supply right?", "Lower wage costs, lower input prices, better productivity, lower taxes on firms or improved confidence."),
+  card("Theme 2", "full", "Aggregate supply", "What shifts long-run aggregate supply right?", "More labour, more capital, better technology, improved education, stronger institutions and higher productivity."),
+  card("Theme 2", "full", "Aggregate supply", "What is an output gap?", "The difference between actual output and the economy's potential output."),
+  card("Theme 2", "full", "Economic growth", "What is economic growth?", "An increase in real national output over time."),
+  card("Theme 2", "full", "Economic growth", "What is the difference between short-run and long-run growth?", "Short-run growth comes from using spare capacity; long-run growth comes from an increase in productive potential."),
+  card("Theme 2", "full", "Economic growth", "What can cause demand-led growth?", "A rise in AD from higher consumption, investment, government spending or exports."),
+  card("Theme 2", "full", "Economic growth", "What can cause supply-led growth?", "Improvements in productivity, labour supply, capital stock, technology and institutions."),
+  card("Theme 2", "full", "Macroeconomic objectives", "What are the main macroeconomic objectives?", "Low and stable inflation, low unemployment, sustainable growth, a balanced or sustainable current account and greater equity."),
+  card("Theme 2", "full", "Macroeconomic objectives", "Why can macro objectives conflict?", "Policies that boost demand may increase inflation and worsen the current account, while anti-inflation policy may reduce growth and employment."),
+  card("Theme 2", "full", "Inflation", "What is demand-pull inflation?", "Inflation caused by rising aggregate demand when the economy is close to capacity."),
+  card("Theme 2", "full", "Inflation", "What is cost-push inflation?", "Inflation caused by rising production costs, such as wages, energy prices or imported inputs."),
+  card("Theme 2", "full", "Inflation", "Why can inflation reduce living standards?", "It lowers real incomes, creates uncertainty, distorts price signals and can reduce international competitiveness."),
+  card("Theme 2", "full", "Inflation", "How does imported inflation happen?", "A depreciation or higher world prices raise the cost of imported goods and inputs."),
+  card("Theme 2", "full", "Deflation", "What is deflation?", "A sustained fall in the general price level over time."),
+  card("Theme 2", "full", "Deflation", "Why can deflation be harmful?", "Consumers may delay spending, firms may cut wages and profits, and real debt burdens can rise."),
+  card("Theme 2", "full", "Unemployment", "What is cyclical unemployment?", "Unemployment caused by weak aggregate demand in a downturn."),
+  card("Theme 2", "full", "Unemployment", "What is structural unemployment?", "Unemployment caused by a mismatch between skills, location or industry and the jobs available."),
+  card("Theme 2", "full", "Unemployment", "What is frictional unemployment?", "Short-term unemployment as people move between jobs or enter the labour market."),
+  card("Theme 2", "full", "Unemployment", "What is wage-push unemployment?", "Unemployment that can occur if wages rise above the level firms are willing to pay, reducing labour demand."),
+  card("Theme 2", "full", "Balance of payments", "What is a current account deficit?", "When spending on imports and outflows exceeds earnings from exports and inflows."),
+  card("Theme 2", "full", "Balance of payments", "Why can a current account deficit matter?", "It may indicate weak competitiveness and can lead to borrowing or downward pressure on the exchange rate."),
+  card("Theme 2", "full", "Balance of payments", "What is meant by international competitiveness?", "How well firms can sell goods and services against foreign rivals on price and non-price factors."),
+  card("Theme 2", "full", "Macroeconomic policies", "What is demand-side policy?", "Policy that tries to influence aggregate demand, mainly through fiscal and monetary policy."),
+  card("Theme 2", "full", "Macroeconomic policies", "What is supply-side policy?", "Policy that raises productive capacity and improves efficiency in the long run."),
+  card("Theme 2", "full", "Fiscal policy", "What is expansionary fiscal policy?", "Higher government spending or lower taxes used to increase AD and output."),
+  card("Theme 2", "full", "Fiscal policy", "What is contractionary fiscal policy?", "Lower government spending or higher taxes used to reduce AD and inflationary pressure."),
+  card("Theme 2", "full", "Fiscal policy", "What is the main drawback of expansionary fiscal policy?", "It can increase borrowing, debt and inflation if the economy is already near capacity."),
+  card("Theme 2", "full", "Monetary policy", "How do higher interest rates affect the economy?", "They reduce borrowing and spending, encourage saving, reduce AD and may lower inflation."),
+  card("Theme 2", "full", "Monetary policy", "Why might monetary policy be slow to work?", "Households and firms may take time to adjust borrowing, spending and investment decisions."),
+  card("Theme 2", "full", "Supply-side policy", "What is a market-based supply-side policy?", "A policy that uses incentives and market forces, such as lower taxes or deregulation, to improve efficiency."),
+  card("Theme 2", "full", "Supply-side policy", "What is an interventionist supply-side policy?", "A policy where the government directly invests in education, training, infrastructure or innovation."),
+  card("Theme 2", "full", "Supply-side policy", "How can supply-side policy reduce inflation?", "By raising productivity and increasing LRAS, it can allow output to rise without creating inflationary pressure."),
+  card("Theme 2", "full", "Policy conflicts", "Why can reducing unemployment increase inflation?", "Higher employment can increase spending and wage pressure, shifting AD right."),
+  card("Theme 2", "full", "Policy conflicts", "Why can reducing inflation worsen growth?", "Higher interest rates or lower government spending reduce AD and can slow output growth."),
+  card("Theme 2", "full", "Policy conflicts", "Why might policy be more effective in the long run than the short run?", "Supply-side changes take time, but they can improve capacity, productivity and stability more sustainably."),
+  card("Theme 2", "full", "Living standards", "How can growth improve living standards?", "It can raise incomes, jobs, tax revenue and government spending on public services."),
+  card("Theme 2", "full", "Living standards", "Why might growth not improve living standards equally?", "If gains are unevenly distributed or if growth damages the environment, average GDP can rise without broad welfare gains."),
+  card("Theme 2", "full", "Evaluation", "Evaluate demand-side policies for managing the UK economy.", "They can change AD quickly and are useful in recessions, but they can create inflation, debt and time lags."),
+  card("Theme 2", "full", "Evaluation", "Evaluate supply-side policies for improving economic performance.", "They can raise productivity and long-run growth, but they often take longer to work and can be costly."),
+  card("Theme 2", "full", "Evaluation", "Evaluate monetary policy as a way to control inflation.", "It is flexible and credible, but it is weaker against cost-push inflation and may slow growth and employment."),
+  card("Theme 2", "full", "Evaluation", "Evaluate fiscal policy as a way to achieve macroeconomic stability.", "It can target specific problems and support demand, but borrowing, political delay and crowding-out may reduce effectiveness."),
+  card("Theme 2", "full", "Evaluation", "Evaluate policies to reduce inequality.", "Taxes, benefits and minimum wages can reduce inequality, but they may weaken incentives or raise costs."),
+  card("Theme 2", "full", "Evaluation", "Evaluate the use of a depreciation to improve the current account.", "It can boost exports and reduce imports, but only if demand is price elastic and it may also raise inflation."),
+  card("Theme 2", "full", "Evaluation", "Evaluate whether economic growth is always beneficial.", "Growth can raise incomes and public revenue, but it may damage the environment, increase inequality or be unsustainable.")
 ];
 
 const ECONOMICS_THEME2_CONDENSED = [
-  card("Theme 2", "condensed", "UK economy performance", "Theme 2: key indicators", "GDP shows output, inflation shows price change, unemployment shows spare labour, productivity shows efficiency, and the current account shows trade position."),
-  card("Theme 2", "condensed", "Macroeconomic objectives", "Theme 2: objectives and conflicts", "The main aims are low inflation, low unemployment, growth, balance of payments stability and lower inequality. These aims can conflict with each other."),
-  card("Theme 2", "condensed", "Labour market", "Theme 2: unemployment types", "Frictional unemployment is short-term job change; structural is a skills/location mismatch; cyclical is caused by low demand; some policies mainly target supply-side weaknesses."),
-  card("Theme 2", "condensed", "Policies", "Theme 2: policy choices", "Monetary policy uses interest rates; fiscal policy uses taxes and spending; supply-side policy improves long-run efficiency and productive capacity."),
-  card("Theme 2", "condensed", "Inequality", "Theme 2: inequality and evaluation", "Policies can reduce inequality through taxes, benefits and wages, but they may lower incentives or increase government borrowing."),
-  card("Theme 2", "condensed", "Evaluation", "Theme 2: essay judgement", "Best policy depends on the problem, the time period, and whether the aim is faster demand management or long-run supply-side improvement.")
+  card("Theme 2", "condensed", "Measures of economic performance", "Theme 2: the main indicators", "GDP = output, inflation = price changes, unemployment = unused labour, productivity = efficiency, current account = external balance.\n\nA stronger answer compares at least two indicators and links them to living standards."),
+  card("Theme 2", "condensed", "AD and AS", "Theme 2: AD/AS chains", "AD rises when spending rises.\nSRAS shifts with costs and productivity.\nLRAS shifts with capacity and productivity.\n\nDiagram language: AD right → output and price level rise; AS right → output rises and inflation pressure falls."),
+  card("Theme 2", "condensed", "Macro objectives", "Theme 2: macro policy conflicts", "Low inflation, low unemployment, growth, current account stability and equity can clash.\n\nJudgement usually depends on the phase of the cycle, the time horizon and whether the issue is demand-side or supply-side."),
+  card("Theme 2", "condensed", "Policies", "Theme 2: policy toolkit", "Monetary policy changes interest rates and credit conditions. Fiscal policy changes taxes and spending. Supply-side policy raises productive capacity.\n\nStrong answers explain both short-run and long-run effects."),
+  card("Theme 2", "condensed", "Inflation and unemployment", "Theme 2: inflation, unemployment and living standards", "Demand-pull inflation comes from excess AD. Cost-push inflation comes from higher costs. Unemployment can be cyclical, structural or frictional.\n\nMention real incomes, confidence, competitiveness and distribution."),
+  card("Theme 2", "condensed", "Evaluation", "Theme 2: evaluation points", "Always assess speed, size, time lags, side effects, confidence, debt, inequality and whether the policy fits the cause of the problem.\n\nUse a judgement sentence that says which policy is best and why.")
 ];
 
 const ECONOMICS_THEME4_FULL = [
   card("Theme 4", "full", "Globalisation and trade", "What is globalisation?", "The growing integration of economies through trade, capital flows, migration, technology and multinational firms."),
+  card("Theme 4", "full", "Globalisation and trade", "Why has globalisation increased?", "Lower transport and communication costs, trade liberalisation, stronger multinational firms and digital connectivity."),
   card("Theme 4", "full", "Globalisation and trade", "What is comparative advantage?", "The ability to produce a good at a lower opportunity cost than another country."),
-  card("Theme 4", "full", "Globalisation and trade", "Why can free trade increase welfare?", "Countries specialise according to comparative advantage, which can raise output, lower prices and improve choice."),
-  card("Theme 4", "full", "Globalisation and trade", "What is protectionism?", "Government policies that restrict imports, such as tariffs, quotas, subsidies and regulations."),
-  card("Theme 4", "full", "Globalisation and trade", "Why might governments use protectionism?", "To protect infant industries, improve the current account, protect jobs or respond to unfair competition."),
+  card("Theme 4", "full", "Globalisation and trade", "Why does comparative advantage support free trade?", "Specialisation raises world output, can lower prices and can increase consumption possibilities."),
+  card("Theme 4", "full", "Globalisation and trade", "What is protectionism?", "Government policies that restrict imports or support domestic producers, such as tariffs, quotas and subsidies."),
+  card("Theme 4", "full", "Globalisation and trade", "Why might governments use protectionism?", "To protect infant industries, save jobs, improve the current account, defend strategic sectors or respond to dumping."),
+  card("Theme 4", "full", "Globalisation and trade", "What are the main costs of protectionism?", "Higher prices, less choice, inefficiency, retaliation and slower innovation."),
+  card("Theme 4", "full", "Globalisation and trade", "What is a trading bloc?", "A group of countries that reduce barriers to trade with each other, such as a free trade area or customs union."),
+  card("Theme 4", "full", "Globalisation and trade", "How can globalisation affect inequality?", "It can create gains from trade and investment, but also widen gaps between regions, sectors and skill groups."),
+  card("Theme 4", "full", "Trade and competitiveness", "What is the terms of trade?", "The ratio of export prices to import prices."),
+  card("Theme 4", "full", "Trade and competitiveness", "Why are terms of trade important?", "They affect the purchasing power of export earnings and can influence living standards and the current account."),
+  card("Theme 4", "full", "Trade and competitiveness", "What is international competitiveness?", "The ability of a country’s firms to sell successfully against foreign rivals on price and non-price factors."),
+  card("Theme 4", "full", "Trade and competitiveness", "How can productivity improve competitiveness?", "Higher output per worker lowers unit costs and can improve quality, price and reliability."),
   card("Theme 4", "full", "Exchange rates", "What is an exchange rate?", "The price of one currency in terms of another currency."),
-  card("Theme 4", "full", "Exchange rates", "How can an appreciation affect the economy?", "Exports become more expensive and imports cheaper, which can reduce export demand but lower imported inflation."),
-  card("Theme 4", "full", "Exchange rates", "How can a depreciation affect the economy?", "Exports become cheaper and imports more expensive, which can improve competitiveness but raise imported inflation."),
-  card("Theme 4", "full", "Financial markets", "What is foreign direct investment (FDI)?", "When a firm based in one country invests in productive assets in another country, often by building or buying operations there."),
-  card("Theme 4", "full", "Financial markets", "Why are financial markets important in the global economy?", "They move savings to investment, help firms and governments borrow, and influence confidence, risk and exchange rates."),
+  card("Theme 4", "full", "Exchange rates", "What is an appreciation?", "A rise in the value of a currency relative to others."),
+  card("Theme 4", "full", "Exchange rates", "What is a depreciation?", "A fall in the value of a currency relative to others."),
+  card("Theme 4", "full", "Exchange rates", "How can an appreciation affect the economy?", "Exports become more expensive and imports cheaper, which may worsen the current account but reduce imported inflation."),
+  card("Theme 4", "full", "Exchange rates", "How can a depreciation affect the economy?", "Exports become cheaper and imports more expensive, which may improve the current account but add inflationary pressure."),
+  card("Theme 4", "full", "Exchange rates", "Why does the Marshall-Lerner condition matter?", "A depreciation improves the current account only if demand for exports and imports is sufficiently price elastic."),
+  card("Theme 4", "full", "Exchange rates", "What is the J-curve effect?", "After a depreciation, the current account may worsen at first before improving later as quantities adjust."),
+  card("Theme 4", "full", "Financial markets", "What is foreign direct investment (FDI)?", "When a firm invests in productive assets in another country, such as opening or buying a factory."),
+  card("Theme 4", "full", "Financial markets", "Why is FDI important?", "It can bring jobs, technology, skills, export capacity and links to global supply chains."),
+  card("Theme 4", "full", "Financial markets", "What are multinational corporations?", "Firms that operate in more than one country."),
+  card("Theme 4", "full", "Financial markets", "Why can multinationals be controversial?", "They may create jobs and investment, but they can also extract profits, reduce tax revenue or dominate local firms."),
   card("Theme 4", "full", "Emerging and developing economies", "What is economic development?", "Improvements in living standards, health, education, income and wider quality of life."),
-  card("Theme 4", "full", "Emerging and developing economies", "Why is GDP per capita an incomplete measure of development?", "It ignores inequality, health, education, the informal economy and environmental quality."),
-  card("Theme 4", "full", "Emerging and developing economies", "What can limit growth in developing economies?", "Poor infrastructure, low savings, weak institutions, debt, political instability and low human capital."),
-  card("Theme 4", "full", "Emerging and developing economies", "How can aid and debt relief help development?", "They can finance infrastructure, health and education, but effectiveness depends on corruption, dependency and how the money is used."),
-  card("Theme 4", "full", "Macro policy in a global context", "How can globalisation affect macroeconomic policy?", "Open economies face stronger trade and capital flow effects, so policy choices must consider competitiveness, inflation and exchange rates."),
-  card("Theme 4", "full", "Macro policy in a global context", "Why might exchange rate stability matter?", "It can reduce uncertainty for firms and support trade and investment."),
-  card("Theme 4", "full", "Macro policy in a global context", "Why can free trade create winners and losers?", "Consumers and efficient exporters may gain, but uncompetitive firms and some workers may lose jobs or bargaining power."),
-  card("Theme 4", "full", "Evaluation", "Evaluate the case for free trade.", "Free trade can raise efficiency and welfare, but it may expose weak industries, worsen inequality or cause adjustment costs."),
-  card("Theme 4", "full", "Evaluation", "Evaluate the use of protectionism.", "It can protect jobs and strategic industries, but it can raise prices, reduce choice and invite retaliation."),
-  card("Theme 4", "full", "Evaluation", "Evaluate policies to promote development.", "There is no single best policy: outcomes depend on institutions, governance, external demand and whether support is short-term or structural."),
-  card("Theme 4", "full", "Evaluation", "Evaluate the impact of globalisation on developing economies.", "It can bring investment, jobs and technology, but also volatility, dependency, unequal gains and environmental pressure.")
+  card("Theme 4", "full", "Emerging and developing economies", "Why is GDP per head an incomplete measure of development?", "It ignores inequality, health, education, the informal economy, sustainability and access to services."),
+  card("Theme 4", "full", "Emerging and developing economies", "What can limit development?", "Weak institutions, poor infrastructure, low savings, debt, corruption, conflict and low human capital."),
+  card("Theme 4", "full", "Emerging and developing economies", "How can aid help development?", "It can finance infrastructure, health and education, but its impact depends on governance and how it is used."),
+  card("Theme 4", "full", "Emerging and developing economies", "How can debt relief help development?", "It frees resources for spending on investment and services, though it may not solve deeper structural problems."),
+  card("Theme 4", "full", "Emerging and developing economies", "How can trade support development?", "Trade can expand markets, increase specialisation and bring technology and foreign exchange."),
+  card("Theme 4", "full", "Emerging and developing economies", "How can some trade patterns hinder development?", "Poor countries may remain dependent on primary products with volatile prices and weak bargaining power."),
+  card("Theme 4", "full", "Development strategies", "What is import substitution industrialisation?", "A strategy that protects domestic industries to reduce dependence on imports and build industrial capacity."),
+  card("Theme 4", "full", "Development strategies", "What is export-led growth?", "A strategy focused on expanding exports to raise output, jobs and foreign exchange earnings."),
+  card("Theme 4", "full", "Development strategies", "What is a development trap?", "A self-reinforcing barrier such as low savings, low investment, poor education or debt that slows progress."),
+  card("Theme 4", "full", "Global institutions", "What is the role of the IMF?", "It provides loans and policy support to countries facing balance of payments problems, often with conditions attached."),
+  card("Theme 4", "full", "Global institutions", "What is the role of the World Bank?", "It finances long-term development projects such as infrastructure, education and health."),
+  card("Theme 4", "full", "Global institutions", "What is the role of the WTO?", "It promotes rules-based trade and tries to reduce barriers and trade disputes."),
+  card("Theme 4", "full", "Globalisation and development", "Why can globalisation create winners and losers?", "Consumers and efficient exporters may gain, but weaker firms, workers and some regions may lose out."),
+  card("Theme 4", "full", "Globalisation and development", "Why can capital flows be risky for developing economies?", "They can be volatile, reverse suddenly and cause exchange rate instability or financial crises."),
+  card("Theme 4", "full", "Evaluation", "Evaluate free trade.", "Free trade can raise efficiency, lower prices and expand choice, but it may damage infant industries and widen inequality."),
+  card("Theme 4", "full", "Evaluation", "Evaluate protectionism.", "Protectionism can protect jobs and strategic sectors, but it can raise prices, reduce competition and provoke retaliation."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the impact of exchange rate changes.", "A depreciation can improve competitiveness, but only if demand is elastic and inflation does not offset the gain."),
+  card("Theme 4", "full", "Evaluation", "Evaluate development policies.", "The best strategy depends on institutions, governance, time horizon and whether the main constraint is demand, supply or external finance."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the impact of globalisation on developing countries.", "It can bring investment, jobs and technology, but also dependency, inequality, volatility and environmental pressure.")
 ];
 
 const ECONOMICS_THEME4_CONDENSED = [
-  card("Theme 4", "condensed", "Globalisation and trade", "Theme 4: globalisation", "Globalisation links economies through trade, finance, migration and multinational firms. It can raise efficiency but also create volatility and uneven gains."),
-  card("Theme 4", "condensed", "Globalisation and trade", "Theme 4: trade and protectionism", "Comparative advantage supports free trade, while protectionism may protect jobs or strategic industries but can raise prices and reduce welfare."),
-  card("Theme 4", "condensed", "Exchange rates", "Theme 4: exchange rates", "An appreciation helps control import prices but hurts exports; a depreciation boosts competitiveness but can add inflation."),
-  card("Theme 4", "condensed", "Financial markets", "Theme 4: finance and investment", "Financial markets and FDI can fund growth, but capital flows can be unstable and affect exchange rates."),
-  card("Theme 4", "condensed", "Emerging and developing economies", "Theme 4: development", "Development is broader than GDP. Aid, debt relief, human capital and institutions matter, but corruption and weak governance can limit progress."),
-  card("Theme 4", "condensed", "Evaluation", "Theme 4: essay judgement", "Judgement usually depends on the country, the time horizon and whether the goal is growth, stability, equality or external balance.")
+  card("Theme 4", "condensed", "Globalisation", "Theme 4: what globalisation does", "Globalisation increases trade, investment, migration and competition.\n\nBenefits: efficiency, lower prices, more choice, technology transfer.\nCosts: volatility, inequality, environmental pressure and dependence."),
+  card("Theme 4", "condensed", "Trade", "Theme 4: trade and protectionism", "Comparative advantage supports free trade. Protectionism may protect strategic or infant industries, but it often raises prices and reduces welfare."),
+  card("Theme 4", "condensed", "Exchange rates", "Theme 4: exchange rate analysis", "Appreciation = cheaper imports, weaker exports, lower imported inflation.\nDepreciation = cheaper exports, dearer imports, possible inflation.\n\nMention Marshall-Lerner and the J-curve in evaluation."),
+  card("Theme 4", "condensed", "Finance and firms", "Theme 4: FDI and multinationals", "FDI and multinationals can bring capital, jobs, skills and technology, but may also repatriate profits, reduce competition and create dependency."),
+  card("Theme 4", "condensed", "Development", "Theme 4: development", "Development is wider than GDP per head. Use health, education, inequality, institutions and sustainability. Aid, debt relief, trade and investment can help, but governance matters."),
+  card("Theme 4", "condensed", "Evaluation", "Theme 4: evaluation and judgement", "Best answers compare short run vs long run, winners vs losers, price vs non-price effects, and whether the country needs growth, stability, equity or external balance.")
 ];
-
 const ALL_CARDS = [
   ...EDUCATION_FULL,
   ...EDUCATION_CONDENSED,
@@ -1516,8 +1647,9 @@ function availableTopicsForGroup(groupName) {
 }
 function selectedTopicsForGroup(groupName) {
   const available = availableTopicsForGroup(groupName);
+  if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) return available;
   const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-  return saved.length ? saved : available;
+  return saved;
 }
 
 function normalizeSelections() {
@@ -1533,10 +1665,18 @@ function normalizeSelections() {
     selectedTopics = {};
   }
 
-  selectedGroups.forEach(groupName => {
+  validGroups.forEach(groupName => {
     const available = availableTopicsForGroup(groupName);
+    if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) {
+      selectedTopics[groupName] = available;
+      return;
+    }
     const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-    selectedTopics[groupName] = saved.length ? saved : available;
+    selectedTopics[groupName] = saved;
+  });
+
+  Object.keys(selectedTopics).forEach(groupName => {
+    if (!validGroups.includes(groupName)) delete selectedTopics[groupName];
   });
 
   saveSelectedGroups();
@@ -1545,7 +1685,7 @@ function normalizeSelections() {
 function setSelectedTopicsForGroup(groupName, topics) {
   const available = availableTopicsForGroup(groupName);
   const cleaned = [...new Set(topics)].filter(topic => available.includes(topic));
-  selectedTopics[groupName] = cleaned.length ? cleaned : available;
+  selectedTopics[groupName] = cleaned;
   saveSelectedTopics();
 }
 function getTypedAnswer(cardData) { return typedAnswers[typedKey(cardData)] || ''; }
@@ -1680,11 +1820,19 @@ function renderTopicFilters() {
     const meta = ((GROUP_META_BY_SUBJECT[selectedSubject] || []).find(item => item.name === groupName)) || { note: '' };
     const topics = availableTopicsForGroup(groupName);
     const checkedTopics = selectedTopicsForGroup(groupName);
+    const allSelected = topics.length > 0 && checkedTopics.length === topics.length;
+    const noneSelected = checkedTopics.length === 0;
     return `
       <details class="topic-accordion" open>
         <summary>
-          <span>${groupName}</span>
-          <span class="summary-meta">${meta.note}</span>
+          <div class="topic-summary-left">
+            <span>${groupName}</span>
+            <span class="summary-meta">${meta.note}</span>
+          </div>
+          <div class="topic-summary-actions">
+            <button type="button" class="mini-topic-btn ${allSelected ? 'active' : ''}" data-action="select-all" data-group="${groupName}">All</button>
+            <button type="button" class="mini-topic-btn ${noneSelected ? 'active' : ''}" data-action="clear" data-group="${groupName}">None</button>
+          </div>
         </summary>
         <div class="topic-accordion-body">
           <div class="topic-grid">
@@ -1719,9 +1867,31 @@ function renderTopicFilters() {
       populateTypingArea();
     });
   });
+
+  host.querySelectorAll('button.mini-topic-btn').forEach(btn => {
+    btn.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
+      const groupName = btn.dataset.group;
+      const action = btn.dataset.action;
+      if (action === 'select-all') {
+        setSelectedTopicsForGroup(groupName, availableTopicsForGroup(groupName));
+      } else {
+        setSelectedTopicsForGroup(groupName, []);
+      }
+      normalizeSelections();
+      renderTopicFilters();
+      flipped = false;
+      currentId = null;
+      buildDeck();
+      updateReviewQueue();
+      populateTypingArea();
+    });
+  });
 }
 
 function updateProfileUI() {
+
   const profileButtons = document.querySelectorAll('.profile-pill');
   profileButtons.forEach(btn => btn.classList.remove('active'));
 
@@ -1741,6 +1911,8 @@ function updateProfileUI() {
   document.getElementById('typeToggle').textContent = `Type mode: ${typeMode ? 'On' : 'Off'}`;
   document.getElementById('typePanel').classList.toggle('show', typeMode);
   document.getElementById('frontHint').textContent = typeMode ? 'Type your answer first, then reveal it.' : 'Tap the card to reveal the answer.';
+  document.getElementById('compareBox').style.display = typeMode ? '' : 'none';
+  document.getElementById('cardASolo').style.display = typeMode ? 'none' : '';
   renderSubjectButtons();
   renderTopicFilters();
 }
@@ -1797,6 +1969,7 @@ async function switchProfile(name) {
 async function switchSubject(name) {
   if (name === selectedSubject) return;
   selectedSubject = name;
+  document.documentElement.dataset.subject = name;
   saveSelectedSubject();
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
@@ -1946,21 +2119,18 @@ function activeCatalog() {
     return cardSubject(cardData) === selectedSubject;
   });
 
-  const filtered = cards.filter(cardData => {
+  return cards.filter(cardData => {
     const groupName = cardGroup(cardData);
-    const groupOk = selectedGroups.includes(groupName);
-    if (!groupOk) return false;
+    if (!selectedGroups.includes(groupName)) return false;
     const topics = selectedTopicsForGroup(groupName);
     return topics.includes(cardData.t);
   });
-
-  if (filtered.length) return filtered;
-  return cards.length ? cards : ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
 }
 
 function currentCard() { return deck[idx]; }
 
 function updateReviewQueue() {
+
   const now = Date.now();
   const reviewQueue = deck.filter(cardData => cardState(cardData).due <= now);
   reviewQueue.sort((a, b) => cardState(a).due - cardState(b).due);
@@ -2032,19 +2202,7 @@ function buildDeck() {
   const now = Date.now();
   normalizeSelections();
 
-  let source = activeCatalog();
-  if (!source.length) {
-    // Self-heal from any stale saved filters by falling back to the active subject deck.
-    source = ALL_CARDS.filter(cardData => cardSubject(cardData) === selectedSubject && cardData.variant === (condensedMode ? 'condensed' : 'full'));
-  }
-  if (!source.length) {
-    source = ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
-  }
-  if (!source.length) {
-    source = [...ALL_CARDS];
-  }
-
-  let cards = [...source];
+  let cards = [...activeCatalog()];
 
   if (mode === 'due') {
     cards = cards.filter(cardData => cardState(cardData).due <= now);
@@ -2058,10 +2216,8 @@ function buildDeck() {
   }
 
   if (!cards.length) {
-    cards = [...source];
-  }
-  if (!cards.length) {
-    cards = [...ALL_CARDS];
+    renderEmptyState();
+    return;
   }
 
   deck = cards;
@@ -2075,6 +2231,7 @@ function buildDeck() {
 }
 
 function render() {
+
   if (!deck.length) {
     renderEmptyState();
     return;
@@ -2087,6 +2244,8 @@ function render() {
   document.getElementById('cardQ').textContent = cardData.q;
   document.getElementById('cardA').textContent = cardData.a;
   document.getElementById('cardASolo').textContent = cardData.a;
+  document.getElementById('compareBox').style.display = typeMode ? '' : 'none';
+  document.getElementById('cardASolo').style.display = typeMode ? 'none' : '';
   document.getElementById('cardTopic').textContent = cardData.unit;
   document.getElementById('cardTopicB').textContent = cardData.unit;
   document.getElementById('cardMeta').textContent = `${cardData.t} · Seen ${state.seen}x · Ease ${state.ease.toFixed(2)}`;
@@ -2202,6 +2361,7 @@ async function resetProgress() {
 }
 
 async function init() {
+  document.documentElement.dataset.subject = selectedSubject;
   updateProfileUI();
   reviewsCache = loadLocalReviews();
   streak = loadLocalStreak();

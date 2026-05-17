@@ -191,67 +191,6 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 .topic-accordion .topic-grid{grid-template-columns:repeat(auto-fit,minmax(180px,1fr));}
 .topic-accordion .check-pill{min-height:56px}
 .topic-accordion .check-pill span{white-space:normal}
-.topic-summary-left{
-  display:flex;
-  flex-direction:column;
-  gap:3px;
-}
-.topic-summary-left > span:first-child{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.summary-arrow{
-  display:inline-flex;
-  align-items:center;
-  justify-content:center;
-  width:22px;
-  height:22px;
-  border-radius:999px;
-  border:1px solid var(--line);
-  color:var(--muted);
-  font-size:13px;
-  line-height:1;
-  flex-shrink:0;
-  transition:transform .2s ease, color .2s ease, border-color .2s ease, background .2s ease;
-}
-.topic-accordion[open] .summary-arrow{
-  transform:rotate(90deg);
-  color:var(--text);
-  border-color:rgba(122,168,255,.30);
-  background:rgba(122,168,255,.08);
-}
-.topic-summary-actions{
-  display:flex;
-  align-items:center;
-  gap:8px;
-}
-.mini-topic-btn{
-  min-height:32px !important;
-  padding:0 12px !important;
-  border-radius:999px !important;
-  font-size:12px !important;
-  box-shadow:none !important;
-}
-.topic-summary-left{display:flex;flex-direction:column;align-items:flex-start;gap:3px;min-width:0;flex:1}
-.topic-summary-left > span:first-child{font-size:15px;line-height:1.2}
-.topic-summary-actions{display:flex;gap:8px;align-items:center;flex-shrink:0;flex-wrap:wrap;justify-content:flex-end}
-.mini-topic-btn{
-  min-height:32px !important;
-  padding:0 12px !important;
-  border-radius:999px !important;
-  font-size:12px !important;
-  font-weight:700 !important;
-  background:rgba(255,255,255,.04) !important;
-  border:1px solid var(--line) !important;
-  color:var(--muted) !important;
-  box-shadow:none !important;
-}
-.mini-topic-btn.active{
-  background:linear-gradient(135deg,var(--accent),var(--accent-2)) !important;
-  border-color:transparent !important;
-  color:#fff !important;
-}
 
 .sync-chip{
   margin-left:auto;
@@ -303,7 +242,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 }
 .controls{
   display:grid;
-  grid-template-columns:repeat(6,minmax(0,1fr));
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr;
   gap:10px;
   margin:16px 0 14px;
 }
@@ -991,8 +930,8 @@ html[data-subject="Economics"] .profile-pill.active {
 
   <div class="header">
     <div class="title">
-      <h1>AQA Sociology + Edexcel Economics Flashcards</h1>
-      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Economics follows the Edexcel A-level Economics A Theme 2 and Theme 4 structure, with an extra Paper 2 prep pack for diagrams, evidence and exam technique. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
+      <h1>AQA Sociology + Economics Flashcards</h1>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
@@ -1005,11 +944,11 @@ html[data-subject="Economics"] .profile-pill.active {
     <details>
       <summary>How to study with this deck</summary>
       <div class="study-grid">
-        <div class="study-step"><strong>1.</strong> Use the top-level area buttons to focus on Education or Research Methods + Methods in Context, or switch to Economics for Edexcel Theme 2 and Theme 4.</div>
+        <div class="study-step"><strong>1.</strong> Use the top-level area buttons to focus on Education or Research Methods + Methods in Context.</div>
         <div class="study-step"><strong>2.</strong> Pick the exact subtopic chunks you want so 25-marker practice stays targeted.</div>
         <div class="study-step"><strong>3.</strong> Use type mode when you want to write your own answer first.</div>
       </div>
-      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly. The subject decks follow their own specs so revision stays focused.</div>
+      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly. The deck follows the AQA Paper 1 structure so 25-marker revision stays focused.</div>
     </details>
   </section>
 
@@ -1017,7 +956,7 @@ html[data-subject="Economics"] .profile-pill.active {
     <div class="filter-top">
       <div>
         <strong>Topic selector</strong>
-        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate. Economics is split into Edexcel Theme 2, Theme 4 and Paper 2 prep.</p>
+        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate.</p>
       </div>
       <div class="filter-summary" id="topicSummary">Sociology</div>
     </div>
@@ -1032,7 +971,6 @@ html[data-subject="Economics"] .profile-pill.active {
       <option value="mixed">Mixed topics</option>
     </select>
     <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
-    <button id="predictionsToggle" class="secondary" aria-pressed="false">Predictions only: Off</button>
     <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
     <button id="shuffleBtn" class="secondary">Shuffle</button>
     <button id="resetBtn" class="secondary">Reset progress</button>
@@ -1117,7 +1055,7 @@ html[data-subject="Economics"] .profile-pill.active {
   </div>
 
   <div class="footer-note">
-    Progress syncs to Supabase separately for each profile. Sociology and Edexcel Economics now live in the same file, while card IDs are synced so new topic packs can be added without losing review history.
+    Progress syncs to Supabase separately for each profile. The full Sociology Paper 1 deck now lives in this file, while card IDs are synced so new topic packs can be added without losing review history.
   </div>
 </div>
 
@@ -1181,94 +1119,65 @@ insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
   on conflict (name) do nothing;
 ───────────────────────────────────────────────────────────────────────── */
 
-const SQL_SETUP = `-- ── Run this in Supabase → SQL Editor ──────────────────────────────────────
--- Safe to run on both fresh databases and existing ones.
-
-create extension if not exists pgcrypto;
+const SQL_SETUP = `create extension if not exists pgcrypto;
 
 create table if not exists profiles (
-  id          uuid primary key default gen_random_uuid(),
-  name        text unique not null,
-  streak      integer not null default 0,
-  last_study  text not null default ''
-);
-
-create table if not exists decks (
-  id          uuid primary key default gen_random_uuid(),
-  user_id     uuid,
-  title       text not null,
-  description text,
-  created_at  timestamptz not null default now()
+  id         uuid primary key default gen_random_uuid(),
+  name       text unique not null,
+  streak     int  default 0,
+  last_study text default ''
 );
 
 create table if not exists cards (
   id         uuid primary key default gen_random_uuid(),
-  slug       text not null,
-  unit       text not null,
   topic      text not null,
-  variant    text not null default 'full',
   question   text not null,
   answer     text not null,
-  created_at timestamptz not null default now(),
-  updated_at timestamptz not null default now()
+  created_at timestamptz default now()
 );
 
--- IMPORTANT: this unique index is required for upsert to work.
--- If you already have a cards table, this adds it without data loss.
-alter table cards add column if not exists slug    text;
-alter table cards add column if not exists unit    text;
+alter table cards add column if not exists slug text;
+alter table cards add column if not exists unit text default '';
 alter table cards add column if not exists variant text default 'full';
 alter table cards add column if not exists updated_at timestamptz default now();
 create unique index if not exists cards_slug_idx on cards(slug);
 
 create table if not exists reviews (
   id            uuid primary key default gen_random_uuid(),
-  profile_id    uuid not null references profiles(id) on delete cascade,
-  card_id       uuid not null references cards(id) on delete cascade,
-  ease          double precision not null default 2.5,
-  interval_days integer not null default 0,
-  reps          integer not null default 0,
-  lapses        integer not null default 0,
-  due           bigint not null default 0,
-  seen          integer not null default 0,
-  mastered      boolean not null default false,
-  last_reviewed bigint not null default 0,
-  updated_at    timestamptz not null default now(),
+  profile_id    uuid references profiles(id) on delete cascade,
+  card_id       uuid references cards(id)    on delete cascade,
+  ease          float   default 2.5,
+  interval_days int     default 0,
+  reps          int     default 0,
+  lapses        int     default 0,
+  due           bigint  default 0,
+  seen          int     default 0,
+  mastered      boolean default false,
+  last_reviewed bigint  default 0,
+  updated_at    timestamptz default now(),
   unique(profile_id, card_id)
 );
 
 alter table profiles enable row level security;
-alter table decks    enable row level security;
 alter table cards    enable row level security;
 alter table reviews  enable row level security;
 
 drop policy if exists "anon_all_profiles" on profiles;
-drop policy if exists "anon_all_decks" on decks;
 drop policy if exists "anon_all_cards" on cards;
 drop policy if exists "anon_all_reviews" on reviews;
 
 create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
-create policy "anon_all_decks"    on decks    for all to anon using (true) with check (true);
 create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
 create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
 
-insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac')
-  on conflict (name) do nothing;`
+insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
+  on conflict (name) do nothing;`;
 
 function slugify(value) {
   return value
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, "-")
     .replace(/^-+|-+$/g, "");
-}
-
-function simpleHash(str) {
-  let hash = 0;
-  for (let i = 0; i < str.length; i++) {
-    hash = ((hash << 5) - hash) + str.charCodeAt(i);
-    hash |= 0;
-  }
-  return Math.abs(hash).toString(36);
 }
 
 function card(unit, variant, topic, question, answer, options = {}) {
@@ -1278,13 +1187,13 @@ function card(unit, variant, topic, question, answer, options = {}) {
     t: topic,
     q: question,
     a: answer,
-    slug: options.slug || `${slugify([unit, variant, topic, question, answer].join("-"))}-${simpleHash(`${unit}|${variant}|${topic}|${question}|${answer}`)}`,
+    slug: options.slug || slugify([unit, variant, topic, question].join("-")),
     legacyKey: options.legacyKey || null
   };
 }
 
 const EDUCATION_FULL = [
- card("Education", "full", "Functionalism", "What is the functionalist view of education?", "Education is seen as a positive institution that helps maintain social order, social solidarity and meritocratic role allocation."),
+  card("Education", "full", "Functionalism", "What is the functionalist view of education?", "Education is seen as a positive institution that helps maintain social order, social solidarity and meritocratic role allocation."),
   card("Education", "full", "Functionalism", "What did Durkheim say education does?", "Schools transmit shared norms and values, create social solidarity, and act as a mini society that prepares pupils for wider society."),
   card("Education", "full", "Functionalism", "What is social solidarity?", "A sense of belonging and shared identity that keeps society together."),
   card("Education", "full", "Functionalism", "Why did Durkheim think the education system is important?", "It helps turn individual children into social beings by teaching them the rules and values of society."),
@@ -1359,25 +1268,8 @@ const EDUCATION_FULL = [
   card("Education", "full", "Policies", "What is glocalisation?", "Global policies are adapted to local contexts rather than copied exactly."),
   card("Education", "full", "Policies", "What is a strength of policy explanations of education?", "They show how government decisions can shape opportunity, standards and inequality."),
   card("Education", "full", "Policies", "What is a criticism of policy explanations of education?", "They may overestimate the impact of policy and underplay class, gender, ethnicity and school-level processes."),
-  card("Education", "full", "New Right", "What is the New Right view of education?", "Education should prepare pupils for competition and raise standards through discipline, choice and a quasi-market."),
-  card("Education", "full", "New Right", "Why do New Right thinkers support marketisation?", "They argue that competition, parental choice and strong accountability make schools improve and perform better."),
-  card("Education", "full", "Gender", "What are the trends in gender and education?", "Girls generally achieve better results than boys, especially at GCSE, but the gap varies by subject, phase and school context."),
-  card("Education", "full", "Gender", "What are external factors in gender achievement?", "Changes in family life, feminism, employment patterns and girls' aspirations can help explain higher female attainment."),
-  card("Education", "full", "Gender", "What are internal processes in gender achievement?", "Teacher expectations, subject choice, the hidden curriculum and assessment methods can all shape boys' and girls' outcomes."),
-  card("Education", "full", "Class", "What are the trends in class and education?", "Middle-class pupils usually outperform working-class pupils, although there are differences within both groups and between schools."),
-  card("Education", "full", "Class", "What are the main external factors in class achievement?", "Material deprivation, cultural deprivation and differences in parental support can all reduce working-class attainment."),
-  card("Education", "full", "Ethnicity", "What are the trends in ethnicity and education?", "Attainment varies widely between ethnic groups, and outcomes are shaped by class, school practices and wider racism."),
-  card("Education", "full", "Ethnicity", "What are external factors in ethnicity achievement?", "Material deprivation, language, family support and migration history can influence how well pupils do in school."),
-  card("Education", "full", "Ethnicity", "What are internal processes in ethnicity achievement?", "Labelling, streaming, teacher expectations and educational triage can create or reinforce ethnic inequalities."),
-  card("Education", "full", "Selection", "What are selection policies in education?", "Selection policies sort pupils into sets, groups or schools using admissions rules, ability measures or behaviour expectations."),
-  card("Education", "full", "Marketisation and privatisation", "What is marketisation and privatisation in education?", "Marketisation makes schools compete for pupils, while privatisation increases the role of private providers and market-style management."),
-  card("Education", "full", "Policies", "What are equality policies in education?", "Equality policies try to reduce disadvantage, for example through pupil premium, compensatory programmes and support for underachieving groups."),
-  card("Education", "full", "Globalisation", "What is globalisation and education?", "Education is increasingly shaped by global competition, international comparisons and policy borrowing between countries."),
-  card("Education", "full", "Private and independent schools", "What are private and independent schools?", "They are fee-paying schools outside the state system, often with smaller classes, stronger resources and exam advantages."),
-  card("Education", "full", "Private and independent schools", "Why do private and independent schools matter?", "They can reproduce class inequality through access to better resources, social networks and highly selective admissions."),
-
 ];
- 
+
 const EDUCATION_CONDENSED = [
   card("Education", "condensed", "Functionalism", "Functionalism: core ideas", "Education creates social solidarity, teaches shared values, and allocates people to roles by merit and ability.\n\nDurkheim: social solidarity and a mini society.\nParsons: universalistic values and meritocracy.\nDavis and Moore: role allocation.\nSchultz: human capital."),
   card("Education", "condensed", "Marxism", "Marxism: core ideas", "Education reproduces class inequality rather than reducing it.\n\nAlthusser: ideological state apparatus.\nBowles and Gintis: correspondence principle and hidden curriculum.\nBourdieu: cultural capital, habitus and symbolic violence.\nWillis: lads can resist but still end up in working-class jobs."),
@@ -1386,19 +1278,9 @@ const EDUCATION_CONDENSED = [
   card("Education", "condensed", "Ethnicity", "Ethnicity and achievement", "Attainment is shaped by class, racism and school processes.\n\nKey ideas: material deprivation, cultural difference, institutional racism, labelling and educational triage."),
   card("Education", "condensed", "Policies", "Marketisation and policy", "Marketisation increases competition between schools.\n\nParentocracy, league tables, OFSTED, formula funding, academies and free schools all change how schools operate.\n\nCream skimming and silt skimming are key criticisms."),
   card("Education", "condensed", "Globalisation", "Globalisation and education", "Education policy is increasingly international.\n\nBall: policy borrowing.\nRitzer: McDonaldisation.\nRobertson: glocalisation."),
-  card("Education", "condensed", "New Right", "New Right", "Education should raise standards through competition, discipline, choice and a quasi-market.\n\nFocus on marketisation, parental choice and accountability."),
-  card("Education", "condensed", "Gender", "Gender trends", "Girls usually outperform boys, but the gap changes by subject and year group.\n\nThink: aspirations, feminism, teacher expectations and subject choice."),
-  card("Education", "condensed", "Gender", "External factors — gender", "External changes include feminism, family roles, women’s employment and shifts in girls’ ambitions."),
-  card("Education", "condensed", "Gender", "Internal processes — gender", "Internal factors include teacher labelling, the hidden curriculum, coursework and subject stereotyping."),
-  card("Education", "condensed", "Ethnicity", "Ethnicity trends", "Ethnic attainment varies a lot.\n\nAlways link outcomes to class, racism, migration history and school processes."),
-  card("Education", "condensed", "Ethnicity", "External factors — ethnicity", "External factors include material deprivation, language, parental support and migration-related differences."),
-  card("Education", "condensed", "Ethnicity", "Internal processes — ethnicity", "Internal factors include labelling, streaming, teacher expectations and educational triage."),
-  card("Education", "condensed", "Selection", "Selection policies", "Selection policies sort pupils by ability, behaviour or admissions rules.\n\nThey can shape who gets into the best classes or schools."),
-  card("Education", "condensed", "Marketisation and privatisation", "Marketisation and privatisation", "Marketisation makes schools compete.\n\nPrivatisation increases private influence, parental choice and pressure to perform."),
-  card("Education", "condensed", "Policies", "Equality policies", "Equality policies aim to reduce disadvantage through support programmes and extra funding.\n\nExamples: pupil premium and compensatory support."),
-  card("Education", "condensed", "Globalisation", "Globalisation and education", "Globalisation pushes policy borrowing and international comparison.\n\nLink to global competition and standardised measures."),
-  card("Education", "condensed", "Private and independent schools", "Private and independent schools", "Fee-paying schools often have smaller classes, stronger resources and better networks.\n\nThey can widen class inequality."),
-]; [
+];
+
+const METHODS_IN_CONTEXT_FULL = [
   card("Research Methods + Methods in Context", "full", "Education research", "What is Research Methods + Methods in Context?", "An exam focus where you apply research methods to the specific setting of education."),
   card("Research Methods + Methods in Context", "full", "Education research", "Why is access a key issue in school research?", "Researchers often need permission from gatekeepers such as heads, local authorities and parents."),
   card("Research Methods + Methods in Context", "full", "Questionnaires", "Why can questionnaires work well in education research?", "They are cheap, quick and useful for reaching large numbers of pupils or parents."),
@@ -1419,9 +1301,9 @@ const EDUCATION_CONDENSED = [
 ];
 
 const METHODS_IN_CONTEXT_CONDENSED = [
-  card("Research Methods + Methods in Context", "condensed", "Education research", "Research Methods + Methods in Context", "Always apply the method to schools, pupils and teachers.\\n\\nMention access, gatekeepers, age, literacy, power differences, safeguarding and disruption to lessons."),
-  card("Research Methods + Methods in Context", "condensed", "Methods", "Questionnaires, interviews and observation", "Questionnaires are quick but can be misunderstood.\\nInterviews are detailed but power imbalances matter.\\nObservation can capture real behaviour but raises ethics and reactivity issues."),
-  card("Research Methods + Methods in Context", "condensed", "Documents and statistics", "Documents and statistics", "Documents can reveal policy and school culture.\\nOfficial statistics are broad and comparative, but may hide bias in recording and definitions."),
+  card("Research Methods + Methods in Context", "condensed", "Education research", "Research Methods + Methods in Context", "Always apply the method to schools, pupils and teachers.\n\nMention access, gatekeepers, age, literacy, power differences, safeguarding and disruption to lessons."),
+  card("Research Methods + Methods in Context", "condensed", "Methods", "Questionnaires, interviews and observation", "Questionnaires are quick but can be misunderstood.\nInterviews are detailed but power imbalances matter.\nObservation can capture real behaviour but raises ethics and reactivity issues."),
+  card("Research Methods + Methods in Context", "condensed", "Documents and statistics", "Documents and statistics", "Documents can reveal policy and school culture.\nOfficial statistics are broad and comparative, but may hide bias in recording and definitions."),
   card("Research Methods + Methods in Context", "condensed", "Evaluation", "How to evaluate methods in context", "Judge methods by validity, reliability, representativeness, ethics and practicality within the school setting."),
 ];
 
@@ -1458,254 +1340,269 @@ const THEORY_METHODS_FULL = [
 ];
 
 const THEORY_METHODS_CONDENSED = [
-  card("Theory & Methods", "condensed", "Methods", "Research approaches", "Quantitative = numbers, measurement and patterns.\\nQualitative = meanings, experiences and depth.\\nPrimary data is collected first-hand; secondary data already exists."),
-  card("Theory & Methods", "condensed", "Positivism and interpretivism", "Positivism vs interpretivism", "Positivists prefer scientific, objective methods and social facts.\\nInterpretivists prefer verstehen, meanings and context."),
-  card("Theory & Methods", "condensed", "Evaluation", "Reliability, validity, representativeness", "Reliability = repeatability.\\nValidity = truth and accuracy.\\nRepresentativeness = how well a sample reflects the wider population."),
-  card("Theory & Methods", "condensed", "Science", "Is sociology a science?", "Positivists say yes because it can test patterns and produce general laws.\\nCritics say human action is meaningful, so sociology cannot copy natural science exactly."),
-  card("Theory & Methods", "condensed", "Theory", "Theory types", "Consensus theories stress shared values.\\nConflict theories stress power and inequality.\\nStructural theories focus on social structures.\\nSocial action theories focus on meanings and interaction."),
-  card("Theory & Methods", "condensed", "Change and policy", "Modernity, postmodernity and policy", "Modernity emphasises order and progress; postmodernity emphasises fragmentation and diversity.\\nSociology can inform social policy, and policy can shape the research agenda."),
+  card("Theory & Methods", "condensed", "Methods", "Research approaches", "Quantitative = numbers, measurement and patterns.\nQualitative = meanings, experiences and depth.\nPrimary data is collected first-hand; secondary data already exists."),
+  card("Theory & Methods", "condensed", "Positivism and interpretivism", "Positivism vs interpretivism", "Positivists prefer scientific, objective methods and social facts.\nInterpretivists prefer verstehen, meanings and context."),
+  card("Theory & Methods", "condensed", "Evaluation", "Reliability, validity, representativeness", "Reliability = repeatability.\nValidity = truth and accuracy.\nRepresentativeness = how well a sample reflects the wider population."),
+  card("Theory & Methods", "condensed", "Science", "Is sociology a science?", "Positivists say yes because it can test patterns and produce general laws.\nCritics say human action is meaningful, so sociology cannot copy natural science exactly."),
+  card("Theory & Methods", "condensed", "Theory", "Theory types", "Consensus theories stress shared values.\nConflict theories stress power and inequality.\nStructural theories focus on social structures.\nSocial action theories focus on meanings and interaction."),
+  card("Theory & Methods", "condensed", "Change and policy", "Modernity, postmodernity and policy", "Modernity emphasises order and progress; postmodernity emphasises fragmentation and diversity.\nSociology can inform social policy, and policy can shape the research agenda."),
 ];
 
 
 
-const SOCIOLOGY_PREDICTIONS_FULL = [
-  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of social class differences in educational achievement.", "Point: Material deprivation (Douglas / Wilkinson and Pickett).\nExplain: poverty, poor housing, diet and lack of resources reduce attainment.\n\nPoint: Cultural capital and language codes (Bourdieu / Bernstein).\nExplain: middle-class language, habits and knowledge match school expectations.\n\nPoint: Labelling and streaming (Becker / Rosenthal and Jacobson / Lacey).\nExplain: teacher expectations can create self-fulfilling prophecies and set pupils onto different achievement paths.\n\nJudgement: the strongest answers link external deprivation with school processes."),
-  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of gender differences in educational achievement.", "Point: Changing ambitions and career opportunities (Sharpe).\nExplain: girls' aspirations and future plans have risen as society changed.\n\nPoint: Teacher expectations, coursework and equal opportunities (Francis / Weiner / Mitsos and Browne).\nExplain: schools can reward organisation and reduce older gender barriers.\n\nPoint: Masculinity and laddish subcultures (Francis / Mac an Ghaill).\nExplain: boys may reject success if it seems unmasculine.\n\nJudgement: gender gaps are shaped by both school change and peer culture."),
-  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of ethnic differences in educational achievement.", "Point: Material deprivation (Modood).\nExplain: poverty, housing and fewer resources can lower attainment.\n\nPoint: Culture and language (Coard / Sewell).\nExplain: language barriers and family-school cultural differences can affect access to the curriculum.\n\nPoint: Labelling, racism and setting (Gillborn and Youdell / Becker).\nExplain: teachers and schools can make unequal expectations become real outcomes.\n\nJudgement: the best answers show ethnicity is shaped by structure, culture and school processes."),
-  card("Predictions", "full", "Mini test", "Evaluate the view that the education system is meritocratic.", "Point: Functionalists say education sorts people fairly and rewards talent (Parsons / Davis and Moore).\nExplain: exams and qualifications can, in theory, link achievement to ability.\n\nPoint: Marxists argue meritocracy is a myth because schooling reproduces class inequality (Althusser / Bowles and Gintis / Bourdieu).\nExplain: hidden curriculum and cultural capital advantage some groups.\n\nPoint: Gender and ethnicity research also shows unequal expectations and labelling (Weiner / Gillborn and Youdell).\nExplain: not everyone is judged in the same way.\n\nJudgement: meritocracy is an ideal, not a full description of reality."),
-  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of the role of education in transmitting ideas and values.", "Point: Functionalists say education transmits shared norms and values (Durkheim / Parsons).\nExplain: schooling creates social solidarity and a common culture.\n\nPoint: Marxists argue the hidden curriculum transmits ruling-class ideology (Althusser / Bowles and Gintis).\nExplain: obedience, hierarchy and acceptance of inequality are taught implicitly.\n\nPoint: Feminists argue schooling can reproduce patriarchy through expectations and subject choice (Weiner).\nExplain: gendered messages still shape how pupils see themselves.\n\nJudgement: education transmits consensus values and unequal power relations at the same time."),
-  card("Predictions", "full", "Mini test", "Evaluate sociological explanations of school processes affecting pupil identity.", "Point: Labelling and self-fulfilling prophecy (Becker / Rosenthal and Jacobson).\nExplain: teacher expectations can become part of how pupils see themselves.\n\nPoint: Differentiation and polarisation (Lacey).\nExplain: setting and streaming can push pupils towards pro-school or anti-school identities.\n\nPoint: Resistance and subcultures (Willis).\nExplain: pupils may reject school identity and build anti-school cultures instead.\n\nJudgement: identity is formed through interaction between school processes and peer culture."),
 
-  card("Predictions", "full", "4-mark questions", "How should I structure a 4-mark sociology answer?", "Give 2 clear points.\\nEach point should be short and direct.\\nNo waffle."),
-  card("Predictions", "full", "6-mark questions", "How should I structure a 6-mark sociology answer?", "Give 3 points.\\nDevelop each point slightly with explanation or an example.\\nKeep it concise."),
-  card("Predictions", "full", "10-mark item questions", "How should I structure a 10-mark item question?", "Use the item twice.\\nLink each point directly to the item.\\nAdd sociological knowledge and a short mini-judgment if you have time."),
-  card("Predictions", "full", "20-mark methods questions", "How should I structure a 20-mark methods question?", "Balance strengths and limitations.\\nUse evaluation throughout.\\nFinish with a judgment about which method fits the context best."),
-  card("Predictions", "full", "30-mark essays", "How should I structure a 30-mark essay?", "Intro: define the issue and give a line of argument.\\nParagraphs: 3-4 main points with sociological evidence.\\nInclude comparison and evaluation.\\nEnd with a direct conclusion that answers the question."),
-  card("Predictions", "full", "Key sociologists", "Which sociologists and ideas are safest to know?", "Class: Bourdieu, Douglas, Wilkinson and Pickett, Bernstein.\\nGender: Mitsos and Browne, Sharpe, Francis, Weiner.\\nEthnicity: Sewell, Gillborn and Youdell, Ball, Coard, Modood.\\nSchool processes: Becker, Rosenthal and Jacobson, Lacey, Willis, Bowles and Gintis.\\nFunctions/theory: Durkheim, Parsons, Davis and Moore, Althusser, Bourdieu."),
-  card("Predictions", "full", "Class essay plan", "What is the best essay skeleton for social class differences in achievement?", "Material deprivation.\\nCultural deprivation / cultural capital.\\nSchool factors such as labelling, setting, streaming and pupil subcultures.\\nWider factors such as housing, family background, class language and private tuition.\\nConclusion: external and internal factors usually interact."),
-  card("Predictions", "full", "Gender essay plan", "What is the best essay skeleton for gender differences in achievement?", "External changes: girls' changing ambitions and career options.\\nSchool factors: teacher expectations, subject choice, coursework and equal opportunities.\\nMasculinity and peer pressure for boys.\\nConclusion: class and ethnicity also shape gender patterns."),
-  card("Predictions", "full", "Ethnicity essay plan", "What is the best essay skeleton for ethnic differences in achievement?", "Material factors.\\nCultural factors.\\nSchool factors: labelling, racism, setting and expectations.\\nExternal factors: language, poverty and home background.\\nConclusion: not all ethnic groups experience school in the same way."),
-  card("Predictions", "full", "Meritocracy essay plan", "What is the best essay skeleton for a meritocracy question?", "Functionalist view: education sorts people fairly.\\nMarxist critique: hidden curriculum and reproduction of class inequality.\\nFeminist critique: patriarchy and gendered expectations.\\nEthnic and class evidence against fairness.\\nConclusion: meritocracy is an ideal, not a full description of reality."),
-  card("Predictions", "full", "Functions essay plan", "What is the best essay skeleton for the functions of education?", "Socialisation and value consensus.\\nRole allocation and skills for the economy.\\nSocial cohesion and nationalism.\\nCritiques from Marxists and feminists.\\nConclusion: education does more than transmit knowledge, but it also reproduces inequality."),
-  card("Predictions", "full", "Common mistakes", "What are the common mistakes that lose marks?", "Writing everything you know instead of answering the exact question.\\nForgetting to use the item in 10-mark questions.\\nGiving description with no evaluation in 20- and 30-mark questions.\\nNot naming sociologists or studies.\\nRepeating the same point.\\nWeak conclusions.\\nSpending too long on one question."),
-  card("Predictions", "full", "Top-band answers", "What do top-band answers do?", "Use accurate sociological knowledge.\\nApply the item properly.\\nDevelop points with explanation.\\nCompare views and make judgment.\\nSound decisive at the end."),
-  card("Predictions", "full", "Timing guide", "What is the exam timing guide?", "4 marks: 4-5 minutes.\\n6 marks: 6-8 minutes.\\n10 marks: 12-15 minutes.\\n20 marks: 20-25 minutes.\\n30 marks: 35-40 minutes.\\nLeave a few minutes at the end to check spelling, item use and conclusions."),
-  card("Predictions", "full", "One-night plan", "What is the one-night survival plan?", "First 45 minutes: class, gender, ethnicity, meritocracy, 6 key sociologists.\\nNext 45 minutes: plan class, gender, ethnicity and meritocracy 30-markers.\\nNext 30 minutes: do one methods question and one 10-marker.\\nFinal 20 minutes: common mistakes and timing guide."),
-  card("Predictions", "full", "Final reminders", "What are the ultra-short final reminders?", "Use the item.\\nMake a judgment.\\nName sociologists.\\nKeep answers focused.\\nDo not panic if a question looks unfamiliar.")
+
+// ── GENDER TRENDS ─────────────────────────────────────────────────────────
+const GENDER_TRENDS_FULL = [
+  card("Education", "full", "Gender trends", "What are the key GCSE gender trends?", "Girls outperform boys in the majority of GCSE subjects. 69% of girls achieve grade 4+ in combined Maths and English vs 62% of boys. The gap is largest in English. (Source: Department for Education / Strand)"),
+  card("Education", "full", "Gender trends", "What are the key A Level gender trends?", "Girls are more likely to take humanitarian subjects (English, Sociology, Psychology). Boys dominate technical/instrumental subjects — around 80% of Physics A Level students are male. Girls are more likely to achieve top grades overall."),
+  card("Education", "full", "Gender trends", "What are the university gender trends?", "Girls are more likely to apply, be accepted and graduate from university. 57% of university students are female vs 43% male. The majority of subject areas are now female-majority. Girls from all social class and ethnic backgrounds have seen improved university entry rates."),
+  card("Education", "full", "Gender trends", "What are the wider outcome gender trends?", "Boys are around 3x more likely to be permanently excluded (approx 77% of exclusions are male). Girls outperform boys at every Key Stage 1–5. The attainment gap is narrowing slightly at A Level but persists strongly at GCSE. Boys are more likely to be in the lowest-attaining groups."),
+  card("Education", "full", "Gender trends", "What is the pattern of subject choice by gender at A Level?", "Girls dominate humanities, languages, and social sciences. Boys dominate physics, computing, and maths. This is known as gender-typed subject choice (Paetcher: 'gender domains'). This contributes to the gender pay gap in later life as technical subjects lead to higher-paid careers."),
 ];
 
-const SOCIOLOGY_PREDICTIONS_CONDENSED = [
-  card("Predictions", "condensed", "Mini test", "Class differences in achievement", "Material deprivation + cultural capital + school processes + judgment."),
-  card("Predictions", "condensed", "Mini test", "Gender differences in achievement", "Changing ambitions + teacher expectations + coursework/equal opportunities + masculinity."),
-  card("Predictions", "condensed", "Mini test", "Ethnic differences in achievement", "Material factors + culture/language + labelling/racism + judgment."),
-  card("Predictions", "condensed", "Mini test", "Meritocracy", "Functionalism vs Marxism vs feminism + evidence + judgment."),
-  card("Predictions", "condensed", "Mini test", "Education transmits ideas and values", "Consensus values + hidden curriculum + patriarchy + judgment."),
-  card("Predictions", "condensed", "Mini test", "School processes and identity", "Labelling + streaming + self-fulfilling prophecy + subcultures + judgment."),
-  card("Predictions", "condensed", "Essay skeletons", "Predictions: best essay order", "Class: deprivation → cultural capital → school processes → wider factors.\\nGender: changing ambitions → school factors → masculinity.\\nEthnicity: material → cultural → school → external.\\nMeritocracy: functionalism → Marxism → feminism → evidence → judgment."),
-  card("Predictions", "condensed", "Timing and mistakes", "Predictions: timing and traps", "4/6/10/20/30 minute guide.\\nAvoid no-evaluation essays, missing the item, weak conclusions and repeating points."),
-  card("Predictions", "condensed", "One-night survival", "Predictions: one-night survival plan", "Memorise class, gender, ethnicity, meritocracy and six key sociologists; then plan essays, do one methods question, and finish by checking mistakes and timings.")
+// ── EXTERNAL FACTORS — GENDER ─────────────────────────────────────────────
+const GENDER_EXTERNAL_FULL = [
+  card("Education", "full", "External factors — gender", "What is gender socialisation and how does it affect achievement?", "Oakley: girls are socialised from birth into femininity — passivity, cooperation, reading. These traits suit formal schooling. Boys socialised into risk-taking and outdoor activity, which can clash with school demands. Differential socialisation creates the gender gap before school even starts."),
+  card("Education", "full", "External factors — gender", "What is 'bedroom culture' and how does it explain the gender gap?", "McRobbie: girls' leisure is home-based and literacy-rich — reading magazines, talking, writing diaries. Boys' culture is more outdoor and physical. This gives girls a head-start in literacy and the kind of reflective skills schools reward."),
+  card("Education", "full", "External factors — gender", "What is the 'crisis of masculinity' and how does it affect boys' attainment?", "Mac an Ghail: deindustrialisation destroyed the traditional male manual working-class jobs. School qualifications feel irrelevant to a 'laddish' masculine identity when there are no longer factories to walk into. Boys from WC backgrounds especially affected. Francis and Skelton support this."),
+  card("Education", "full", "External factors — gender", "How have changes in employment affected girls' aspirations?", "The shift to a service-sector economy has opened more graduate careers to women. Sharpe (1970s vs 1990s): girls' priorities shifted from marriage and family to careers and independence. Greater female role models in professions have raised aspirations (Norman; Francis)."),
+  card("Education", "full", "External factors — gender", "How has feminism affected gender and education?", "Second-wave feminism raised awareness of female potential and changed cultural expectations. Girls now expect to work and are encouraged to achieve. GIST and WISE campaigns in schools aimed to encourage girls into science and technology. Mitsos and Browne: girls benefit from higher aspirations."),
+  card("Education", "full", "External factors — gender", "How do literacy skills relate to the gender gap?", "Girls develop verbal and language skills earlier on average. Jackson: the current assessment style — extended writing, coursework, literacy tasks — suits girls' strengths. Some argue this is biological; others (Epstein) say it reflects gendered socialisation and reading habits."),
 ];
+
+// ── INTERNAL PROCESSES — GENDER ───────────────────────────────────────────
+const GENDER_INTERNAL_FULL = [
+  card("Education", "full", "Internal processes — gender", "What is the 'feminisation of education' argument?", "Sewell, Epstein: the shift to coursework, group work and teacher assessment favours girls' socialised learning styles. Boys prefer competitive, exam-based formats. Critics argue this is oversimplified — boys do outperform girls in some exam-only subjects."),
+  card("Education", "full", "Internal processes — gender", "How do teacher expectations affect gender achievement?", "Francis and Skelton: teachers spend more time disciplining boys, giving girls more uninterrupted learning time. Teachers also tend to give girls more academic encouragement. Lobban: older textbooks showed women in passive roles — now less common but imagery still matters."),
+  card("Education", "full", "Internal processes — gender", "What are laddish subcultures and how do they affect boys?", "Francis and Skelton: some male peer groups define hard work as 'uncool' or feminine. Being seen as academic threatens masculine identity. Jackson: boys who work hard may be labelled a 'nerd' or 'gay' — so underachievement becomes a performance of masculinity."),
+  card("Education", "full", "Internal processes — gender", "What are gender domains and how do they shape subject choice?", "Paetcher: subjects are coded as masculine or feminine — physics = male, English = female. Peer pressure reinforces these codes. Teachers may unconsciously steer pupils. Ball: girls in mixed schools sometimes avoid science to avoid appearing 'unfeminine'."),
+  card("Education", "full", "Internal processes — gender", "What is the male gaze in education?", "Lobban and later Mitsos and Browne: school readers and textbooks historically portrayed women as passive and domestic, reinforcing low aspirations. Now updated in most schools, but gendered imagery in subject materials (e.g. male scientists in physics textbooks) still shapes who 'belongs'."),
+  card("Education", "full", "Internal processes — gender", "What is gendered subject imagery and how does it affect choices?", "Physics books feature male scientists; humanities books feature female figures. This signals to pupils who the 'natural' students are (Paetcher). Girls opting out of physics or computing is partly a response to not seeing themselves represented in the subject's cultural identity."),
+  card("Education", "full", "Internal processes — gender", "What did Boaler find about girls and maths?", "Boaler: girls are disadvantaged by the competitive, timed, test-based culture of maths teaching. When maths was taught through collaborative projects, the gender gap reduced significantly. This suggests internal school processes — not ability — explain the gender gap in maths."),
+];
+
+// ── ETHNICITY TRENDS ──────────────────────────────────────────────────────
+const ETHNICITY_TRENDS_FULL = [
+  card("Education", "full", "Ethnicity trends", "What are the key ethnicity attainment trends at GCSE?", "Chinese and Indian pupils consistently outperform the national average. Black Caribbean pupils, especially boys, significantly underperform. Pakistani and Bangladeshi pupils have historically underperformed but the gap is narrowing. White British working-class pupils are now among the lowest-attaining groups overall."),
+  card("Education", "full", "Ethnicity trends", "Why must we be specific about ethnic group trends?", "AQA Exam Gold: Not all ethnic minority groups have the same experience. Saying 'ethnic minorities underperform' is wrong — Chinese and Indian pupils outperform most White British pupils. Always name the specific group and use named research evidence. Vague claims = lower marks."),
+  card("Education", "full", "Ethnicity trends", "What does the data say about Black Caribbean pupils specifically?", "Gillborn and Mirza: Black Caribbean pupils are the most likely to be permanently excluded and among the lowest-attaining groups at GCSE. Black Caribbean boys are particularly disadvantaged. The gap opens up during secondary school, suggesting in-school processes (not just external factors) are key."),
+  card("Education", "full", "Ethnicity trends", "What does the data say about Chinese and Indian pupils?", "Chinese pupils are the highest-achieving ethnic group at GCSE in England. Indian pupils also consistently outperform the national average. Modood: South Asian families place very high cultural value on education and parental support is strong. This challenges cultural deprivation arguments."),
+];
+
+// ── EXTERNAL FACTORS — ETHNICITY ──────────────────────────────────────────
+const ETHNICITY_EXTERNAL_FULL = [
+  card("Education", "full", "External factors — ethnicity", "What material factors affect the attainment of some ethnic groups?", "Some ethnic minority groups face higher rates of poverty — Black and Bangladeshi families in particular (Gillborn and Mirza; Strand). Poverty means poor diet, overcrowded housing (less revision space), fewer books and resources. Class and ethnicity intersect — many ethnic minority pupils are also WC. ONS data on relative deprivation supports this."),
+  card("Education", "full", "External factors — ethnicity", "What cultural differences explain variation in ethnic group attainment?", "Modood: South Asian families place high cultural value on education — parental pressure and community support are strong. Flannery: language barriers for recently arrived families can reduce parental support. Ball and Walters: parental knowledge of how to 'work' the school system varies by group. Not all cultural explanations are deficit models."),
+  card("Education", "full", "External factors — ethnicity", "What is the cultural deprivation argument for ethnic minority underachievement?", "Bernstein and Douglas: some families lack the 'elaborated code' and cultural capital schools reward. Applied to ethnicity: some argue working-class Black Caribbean families lack the values that promote educational success. Criticism: this is a deficit model that blames the victim and ignores structural racism. Sewell disputes this — argues Black culture does value education."),
+  card("Education", "full", "External factors — ethnicity", "How does cultural capital relate to ethnic group attainment?", "Bourdieu applied to ethnicity: some ethnic minority groups have cultural capital that differs from the white MC norm schools reward. However, Modood shows some South Asian groups have cultural capital that matches school expectations well (valuing education, parental involvement). Basit: Muslim girls' cultural capital is compatible with school success."),
+  card("Education", "full", "External factors — ethnicity", "What is the impact of government immigration policy on attainment?", "Pupils who have recently arrived may face language barriers and a lack of familiarity with the UK school system. Asylum seeker children may experience trauma affecting learning. Barnard and Turner: newly arrived pupils often placed in lower sets unfairly. Government policies on EAL (English as an Additional Language) support are inconsistent."),
+];
+
+// ── INTERNAL PROCESSES — ETHNICITY ────────────────────────────────────────
+const ETHNICITY_INTERNAL_FULL = [
+  card("Education", "full", "Internal processes — ethnicity", "What is teacher racism and how does it affect attainment?", "Wright: Black and Asian pupils receive less teacher time, more criticism and lower expectations in classroom interactions — even from teachers who do not consider themselves racist. This is not always intentional but creates differential learning experiences. Troyna and Williams support this finding."),
+  card("Education", "full", "Internal processes — ethnicity", "What is institutional racism in education?", "Macpherson (1999): racism that exists in the policies, practices and culture of institutions — not just individual prejudice. Schools can be institutionally racist through: exclusion rates, streaming decisions, curriculum content and assessment formats that all disadvantage some ethnic minority pupils. Gillborn argues the exam system systematically disadvantages Black pupils."),
+  card("Education", "full", "Internal processes — ethnicity", "What is the ethnocentric curriculum?", "Coard (1971): the curriculum centres White/Western history, literature and values. Minority ethnic cultures are absent or marginalised. This makes Black and Asian pupils feel their heritage is invisible or inferior, damaging self-esteem and engagement. Still partially true today — e.g. history curriculum debates about Empire."),
+  card("Education", "full", "Internal processes — ethnicity", "How does labelling affect ethnic minority pupils?", "Gillborn: teachers racialise expectations — perceiving Black pupils as more threatening or less able, even with identical behaviour to White pupils. This becomes a self-fulfilling prophecy (Rosenthal and Jacobsen applied to race): lower expectations → lower effort → lower attainment. Rist: labelling begins in primary school."),
+  card("Education", "full", "Internal processes — ethnicity", "What is educational triage and how does it disadvantage Black pupils?", "Gillborn and Youdell: schools under pressure to hit grade boundaries focus resources on C/D borderline pupils. Black pupils are disproportionately placed in 'hopeless cases' or 'safe bets' categories and get less teacher attention. This is a form of institutional racism embedded in performance management culture."),
+  card("Education", "full", "Internal processes — ethnicity", "How are ethnic subcultures formed in response to school processes?", "Sewell: Black boys respond to racism in four ways — rebels (reject school entirely), retreatists (disengage quietly), conformists (assimilate), innovators (stay committed to education but resist racism). The 'rebel' identity gets most teacher attention but is a minority. Most Black boys are actually pro-school."),
+  card("Education", "full", "Internal processes — ethnicity", "What are speech hierarchies and how do they disadvantage some pupils?", "Bernstein's restricted vs elaborated code — applied to ethnicity: pupils whose home language or dialect differs from standard English (e.g. AAVE, patois, EAL speakers) may be judged less intelligent by teachers. Coard: Black children's linguistic style was devalued in 1970s schools. Still relevant in assessment contexts."),
+  card("Education", "full", "Internal processes — ethnicity", "What did Connolly find about racism and young children?", "Connolly: racist attitudes and racialised identities form very early — even in nursery and Key Stage 1. Teachers had different expectations of Black and South Asian children from the start of school. This shows that racism in education begins before secondary school, challenging the idea it is about teen peer culture."),
+];
+
+// ── SELECTION POLICIES ────────────────────────────────────────────────────
+const SELECTION_FULL = [
+  card("Education", "full", "Selection policies", "What was the tripartite system?", "Introduced by the 1944 Butler Education Act. Three types of school: grammar (academic), secondary modern (vocational), technical (craft/trades). Selection via the 11+ exam. Hugely class-biased — MC children more likely to pass. Abolished in most areas from the 1960s with comprehensive schools."),
+  card("Education", "full", "Selection policies", "How do comprehensive schools differ from the tripartite system?", "Comprehensives (introduced 1960s–70s) have a mixed-ability intake from the local area — no selection by academic ability. Aimed to reduce class inequality in education. But: internal streaming and setting within schools recreated some of the same class divisions (Ball: 'Beachside Comprehensive')."),
+  card("Education", "full", "Selection policies", "What is 'selection by mortgage'?", "Ball: in a marketised system, parents buy homes in the catchment areas of high-performing schools. House prices near good schools are higher. This means that middle-class families effectively buy access to better schools — selection by wealth, not ability. Gewitz et al support this finding."),
+  card("Education", "full", "Selection policies", "What is covert selection?", "Schools in a market system select 'desirable' pupils without openly saying so: interviews, requiring uniform from day one, off-putting prospectuses, visiting days on weekdays only. Filters out poorer, less engaged or potentially disruptive pupils. Tough and Brooks: grammar schools use covert selection even in entry exams."),
+  card("Education", "full", "Selection policies", "What is streaming and how does it affect class achievement?", "Streaming: pupils placed in different teaching groups for all subjects based on ability (set = per subject). Lacey: differentiation and polarisation — streaming divides pupils, who then polarise into pro-school (top sets) and anti-school (bottom sets) subcultures. Bottom sets predominantly working-class (Ball; Gillborn and Youdell)."),
+];
+
+// ── MARKETISATION AND PRIVATISATION ──────────────────────────────────────
+const MARKET_FULL = [
+  card("Education", "full", "Marketisation and privatisation", "What was the Education Reform Act 1988 and why is it so important?", "Key turning point introduced by Thatcher's New Right government. Created an education market through: league tables (public school rankings), OFSTED inspections, formula funding (per-pupil budget), open enrolment (parental choice), National Curriculum, and Local Management of Schools (schools control their own budget). Transformed education into a quasi-market."),
+  card("Education", "full", "Marketisation and privatisation", "What are the key features of marketisation in education?", "1. League tables — schools ranked publicly; parents can compare. 2. OFSTED — inspections and published results. 3. Formula funding — popular schools get more money. 4. Parental choice — open enrolment. 5. Specialist/faith/free schools — diversity of providers. 6. Academies — schools outside local authority control. Chubb and Moe: market forces drive up standards through competition."),
+  card("Education", "full", "Marketisation and privatisation", "What is the difference between endogenous and exogenous privatisation?", "Ball: Endogenous privatisation = private sector values/methods introduced into state schools (performance targets, performance-related pay, management culture). Exogenous privatisation = private companies actually run schools (e.g. academy chains, multi-academy trusts, private tutoring firms). Both shift education from a public good to a commodity."),
+  card("Education", "full", "Marketisation and privatisation", "What are free schools and academy schools?", "Academies (from 2000, expanded 2010): state-funded schools outside local authority control, can set own curriculum, pay and admissions. Free schools (from 2010): set up by parents, teachers or charities. Both types can be run by multi-academy trusts (MATs) — private organisations. By 2023, majority of secondary schools in England are academies."),
+  card("Education", "full", "Marketisation and privatisation", "What is the New Right argument for marketisation?", "Chubb and Moe (US study): state education is ineffective because it is a bureaucratic monopoly with no incentive to improve. A market creates competition — schools that attract pupils thrive; poor schools lose pupils and must improve or close. Parental choice gives power to consumers. Standards rise overall. Schultz: investment in education as human capital benefits the economy."),
+  card("Education", "full", "Marketisation and privatisation", "What are the Marxist and social democratic criticisms of marketisation?", "Ball and Gewitz: marketisation benefits the MC who are better at 'playing the system' — choosing schools, writing applications, transport. Whitty: league tables narrow the curriculum (teaching to the test) and disadvantage schools in deprived areas. Benn and David: competition between schools damages cooperation and increases inequality. The market creates more inequality, not less."),
+  card("Education", "full", "Marketisation and privatisation", "What is 'cream-skimming' and 'silt-shifting'?", "Gewitz et al: in a marketised system, schools compete for the best pupils ('cream-skimming' — selecting high-attaining students to boost league table position) and avoid pupils who might lower their results ('silt-shifting' — excluding or discouraging SEN, EAL or low-attaining pupils). League tables incentivise schools to prioritise results over inclusion."),
+  card("Education", "full", "Marketisation and privatisation", "What did Ball say about the three types of parents in a market?", "Ball et al: Privileged/skilled choosers (MC — use all available information, transport, can visit multiple schools). Semi-skilled choosers (some WC — want to choose but lack knowledge/resources). Disconnected choosers (WC — prioritise proximity, familiarity, rely on reputation). Market benefits those with most cultural capital."),
+];
+
+// ── POLICIES TO IMPROVE EQUALITY ──────────────────────────────────────────
+const EQUALITY_POLICY_FULL = [
+  card("Education", "full", "Equality policies", "What were the main post-war policies aimed at reducing class inequality?", "1944 Butler Act: free secondary education for all. 1960s: comprehensive schools to abolish selection. Sure Start (1999, Labour): early intervention for deprived families — nurseries, parenting support, health services in deprived areas. EMA (Education Maintenance Allowance, 2004): cash payments to keep 16–18 WC pupils in education (abolished 2010)."),
+  card("Education", "full", "Equality policies", "What is the Pupil Premium and is it effective?", "Introduced 2011 (Coalition): extra funding for schools per pupil eligible for Free School Meals (FSM) — aimed at closing the class attainment gap. Schools have discretion in how to use it. Evaluation (Kendall; Allen): some evidence it narrows the gap but inconsistent — depends on how schools spend the money. Critics: amount too small given scale of disadvantage."),
+  card("Education", "full", "Equality policies", "What is Aim Higher and similar aspiration-raising policies?", "Labour policies aimed at raising aspirations of WC and ethnic minority pupils to go to university: Aim Higher, Aimhigher (university outreach programmes), mentoring schemes, campus visits. Ball: these assume the problem is attitudes, ignoring material and structural barriers. Keddie: policy focuses on individual pupils rather than changing structures."),
+  card("Education", "full", "Equality policies", "What are GIST and WISE and what were they trying to do?", "GIST (Girls Into Science and Technology) and WISE (Women Into Science and Engineering): 1980s–90s initiatives to encourage girls into male-dominated subjects. Brought female scientists into schools as role models, changed textbook imagery, made classrooms more girl-friendly. Some success — girls' science GCSE entry increased. Feminist critique: doesn't change the underlying gendered culture of science."),
+  card("Education", "full", "Equality policies", "What multicultural and anti-racist policies have been used in education?", "Multicultural education: includes diverse cultures in curriculum, celebrates cultural events, resources represent multiple ethnicities. Anti-racist education (Troyna): goes further — actively challenges racism and institutional discrimination. Ethnocentric curriculum critique (Coard) inspired both. Ball: multicultural education risks being tokenistic ('sari, samosa and steel band') without tackling structural racism."),
+  card("Education", "full", "Equality policies", "What does Progress 8 measure and is it fairer?", "Progress 8 (introduced 2016): measures pupils' progress across 8 subjects relative to their starting point (Key Stage 2 results). Intended to be fairer than raw attainment (Attainment 8) as it rewards schools for improving all pupils, not just those near grade boundaries. Criticism: still favours schools in affluent areas with higher-attaining intakes; doesn't solve underlying inequality."),
+  card("Education", "full", "Equality policies", "What is the social mobility strategy and what are its limitations?", "Government social mobility strategy (various versions under Labour and Conservative): targets WC pupils for university entry, professional careers. Critics: social mobility assumes individuals can move up without structural change — Goldthorpe: social mobility is a 'zero-sum game', for someone to move up another must move down. Does not address root causes of class inequality."),
+];
+
+// ── GLOBALISATION AND EDUCATION ───────────────────────────────────────────
+const GLOBALISATION_EDU_FULL = [
+  card("Education", "full", "Globalisation and education", "What is the impact of globalisation on educational policy?", "Globalisation creates international competition between economies — governments respond by reforming education to produce a more skilled, flexible workforce. PISA and TIMSS international rankings make governments compare their systems and adopt 'successful' policies from abroad (e.g. UK importing Finnish or East Asian methods). Ball: 'policy tourism'."),
+  card("Education", "full", "Globalisation and education", "What are PISA and TIMSS and why do they matter?", "PISA (Programme for International Student Assessment, OECD) and TIMSS (Trends in International Mathematics and Science Study): international tests ranking countries by pupil attainment in literacy, maths and science. UK governments use poor rankings to justify reforms. Critics (Alexander; Tomlinson): rankings oversimplify and ignore cultural context; they drive narrow, testable curriculum."),
+  card("Education", "full", "Globalisation and education", "How has globalisation led to the expansion of private education providers?", "Globalisation enables multinational education companies to operate across borders: private tutoring firms (Kumon), EdTech platforms (Khan Academy, Pearson), academy chain management, university franchising. Ball: the 'global education industry' is worth billions. Exogenous privatisation is partly driven by global capital seeking new markets in public services."),
+  card("Education", "full", "Globalisation and education", "What is the 'knowledge economy' argument in education?", "Globalisation shifts developed economies from manufacturing to knowledge-based industries (finance, tech, media). Governments argue education must produce 'knowledge workers' — critical, flexible, IT-literate graduates. This drives: literacy and numeracy strategies, compulsory maths and English to 18, expansion of universities and focus on STEM subjects."),
+  card("Education", "full", "Globalisation and education", "How has globalisation affected the curriculum?", "Literacy and numeracy strategies (National Literacy Strategy 1998): standardised teaching to raise basic skills. Compulsory maths and English to 18 (post-2013): reflects global economy's demand for numerate workers. Reforms to curriculum content to include computing (coding). Critics (Alexander; Tomlinson): globalisation-driven curriculum is narrow and kills creativity."),
+  card("Education", "full", "Globalisation and education", "What did Ball argue about the impact of globalisation on education?", "Ball: globalisation drives a 'new managerialism' in schools — performance targets, inspection regimes, league tables — imported from business culture. It also enables policy transfer across nations ('travelling policies'). The result is convergence of education systems worldwide around market principles, which may not suit all national contexts."),
+  card("Education", "full", "Globalisation and education", "What is the role of international organisations in shaping education policy?", "World Bank and IMF structural adjustment programmes have required developing countries to privatise/reform education as a condition of loans. OECD's PISA rankings shape policy in developed countries. EU free movement affected UK school demographics. Tomlinson: UK education reform cannot be understood without understanding its global economic context."),
+];
+
+// ── PRIVATE SCHOOLING ─────────────────────────────────────────────────────
+const PRIVATE_SCHOOL_FULL = [
+  card("Education", "full", "Private and independent schools", "What is the independent school sector?", "Around 7% of UK pupils attend fee-paying independent schools (also called private or public schools). Fees average £15,000–£45,000 per year. They are exempt from the National Curriculum and OFSTED inspection regime (inspected by ISI instead). They include famous schools like Eton, Harrow, and Winchester."),
+  card("Education", "full", "Private and independent schools", "How do independent schools affect class inequality?", "Sutton Trust: privately educated pupils are massively over-represented in elite positions — 65% of senior judges, 57% of senior civil servants and 52% of diplomats attended private school (despite being 7% of all pupils). Attending private school provides superior resources, small class sizes, and crucially, social networks ('old boy network') that persist into working life."),
+  card("Education", "full", "Private and independent schools", "What is the 'old boy network' and how does it reproduce inequality?", "Private schools create social networks among the elite — shared contacts, mutual trust, and social capital that advantage graduates in job markets and professions. Bourdieu: this is social capital (connections) combined with cultural capital. It is not just qualifications that matter — who you know, how you speak and carry yourself all give private school pupils advantages."),
+  card("Education", "full", "Private and independent schools", "What is the New Right view of private schools?", "New Right (Chubb and Moe): private schools are more effective because they are free from bureaucratic state control, are directly accountable to fee-paying parents, and have stronger incentives to perform. They argue this model should be extended to all schools through academies, free schools and voucher systems."),
+  card("Education", "full", "Private and independent schools", "What is the Marxist/critical view of private schools?", "Private schools reproduce class advantage across generations — they are the mechanism by which the ruling class reproduces itself. Gramsci: elite schools create cultural hegemony — graduates who share the same values, accents and contacts go on to run institutions. The state's failure to abolish private schools shows the limits of reform within capitalism."),
+  card("Education", "full", "Private and independent schools", "What is the debate about charitable status for private schools?", "Most private schools have charitable status, giving them significant tax advantages (estimated £1.5 billion per year in tax relief). Critics argue this public subsidy for elite institutions deepens inequality. Some schools offer bursaries or state partnerships in exchange. The Labour government's 2024 move to apply VAT to private school fees reignited this debate."),
+];
+
+// ── CONDENSED CARDS ───────────────────────────────────────────────────────
+const GENDER_TRENDS_CONDENSED = [
+  card("Education", "condensed", "Gender trends", "Gender: attainment trends", "GCSE: girls 69% vs boys 62% grade 4+ Eng+Maths. Gap largest in English.\nA Level: girls = humanities; boys = maths/physics (~80% male). Girls more A grades overall.\nUniversity: 57% female, 43% male. Girls dominate most subjects.\nWider: 77% exclusions are male. Girls lead at all Key Stages 1–5. Gap narrowing at A Level only."),
+];
+
+const GENDER_EXTERNAL_CONDENSED = [
+  card("Education", "condensed", "External factors — gender", "Why do girls outperform boys? (External)", "Socialisation (Oakley): girls raised to be cooperative, patient, literary — suits school.\nBedroom culture (McRobbie): girls' leisure is home-based/literacy-rich.\nChanges in employment (Norman, Sharpe): service economy opened careers for women; aspirations rose.\nFeminism: raised girls' expectations. GIST/WISE: encouraged girls into science.\nCrisis of masculinity (Mac an Ghail): WC male jobs gone — school feels irrelevant. Laddish culture devalues effort."),
+];
+
+const GENDER_INTERNAL_CONDENSED = [
+  card("Education", "condensed", "Internal processes — gender", "Gender inside schools", "Feminisation of education (Sewell, Epstein): coursework suits girls' learning styles.\nTeacher expectations (Francis & Skelton): boys disciplined more; girls get more academic support.\nLaddish subcultures (Jackson): working hard seen as 'uncool' or 'feminine' by some male peer groups.\nGender domains (Paetcher): subjects coded male/female; peer pressure reinforces gender-typed choices.\nBoaler: competitive maths culture disadvantages girls; collaborative teaching closes the gap."),
+];
+
+const ETHNICITY_CONDENSED = [
+  card("Education", "condensed", "Ethnicity trends", "Ethnicity: attainment trends", "Be SPECIFIC — not all ethnic minority groups underperform!\nChinese: highest achieving. Indian: above average.\nBlack Caribbean: significantly below average, especially boys; most excluded (Gillborn & Mirza).\nPakistani/Bangladeshi: historically below average, gap narrowing.\nWhite WC: now among lowest attaining overall.\nGap widens during secondary school → internal school processes matter."),
+  card("Education", "condensed", "External factors — ethnicity", "Ethnicity: external factors", "Material: poverty (Black/Bangladeshi families disproportionately affected) → poor resources, housing, diet (Strand; Gillborn & Mirza).\nCultural: Modood — South Asian families highly value education (pro-education culture). Flannery — language barriers for new arrivals.\nCultural capital: some ethnic groups' capital matches school expectations well (Basit on Muslim girls); others face mismatch.\nDon't use deficit models — avoids blaming the victim."),
+  card("Education", "condensed", "Internal processes — ethnicity", "Ethnicity: inside schools", "Teacher racism (Wright): less time, more criticism for Black/Asian pupils.\nInstitutional racism (Macpherson): embedded in policies, not just individual prejudice — exclusion rates, streaming.\nEthnocentric curriculum (Coard): White/Western-centred; minority cultures marginalised.\nLabelling + self-fulfilling prophecy (Gillborn): racialised low expectations → lower attainment.\nEducational triage (Gillborn & Youdell): Black pupils disproportionately classed as 'hopeless cases'.\nSewell: Black boys — rebels, retreatists, conformists, innovators. Most are actually pro-school."),
+];
+
+const SELECTION_CONDENSED = [
+  card("Education", "condensed", "Selection policies", "Selection policies", "Tripartite (1944): grammar/secondary modern/technical via 11+. Class-biased — MC advantage.\nComprehensive (1960s): mixed ability, local intake — aimed to reduce inequality. But streaming recreated class divisions inside school (Ball: Beachside).\nSelection by mortgage (Ball): MC buy houses in good-school catchment areas — market = wealth buys access.\nCovert selection (Gewitz): schools filter pupils via interviews, uniform, prospectuses.\nStreaming: differentiation → polarisation (Lacey). Bottom sets = WC. Educational triage (Gillborn & Youdell)."),
+];
+
+const MARKET_CONDENSED = [
+  card("Education", "condensed", "Marketisation and privatisation", "Marketisation and privatisation", "ERA 1988 (Thatcher): league tables, OFSTED, formula funding, open enrolment, National Curriculum, LMS.\nAcademies/free schools: outside LA control. MATs = private chains run schools.\nEndogenous privatisation (Ball): private sector VALUES in schools (targets, performance pay).\nExogenous privatisation: private COMPANIES run schools.\nNew Right (Chubb & Moe): competition raises standards.\nCritique: Ball, Gewitz — benefits MC 'skilled choosers'. Cream-skimming/silt-shifting. Whitty — narrows curriculum. More inequality, not less."),
+];
+
+const EQUALITY_CONDENSED = [
+  card("Education", "condensed", "Equality policies", "Policies to improve equality", "Class: Sure Start (early intervention), EMA (abolished 2010), Pupil Premium (per-FSM pupil funding — mixed evidence), Aim Higher (aspiration raising — ignores structural barriers).\nGender: GIST/WISE (girls into science — some success), Progress 8 (measures progress not just attainment).\nEthnicity: multicultural education (Troyna: too tokenistic), anti-racist education (challenges structure), EAL support.\nCritique: social mobility policy ignores structural causes of inequality (Goldthorpe: zero-sum game)."),
+];
+
+const GLOBALISATION_EDU_CONDENSED = [
+  card("Education", "condensed", "Globalisation and education", "Globalisation and education", "Global competition → government reform education for 'knowledge economy' (STEM, literacy, numeracy).\nPISA/TIMSS rankings: drive policy — UK borrows from 'high performing' systems (Ball: 'policy tourism'). Critics (Alexander, Tomlinson): rankings narrow curriculum, ignore cultural context.\nPrivate providers expand globally: EdTech, tutoring firms, academy chains = global education industry (Ball).\nNew managerialism: business culture imported into schools — targets, inspections, performance data.\nWorld Bank/IMF: force developing countries to privatise education as loan condition."),
+];
+
+const PRIVATE_SCHOOL_CONDENSED = [
+  card("Education", "condensed", "Private and independent schools", "Private and independent schools", "7% of pupils, disproportionate elite outcomes: 65% senior judges, 57% senior civil servants privately educated (Sutton Trust).\nOld boy network: social capital + cultural capital → career advantage beyond qualifications (Bourdieu).\nNew Right (Chubb & Moe): private schools more effective — market accountability.\nMarxist view: mechanism for ruling class to reproduce itself (Gramsci: hegemony).\nCharitable status: ~£1.5bn tax relief — public subsidy for elite. 2024: Labour applied VAT to fees.\nKey evaluative point: private school advantage is about networks and capital, not just teaching quality."),
+];
+
 
 const ECONOMICS_THEME2_FULL = [
-  card("Theme 2", "full", "Measures of economic performance", "What does GDP measure?", "The total value of output produced in an economy over a period, usually a year."),
-  card("Theme 2", "full", "Measures of economic performance", "Why is real GDP more useful than nominal GDP?", "Real GDP removes the effect of inflation, so it shows changes in output more accurately."),
-  card("Theme 2", "full", "Measures of economic performance", "What does the unemployment rate measure?", "The proportion of the labour force without work who are actively seeking and available for work."),
-  card("Theme 2", "full", "Measures of economic performance", "What does inflation measure?", "The sustained rise in the general price level over time."),
-  card("Theme 2", "full", "Measures of economic performance", "What is the current account?", "A record of trade in goods and services, primary income and transfers with the rest of the world."),
-  card("Theme 2", "full", "Measures of economic performance", "What is productivity?", "Output per worker or per hour worked; it is a key driver of competitiveness and living standards."),
-  card("Theme 2", "full", "Measures of economic performance", "Why is GDP per head not a full measure of living standards?", "It ignores inequality, leisure, health, the environment, unpaid work and quality of life."),
-  card("Theme 2", "full", "Measures of economic performance", "What is the Phillips curve used to show?", "The short-run inverse relationship between unemployment and inflation, though it can shift over time."),
-  card("Theme 2", "full", "Aggregate demand", "What is aggregate demand?", "The total demand for goods and services in an economy at a given price level."),
-  card("Theme 2", "full", "Aggregate demand", "What are the components of aggregate demand?", "Consumption, investment, government spending and net exports."),
-  card("Theme 2", "full", "Aggregate demand", "What happens when consumer confidence rises?", "Consumption usually rises, shifting AD right and increasing output and possibly inflation."),
-  card("Theme 2", "full", "Aggregate demand", "How does a fall in interest rates affect AD?", "Borrowing becomes cheaper, saving falls and spending rises, so AD shifts right."),
-  card("Theme 2", "full", "Aggregate demand", "How does a depreciation affect AD?", "Net exports may rise as exports become cheaper and imports more expensive, increasing AD."),
-  card("Theme 2", "full", "Aggregate demand", "What is the multiplier?", "The process by which an initial change in spending causes a larger final change in national income."),
-  card("Theme 2", "full", "Aggregate demand", "Why is the multiplier important?", "It magnifies the effect of government spending, investment or export changes on output and jobs."),
-  card("Theme 2", "full", "Aggregate supply", "What is aggregate supply?", "The total output firms are willing and able to supply at different price levels."),
-  card("Theme 2", "full", "Aggregate supply", "What is the difference between SRAS and LRAS?", "SRAS can change with costs and spare capacity; LRAS reflects productive potential and the economy's long-run capacity."),
-  card("Theme 2", "full", "Aggregate supply", "What shifts short-run aggregate supply right?", "Lower wage costs, lower input prices, better productivity, lower taxes on firms or improved confidence."),
-  card("Theme 2", "full", "Aggregate supply", "What shifts long-run aggregate supply right?", "More labour, more capital, better technology, improved education, stronger institutions and higher productivity."),
-  card("Theme 2", "full", "Aggregate supply", "What is an output gap?", "The difference between actual output and the economy's potential output."),
-  card("Theme 2", "full", "Economic growth", "What is economic growth?", "An increase in real national output over time."),
-  card("Theme 2", "full", "Economic growth", "What is the difference between short-run and long-run growth?", "Short-run growth comes from using spare capacity; long-run growth comes from an increase in productive potential."),
-  card("Theme 2", "full", "Economic growth", "What can cause demand-led growth?", "A rise in AD from higher consumption, investment, government spending or exports."),
-  card("Theme 2", "full", "Economic growth", "What can cause supply-led growth?", "Improvements in productivity, labour supply, capital stock, technology and institutions."),
-  card("Theme 2", "full", "Macroeconomic objectives", "What are the main macroeconomic objectives?", "Low and stable inflation, low unemployment, sustainable growth, a balanced or sustainable current account and greater equity."),
-  card("Theme 2", "full", "Macroeconomic objectives", "Why can macro objectives conflict?", "Policies that boost demand may increase inflation and worsen the current account, while anti-inflation policy may reduce growth and employment."),
-  card("Theme 2", "full", "Inflation", "What is demand-pull inflation?", "Inflation caused by rising aggregate demand when the economy is close to capacity."),
-  card("Theme 2", "full", "Inflation", "What is cost-push inflation?", "Inflation caused by rising production costs, such as wages, energy prices or imported inputs."),
-  card("Theme 2", "full", "Inflation", "Why can inflation reduce living standards?", "It lowers real incomes, creates uncertainty, distorts price signals and can reduce international competitiveness."),
-  card("Theme 2", "full", "Inflation", "How does imported inflation happen?", "A depreciation or higher world prices raise the cost of imported goods and inputs."),
-  card("Theme 2", "full", "Deflation", "What is deflation?", "A sustained fall in the general price level over time."),
-  card("Theme 2", "full", "Deflation", "Why can deflation be harmful?", "Consumers may delay spending, firms may cut wages and profits, and real debt burdens can rise."),
-  card("Theme 2", "full", "Unemployment", "What is cyclical unemployment?", "Unemployment caused by weak aggregate demand in a downturn."),
-  card("Theme 2", "full", "Unemployment", "What is structural unemployment?", "Unemployment caused by a mismatch between skills, location or industry and the jobs available."),
-  card("Theme 2", "full", "Unemployment", "What is frictional unemployment?", "Short-term unemployment as people move between jobs or enter the labour market."),
-  card("Theme 2", "full", "Unemployment", "What is wage-push unemployment?", "Unemployment that can occur if wages rise above the level firms are willing to pay, reducing labour demand."),
-  card("Theme 2", "full", "Balance of payments", "What is a current account deficit?", "When spending on imports and outflows exceeds earnings from exports and inflows."),
-  card("Theme 2", "full", "Balance of payments", "Why can a current account deficit matter?", "It may indicate weak competitiveness and can lead to borrowing or downward pressure on the exchange rate."),
-  card("Theme 2", "full", "Balance of payments", "What is meant by international competitiveness?", "How well firms can sell goods and services against foreign rivals on price and non-price factors."),
-  card("Theme 2", "full", "Macroeconomic policies", "What is demand-side policy?", "Policy that tries to influence aggregate demand, mainly through fiscal and monetary policy."),
-  card("Theme 2", "full", "Macroeconomic policies", "What is supply-side policy?", "Policy that raises productive capacity and improves efficiency in the long run."),
-  card("Theme 2", "full", "Fiscal policy", "What is expansionary fiscal policy?", "Higher government spending or lower taxes used to increase AD and output."),
-  card("Theme 2", "full", "Fiscal policy", "What is contractionary fiscal policy?", "Lower government spending or higher taxes used to reduce AD and inflationary pressure."),
-  card("Theme 2", "full", "Fiscal policy", "What is the main drawback of expansionary fiscal policy?", "It can increase borrowing, debt and inflation if the economy is already near capacity."),
-  card("Theme 2", "full", "Monetary policy", "How do higher interest rates affect the economy?", "They reduce borrowing and spending, encourage saving, reduce AD and may lower inflation."),
-  card("Theme 2", "full", "Monetary policy", "Why might monetary policy be slow to work?", "Households and firms may take time to adjust borrowing, spending and investment decisions."),
-  card("Theme 2", "full", "Supply-side policy", "What is a market-based supply-side policy?", "A policy that uses incentives and market forces, such as lower taxes or deregulation, to improve efficiency."),
-  card("Theme 2", "full", "Supply-side policy", "What is an interventionist supply-side policy?", "A policy where the government directly invests in education, training, infrastructure or innovation."),
-  card("Theme 2", "full", "Supply-side policy", "How can supply-side policy reduce inflation?", "By raising productivity and increasing LRAS, it can allow output to rise without creating inflationary pressure."),
-  card("Theme 2", "full", "Policy conflicts", "Why can reducing unemployment increase inflation?", "Higher employment can increase spending and wage pressure, shifting AD right."),
-  card("Theme 2", "full", "Policy conflicts", "Why can reducing inflation worsen growth?", "Higher interest rates or lower government spending reduce AD and can slow output growth."),
-  card("Theme 2", "full", "Policy conflicts", "Why might policy be more effective in the long run than the short run?", "Supply-side changes take time, but they can improve capacity, productivity and stability more sustainably."),
-  card("Theme 2", "full", "Living standards", "How can growth improve living standards?", "It can raise incomes, jobs, tax revenue and government spending on public services."),
-  card("Theme 2", "full", "Living standards", "Why might growth not improve living standards equally?", "If gains are unevenly distributed or if growth damages the environment, average GDP can rise without broad welfare gains."),
-  card("Theme 2", "full", "Evaluation", "Evaluate demand-side policies for managing the UK economy.", "They can change AD quickly and are useful in recessions, but they can create inflation, debt and time lags."),
-  card("Theme 2", "full", "Evaluation", "Evaluate supply-side policies for improving economic performance.", "They can raise productivity and long-run growth, but they often take longer to work and can be costly."),
-  card("Theme 2", "full", "Evaluation", "Evaluate monetary policy as a way to control inflation.", "It is flexible and credible, but it is weaker against cost-push inflation and may slow growth and employment."),
-  card("Theme 2", "full", "Evaluation", "Evaluate fiscal policy as a way to achieve macroeconomic stability.", "It can target specific problems and support demand, but borrowing, political delay and crowding-out may reduce effectiveness."),
-  card("Theme 2", "full", "Evaluation", "Evaluate policies to reduce inequality.", "Taxes, benefits and minimum wages can reduce inequality, but they may weaken incentives or raise costs."),
-  card("Theme 2", "full", "Evaluation", "Evaluate the use of a depreciation to improve the current account.", "It can boost exports and reduce imports, but only if demand is price elastic and it may also raise inflation."),
-  card("Theme 2", "full", "Evaluation", "Evaluate whether economic growth is always beneficial.", "Growth can raise incomes and public revenue, but it may damage the environment, increase inequality or be unsustainable.")
+  card("Theme 2", "full", "UK economy performance", "What is gross domestic product (GDP)?", "The total value of goods and services produced in an economy over a period of time, usually a year."),
+  card("Theme 2", "full", "UK economy performance", "What is real GDP growth?", "An increase in the volume of output after adjusting for inflation."),
+  card("Theme 2", "full", "UK economy performance", "What does the unemployment rate measure?", "The proportion of the labour force that is out of work but actively seeking and available for work."),
+  card("Theme 2", "full", "UK economy performance", "What is inflation?", "A sustained rise in the general price level in an economy over time."),
+  card("Theme 2", "full", "UK economy performance", "What is the current account of the balance of payments?", "A record of trade in goods and services, primary income, secondary income and transfers with the rest of the world."),
+  card("Theme 2", "full", "UK economy performance", "What is productivity?", "Output per worker or per hour worked; higher productivity usually means higher living standards."),
+  card("Theme 2", "full", "UK economy performance", "Why is living standards not the same as GDP alone?", "Because GDP ignores distribution, unpaid work, environmental damage and quality of life."),
+  card("Theme 2", "full", "Macroeconomic objectives", "What are the main macroeconomic objectives?", "Low and stable inflation, low unemployment, sustainable growth, a healthy current account and reduced inequality."),
+  card("Theme 2", "full", "Macroeconomic objectives", "Why can macroeconomic objectives conflict?", "Policies that reduce inflation can raise unemployment, while policies that boost growth can worsen the current account or inflation."),
+  card("Theme 2", "full", "Labour market", "What is structural unemployment?", "Unemployment caused by a mismatch between workers' skills or locations and the jobs available."),
+  card("Theme 2", "full", "Labour market", "What is cyclical unemployment?", "Unemployment caused by a fall in demand for goods and services during a downturn."),
+  card("Theme 2", "full", "Labour market", "What is frictional unemployment?", "Short-term unemployment as people move between jobs or enter the labour market."),
+  card("Theme 2", "full", "Labour market", "What is supply-side policy?", "Policies aimed at improving the productive potential and efficiency of the economy."),
+  card("Theme 2", "full", "Labour market", "What is demand-side policy?", "Policies aimed at influencing aggregate demand, such as fiscal or monetary policy."),
+  card("Theme 2", "full", "Policies", "Why might monetary policy be used to control inflation?", "Higher interest rates can reduce borrowing and spending, lowering aggregate demand and inflationary pressure."),
+  card("Theme 2", "full", "Policies", "Why might fiscal policy be used to support growth?", "Higher government spending or lower taxes can increase aggregate demand and raise output and employment."),
+  card("Theme 2", "full", "Policies", "What is a supply-side policy benefit?", "It can raise long-run productive capacity and improve non-inflationary growth."),
+  card("Theme 2", "full", "Policies", "What is a common criticism of demand-side policy?", "It may be delayed, uncertain, and can create conflicts with other objectives like inflation or debt."),
+  card("Theme 2", "full", "Inequality", "How can the government reduce income inequality?", "Through progressive taxation, benefits, welfare spending and minimum wage policies."),
+  card("Theme 2", "full", "Inequality", "Why might inequality matter for macro performance?", "High inequality can reduce social cohesion, limit mobility and weaken long-run sustainable growth."),
+  card("Theme 2", "full", "Evaluation", "Evaluate the use of supply-side policies to improve UK performance.", "They can improve productivity and long-run growth, but they often take time, can be expensive, and may not solve cyclical problems quickly."),
+  card("Theme 2", "full", "Evaluation", "Evaluate policies to reduce inflation.", "Demand-side policies can lower inflation but may reduce growth and jobs; supply-side policies are slower but can be more sustainable."),
+  card("Theme 2", "full", "Evaluation", "Evaluate government intervention in the labour market.", "It can reduce unemployment and raise skills, but too much intervention can raise costs or create unintended side effects.")
 ];
 
 const ECONOMICS_THEME2_CONDENSED = [
-  card("Theme 2", "condensed", "Measures of economic performance", "Theme 2: the main indicators", "GDP = output, inflation = price changes, unemployment = unused labour, productivity = efficiency, current account = external balance.\\n\\nA stronger answer compares at least two indicators and links them to living standards."),
-  card("Theme 2", "condensed", "AD and AS", "Theme 2: AD/AS chains", "AD rises when spending rises.\\nSRAS shifts with costs and productivity.\\nLRAS shifts with capacity and productivity.\\n\\nDiagram language: AD right → output and price level rise; AS right → output rises and inflation pressure falls."),
-  card("Theme 2", "condensed", "Macro objectives", "Theme 2: macro policy conflicts", "Low inflation, low unemployment, growth, current account stability and equity can clash.\\n\\nJudgement usually depends on the phase of the cycle, the time horizon and whether the issue is demand-side or supply-side."),
-  card("Theme 2", "condensed", "Policies", "Theme 2: policy toolkit", "Monetary policy changes interest rates and credit conditions. Fiscal policy changes taxes and spending. Supply-side policy raises productive capacity.\\n\\nStrong answers explain both short-run and long-run effects."),
-  card("Theme 2", "condensed", "Inflation and unemployment", "Theme 2: inflation, unemployment and living standards", "Demand-pull inflation comes from excess AD. Cost-push inflation comes from higher costs. Unemployment can be cyclical, structural or frictional.\\n\\nMention real incomes, confidence, competitiveness and distribution."),
-  card("Theme 2", "condensed", "Evaluation", "Theme 2: evaluation points", "Always assess speed, size, time lags, side effects, confidence, debt, inequality and whether the policy fits the cause of the problem.\\n\\nUse a judgement sentence that says which policy is best and why.")
+  card("Theme 2", "condensed", "UK economy performance", "Theme 2: key indicators", "GDP shows output, inflation shows price change, unemployment shows spare labour, productivity shows efficiency, and the current account shows trade position."),
+  card("Theme 2", "condensed", "Macroeconomic objectives", "Theme 2: objectives and conflicts", "The main aims are low inflation, low unemployment, growth, balance of payments stability and lower inequality. These aims can conflict with each other."),
+  card("Theme 2", "condensed", "Labour market", "Theme 2: unemployment types", "Frictional unemployment is short-term job change; structural is a skills/location mismatch; cyclical is caused by low demand; some policies mainly target supply-side weaknesses."),
+  card("Theme 2", "condensed", "Policies", "Theme 2: policy choices", "Monetary policy uses interest rates; fiscal policy uses taxes and spending; supply-side policy improves long-run efficiency and productive capacity."),
+  card("Theme 2", "condensed", "Inequality", "Theme 2: inequality and evaluation", "Policies can reduce inequality through taxes, benefits and wages, but they may lower incentives or increase government borrowing."),
+  card("Theme 2", "condensed", "Evaluation", "Theme 2: essay judgement", "Best policy depends on the problem, the time period, and whether the aim is faster demand management or long-run supply-side improvement.")
 ];
 
 const ECONOMICS_THEME4_FULL = [
   card("Theme 4", "full", "Globalisation and trade", "What is globalisation?", "The growing integration of economies through trade, capital flows, migration, technology and multinational firms."),
-  card("Theme 4", "full", "Globalisation and trade", "Why has globalisation increased?", "Lower transport and communication costs, trade liberalisation, stronger multinational firms and digital connectivity."),
   card("Theme 4", "full", "Globalisation and trade", "What is comparative advantage?", "The ability to produce a good at a lower opportunity cost than another country."),
-  card("Theme 4", "full", "Globalisation and trade", "Why does comparative advantage support free trade?", "Specialisation raises world output, can lower prices and can increase consumption possibilities."),
-  card("Theme 4", "full", "Globalisation and trade", "What is protectionism?", "Government policies that restrict imports or support domestic producers, such as tariffs, quotas and subsidies."),
-  card("Theme 4", "full", "Globalisation and trade", "Why might governments use protectionism?", "To protect infant industries, save jobs, improve the current account, defend strategic sectors or respond to dumping."),
-  card("Theme 4", "full", "Globalisation and trade", "What are the main costs of protectionism?", "Higher prices, less choice, inefficiency, retaliation and slower innovation."),
-  card("Theme 4", "full", "Globalisation and trade", "What is a trading bloc?", "A group of countries that reduce barriers to trade with each other, such as a free trade area or customs union."),
-  card("Theme 4", "full", "Globalisation and trade", "How can globalisation affect inequality?", "It can create gains from trade and investment, but also widen gaps between regions, sectors and skill groups."),
-  card("Theme 4", "full", "Trade and competitiveness", "What is the terms of trade?", "The ratio of export prices to import prices."),
-  card("Theme 4", "full", "Trade and competitiveness", "Why are terms of trade important?", "They affect the purchasing power of export earnings and can influence living standards and the current account."),
-  card("Theme 4", "full", "Trade and competitiveness", "What is international competitiveness?", "The ability of a country's firms to sell successfully against foreign rivals on price and non-price factors."),
-  card("Theme 4", "full", "Trade and competitiveness", "How can productivity improve competitiveness?", "Higher output per worker lowers unit costs and can improve quality, price and reliability."),
+  card("Theme 4", "full", "Globalisation and trade", "Why can free trade increase welfare?", "Countries specialise according to comparative advantage, which can raise output, lower prices and improve choice."),
+  card("Theme 4", "full", "Globalisation and trade", "What is protectionism?", "Government policies that restrict imports, such as tariffs, quotas, subsidies and regulations."),
+  card("Theme 4", "full", "Globalisation and trade", "Why might governments use protectionism?", "To protect infant industries, improve the current account, protect jobs or respond to unfair competition."),
   card("Theme 4", "full", "Exchange rates", "What is an exchange rate?", "The price of one currency in terms of another currency."),
-  card("Theme 4", "full", "Exchange rates", "What is an appreciation?", "A rise in the value of a currency relative to others."),
-  card("Theme 4", "full", "Exchange rates", "What is a depreciation?", "A fall in the value of a currency relative to others."),
-  card("Theme 4", "full", "Exchange rates", "How can an appreciation affect the economy?", "Exports become more expensive and imports cheaper, which may worsen the current account but reduce imported inflation."),
-  card("Theme 4", "full", "Exchange rates", "How can a depreciation affect the economy?", "Exports become cheaper and imports more expensive, which may improve the current account but add inflationary pressure."),
-  card("Theme 4", "full", "Exchange rates", "Why does the Marshall-Lerner condition matter?", "A depreciation improves the current account only if demand for exports and imports is sufficiently price elastic."),
-  card("Theme 4", "full", "Exchange rates", "What is the J-curve effect?", "After a depreciation, the current account may worsen at first before improving later as quantities adjust."),
-  card("Theme 4", "full", "Financial markets", "What is foreign direct investment (FDI)?", "When a firm invests in productive assets in another country, such as opening or buying a factory."),
-  card("Theme 4", "full", "Financial markets", "Why is FDI important?", "It can bring jobs, technology, skills, export capacity and links to global supply chains."),
-  card("Theme 4", "full", "Financial markets", "What are multinational corporations?", "Firms that operate in more than one country."),
-  card("Theme 4", "full", "Financial markets", "Why can multinationals be controversial?", "They may create jobs and investment, but they can also extract profits, reduce tax revenue or dominate local firms."),
+  card("Theme 4", "full", "Exchange rates", "How can an appreciation affect the economy?", "Exports become more expensive and imports cheaper, which can reduce export demand but lower imported inflation."),
+  card("Theme 4", "full", "Exchange rates", "How can a depreciation affect the economy?", "Exports become cheaper and imports more expensive, which can improve competitiveness but raise imported inflation."),
+  card("Theme 4", "full", "Financial markets", "What is foreign direct investment (FDI)?", "When a firm based in one country invests in productive assets in another country, often by building or buying operations there."),
+  card("Theme 4", "full", "Financial markets", "Why are financial markets important in the global economy?", "They move savings to investment, help firms and governments borrow, and influence confidence, risk and exchange rates."),
   card("Theme 4", "full", "Emerging and developing economies", "What is economic development?", "Improvements in living standards, health, education, income and wider quality of life."),
-  card("Theme 4", "full", "Emerging and developing economies", "Why is GDP per head an incomplete measure of development?", "It ignores inequality, health, education, the informal economy, sustainability and access to services."),
-  card("Theme 4", "full", "Emerging and developing economies", "What can limit development?", "Weak institutions, poor infrastructure, low savings, debt, corruption, conflict and low human capital."),
-  card("Theme 4", "full", "Emerging and developing economies", "How can aid help development?", "It can finance infrastructure, health and education, but its impact depends on governance and how it is used."),
-  card("Theme 4", "full", "Emerging and developing economies", "How can debt relief help development?", "It frees resources for spending on investment and services, though it may not solve deeper structural problems."),
-  card("Theme 4", "full", "Emerging and developing economies", "How can trade support development?", "Trade can expand markets, increase specialisation and bring technology and foreign exchange."),
-  card("Theme 4", "full", "Emerging and developing economies", "How can some trade patterns hinder development?", "Poor countries may remain dependent on primary products with volatile prices and weak bargaining power."),
-  card("Theme 4", "full", "Development strategies", "What is import substitution industrialisation?", "A strategy that protects domestic industries to reduce dependence on imports and build industrial capacity."),
-  card("Theme 4", "full", "Development strategies", "What is export-led growth?", "A strategy focused on expanding exports to raise output, jobs and foreign exchange earnings."),
-  card("Theme 4", "full", "Development strategies", "What is a development trap?", "A self-reinforcing barrier such as low savings, low investment, poor education or debt that slows progress."),
-  card("Theme 4", "full", "Global institutions", "What is the role of the IMF?", "It provides loans and policy support to countries facing balance of payments problems, often with conditions attached."),
-  card("Theme 4", "full", "Global institutions", "What is the role of the World Bank?", "It finances long-term development projects such as infrastructure, education and health."),
-  card("Theme 4", "full", "Global institutions", "What is the role of the WTO?", "It promotes rules-based trade and tries to reduce barriers and trade disputes."),
-  card("Theme 4", "full", "Globalisation and development", "Why can globalisation create winners and losers?", "Consumers and efficient exporters may gain, but weaker firms, workers and some regions may lose out."),
-  card("Theme 4", "full", "Globalisation and development", "Why can capital flows be risky for developing economies?", "They can be volatile, reverse suddenly and cause exchange rate instability or financial crises."),
-  card("Theme 4", "full", "Evaluation", "Evaluate free trade.", "Free trade can raise efficiency, lower prices and expand choice, but it may damage infant industries and widen inequality."),
-  card("Theme 4", "full", "Evaluation", "Evaluate protectionism.", "Protectionism can protect jobs and strategic sectors, but it can raise prices, reduce competition and provoke retaliation."),
-  card("Theme 4", "full", "Evaluation", "Evaluate the impact of exchange rate changes.", "A depreciation can improve competitiveness, but only if demand is elastic and inflation does not offset the gain."),
-  card("Theme 4", "full", "Evaluation", "Evaluate development policies.", "The best strategy depends on institutions, governance, time horizon and whether the main constraint is demand, supply or external finance."),
-  card("Theme 4", "full", "Evaluation", "Evaluate the impact of globalisation on developing countries.", "It can bring investment, jobs and technology, but also dependency, inequality, volatility and environmental pressure.")
+  card("Theme 4", "full", "Emerging and developing economies", "Why is GDP per capita an incomplete measure of development?", "It ignores inequality, health, education, the informal economy and environmental quality."),
+  card("Theme 4", "full", "Emerging and developing economies", "What can limit growth in developing economies?", "Poor infrastructure, low savings, weak institutions, debt, political instability and low human capital."),
+  card("Theme 4", "full", "Emerging and developing economies", "How can aid and debt relief help development?", "They can finance infrastructure, health and education, but effectiveness depends on corruption, dependency and how the money is used."),
+  card("Theme 4", "full", "Macro policy in a global context", "How can globalisation affect macroeconomic policy?", "Open economies face stronger trade and capital flow effects, so policy choices must consider competitiveness, inflation and exchange rates."),
+  card("Theme 4", "full", "Macro policy in a global context", "Why might exchange rate stability matter?", "It can reduce uncertainty for firms and support trade and investment."),
+  card("Theme 4", "full", "Macro policy in a global context", "Why can free trade create winners and losers?", "Consumers and efficient exporters may gain, but uncompetitive firms and some workers may lose jobs or bargaining power."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the case for free trade.", "Free trade can raise efficiency and welfare, but it may expose weak industries, worsen inequality or cause adjustment costs."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the use of protectionism.", "It can protect jobs and strategic industries, but it can raise prices, reduce choice and invite retaliation."),
+  card("Theme 4", "full", "Evaluation", "Evaluate policies to promote development.", "There is no single best policy: outcomes depend on institutions, governance, external demand and whether support is short-term or structural."),
+  card("Theme 4", "full", "Evaluation", "Evaluate the impact of globalisation on developing economies.", "It can bring investment, jobs and technology, but also volatility, dependency, unequal gains and environmental pressure.")
 ];
 
 const ECONOMICS_THEME4_CONDENSED = [
-  card("Theme 4", "condensed", "Globalisation", "Theme 4: what globalisation does", "Globalisation increases trade, investment, migration and competition.\\n\\nBenefits: efficiency, lower prices, more choice, technology transfer.\\nCosts: volatility, inequality, environmental pressure and dependence."),
-  card("Theme 4", "condensed", "Trade", "Theme 4: trade and protectionism", "Comparative advantage supports free trade. Protectionism may protect strategic or infant industries, but it often raises prices and reduces welfare."),
-  card("Theme 4", "condensed", "Exchange rates", "Theme 4: exchange rate analysis", "Appreciation = cheaper imports, weaker exports, lower imported inflation.\\nDepreciation = cheaper exports, dearer imports, possible inflation.\\n\\nMention Marshall-Lerner and the J-curve in evaluation."),
-  card("Theme 4", "condensed", "Finance and firms", "Theme 4: FDI and multinationals", "FDI and multinationals can bring capital, jobs, skills and technology, but may also repatriate profits, reduce competition and create dependency."),
-  card("Theme 4", "condensed", "Development", "Theme 4: development", "Development is wider than GDP per head. Use health, education, inequality, institutions and sustainability. Aid, debt relief, trade and investment can help, but governance matters."),
-  card("Theme 4", "condensed", "Evaluation", "Theme 4: evaluation and judgement", "Best answers compare short run vs long run, winners vs losers, price vs non-price effects, and whether the country needs growth, stability, equity or external balance.")
-];
-
-
-const ECONOMICS_PAPER2_PREP_FULL = [
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for demand-pull inflation?", "Use AD/AS.\\nAD shifts right, price level rises, real output may rise in the short run.\\nApplication: strong consumer confidence, lower interest rates or higher government spending."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for cost-push inflation?", "Use AD/AS.\\nSRAS shifts left, price level rises and real output falls.\\nApplication: energy price spikes, wage pressure or imported inflation."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for a recessionary output gap?", "Use AD/AS.\\nAD shifts left so actual output falls below potential output.\\nEvaluation: the size of the gap matters because spare capacity can reduce inflationary pressure."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for supply-side policy?", "Usually AD/AS with LRAS shifting right.\\nIt shows higher productive potential, lower inflationary pressure and higher long-run growth.\\nApplication: better education, infrastructure and productivity."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for exchange rates?", "Use the foreign exchange market.\\nA depreciation is a leftward shift in demand for the currency or a rightward shift in supply.\\nApplication: it can improve net exports if Marshall-Lerner conditions hold."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for protectionism?", "Use an import market or tariff/quota diagram.\\nA tariff raises the domestic price of imports and reduces import volume.\\nEvaluation: it may protect domestic jobs but can raise prices."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for comparative advantage?", "Use PPCs or a trade specialisation diagram.\\nIt shows gains from specialising where opportunity cost is lowest.\\nApplication: useful for explaining why countries trade."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for inequality?", "Use a Lorenz curve and Gini coefficient.\\nIt shows the distribution of income or wealth.\\nEvaluation: it measures distribution, not the causes of inequality."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for unemployment?", "Use AD/AS for demand-deficient unemployment or labour market diagrams for real wage unemployment.\\nApplication: the best diagram depends on whether the problem is cyclical or structural."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for the current account?", "Use AD/AS or the circular flow to show net exports effects, and an exchange rate diagram when the question is about competitiveness.\\nEvaluation: current account problems usually need more than one diagram."),
-  card("Paper 2 prep", "full", "USA evidence", "Why is the USA such a powerful evidence country for Edexcel Economics?", "Knowledge: it is a huge advanced economy with major influence on global output, trade and finance.\\nAnalysis: US monetary policy, demand shocks and inflation often transmit across the world.\\nApplication: use the USA for questions on inflation, interest rates, deficits, globalisation and market confidence.\\nEvaluation: it is strongest for developed-economy comparison because it has deep capital markets and a large service sector."),
-  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for inflation and interest-rate questions?", "Knowledge: the US Federal Reserve is a key global policy maker.\\nAnalysis: higher rates reduce borrowing and AD, which can lower inflation but slow growth.\\nApplication: use the USA to discuss inflation targeting, rate rises and recession risk.\\nEvaluation: it is a strong example because US decisions affect global finance, not just the domestic economy."),
-  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for growth and productivity questions?", "Knowledge: the USA is often used as a benchmark for high productivity and innovation.\\nAnalysis: strong productivity supports higher real wages, investment and long-run growth.\\nApplication: use it for supply-side policy, living standards and competitiveness.\\nEvaluation: it is useful because it shows that growth is not only about AD, but also about productive potential."),
-  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for inequality questions?", "Knowledge: the USA has well-known income and wealth inequality.\\nAnalysis: inequality can weaken social cohesion and reduce the effectiveness of growth in raising living standards.\\nApplication: use it when discussing Gini, poverty, labour market outcomes or regional divides.\\nEvaluation: it is especially useful because it shows GDP can rise while inequality remains high."),
-  card("Paper 2 prep", "full", "USA evidence", "How can I use the USA for globalisation and trade questions?", "Knowledge: the USA is central to global trade, financial markets and multinational firms.\\nAnalysis: tariffs or trade wars can disrupt supply chains and reduce global efficiency.\\nApplication: use it for protectionism, deglobalisation and exchange rate questions.\\nEvaluation: it works well because the USA can be used as both a developed economy and a policy shock source."),
-  card("Paper 2 prep", "full", "China evidence", "Why is China such a powerful evidence country for Edexcel Economics?", "Knowledge: China is a huge emerging economy and a key manufacturing and trade power.\\nAnalysis: its growth affects global supply chains, commodity demand and export markets.\\nApplication: use it for questions on development, globalisation, FDI, exchange rates and trade.\\nEvaluation: it is one of the most flexible examples because it links macroeconomics, development and globalisation."),
-  card("Paper 2 prep", "full", "China evidence", "How can I use China for growth and development questions?", "Knowledge: China has used export-led growth, investment and industrial policy to raise output rapidly.\\nAnalysis: this shows how supply-side factors and capital deepening can drive growth.\\nApplication: use it for development, productivity, infrastructure and poverty reduction.\\nEvaluation: it is useful because it shows growth can be fast, but may be uneven across regions and sectors."),
-  card("Paper 2 prep", "full", "China evidence", "How can I use China for global trade and supply-chain questions?", "Knowledge: China is deeply embedded in world manufacturing and trade flows.\\nAnalysis: shocks in China can ripple through world prices, shipping, exports and input costs.\\nApplication: use it for globalisation, protectionism, shortages and current account questions.\\nEvaluation: it is especially strong evidence for interdependence in the world economy."),
-  card("Paper 2 prep", "full", "China evidence", "How can I use China for exchange-rate questions?", "Knowledge: China has often managed its exchange rate more actively than a free-floating currency.\\nAnalysis: exchange-rate policy can support exports, control capital flows or reduce volatility.\\nApplication: use it for competitiveness, trade balances and capital controls.\\nEvaluation: it is useful because it shows that exchange rates are also policy tools, not just market outcomes."),
-  card("Paper 2 prep", "full", "China evidence", "How can I use China for inflation or deflation questions?", "Knowledge: China has faced periods of very different price pressures.\\nAnalysis: weak demand, overcapacity or slower exports can create disinflationary pressure.\\nApplication: use it for AD/AS, global demand shocks and policy responses.\\nEvaluation: it shows that macro policy has to respond differently depending on whether the shock is demand or supply driven."),
-  card("Paper 2 prep", "full", "Exam technique", "What are the most common Edexcel Paper 2 question types?", "Knowledge: short definitions, explain questions, data-response questions, diagram questions and assess questions appear repeatedly.\\nAnalysis: each type rewards a different mix of knowledge, application, analysis and evaluation.\\nApplication: use the question stem to decide whether to prioritise KAA or evaluation.\\nEvaluation: top answers stay tightly focused on the command word."),
-  card("Paper 2 prep", "full", "Exam technique", "How should I structure a 10 or 12 marker in EconplusDal style?", "Knowledge: start with a clear point and define the key term.\\nAnalysis: explain the chain from cause to effect in 2-3 steps.\\nApplication: add a country, policy or market example.\\nEvaluation: finish with a brief judgment about when the point matters most."),
-  card("Paper 2 prep", "full", "Exam technique", "How should I structure a 20 or 25 marker in EconplusDal style?", "Knowledge: use 2-3 developed paragraphs.\\nAnalysis: each paragraph should contain a chain of reasoning, not just a list.\\nApplication: use a real example or country reference in every main paragraph.\\nEvaluation: compare alternatives, explain conditions, and end with a decisive overall judgment."),
-  card("Paper 2 prep", "full", "Exam technique", "How do EconplusDal-style packs help with essays?", "Knowledge: EconplusDal publishes Analysis and Evaluation Packs, plus separate Examples for Exams and Diagrams and Definitions packs.\\nAnalysis: that structure means you revise definitions, diagrams, examples and evaluation as separate but linked skills.\\nApplication: copy that split in your revision by learning a diagram, an example and a judgment for each topic.\\nEvaluation: that is more efficient than only memorising definitions."),
-  card("Paper 2 prep", "full", "Exam technique", "What should my final judgement sound like?", "Knowledge: do not end with 'it depends' only.\\nAnalysis: state which side is stronger and why.\\nApplication: refer to the size of the shock, time horizon, or whether the country is developed or emerging.\\nEvaluation: a top answer narrows the conditions under which the policy works best."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for monetary policy?", "Use AD/AS or the money market / interest-rate transmission mechanism.\nAD shifts left when rates rise, reducing inflation but also growth.\nApplication: rate hikes, QE, confidence effects."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for fiscal policy?", "Use AD/AS.\nHigher government spending or lower taxes shift AD right; austerity shifts AD left.\nApplication: budget deficits, recession support and crowding out."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for the current account deficit?", "Use AD/AS, exchange rate, or circular flow depending on the focus.\nA stronger currency can worsen net exports, while a depreciation can improve them if conditions hold."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for economic growth?", "Use AD/AS and LRAS.\nShort-run growth comes from higher AD; long-run growth comes from LRAS shifting right.\nApplication: investment, innovation, education and productivity."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for development?", "Use PPC, AD/AS or a poverty/inequality diagram depending on the focus.\nApplication: growth, living standards, industrialisation and structural change."),
-  card("Paper 2 prep", "full", "Diagram choice", "Which diagram should I use for a trade war?", "Use tariff, import market, or AD/AS with net exports.\nApplication: tariffs, retaliation, higher prices and lower trade volumes."),
-  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use the USA as evidence?", "Use the USA for a developed-economy comparison, Federal Reserve policy, productivity, inequality, trade deficits and global spillovers.\nJudgement: strongest when the question needs a large advanced economy with major world influence."),
-  card("Paper 2 prep", "full", "Paper 2 evidence", "When should I use China as evidence?", "Use China for an emerging-economy example, export-led growth, FDI, supply chains, exchange rates, inflation and development.\nJudgement: strongest when the question needs a fast-growing economy that affects the whole world."),
-  card("Paper 2 prep", "full", "Paper 2 evidence", "How do I compare the USA and China in essays?", "USA = developed, high productivity, big consumer market, Fed influence.\nChina = emerging, manufacturing hub, export-led growth, global supply-chain power.\nJudgement: together they cover most macro and globalisation questions."),
-  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 10-marker into a top answer?", "Point: define the key term.\nAnalysis: explain the chain of cause and effect.\nApplication: add USA or China evidence.\nEvaluation: say when the effect is strongest or weakest."),
-  card("Paper 2 prep", "full", "Exam technique", "How do I turn a 20/25-marker into a top answer?", "Use 2-3 developed paragraphs.\nEach paragraph should include knowledge, analysis, application and evaluation.\nFinish with a clear judgement about the most important factor."),
-  card("Paper 2 prep", "full", "Exam technique", "What common question types should I recognise fast?", "Definitions, explain questions, data-response questions, diagram questions and assess questions.\nJudgement: command words decide whether the answer should lean toward KAA or evaluation."),
-
-];
-
-const ECONOMICS_PAPER2_PREP_CONDENSED = [
-  card("Paper 2 prep", "condensed", "Diagram choice", "Demand-pull inflation", "AD/AS. AD right, PL up, Y may rise short run."),
-  card("Paper 2 prep", "condensed", "Diagram choice", "Cost-push inflation", "AD/AS. SRAS left, PL up, Y down."),
-  card("Paper 2 prep", "condensed", "Diagram choice", "Exchange rates", "Foreign exchange market. Depreciation or appreciation."),
-  card("Paper 2 prep", "condensed", "USA evidence", "USA in essays", "Advanced economy, Fed, productivity, inequality, trade and deficits."),
-  card("Paper 2 prep", "condensed", "China evidence", "China in essays", "Emerging giant, exports, FDI, supply chains, exchange rates."),
-  card("Paper 2 prep", "condensed", "Exam technique", "Paper 2 structure", "10/12 = K + A + A + brief E. 20/25 = 2-3 paragraphs, applications, judgment."),
-  card("Paper 2 prep", "condensed", "Diagram choice", "Monetary policy", "AD/AS or money market. Higher rates -> AD left."),
-  card("Paper 2 prep", "condensed", "Diagram choice", "Fiscal policy", "AD/AS. Higher G or lower taxes -> AD right."),
-  card("Paper 2 prep", "condensed", "Diagram choice", "Growth/development", "AD/AS + LRAS or PPC depending on focus."),
-  card("Paper 2 prep", "condensed", "Paper 2 evidence", "USA and China", "USA = developed giant. China = emerging giant. Use both flexibly."),
-
+  card("Theme 4", "condensed", "Globalisation and trade", "Theme 4: globalisation", "Globalisation links economies through trade, finance, migration and multinational firms. It can raise efficiency but also create volatility and uneven gains."),
+  card("Theme 4", "condensed", "Globalisation and trade", "Theme 4: trade and protectionism", "Comparative advantage supports free trade, while protectionism may protect jobs or strategic industries but can raise prices and reduce welfare."),
+  card("Theme 4", "condensed", "Exchange rates", "Theme 4: exchange rates", "An appreciation helps control import prices but hurts exports; a depreciation boosts competitiveness but can add inflation."),
+  card("Theme 4", "condensed", "Financial markets", "Theme 4: finance and investment", "Financial markets and FDI can fund growth, but capital flows can be unstable and affect exchange rates."),
+  card("Theme 4", "condensed", "Emerging and developing economies", "Theme 4: development", "Development is broader than GDP. Aid, debt relief, human capital and institutions matter, but corruption and weak governance can limit progress."),
+  card("Theme 4", "condensed", "Evaluation", "Theme 4: essay judgement", "Judgement usually depends on the country, the time horizon and whether the goal is growth, stability, equality or external balance.")
 ];
 
 const ALL_CARDS = [
   ...EDUCATION_FULL,
   ...EDUCATION_CONDENSED,
+  ...GENDER_TRENDS_FULL,
+  ...GENDER_TRENDS_CONDENSED,
+  ...GENDER_EXTERNAL_FULL,
+  ...GENDER_EXTERNAL_CONDENSED,
+  ...GENDER_INTERNAL_FULL,
+  ...GENDER_INTERNAL_CONDENSED,
+  ...ETHNICITY_TRENDS_FULL,
+  ...ETHNICITY_CONDENSED,
+  ...ETHNICITY_EXTERNAL_FULL,
+  ...ETHNICITY_INTERNAL_FULL,
+  ...SELECTION_FULL,
+  ...SELECTION_CONDENSED,
+  ...MARKET_FULL,
+  ...MARKET_CONDENSED,
+  ...EQUALITY_POLICY_FULL,
+  ...EQUALITY_CONDENSED,
+  ...GLOBALISATION_EDU_FULL,
+  ...GLOBALISATION_EDU_CONDENSED,
+  ...PRIVATE_SCHOOL_FULL,
+  ...PRIVATE_SCHOOL_CONDENSED,
   ...METHODS_IN_CONTEXT_FULL,
   ...METHODS_IN_CONTEXT_CONDENSED,
   ...THEORY_METHODS_FULL,
   ...THEORY_METHODS_CONDENSED,
-  ...SOCIOLOGY_PREDICTIONS_FULL,
-  ...SOCIOLOGY_PREDICTIONS_CONDENSED,
   ...ECONOMICS_THEME2_FULL,
   ...ECONOMICS_THEME2_CONDENSED,
   ...ECONOMICS_THEME4_FULL,
-  ...ECONOMICS_THEME4_CONDENSED,
-  ...ECONOMICS_PAPER2_PREP_FULL,
-  ...ECONOMICS_PAPER2_PREP_CONDENSED
+  ...ECONOMICS_THEME4_CONDENSED
 ];
 
 
@@ -1719,7 +1616,7 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 const GROUP_META = [
-  { name: "Education", note: "Functionalism, Marxism, gender, class, ethnicity, policies" },
+  { name: "Education", note: "Functionalism, Marxism, New Right, class, gender, ethnicity, selection, marketisation, policies, globalisation" },
   { name: "Research Methods + Methods in Context", note: "Methods in context, research methods, theory and methods" }
 ];
 
@@ -1734,13 +1631,11 @@ const UNIT_TO_GROUP = {
 const GROUP_META_BY_SUBJECT = {
   Sociology: [
     { name: 'Education', note: 'Functionalism, Marxism, New Right, class, gender, ethnicity, selection, marketisation, policies, globalisation' },
-    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' },
-    { name: 'Predictions', note: 'Likely questions, mini tests and cram sheets' }
+    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' }
   ],
   Economics: [
     { name: 'Theme 2', note: 'UK performance, policy and inequality' },
-    { name: 'Theme 4', note: 'Globalisation, trade and development' },
-    { name: 'Paper 2 prep', note: 'Diagrams, evidence packs, KAA and judgement' }
+    { name: 'Theme 4', note: 'Globalisation, trade and development' }
   ]
 };
 
@@ -1761,7 +1656,6 @@ let typeMode = localStorage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
 let selectedGroups = loadSelectedGroups();
 let selectedTopics = loadSelectedTopics();
-let topicClearFlags = loadTopicClearFlags();
 let typedAnswers = loadTypedAnswers();
 
 
@@ -1774,16 +1668,6 @@ function loadCondensedMode() {
 }
 function saveCondensedMode() {
   try { localStorage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
-}
-function loadPredictionSnapshot() {
-  try { return JSON.parse(localStorage.getItem(subjectKey('prediction_snapshot'))); }
-  catch { return null; }
-}
-function savePredictionSnapshot(snapshot) {
-  try { localStorage.setItem(subjectKey('prediction_snapshot'), JSON.stringify(snapshot)); } catch {}
-}
-function clearPredictionSnapshot() {
-  try { localStorage.removeItem(subjectKey('prediction_snapshot')); } catch {}
 }
 function loadSelectedSubject() {
   try {
@@ -1803,15 +1687,6 @@ function groupsForSubject(subject) {
 function defaultGroupsForSubject(subject) {
   return groupsForSubject(subject);
 }
-
-/* ── FIX 1: loadSelectedGroups ────────────────────────────────────────────
-   The old version wrote a `selected_groups_cleared` flag to localStorage
-   whenever selectedGroups was empty (which happened silently on every
-   subject-switch because the old subject's groups filtered to nothing).
-   On next load it short-circuited to [] and the deck never recovered.
-   Fix: drop the cleared branch entirely and just use the saved array,
-   falling back to defaults when empty.
-   ───────────────────────────────────────────────────────────────────────── */
 function loadSelectedGroups() {
   try {
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_groups')));
@@ -1823,16 +1698,9 @@ function loadSelectedGroups() {
   }
 }
 
-/* ── FIX 2: saveSelectedGroups ────────────────────────────────────────────
-   No longer writes the `selected_groups_cleared` flag that caused
-   future loads to return [] even when groups should be active.
-   ───────────────────────────────────────────────────────────────────────── */
 function saveSelectedGroups() {
-  try {
-    localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups));
-  } catch {}
+  try { localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
 }
-
 function loadSelectedTopics() {
   try {
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_topics')));
@@ -1843,17 +1711,6 @@ function loadSelectedTopics() {
 }
 function saveSelectedTopics() {
   try { localStorage.setItem(subjectKey('selected_topics'), JSON.stringify(selectedTopics)); } catch {}
-}
-function loadTopicClearFlags() {
-  try {
-    const saved = JSON.parse(localStorage.getItem(subjectKey('topic_clear_flags')));
-    return saved && typeof saved === 'object' && !Array.isArray(saved) ? saved : {};
-  } catch {
-    return {};
-  }
-}
-function saveTopicClearFlags() {
-  try { localStorage.setItem(subjectKey('topic_clear_flags'), JSON.stringify(topicClearFlags)); } catch {}
 }
 function loadTypedAnswers() {
   try { return JSON.parse(localStorage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
@@ -1867,162 +1724,55 @@ function cardGroup(cardData) {
   const unit = String(cardData.unit || '');
   if (unit === 'Education') return 'Education';
   if (unit === 'Research Methods + Methods in Context' || unit === 'Theory & Methods') return 'Research Methods + Methods in Context';
-  if (unit === 'Predictions') return 'Predictions';
   if (unit === 'Theme 2') return 'Theme 2';
   if (unit === 'Theme 4') return 'Theme 4';
-  if (unit === 'Paper 2 prep') return 'Paper 2 prep';
   return unit || 'Education';
 }
 function cardSubject(cardData) {
   const group = cardGroup(cardData);
-  if (group === 'Theme 2' || group === 'Theme 4' || group === 'Paper 2 prep') return 'Economics';
+  if (group === 'Theme 2' || group === 'Theme 4') return 'Economics';
   return 'Sociology';
 }
 function availableTopicsForGroup(groupName) {
-
   return [...new Set(
     ALL_CARDS
       .filter(cardData => cardSubject(cardData) === selectedSubject && cardGroup(cardData) === groupName)
       .map(cardData => cardData.t)
   )];
 }
-function isGroupCleared(groupName) {
-  return !!topicClearFlags && !!topicClearFlags[groupName];
-}
-
-function setGroupCleared(groupName, cleared) {
-  if (!topicClearFlags || typeof topicClearFlags !== 'object' || Array.isArray(topicClearFlags)) {
-    topicClearFlags = {};
-  }
-  if (cleared) topicClearFlags[groupName] = true;
-  else delete topicClearFlags[groupName];
-  saveTopicClearFlags();
-}
-
-function setSelectedTopicsForGroup(groupName, topics) {
-  if (!selectedTopics || typeof selectedTopics !== 'object' || Array.isArray(selectedTopics)) {
-    selectedTopics = {};
-  }
-  const arr = Array.isArray(topics) ? topics : [];
-  selectedTopics[groupName] = arr;
-  setGroupCleared(groupName, arr.length === 0);
-  saveSelectedTopics();
-}
-
 function selectedTopicsForGroup(groupName) {
   const available = availableTopicsForGroup(groupName);
-  if (isGroupCleared(groupName)) return [];
-  if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) return available;
   const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-  const merged = [...saved];
-  available.forEach(topic => {
-    if (!merged.includes(topic)) merged.push(topic);
-  });
-  return merged;
+  return saved.length ? saved : available;
 }
 
-/* ── FIX 3: normalizeSelections ───────────────────────────────────────────
-   Two changes:
-   a) After filtering selectedGroups, guard against an empty result by
-      restoring defaults. This prevents stale subject-switch data from
-      permanently hiding all cards.
-   b) REMOVED the block that unconditionally deleted
-      topicClearFlags['Paper 2 prep'], which made it impossible to ever
-      toggle that section off via the "None" button.
-   ───────────────────────────────────────────────────────────────────────── */
 function normalizeSelections() {
   const validGroups = groupsForSubject(selectedSubject);
-  if (!Array.isArray(selectedGroups)) {
+  if (!Array.isArray(selectedGroups) || !selectedGroups.length) {
     selectedGroups = [...validGroups];
   } else {
     selectedGroups = selectedGroups.filter(group => validGroups.includes(group));
-    // Guard: stale data from a subject-switch leaves an empty array — restore defaults
     if (!selectedGroups.length) selectedGroups = [...validGroups];
   }
 
   if (!selectedTopics || typeof selectedTopics !== 'object' || Array.isArray(selectedTopics)) {
     selectedTopics = {};
   }
-  if (!topicClearFlags || typeof topicClearFlags !== 'object' || Array.isArray(topicClearFlags)) {
-    topicClearFlags = {};
-  }
 
-  // NOTE: The old forced-repair block for 'Paper 2 prep' has been removed.
-  // It prevented users from toggling that section off.
-
-  validGroups.forEach(groupName => {
+  selectedGroups.forEach(groupName => {
     const available = availableTopicsForGroup(groupName);
-    if (isGroupCleared(groupName)) {
-      selectedTopics[groupName] = [];
-      return;
-    }
-    if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) {
-      selectedTopics[groupName] = available;
-      return;
-    }
-    const saved = Array.isArray(selectedTopics[groupName])
-      ? selectedTopics[groupName].filter(topic => available.includes(topic))
-      : [];
-    selectedTopics[groupName] = saved.length > 0 ? saved : available;
-  });
-
-  Object.keys(selectedTopics).forEach(groupName => {
-    if (!validGroups.includes(groupName)) delete selectedTopics[groupName];
-  });
-  Object.keys(topicClearFlags).forEach(groupName => {
-    if (!validGroups.includes(groupName)) delete topicClearFlags[groupName];
+    const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
+    selectedTopics[groupName] = saved.length ? saved : available;
   });
 
   saveSelectedGroups();
   saveSelectedTopics();
-  saveTopicClearFlags();
 }
-
-function isPredictionsOnlyView() {
-  return selectedSubject === 'Sociology' &&
-    Array.isArray(selectedGroups) &&
-    selectedGroups.length === 1 &&
-    selectedGroups[0] === 'Predictions';
-}
-
-function togglePredictionsOnlyView() {
-  if (selectedSubject !== 'Sociology') return;
-
-  if (!isPredictionsOnlyView()) {
-    savePredictionSnapshot({
-      selectedGroups: [...selectedGroups],
-      selectedTopics: JSON.parse(JSON.stringify(selectedTopics || {})),
-      topicClearFlags: JSON.parse(JSON.stringify(topicClearFlags || {}))
-    });
-    selectedGroups = ['Predictions'];
-    selectedTopics = { Predictions: availableTopicsForGroup('Predictions') };
-  } else {
-    const snapshot = loadPredictionSnapshot();
-    if (snapshot && Array.isArray(snapshot.selectedGroups) && snapshot.selectedGroups.length) {
-      selectedGroups = snapshot.selectedGroups;
-      selectedTopics = snapshot.selectedTopics && typeof snapshot.selectedTopics === 'object' && !Array.isArray(snapshot.selectedTopics)
-        ? snapshot.selectedTopics
-        : {};
-      topicClearFlags = snapshot.topicClearFlags && typeof snapshot.topicClearFlags === 'object' && !Array.isArray(snapshot.topicClearFlags)
-        ? snapshot.topicClearFlags
-        : {};
-    } else {
-      selectedGroups = loadSelectedGroups();
-      selectedTopics = loadSelectedTopics();
-      topicClearFlags = loadTopicClearFlags();
-    }
-    clearPredictionSnapshot();
-  }
-
-  normalizeSelections();
-  saveSelectedGroups();
+function setSelectedTopicsForGroup(groupName, topics) {
+  const available = availableTopicsForGroup(groupName);
+  const cleaned = [...new Set(topics)].filter(topic => available.includes(topic));
+  selectedTopics[groupName] = cleaned.length ? cleaned : available;
   saveSelectedTopics();
-  flipped = false;
-  currentId = null;
-  updateProfileUI();
-  buildDeck();
-  updateReviewQueue();
-  populateTypingArea();
 }
 function getTypedAnswer(cardData) { return typedAnswers[typedKey(cardData)] || ''; }
 function setTypedAnswer(cardData, value) {
@@ -2129,8 +1879,7 @@ function topicSummaryText() {
   const fallbackGroups = groupsForSubject(selectedSubject);
   const chunkCount = fallbackGroups.reduce((total, groupName) => total + selectedTopicsForGroup(groupName).length, 0);
   const sectionCount = fallbackGroups.length || selectedGroups.length || 0;
-  const predictionTag = isPredictionsOnlyView() ? ' · Predictions only' : '';
-  return `${groupLabel} · ${sectionCount} sections · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}${predictionTag}`;
+  return `${groupLabel} · ${sectionCount} sections · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}`;
 }
 
 function renderSubjectButtons() {
@@ -2157,19 +1906,11 @@ function renderTopicFilters() {
     const meta = ((GROUP_META_BY_SUBJECT[selectedSubject] || []).find(item => item.name === groupName)) || { note: '' };
     const topics = availableTopicsForGroup(groupName);
     const checkedTopics = selectedTopicsForGroup(groupName);
-    const allSelected = topics.length > 0 && checkedTopics.length === topics.length;
-    const noneSelected = checkedTopics.length === 0;
     return `
       <details class="topic-accordion" open>
         <summary>
-          <div class="topic-summary-left">
-            <span><span class="summary-arrow">›</span>${groupName}</span>
-            <span class="summary-meta">${meta.note}</span>
-          </div>
-          <div class="topic-summary-actions">
-            <button type="button" class="mini-topic-btn ${allSelected ? 'active' : ''}" data-action="select-all" data-group="${groupName}">All</button>
-            <button type="button" class="mini-topic-btn ${noneSelected ? 'active' : ''}" data-action="clear" data-group="${groupName}">None</button>
-          </div>
+          <span>${groupName}</span>
+          <span class="summary-meta">${meta.note}</span>
         </summary>
         <div class="topic-accordion-body">
           <div class="topic-grid">
@@ -2204,31 +1945,9 @@ function renderTopicFilters() {
       populateTypingArea();
     });
   });
-
-  host.querySelectorAll('button.mini-topic-btn').forEach(btn => {
-    btn.addEventListener('click', (event) => {
-      event.preventDefault();
-      event.stopPropagation();
-      const groupName = btn.dataset.group;
-      const action = btn.dataset.action;
-      if (action === 'select-all') {
-        setSelectedTopicsForGroup(groupName, availableTopicsForGroup(groupName));
-      } else {
-        setSelectedTopicsForGroup(groupName, []);
-      }
-      normalizeSelections();
-      renderTopicFilters();
-      flipped = false;
-      currentId = null;
-      buildDeck();
-      updateReviewQueue();
-      populateTypingArea();
-    });
-  });
 }
 
 function updateProfileUI() {
-
   const profileButtons = document.querySelectorAll('.profile-pill');
   profileButtons.forEach(btn => btn.classList.remove('active'));
 
@@ -2280,7 +1999,6 @@ async function switchProfile(name) {
   condensedMode = loadCondensedMode();
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
-  topicClearFlags = loadTopicClearFlags();
   typedAnswers = loadTypedAnswers();
   reviewsCache = loadLocalReviews();
   streak = loadLocalStreak();
@@ -2311,7 +2029,6 @@ async function switchSubject(name) {
   saveSelectedSubject();
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
-  topicClearFlags = loadTopicClearFlags();
   normalizeSelections();
   flipped = false;
   currentId = null;
@@ -2347,12 +2064,6 @@ async function loadProfiles() {
 function isMissingCardColumn(error) {
   const text = `${error?.message || ''} ${error?.details || ''} ${error?.hint || ''}`.toLowerCase();
   return text.includes('slug') || text.includes('variant') || text.includes('unit') || error?.code === '42703';
-}
-
-function isMissingUniqueConstraint(error) {
-  return error?.code === '42P10' || (
-    `${error?.message || ''}`.toLowerCase().includes('no unique or exclusion constraint')
-  );
 }
 function chunkArray(items, size = 50) {
   const chunks = [];
@@ -2426,24 +2137,33 @@ async function syncCardCatalog() {
     }
   });
 
-  const uniqueInserts = Array.from(new Map(inserts.map(i => [i.slug || `${i.topic}|${i.question}`, i])).values());
-  for (const batch of chunkArray(uniqueInserts)) {
+  for (const batch of chunkArray(inserts)) {
     if (!batch.length) continue;
-    const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
-    if (error && error.code !== '23505') throw error;
-  }
-
-  const uniqueUpdates = Array.from(new Map(updates.map(u => [u.id, u])).values());
-  for (const batch of chunkArray(uniqueUpdates)) {
-    if (!batch.length) continue;
-    const { error } = await db.from('cards').upsert(batch, { onConflict: 'id' });
+    const { error } = await db.from('cards').insert(batch);
     if (error) throw error;
   }
 
+  for (const batch of chunkArray(updates)) {
+    if (!batch.length) continue;
+    if (extendedCardSchema) {
+      const { error } = await db.from('cards').upsert(batch);
+      if (error) throw error;
+      continue;
+    }
+    for (const row of batch) {
+      const { error } = await db.from('cards')
+        .update({ topic: row.topic, question: row.question, answer: row.answer })
+        .eq('id', row.id);
+      if (error) throw error;
+    }
+  }
+
   const refreshed = await fetchCardRows();
+  const localBySlug = new Map(ALL_CARDS.map(card => [card.slug, card]));
   refreshed.forEach(row => {
-    const local = ALL_CARDS.find(card => card.slug === row.slug || (card.t === row.topic && card.q === row.question));
-    if (local) cardIdMap[cid(local)] = row.id;
+    const local = localBySlug.get(row.slug) || ALL_CARDS.find(card => card.t === row.topic && card.q === row.question);
+    if (!local) return;
+    cardIdMap[cid(local)] = row.id;
   });
 }
 
@@ -2455,18 +2175,21 @@ function activeCatalog() {
     return cardSubject(cardData) === selectedSubject;
   });
 
-  return cards.filter(cardData => {
+  const filtered = cards.filter(cardData => {
     const groupName = cardGroup(cardData);
-    if (!selectedGroups.includes(groupName)) return false;
+    const groupOk = selectedGroups.includes(groupName);
+    if (!groupOk) return false;
     const topics = selectedTopicsForGroup(groupName);
     return topics.includes(cardData.t);
   });
+
+  if (filtered.length) return filtered;
+  return cards.length ? cards : ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
 }
 
 function currentCard() { return deck[idx]; }
 
 function updateReviewQueue() {
-
   const now = Date.now();
   const reviewQueue = deck.filter(cardData => cardState(cardData).due <= now);
   reviewQueue.sort((a, b) => cardState(a).due - cardState(b).due);
@@ -2485,17 +2208,6 @@ function nextDueText() {
   const now = Date.now();
   const future = activeCatalog().map(cardData => cardState(cardData).due).filter(ts => ts > now).sort((a, b) => a - b);
   return future.length ? formatDate(future[0]) : 'Now';
-}
-
-function formatDate(ts) {
-  const d = new Date(ts);
-  const now = new Date();
-  const diffMs = d - now;
-  const diffMins = Math.round(diffMs / 60000);
-  if (diffMins < 60) return `${diffMins}m`;
-  const diffHours = Math.round(diffMins / 60);
-  if (diffHours < 24) return `${diffHours}h`;
-  return d.toLocaleDateString();
 }
 
 function updateStats() {
@@ -2544,20 +2256,24 @@ function renderEmptyState() {
   updateStats();
 }
 
-function shuffle(arr) {
-  for (let i = arr.length - 1; i > 0; i--) {
-    const j = Math.floor(Math.random() * (i + 1));
-    [arr[i], arr[j]] = [arr[j], arr[i]];
-  }
-  return arr;
-}
-
 function buildDeck() {
   const mode = document.getElementById('modeSel').value;
   const now = Date.now();
   normalizeSelections();
 
-  let cards = [...activeCatalog()];
+  let source = activeCatalog();
+  if (!source.length) {
+    // Self-heal from any stale saved filters by falling back to the active subject deck.
+    source = ALL_CARDS.filter(cardData => cardSubject(cardData) === selectedSubject && cardData.variant === (condensedMode ? 'condensed' : 'full'));
+  }
+  if (!source.length) {
+    source = ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
+  }
+  if (!source.length) {
+    source = [...ALL_CARDS];
+  }
+
+  let cards = [...source];
 
   if (mode === 'due') {
     cards = cards.filter(cardData => cardState(cardData).due <= now);
@@ -2571,8 +2287,10 @@ function buildDeck() {
   }
 
   if (!cards.length) {
-    renderEmptyState();
-    return;
+    cards = [...source];
+  }
+  if (!cards.length) {
+    cards = [...ALL_CARDS];
   }
 
   deck = cards;
@@ -2586,7 +2304,6 @@ function buildDeck() {
 }
 
 function render() {
-
   if (!deck.length) {
     renderEmptyState();
     return;
@@ -2736,9 +2453,7 @@ async function init() {
       setSyncStatus('ok');
     } catch (error) {
       console.error('Supabase unavailable, running from local cache:', error);
-      if (error && (error.code === '42P01' || isMissingUniqueConstraint(error))) {
-        showSetupModal();
-      }
+      if (error && error.code === '42P01') showSetupModal();
       supabaseReady = false;
       setSyncStatus('error', 'Offline mode');
     } finally {
@@ -2797,7 +2512,6 @@ document.getElementById('modeSel').addEventListener('change', () => {
   populateTypingArea();
 });
 document.getElementById('condensedToggle').addEventListener('click', () => setCondensedMode(!condensedMode));
-document.getElementById('predictionsToggle')?.addEventListener('click', () => togglePredictionsOnlyView());
 document.getElementById('shuffleBtn').addEventListener('click', () => {
   deck = shuffle([...deck]);
   idx = 0;

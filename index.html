@@ -1181,7 +1181,10 @@ insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
   on conflict (name) do nothing;
 ───────────────────────────────────────────────────────────────────────── */
 
-const SQL_SETUP = `create extension if not exists pgcrypto;
+const SQL_SETUP = `-- ── Run this in Supabase → SQL Editor ──────────────────────────────────────
+-- Safe to run on both fresh databases and existing ones.
+
+create extension if not exists pgcrypto;
 
 create table if not exists profiles (
   id          uuid primary key default gen_random_uuid(),
@@ -1210,6 +1213,12 @@ create table if not exists cards (
   updated_at timestamptz not null default now()
 );
 
+-- IMPORTANT: this unique index is required for upsert to work.
+-- If you already have a cards table, this adds it without data loss.
+alter table cards add column if not exists slug    text;
+alter table cards add column if not exists unit    text;
+alter table cards add column if not exists variant text default 'full';
+alter table cards add column if not exists updated_at timestamptz default now();
 create unique index if not exists cards_slug_idx on cards(slug);
 
 create table if not exists reviews (
@@ -1873,6 +1882,20 @@ function setGroupCleared(groupName, cleared) {
   saveTopicClearFlags();
 }
 
+// Sets the selected topics for a group and syncs cleared state + localStorage.
+// This function was missing in the previous version, causing all topic filter
+// interactions (checkboxes, All / None buttons) to throw a ReferenceError.
+function setSelectedTopicsForGroup(groupName, topics) {
+  if (!selectedTopics || typeof selectedTopics !== 'object' || Array.isArray(selectedTopics)) {
+    selectedTopics = {};
+  }
+  const arr = Array.isArray(topics) ? topics : [];
+  selectedTopics[groupName] = arr;
+  // Mirror cleared-state so normalizeSelections() respects the user's choice
+  setGroupCleared(groupName, arr.length === 0);
+  saveSelectedTopics();
+}
+
 function selectedTopicsForGroup(groupName) {
   const available = availableTopicsForGroup(groupName);
   if (isGroupCleared(groupName)) return [];
@@ -1911,8 +1934,13 @@ function normalizeSelections() {
       selectedTopics[groupName] = available;
       return;
     }
-    const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-    selectedTopics[groupName] = saved;
+    const saved = Array.isArray(selectedTopics[groupName])
+      ? selectedTopics[groupName].filter(topic => available.includes(topic))
+      : [];
+    // Guard: if saved is empty but the group is NOT explicitly cleared,
+    // restore all available topics so a stale empty array never silently
+    // hides cards.
+    selectedTopics[groupName] = saved.length > 0 ? saved : available;
   });
 
   Object.keys(selectedTopics).forEach(groupName => {
@@ -2295,6 +2323,14 @@ function isMissingCardColumn(error) {
   const text = `${error?.message || ''} ${error?.details || ''} ${error?.hint || ''}`.toLowerCase();
   return text.includes('slug') || text.includes('variant') || text.includes('unit') || error?.code === '42703';
 }
+
+// Returns true when the upsert fails because the slug column has no unique
+// constraint in Postgres (PostgREST surfaces this as code 42P10).
+function isMissingUniqueConstraint(error) {
+  return error?.code === '42P10' || (
+    `${error?.message || ''}`.toLowerCase().includes('no unique or exclusion constraint')
+  );
+}
 function chunkArray(items, size = 50) {
   const chunks = [];
   for (let i = 0; i < items.length; i += size) chunks.push(items.slice(i, i + size));
@@ -2371,7 +2407,18 @@ async function syncCardCatalog() {
     if (!batch.length) continue;
     if (extendedCardSchema) {
       const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
-      if (error) throw error;
+      if (error) {
+        if (isMissingUniqueConstraint(error)) {
+          // Slug unique index is missing – fall back to individual inserts,
+          // ignoring unique-violation errors so existing rows are preserved.
+          for (const row of batch) {
+            const { error: ie } = await db.from('cards').insert([row]);
+            if (ie && ie.code !== '23505') throw ie;
+          }
+        } else {
+          throw error;
+        }
+      }
     } else {
       const { error } = await db.from('cards').insert(batch);
       if (error) throw error;
@@ -2382,7 +2429,22 @@ async function syncCardCatalog() {
     if (!batch.length) continue;
     if (extendedCardSchema) {
       const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
-      if (error) throw error;
+      if (error) {
+        if (isMissingUniqueConstraint(error)) {
+          // Fallback: update each row by id instead
+          for (const row of batch) {
+            if (!row.id) continue;
+            const { error: ue } = await db.from('cards')
+              .update({ topic: row.topic, question: row.question, answer: row.answer,
+                        unit: row.unit, variant: row.variant, slug: row.slug,
+                        updated_at: row.updated_at })
+              .eq('id', row.id);
+            if (ue) throw ue;
+          }
+        } else {
+          throw error;
+        }
+      }
       continue;
     }
     for (const row of batch) {
@@ -2680,10 +2742,15 @@ async function init() {
       setSyncStatus('ok');
     } catch (error) {
       console.error('Supabase unavailable, running from local cache:', error);
-      if (error && error.code === '42P01') showSetupModal();
+      // Show setup modal for missing tables (42P01) OR missing unique index (42P10)
+      if (error && (error.code === '42P01' || isMissingUniqueConstraint(error))) {
+        showSetupModal();
+      }
       supabaseReady = false;
       setSyncStatus('error', 'Offline mode');
     } finally {
+      // Always rebuild the deck after Supabase settles (success or failure)
+      // so cards are guaranteed to appear even in full local/offline mode.
       normalizeSelections();
       buildDeck();
       updateReviewQueue();

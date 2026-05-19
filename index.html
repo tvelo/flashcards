@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>AQA Sociology Paper 1 Flashcards</title>
+<title>AQA Psychology &amp; Economics Flashcards</title>
 <link rel="manifest" href="manifest.json" />
 <style>
 :root{
@@ -798,7 +798,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 body {
   transition: background-color 0.45s ease;
 }
-/* Sociology: default blue-purple (root vars, no override needed) */
+/* Psychology: default blue-purple */
 
 /* Economics: emerald-teal shift */
 html[data-subject="Economics"] {
@@ -845,6 +845,35 @@ html[data-subject="Economics"] .sql-btn.primary {
 html[data-subject="Economics"] .profile-pill.active {
   box-shadow:0 10px 24px rgba(52,211,153,.28) !important;
 }
+
+/* ── Quick-select row ───────────────────────────────────────────── */
+.quick-select-row{display:flex;align-items:center;gap:8px;padding:8px 0 10px;flex-wrap:wrap}
+.quick-sel-btn{
+  min-height:30px !important; padding:0 13px !important; border-radius:999px !important;
+  font-size:12px !important; font-weight:600 !important; box-shadow:none !important;
+  background:rgba(122,168,255,.10) !important; border:1px solid rgba(122,168,255,.22) !important;
+  color:#dce7ff !important; transition:background .18s ease, opacity .18s ease;
+}
+.quick-sel-btn.danger{
+  background:rgba(255,107,107,.08) !important; border-color:rgba(255,107,107,.22) !important;
+  color:#ffd9d9 !important;
+}
+.quick-sel-btn:disabled{opacity:.3 !important; cursor:default !important; pointer-events:none !important}
+.quick-sel-btn:not(:disabled):hover{background:rgba(122,168,255,.2) !important}
+.quick-sel-btn.danger:not(:disabled):hover{background:rgba(255,107,107,.18) !important}
+.sel-count{font-size:12px;color:var(--muted);margin-left:auto;white-space:nowrap}
+/* ── Topic subheadings ──────────────────────────────────────────── */
+.topic-subheading{
+  grid-column:1/-1; font-size:11px; font-weight:700; letter-spacing:.06em;
+  text-transform:uppercase; color:var(--muted); padding:8px 2px 2px;
+  margin-top:6px; border-top:1px solid var(--line);
+}
+.topic-subheading:first-child{margin-top:0; border-top:none; padding-top:0}
+/* Economics overrides */
+html[data-subject="Economics"] .quick-sel-btn{
+  background:rgba(52,211,153,.10) !important; border-color:rgba(52,211,153,.22) !important; color:#a7f3d0 !important;
+}
+html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rgba(52,211,153,.2) !important}
 </style>
 </head>
 <body>
@@ -923,15 +952,15 @@ html[data-subject="Economics"] .profile-pill.active {
   <div class="subject-bar" aria-label="Subject selector">
     <span class="subject-label">Subject</span>
     <div class="subject-pills">
-      <button class="subject-pill" id="btnSociology" onclick="switchSubject('Sociology')">Sociology</button>
+      <button class="subject-pill" id="btnPsychology" onclick="switchSubject('Psychology')">Psychology</button>
       <button class="subject-pill" id="btnEconomics" onclick="switchSubject('Economics')">Economics</button>
     </div>
   </div>
 
   <div class="header">
     <div class="title">
-      <h1>AQA Sociology + Economics Flashcards</h1>
-      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Sociology or Economics, then open the subject sections you want to revise. Use condensed notes, type your answer, reveal, compare, then grade honestly so weak cards come back sooner.</p>
+      <h1>AQA Psychology + Economics Flashcards</h1>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Psychology or Economics, then select the topics you want to revise. Grade honestly — weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
@@ -958,7 +987,7 @@ html[data-subject="Economics"] .profile-pill.active {
         <strong>Topic selector</strong>
         <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate.</p>
       </div>
-      <div class="filter-summary" id="topicSummary">Sociology</div>
+      <div class="filter-summary" id="topicSummary">Psychology</div>
     </div>
     <div id="topicFilter"></div>
   </section>
@@ -1055,70 +1084,12 @@ html[data-subject="Economics"] .profile-pill.active {
   </div>
 
   <div class="footer-note">
-    Progress syncs to Supabase separately for each profile. The full Sociology Paper 1 deck now lives in this file, while card IDs are synced so new topic packs can be added without losing review history.
+    Progress syncs to Supabase separately for each profile. AQA Psychology Approaches + Economics live in this file — card IDs are synced so topic packs can be added without losing history.
   </div>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.js"></script>
 <script>
-/* ─────────────────────────────────────────────────────────────────────────
-   SUPABASE SQL — run this ONCE in your Supabase SQL Editor
-   ─────────────────────────────────────────────────────────────────────────
-create extension if not exists pgcrypto;
-
-create table if not exists profiles (
-  id          uuid primary key default gen_random_uuid(),
-  name        text unique not null,
-  streak      int  default 0,
-  last_study  text default ''
-);
-
-create table if not exists cards (
-  id         uuid primary key default gen_random_uuid(),
-  topic      text not null,
-  question   text not null,
-  answer     text not null,
-  created_at timestamptz default now()
-);
-
-alter table cards add column if not exists slug text;
-alter table cards add column if not exists unit text default '';
-alter table cards add column if not exists variant text default 'full';
-alter table cards add column if not exists updated_at timestamptz default now();
-create unique index if not exists cards_slug_idx on cards(slug);
-
-create table if not exists reviews (
-  id            uuid primary key default gen_random_uuid(),
-  profile_id    uuid references profiles(id) on delete cascade,
-  card_id       uuid references cards(id)    on delete cascade,
-  ease          float   default 2.5,
-  interval_days int     default 0,
-  reps          int     default 0,
-  lapses        int     default 0,
-  due           bigint  default 0,
-  seen          int     default 0,
-  mastered      boolean default false,
-  last_reviewed bigint  default 0,
-  updated_at    timestamptz default now(),
-  unique(profile_id, card_id)
-);
-
-alter table profiles enable row level security;
-alter table cards    enable row level security;
-alter table reviews  enable row level security;
-
-drop policy if exists "anon_all_profiles" on profiles;
-drop policy if exists "anon_all_cards" on cards;
-drop policy if exists "anon_all_reviews" on reviews;
-
-create policy "anon_all_profiles" on profiles for all to anon using (true) with check (true);
-create policy "anon_all_cards"    on cards    for all to anon using (true) with check (true);
-create policy "anon_all_reviews"  on reviews  for all to anon using (true) with check (true);
-
-insert into profiles (name) values ('Elisha'), ('Lmar'), ('Isaac'), ('Isaac')
-  on conflict (name) do nothing;
-───────────────────────────────────────────────────────────────────────── */
-
 const SQL_SETUP = `create extension if not exists pgcrypto;
 
 create table if not exists profiles (
@@ -1192,317 +1163,143 @@ function card(unit, variant, topic, question, answer, options = {}) {
   };
 }
 
-const EDUCATION_FULL = [
-  card("Education", "full", "Functionalism", "What is the functionalist view of education?", "Education is seen as a positive institution that helps maintain social order, social solidarity and meritocratic role allocation."),
-  card("Education", "full", "Functionalism", "What did Durkheim say education does?", "Schools transmit shared norms and values, create social solidarity, and act as a mini society that prepares pupils for wider society."),
-  card("Education", "full", "Functionalism", "What is social solidarity?", "A sense of belonging and shared identity that keeps society together."),
-  card("Education", "full", "Functionalism", "Why did Durkheim think the education system is important?", "It helps turn individual children into social beings by teaching them the rules and values of society."),
-  card("Education", "full", "Functionalism", "What did Parsons argue about the values taught in school?", "Schools move pupils from particularistic values in the family to universalistic values where everyone is judged by the same standards."),
-  card("Education", "full", "Functionalism", "What is role allocation?", "Education sorts people by ability and helps allocate them to the jobs and roles society needs."),
-  card("Education", "full", "Functionalism", "What is meritocracy?", "A system where hard work and ability are rewarded, so achievement is based on merit rather than class background."),
-  card("Education", "full", "Functionalism", "What did Schultz mean by human capital?", "The skills, knowledge and attitudes gained through education that make workers more productive and valuable to the economy."),
-  card("Education", "full", "Functionalism", "What did Davis and Moore argue?", "Inequality in education is necessary because it motivates people to compete for the most important jobs and rewards the most talented."),
-  card("Education", "full", "Functionalism", "What is a strength of the functionalist view of education?", "It explains how education can create cohesion and prepare people for work, which fits the broad role of schooling in society."),
-  card("Education", "full", "Functionalism", "What is a criticism of the functionalist view of education?", "It is too positive and may ignore how schools can reproduce inequality rather than create equal opportunity."),
-  card("Education", "full", "Marxism", "How do Marxists view education?", "As a system that helps reproduce class inequality and supports capitalism rather than offering equal opportunity."),
-  card("Education", "full", "Marxism", "What did Althusser mean by the ideological state apparatus?", "Institutions such as education that transmit ruling-class ideas and make inequality seem normal."),
-  card("Education", "full", "Marxism", "What is the correspondence principle?", "Bowles and Gintis argued that the structure of school mirrors the structure of the workplace."),
-  card("Education", "full", "Marxism", "What is the hidden curriculum?", "The lessons pupils learn implicitly in school, such as obedience, punctuality and acceptance of hierarchy."),
-  card("Education", "full", "Marxism", "What did Bowles and Gintis say about meritocracy?", "They argued that meritocracy is a myth because education rewards conformity and class advantage, not just ability."),
-  card("Education", "full", "Marxism", "What did Bourdieu mean by cultural capital?", "The language, knowledge, tastes and attitudes valued by schools and more common in middle-class homes."),
-  card("Education", "full", "Marxism", "What is habitus?", "The dispositions and ways of thinking shaped by class background that influence how a pupil fits into school."),
-  card("Education", "full", "Marxism", "What is symbolic violence?", "When the values of the dominant class are presented as normal and legitimate, making other groups feel inferior."),
-  card("Education", "full", "Marxism", "What did Willis find in his study of lads?", "Working-class boys formed an anti-school subculture, but their resistance still led them into working-class jobs."),
-  card("Education", "full", "Marxism", "What is a strength of Marxist explanations of education?", "They show how education can reproduce class inequality and link schooling to wider power structures."),
-  card("Education", "full", "Marxism", "What is a criticism of Marxist explanations of education?", "They can be overly deterministic and may underplay pupil agency, gender and ethnicity."),
-  card("Education", "full", "Gender", "What is the feminist view of education?", "Feminists study how education can reproduce patriarchy, but also how schooling and wider changes have improved girls' outcomes."),
-  card("Education", "full", "Gender", "What is patriarchy?", "A system of male power in which men dominate women in society and institutions."),
-  card("Education", "full", "Gender", "What is the hidden curriculum in relation to gender?", "The implicit messages in school that can reinforce traditional gender roles and expectations."),
-  card("Education", "full", "Gender", "What is gender role socialisation?", "The process through which boys and girls are taught different expectations and behaviours from an early age."),
-  card("Education", "full", "Gender", "How do teacher expectations affect gender?", "Teachers may label boys as disruptive and girls as hardworking, which can influence attainment and subject choices."),
-  card("Education", "full", "Gender", "What is the gendered curriculum?", "A curriculum and subject structure that can steer boys and girls into different paths and reinforce stereotypes."),
-  card("Education", "full", "Gender", "What did liberal feminists argue about education?", "That reforms, equal opportunities and changing attitudes can reduce gender inequality in schooling."),
-  card("Education", "full", "Gender", "What did radical feminists argue about education?", "That education can reproduce patriarchy through male-dominated structures, subject choices and teacher control."),
-  card("Education", "full", "Gender", "What did Marxist feminists argue about education?", "That education helps reproduce both capitalism and patriarchy by preparing women for subordinate roles."),
-  card("Education", "full", "Gender", "What did Sharpe find about girls' aspirations?", "Girls' ambitions shifted from marriage and family towards careers and independence over time."),
-  card("Education", "full", "Gender", "What did Mitsos and Browne argue about coursework?", "Schoolwork often rewards neatness, patience and organisation, which can suit girls more than boys."),
-  card("Education", "full", "Gender", "What is one explanation for boys' underachievement?", "Laddish or anti-school subcultures can make academic success seem unmasculine."),
-  card("Education", "full", "Gender", "What did Mac an Ghaill argue about masculinity?", "Different masculine identities shape how boys respond to school, with some seeing qualifications as irrelevant or feminine."),
-  card("Education", "full", "Gender", "What did Francis find about gender and achievement?", "Girls often experience stronger pressure to succeed and may care more about image and academic success."),
-  card("Education", "full", "Gender", "What is a strength of gender explanations of achievement?", "They explain the gap in attainment as well as the different subject and career patterns seen in education."),
-  card("Education", "full", "Gender", "What is a criticism of some gender explanations?", "They can be too general and may ignore class and ethnicity, which also shape attainment."),
-  card("Education", "full", "Class", "What is material deprivation?", "A lack of economic resources that can reduce educational achievement, such as poor housing, diet or equipment."),
-  card("Education", "full", "Class", "What is cultural deprivation?", "A lack of access to the language, attitudes and knowledge valued by schools."),
-  card("Education", "full", "Class", "How does parental income affect achievement?", "Lower income can limit books, revision resources, tutoring, transport and school choice."),
-  card("Education", "full", "Class", "How does parental education affect achievement?", "More educated parents are often better able to support homework, school choices and aspirations."),
-  card("Education", "full", "Class", "How does cultural capital help middle-class pupils?", "It gives them confidence with school language, routines and expectations, making them more likely to succeed."),
-  card("Education", "full", "Class", "How can working-class subcultures affect achievement?", "Some pupils may develop anti-school attitudes if they feel school offers little reward or does not fit their identity."),
-  card("Education", "full", "Class", "What is a strength of class explanations of underachievement?", "They connect school outcomes to wider inequalities in family resources and life chances."),
-  card("Education", "full", "Class", "What is a criticism of class explanations of underachievement?", "They can overstate deprivation and ignore successful working-class pupils and school factors."),
-  card("Education", "full", "Ethnicity", "What is the general pattern of ethnic attainment?", "Attainment varies by group, but outcomes are strongly shaped by class, school processes and wider racism."),
-  card("Education", "full", "Ethnicity", "What is institutional racism?", "Racism built into the routines and culture of institutions, so some groups are disadvantaged even without open prejudice."),
-  card("Education", "full", "Ethnicity", "What is teacher labelling in relation to ethnicity?", "Teachers may make assumptions about pupils based on ethnicity, which can affect behaviour and achievement."),
-  card("Education", "full", "Ethnicity", "What did Gillborn and Youdell argue about educational triage?", "Schools may prioritise pupils they think can boost results, while others are neglected or written off."),
-  card("Education", "full", "Ethnicity", "What is the self-fulfilling prophecy in relation to ethnicity?", "Negative labels can lead pupils to act in ways that confirm the label and lower achievement further."),
-  card("Education", "full", "Ethnicity", "What did Sewell argue about black masculinity?", "Different responses to schooling exist, including conformists, rebels, retreatists and innovators."),
-  card("Education", "full", "Ethnicity", "What role can language play in ethnic achievement?", "English as an additional language or weak school-home language links can make school harder, but this is only one factor."),
-  card("Education", "full", "Ethnicity", "What is a strength of ethnic explanations of achievement?", "They show that school outcomes are not caused by culture alone and that racism matters."),
-  card("Education", "full", "Ethnicity", "What is a criticism of ethnic explanations of achievement?", "They can generalise across very different ethnic groups and overlook class differences."),
-  card("Education", "full", "Policies", "What is marketisation?", "Making schools compete with one another so that parental choice and league tables shape provision."),
-  card("Education", "full", "Policies", "What is parentocracy?", "A system where parents' choices and resources increasingly influence which school children attend."),
-  card("Education", "full", "Policies", "What is cream skimming?", "When schools select or attract the most advantaged or high-achieving pupils."),
-  card("Education", "full", "Policies", "What is silt skimming?", "When schools avoid or exclude lower-attaining or disadvantaged pupils."),
-  card("Education", "full", "Policies", "How do league tables affect schools?", "They encourage competition and performance management, but can also increase pressure to select pupils who will boost results."),
-  card("Education", "full", "Policies", "How does OFSTED affect education?", "Inspection creates accountability and pressure to improve, but it can also intensify market competition."),
-  card("Education", "full", "Policies", "What is the National Curriculum?", "A standardised curriculum used to ensure common content across schools and raise standards."),
-  card("Education", "full", "Policies", "How does formula funding affect schools?", "Funding per pupil gives schools incentives to attract students, linking finance to market competition."),
-  card("Education", "full", "Policies", "What are academies and free schools?", "Schools with greater independence from local authority control, often justified as raising standards and choice."),
-  card("Education", "full", "Policies", "What is a criticism of academies and free schools?", "They can deepen inequalities if more advantaged parents and schools are better able to use choice and resources."),
-  card("Education", "full", "Policies", "What is the pupil premium?", "Extra funding for disadvantaged pupils, designed to reduce inequality of opportunity."),
-  card("Education", "full", "Policies", "What is an Education Action Zone?", "A targeted policy that gives extra support and funding to schools in deprived areas."),
-  card("Education", "full", "Policies", "What is Sure Start?", "An early-years support policy aimed at improving children's life chances and reducing inequality."),
-  card("Education", "full", "Policies", "What is the impact of globalisation on education policy?", "Policies and ideas are increasingly borrowed across countries, so education becomes shaped by international competition."),
-  card("Education", "full", "Policies", "What is policy borrowing?", "When one country copies or adapts an education policy from another country or system."),
-  card("Education", "full", "Policies", "What did Ball mean by the global policy market?", "Education reform is increasingly influenced by international organisations, businesses and global competition."),
-  card("Education", "full", "Policies", "What is McDonaldisation in education?", "The spread of standardised, efficient and measurable systems such as testing and league comparisons."),
-  card("Education", "full", "Policies", "What is glocalisation?", "Global policies are adapted to local contexts rather than copied exactly."),
-  card("Education", "full", "Policies", "What is a strength of policy explanations of education?", "They show how government decisions can shape opportunity, standards and inequality."),
-  card("Education", "full", "Policies", "What is a criticism of policy explanations of education?", "They may overestimate the impact of policy and underplay class, gender, ethnicity and school-level processes."),
+
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PSYCHOLOGY — AQA A-LEVEL APPROACHES
+// ═══════════════════════════════════════════════════════════════════════
+
+// ── ORIGINS OF PSYCHOLOGY ───────────────────────────────────────────────
+const ORIGINS_FULL = [
+  card("Approaches","full","Origins of Psychology","Who is considered the founding father of psychology and why?","Wilhelm Wundt (1832–1920) established the first experimental psychology laboratory in Leipzig, Germany in 1879. By insisting on controlled conditions and trained observers he separated psychology from philosophy, making it a standalone empirical science."),
+  card("Approaches","full","Origins of Psychology","What was Wundt's key method for studying the mind?","Introspection — participants were trained to observe and report their own conscious thoughts and feelings under controlled lab conditions in response to stimuli. This gave psychology its first systematic, repeatable scientific tool."),
+  card("Approaches","full","Origins of Psychology","What is introspection?","The systematic self-examination of one's own conscious mental states. Wundt required trained observers to document inner experience precisely and repeatedly, aiming to identify the basic elements of consciousness — a programme he called structuralism."),
+  card("Approaches","full","Origins of Psychology","What is structuralism in early psychology?","Wundt's programme of breaking conscious experience down into its fundamental building blocks — sensations, feelings and images — using introspective reports from trained participants. The goal was to map the 'structure' of the mind, much as chemistry maps elements."),
+  card("Approaches","full","Origins of Psychology","What is empiricism and how does it underpin psychology?","Empiricism is the view that all knowledge derives from sensory experience rather than innate ideas. It underpins psychology's use of observation, experimentation and careful measurement to study the mind scientifically, rather than through pure philosophical argument."),
+  card("Approaches","full","Origins of Psychology","What did Watson (1913) argue and why was it significant?","In 'Psychology as the Behaviourist Views It', Watson rejected introspection as unreliable — its results could not be verified by others. He argued psychology must study only observable, measurable behaviour, treating the mind as a 'black box'. This manifesto founded the behaviourist school."),
+  card("Approaches","full","Origins of Psychology","What is the key strength of Wundt's approach?","He introduced standardised lab procedures, trained observers and systematic data collection — providing a rigorous, repeatable foundation for psychology as a scientific discipline, setting the template for all subsequent experimental approaches."),
+  card("Approaches","full","Origins of Psychology","What is a weakness of Wundt's introspection method?","Results cannot be independently verified. Different trained participants often produced contradictory reports of the same stimulus experience, making findings unreliable — a fundamental problem for any science."),
+  card("Approaches","full","Origins of Psychology","What did Nisbett and Wilson (1977) find about introspective reports?","In controlled experiments, participants were unaware of the real stimuli influencing their judgements but confidently gave wrong explanations for their own choices. Introspective reports are often post-hoc rationalisations, not accurate descriptions of mental processes — directly undermining Wundt's method."),
+  card("Approaches","full","Origins of Psychology","What did Watson's approach enable psychology to study?","By focusing on observable behaviour, Watson made psychology genuinely scientific. He demonstrated conditioning of emotional responses in the Little Albert study (1920) — showing measurable, verifiable results that could be replicated and tested by others."),
+  card("Approaches","full","Origins of Psychology","How did early psychology evolve from Wundt to Watson?","Wundt (1879): psychology as scientific study of consciousness via introspection. Structuralism aimed to map the mind's elements. Watson (1913): rejected consciousness as a subject of science; founded behaviourism focusing purely on stimulus-response behaviour. A shift from the inner world to the outer, observable world."),
 ];
 
-const EDUCATION_CONDENSED = [
-  card("Education", "condensed", "Functionalism", "Functionalism: core ideas", "Education creates social solidarity, teaches shared values, and allocates people to roles by merit and ability.\n\nDurkheim: social solidarity and a mini society.\nParsons: universalistic values and meritocracy.\nDavis and Moore: role allocation.\nSchultz: human capital."),
-  card("Education", "condensed", "Marxism", "Marxism: core ideas", "Education reproduces class inequality rather than reducing it.\n\nAlthusser: ideological state apparatus.\nBowles and Gintis: correspondence principle and hidden curriculum.\nBourdieu: cultural capital, habitus and symbolic violence.\nWillis: lads can resist but still end up in working-class jobs."),
-  card("Education", "condensed", "Gender", "Gender and achievement", "Girls now outperform boys in many areas, but explanations include labelling, hidden curriculum, subject choice, gender role socialisation and wider social change.\n\nFeminist views split into liberal, radical and Marxist approaches."),
-  card("Education", "condensed", "Class", "Class and achievement", "Working-class underachievement can be linked to material deprivation, cultural deprivation and low access to cultural capital.\n\nMiddle-class pupils often have advantages in resources, language and parental support."),
-  card("Education", "condensed", "Ethnicity", "Ethnicity and achievement", "Attainment is shaped by class, racism and school processes.\n\nKey ideas: material deprivation, cultural difference, institutional racism, labelling and educational triage."),
-  card("Education", "condensed", "Policies", "Marketisation and policy", "Marketisation increases competition between schools.\n\nParentocracy, league tables, OFSTED, formula funding, academies and free schools all change how schools operate.\n\nCream skimming and silt skimming are key criticisms."),
-  card("Education", "condensed", "Globalisation", "Globalisation and education", "Education policy is increasingly international.\n\nBall: policy borrowing.\nRitzer: McDonaldisation.\nRobertson: glocalisation."),
+// ── BEHAVIOURISM — CLASSICAL CONDITIONING ──────────────────────────────
+const CLASSICAL_FULL = [
+  card("Approaches","full","Classical Conditioning","What is classical conditioning?","A form of associative learning — Ivan Pavlov found that a neutral stimulus (NS) paired repeatedly with an unconditioned stimulus (UCS) eventually produces a conditioned response (CR) on its own. Learning occurs through association, not conscious thought."),
+  card("Approaches","full","Classical Conditioning","What was Pavlov's key experiment?","Pavlov paired a bell (NS) with food (UCS) for dogs. After conditioning, the bell alone (now the conditioned stimulus, CS) triggered salivation (the conditioned response, CR) — demonstrating that reflexes can be attached to new stimuli through repeated association."),
+  card("Approaches","full","Classical Conditioning","What is an unconditioned stimulus (UCS)?","A stimulus that naturally and automatically triggers a response without any learning — e.g. food causing salivation. No prior conditioning is required; the response is a built-in biological reflex."),
+  card("Approaches","full","Classical Conditioning","What is a conditioned stimulus (CS)?","A previously neutral stimulus that, after repeated pairing with the UCS, comes to produce the conditioned response on its own — e.g. a bell that now triggers salivation after conditioning with food."),
+  card("Approaches","full","Classical Conditioning","What is a conditioned response (CR)?","The learned response elicited by the CS alone after conditioning — e.g. salivating to a bell. It is typically slightly weaker than the original unconditioned response."),
+  card("Approaches","full","Classical Conditioning","What does behaviourism assume about humans at birth?","Humans are born with a limited set of biological reflexes (UCRs to UCSs). All other behaviour is built on top of these through conditioning. Behaviourists treat the mind as a blank slate — all learning comes from experience and association."),
+  card("Approaches","full","Classical Conditioning","What is extinction in classical conditioning?","If the CS is repeatedly presented without the UCS, the CR gradually weakens and disappears. However, spontaneous recovery can occur after a rest period, showing the CR was suppressed rather than permanently erased."),
+  card("Approaches","full","Classical Conditioning","What is a strength of classical conditioning?","Strong experimental support from controlled lab studies (Pavlov; Watson & Rayner, 1920 — Little Albert). Real-world clinical applications include systematic desensitisation for phobias and aversion therapy, demonstrating scientific utility."),
+  card("Approaches","full","Classical Conditioning","What is a limitation of classical conditioning?","It only explains simple, reflexive stimulus-response learning and cannot account for cognitive processes like expectation, insight or language acquisition. It explains some, but far from all, types of learning."),
 ];
 
-const METHODS_IN_CONTEXT_FULL = [
-  card("Research Methods + Methods in Context", "full", "Education research", "What is Research Methods + Methods in Context?", "An exam focus where you apply research methods to the specific setting of education."),
-  card("Research Methods + Methods in Context", "full", "Education research", "Why is access a key issue in school research?", "Researchers often need permission from gatekeepers such as heads, local authorities and parents."),
-  card("Research Methods + Methods in Context", "full", "Questionnaires", "Why can questionnaires work well in education research?", "They are cheap, quick and useful for reaching large numbers of pupils or parents."),
-  card("Research Methods + Methods in Context", "full", "Questionnaires", "What is a problem with questionnaires in schools?", "Younger pupils may struggle with wording or literacy, reducing validity."),
-  card("Research Methods + Methods in Context", "full", "Interviews", "Why can interviews be useful in education research?", "They allow researchers to probe answers and gather detailed information about experiences and attitudes."),
-  card("Research Methods + Methods in Context", "full", "Interviews", "What is a problem with interviews in schools?", "Power differences between adults and children can create social desirability bias or reluctance to speak openly."),
-  card("Research Methods + Methods in Context", "full", "Observation", "Why can observation be useful in education research?", "It can capture real classroom behaviour, interactions and routines rather than just reported behaviour."),
-  card("Research Methods + Methods in Context", "full", "Observation", "What is a problem with observation in schools?", "The presence of the researcher can change behaviour, and covert observation raises major ethical issues."),
-  card("Research Methods + Methods in Context", "full", "Official statistics", "Why are official statistics useful in education research?", "They provide large-scale data on attainment, exclusions, attendance and attendance patterns."),
-  card("Research Methods + Methods in Context", "full", "Official statistics", "What is a limitation of official statistics in education?", "They may reflect institutional practices, missing data or different definitions rather than pure reality."),
-  card("Research Methods + Methods in Context", "full", "Documents", "Why are documents useful in education research?", "School policies, lesson materials and inspection reports can reveal values, priorities and official messages."),
-  card("Research Methods + Methods in Context", "full", "Documents", "What is a limitation of documents in education research?", "They are often produced for another purpose, so their meaning may not match what pupils actually experience."),
-  card("Research Methods + Methods in Context", "full", "Sampling", "Why is sampling important in education research?", "Researchers need a sample that reflects different ages, year groups, schools and backgrounds."),
-  card("Research Methods + Methods in Context", "full", "Ethics", "What ethical issues matter most in research with children?", "Informed consent, parental permission, assent, confidentiality and safeguarding are especially important."),
-  card("Research Methods + Methods in Context", "full", "Validity", "Why is validity important in education research?", "Researchers need to know whether they are capturing the real experiences of pupils and teachers."),
-  card("Research Methods + Methods in Context", "full", "Practical issues", "What practical problems can education researchers face?", "Timetables, school routines, exam pressure, disruptive lessons and access restrictions can all limit research."),
-  card("Research Methods + Methods in Context", "full", "Triangulation", "What is triangulation?", "Using more than one method or source to improve the overall quality and balance of research."),
+// ── BEHAVIOURISM — OPERANT CONDITIONING ──────────────────────────────
+const OPERANT_FULL = [
+  card("Approaches","full","Operant Conditioning","What is operant conditioning?","B.F. Skinner's theory that voluntary behaviour is shaped by its consequences. Behaviours producing positive outcomes increase in frequency; those producing negative outcomes decrease. Consequences control future behaviour."),
+  card("Approaches","full","Operant Conditioning","What is positive reinforcement?","A rewarding stimulus delivered after a behaviour, increasing the likelihood of that behaviour being repeated — e.g. praise after completing homework increases the probability of doing homework again."),
+  card("Approaches","full","Operant Conditioning","What is negative reinforcement?","Removing an unpleasant stimulus after a behaviour, increasing the likelihood of repetition — e.g. taking paracetamol removes a headache, reinforcing painkiller use. Crucially, this is NOT the same as punishment."),
+  card("Approaches","full","Operant Conditioning","What is positive punishment?","Adding an aversive consequence after a behaviour to decrease its frequency — e.g. receiving detention for misbehaving reduces the likelihood of that misbehaviour recurring."),
+  card("Approaches","full","Operant Conditioning","What is negative punishment?","Removing a pleasant stimulus following a behaviour to reduce its frequency — e.g. confiscating a phone after breaking rules. Also called a response cost."),
+  card("Approaches","full","Operant Conditioning","What is continuous reinforcement?","Every instance of the target behaviour is reinforced. Produces rapid learning but also rapid extinction when reinforcement stops. Best used when teaching a completely new behaviour."),
+  card("Approaches","full","Operant Conditioning","What are variable schedules of reinforcement?","Reinforcement delivered after unpredictable numbers of responses (variable-ratio) or unpredictable time intervals (variable-interval). Variable-ratio produces the most persistent behaviour and slowest extinction — the principle behind gambling machines."),
+  card("Approaches","full","Operant Conditioning","What is vicarious reinforcement in operant conditioning?","Learning the consequences of a behaviour by watching others being rewarded or punished for it — without experiencing consequences directly. This concept bridges operant conditioning to Bandura's Social Learning Theory."),
+  card("Approaches","full","Operant Conditioning","What is a strength of operant conditioning?","Practical applications in therapy (token economy programmes in psychiatric wards and prisons) and real-world behaviour management (classrooms, parenting). Demonstrably effective at changing behaviour."),
+  card("Approaches","full","Operant Conditioning","What are the criticisms of operant conditioning?","Skinner's animal studies raise ethical concerns and findings may not generalise to complex human behaviour. The approach ignores cognition, emotion and social context entirely — it is reductionist and mechanistic. Humans are treated as passive responders, not active thinkers."),
 ];
 
-const METHODS_IN_CONTEXT_CONDENSED = [
-  card("Research Methods + Methods in Context", "condensed", "Education research", "Research Methods + Methods in Context", "Always apply the method to schools, pupils and teachers.\n\nMention access, gatekeepers, age, literacy, power differences, safeguarding and disruption to lessons."),
-  card("Research Methods + Methods in Context", "condensed", "Methods", "Questionnaires, interviews and observation", "Questionnaires are quick but can be misunderstood.\nInterviews are detailed but power imbalances matter.\nObservation can capture real behaviour but raises ethics and reactivity issues."),
-  card("Research Methods + Methods in Context", "condensed", "Documents and statistics", "Documents and statistics", "Documents can reveal policy and school culture.\nOfficial statistics are broad and comparative, but may hide bias in recording and definitions."),
-  card("Research Methods + Methods in Context", "condensed", "Evaluation", "How to evaluate methods in context", "Judge methods by validity, reliability, representativeness, ethics and practicality within the school setting."),
+// ── SOCIAL LEARNING THEORY ────────────────────────────────────────────
+const SLT_FULL = [
+  card("Approaches","full","Social Learning Theory","What is the core claim of Social Learning Theory?","Albert Bandura argued that behaviour is learned not only through direct reinforcement, but also through observation and imitation of models. Crucially, cognitive (mediational) processes determine what is and is not imitated — making SLT more cognitive than pure behaviourism."),
+  card("Approaches","full","Social Learning Theory","How does SLT differ from operant conditioning?","Operant conditioning requires direct personal reinforcement. SLT allows learning through observation alone. Bandura also emphasised the role of cognitive factors — you must attend, remember and be motivated — bridging behaviourism and cognitive psychology."),
+  card("Approaches","full","Social Learning Theory","What is modelling in SLT?","A model demonstrates a behaviour that observers can watch and then potentially imitate. The likelihood of imitation depends on the model's characteristics: age, gender, status and perceived similarity to the observer."),
+  card("Approaches","full","Social Learning Theory","What is identification in SLT?","When an observer relates to or admires a model, they are more likely to imitate them. Identification deepens the connection between observer and model, increasing the drive to reproduce the behaviour."),
+  card("Approaches","full","Social Learning Theory","What are the four mediational processes in SLT? (ARRM)","Attention (noticing the model's behaviour), Retention (remembering it), Reproduction (having the ability to perform it), Motivation (having a reason to do it — often based on vicarious reinforcement). All four must occur for imitation to happen."),
+  card("Approaches","full","Social Learning Theory","What is vicarious reinforcement in SLT?","Observing a model being rewarded for a behaviour increases the observer's motivation to imitate it. Observing punishment reduces the likelihood of imitation. No direct experience of consequences is needed — learning is vicarious (indirect)."),
+  card("Approaches","full","Social Learning Theory","What was the Bobo doll study (Bandura, 1961)?","Children watched an adult model behave aggressively (hitting a Bobo doll with a mallet, shouting) or non-aggressively. Children who saw the aggressive model imitated the specific behaviours. In the 1963 follow-up, vicarious reinforcement increased imitation further."),
+  card("Approaches","full","Social Learning Theory","What did Akers (1998) find that supports SLT?","Criminal behaviour is significantly more likely when individuals have deviant models in their social environment — supporting the role of observational learning and vicarious reinforcement in antisocial behaviour."),
+  card("Approaches","full","Social Learning Theory","What did Fox and Bailenson (2009) find that supports SLT?","Participants were more likely to imitate the behaviour of a virtual character (avatar) when it physically resembled them — directly supporting the role of identification in determining whether imitation occurs."),
+  card("Approaches","full","Social Learning Theory","What are the limitations of SLT?","Young people may actively seek out peers with similar deviant attitudes (selection effect), making it hard to establish that models cause delinquency rather than delinquent people selecting similar peers. The Bobo doll study also has ethical concerns and low ecological validity — children may have treated the doll as a toy."),
 ];
 
-const THEORY_METHODS_FULL = [
-  card("Theory & Methods", "full", "Research approaches", "What is the difference between quantitative and qualitative data?", "Quantitative data are numerical; qualitative data describe meanings, experiences and feelings."),
-  card("Theory & Methods", "full", "Research approaches", "What is the difference between primary and secondary data?", "Primary data are collected first-hand by the researcher; secondary data already exist and were collected by someone else."),
-  card("Theory & Methods", "full", "Research methods", "What are questionnaires?", "A method that asks a standard set of questions, usually in written form, to collect comparable data."),
-  card("Theory & Methods", "full", "Research methods", "What are interviews?", "A method that collects data through spoken questions and answers, either structured or unstructured."),
-  card("Theory & Methods", "full", "Research methods", "What is participant observation?", "A method where the researcher joins in with the group being studied."),
-  card("Theory & Methods", "full", "Research methods", "What is non-participant observation?", "A method where the researcher observes without becoming part of the group."),
-  card("Theory & Methods", "full", "Research methods", "What is an experiment?", "A method that tests a hypothesis by controlling variables to identify cause and effect."),
-  card("Theory & Methods", "full", "Research methods", "What are official statistics?", "Numerical data collected by organisations such as government departments."),
-  card("Theory & Methods", "full", "Positivism", "What is positivism?", "A view that sociology should use scientific methods, search for patterns and produce objective knowledge."),
-  card("Theory & Methods", "full", "Interpretivism", "What is interpretivism?", "A view that sociology should understand meanings, motives and social action from the standpoint of participants."),
-  card("Theory & Methods", "full", "Theory", "What are social facts?", "External social forces, such as values and norms, that shape individual behaviour."),
-  card("Theory & Methods", "full", "Evaluation", "What is reliability?", "Whether a method would produce the same or very similar results if repeated."),
-  card("Theory & Methods", "full", "Evaluation", "What is validity?", "Whether a method measures or reveals the thing it claims to measure."),
-  card("Theory & Methods", "full", "Evaluation", "What is representativeness?", "How far a sample reflects the wider population being studied."),
-  card("Theory & Methods", "full", "Evaluation", "What is objectivity?", "When research is free from personal bias and the researcher does not influence the findings."),
-  card("Theory & Methods", "full", "Evaluation", "What is value freedom?", "The idea that research should be free from the researcher's own values and opinions."),
-  card("Theory & Methods", "full", "Science", "Why do positivists want sociology to be scientific?", "They want reliable, comparable and generalisable knowledge that can identify social patterns."),
-  card("Theory & Methods", "full", "Science", "What is a criticism of the idea that sociology can be fully scientific?", "Human behaviour is meaningful and context-dependent, so it may not fit the natural-science model."),
-  card("Theory & Methods", "full", "Theory", "What is the relationship between theory and methods?", "Theory shapes what methods are chosen, and findings from methods can support, challenge or refine theory."),
-  card("Theory & Methods", "full", "Theory", "What is consensus theory?", "A theory that sees society as based on shared norms, values and agreement."),
-  card("Theory & Methods", "full", "Theory", "What is conflict theory?", "A theory that sees society as shaped by power, inequality and competition between groups."),
-  card("Theory & Methods", "full", "Theory", "What is a structural theory?", "A theory that explains behaviour through social structures rather than individual choice alone."),
-  card("Theory & Methods", "full", "Theory", "What is a social action theory?", "A theory that focuses on how individuals create social reality through meanings and interactions."),
-  card("Theory & Methods", "full", "Theory", "What is modernity?", "A phase of society associated with industry, bureaucracy, progress and belief in scientific certainty."),
-  card("Theory & Methods", "full", "Theory", "What is postmodernity?", "A stage where society is seen as fragmented, diverse and less predictable than in modernity."),
-  card("Theory & Methods", "full", "Theory", "What are theoretical considerations in choosing a method?", "Researchers think about whether a method fits the theory they are using and the kind of knowledge they want."),
-  card("Theory & Methods", "full", "Theory", "What are practical considerations in choosing a method?", "Time, cost, access, skills and the availability of participants."),
-  card("Theory & Methods", "full", "Theory", "What are ethical considerations in choosing a method?", "Consent, confidentiality, avoiding harm and respecting participants."),
-  card("Theory & Methods", "full", "Social policy", "What is the relationship between sociology and social policy?", "Sociological research can inform policy, while policy changes can also affect what sociologists study."),
+// ── COGNITIVE APPROACH ────────────────────────────────────────────────
+const COGNITIVE_FULL = [
+  card("Approaches","full","Cognitive Approach","What is the core claim of the cognitive approach?","To understand and explain behaviour we must study internal mental processes — memory, attention, perception, language and thinking — which mediate between stimulus and response. The 'black box' must be opened."),
+  card("Approaches","full","Cognitive Approach","How does the cognitive approach differ from behaviourism?","Behaviourists rejected internal processes as unscientific. Cognitive psychologists argue these processes are essential for explaining behaviour and can be studied indirectly and rigorously through controlled experiments."),
+  card("Approaches","full","Cognitive Approach","What is the computer analogy?","The mind is compared to a computer: information is input, encoded, processed, stored and retrieved as output. This framing inspired theoretical models such as the Multi-Store Model (Atkinson & Shiffrin, 1968) and the Working Memory Model (Baddeley & Hitch, 1974)."),
+  card("Approaches","full","Cognitive Approach","What is a theoretical model in cognitive psychology?","An abstract representation of how information flows through mental processes in stages — e.g. the MSM (sensory register → STM → LTM) or the WMM (central executive with slave systems). Models generate testable predictions about behaviour."),
+  card("Approaches","full","Cognitive Approach","What is cognitive neuroscience?","The scientific study of how brain structures and neural activity underlie cognitive processes such as memory, attention and language. It bridges cognitive psychology and biology, using tools like fMRI and EEG to link brain function to mental processes."),
+  card("Approaches","full","Cognitive Approach","What is a strength of the cognitive approach — applications?","Led to Cognitive Behavioural Therapy (CBT) — one of the most evidence-based treatments for depression, anxiety and OCD. Shows that changing irrational thought patterns can change behaviour and emotional outcomes."),
+  card("Approaches","full","Cognitive Approach","What is a strength of the cognitive approach — methodology?","Uses controlled lab experiments (memory recall, reaction time tasks) to measure cognitive processes indirectly, producing objective, replicable data with high reliability and scientific credibility."),
+  card("Approaches","full","Cognitive Approach","What is the limitation of the computer analogy?","The brain works very differently to a computer: it is heavily shaped by emotion, motivation and context; it processes information in parallel and non-linearly; it changes with experience. The analogy greatly oversimplifies human cognition."),
+  card("Approaches","full","Cognitive Approach","What is the inference problem in cognitive psychology?","Mental processes are private and unobservable — all conclusions are inferences from behaviour. We can never directly confirm our models accurately reflect actual mental processes, creating a fundamental limit on the validity of findings."),
 ];
 
-const THEORY_METHODS_CONDENSED = [
-  card("Theory & Methods", "condensed", "Methods", "Research approaches", "Quantitative = numbers, measurement and patterns.\nQualitative = meanings, experiences and depth.\nPrimary data is collected first-hand; secondary data already exists."),
-  card("Theory & Methods", "condensed", "Positivism and interpretivism", "Positivism vs interpretivism", "Positivists prefer scientific, objective methods and social facts.\nInterpretivists prefer verstehen, meanings and context."),
-  card("Theory & Methods", "condensed", "Evaluation", "Reliability, validity, representativeness", "Reliability = repeatability.\nValidity = truth and accuracy.\nRepresentativeness = how well a sample reflects the wider population."),
-  card("Theory & Methods", "condensed", "Science", "Is sociology a science?", "Positivists say yes because it can test patterns and produce general laws.\nCritics say human action is meaningful, so sociology cannot copy natural science exactly."),
-  card("Theory & Methods", "condensed", "Theory", "Theory types", "Consensus theories stress shared values.\nConflict theories stress power and inequality.\nStructural theories focus on social structures.\nSocial action theories focus on meanings and interaction."),
-  card("Theory & Methods", "condensed", "Change and policy", "Modernity, postmodernity and policy", "Modernity emphasises order and progress; postmodernity emphasises fragmentation and diversity.\nSociology can inform social policy, and policy can shape the research agenda."),
+// ── BIOLOGICAL APPROACH ───────────────────────────────────────────────
+const BIOLOGICAL_FULL = [
+  card("Approaches","full","Biological Approach","What is the core claim of the biological approach?","Behaviour and mental processes can be fully explained through the biological structure and function of the body — including the brain, genes, hormones, neurotransmitters and evolutionary history."),
+  card("Approaches","full","Biological Approach","What is a genotype?","The actual genetic make-up of an individual — the full DNA sequence inherited from both parents. The genotype determines biological potential but is not directly visible from the outside."),
+  card("Approaches","full","Biological Approach","What is a phenotype?","The observable physical and behavioural characteristics that result from the interaction of genotype with environmental factors. Two people with the same genotype (e.g. identical twins) can have different phenotypes due to experience."),
+  card("Approaches","full","Biological Approach","What is the CNS and why is it important in psychology?","The central nervous system (brain + spinal cord) processes all sensory input and coordinates all behavioural responses. It is the biological seat of behaviour, emotion, cognition and personality — and can be altered by neurotransmitters, hormones and drugs."),
+  card("Approaches","full","Biological Approach","What is an excitatory neurotransmitter?","A chemical messenger — e.g. glutamate, dopamine — that increases the likelihood of a post-synaptic neuron firing an action potential, promoting neural activity and communication."),
+  card("Approaches","full","Biological Approach","What is an inhibitory neurotransmitter?","A chemical messenger — e.g. GABA — that decreases the likelihood of a post-synaptic neuron firing, reducing neural activity. Imbalances in inhibitory NTs are linked to anxiety disorders and epilepsy."),
+  card("Approaches","full","Biological Approach","What is natural selection in psychology?","Darwin's principle that behaviours enhancing survival and reproduction are passed to descendants. Biological psychologists argue many human behaviours (aggression, mate selection, altruism) are evolved adaptations shaped over millions of years."),
+  card("Approaches","full","Biological Approach","What is a strength of the biological approach?","Led to highly effective drug therapies — SSRIs for depression, antipsychotics for schizophrenia, anxiolytics for anxiety disorders. These provide real clinical benefits, confirming that biology causally underpins mental processes."),
+  card("Approaches","full","Biological Approach","What is the reductionism criticism of the biological approach?","Reducing complex human behaviour to genes or neurochemistry ignores social, cultural, cognitive and environmental factors. A full explanation of behaviour requires multiple levels of analysis, not biology alone."),
+  card("Approaches","full","Biological Approach","What is the ecological validity criticism?","Much biological research uses controlled lab settings or non-human animals. Animal findings may not generalise to humans, and artificial conditions may not capture the full complexity of real-world behaviour."),
 ];
 
-
-
-
-
-// ── GENDER TRENDS ─────────────────────────────────────────────────────────
-const GENDER_TRENDS_FULL = [
-  card("Education", "full", "Gender trends", "What are the key GCSE gender trends?", "Girls outperform boys in the majority of GCSE subjects. 69% of girls achieve grade 4+ in combined Maths and English vs 62% of boys. The gap is largest in English. (Source: Department for Education / Strand)"),
-  card("Education", "full", "Gender trends", "What are the key A Level gender trends?", "Girls are more likely to take humanitarian subjects (English, Sociology, Psychology). Boys dominate technical/instrumental subjects — around 80% of Physics A Level students are male. Girls are more likely to achieve top grades overall."),
-  card("Education", "full", "Gender trends", "What are the university gender trends?", "Girls are more likely to apply, be accepted and graduate from university. 57% of university students are female vs 43% male. The majority of subject areas are now female-majority. Girls from all social class and ethnic backgrounds have seen improved university entry rates."),
-  card("Education", "full", "Gender trends", "What are the wider outcome gender trends?", "Boys are around 3x more likely to be permanently excluded (approx 77% of exclusions are male). Girls outperform boys at every Key Stage 1–5. The attainment gap is narrowing slightly at A Level but persists strongly at GCSE. Boys are more likely to be in the lowest-attaining groups."),
-  card("Education", "full", "Gender trends", "What is the pattern of subject choice by gender at A Level?", "Girls dominate humanities, languages, and social sciences. Boys dominate physics, computing, and maths. This is known as gender-typed subject choice (Paetcher: 'gender domains'). This contributes to the gender pay gap in later life as technical subjects lead to higher-paid careers."),
+// ── PSYCHODYNAMIC APPROACH ────────────────────────────────────────────
+const PSYCHODYNAMIC_FULL = [
+  card("Approaches","full","Psychodynamic Approach","What is the core claim of Freud's psychodynamic approach?","Behaviour is primarily determined by unconscious psychological forces — repressed conflicts, instinctual drives and unresolved childhood experiences. We have limited conscious access to the real causes of our thoughts and actions."),
+  card("Approaches","full","Psychodynamic Approach","What are the three levels of the mind in Freud's model?","Conscious (what we are currently aware of), Preconscious (accessible with effort — memories, stored knowledge) and Unconscious (repressed desires and memories that influence behaviour without awareness). The unconscious is the most powerful and the largest part."),
+  card("Approaches","full","Psychodynamic Approach","What is the Id?","The primitive, unconscious part of personality present from birth, operating on the pleasure principle — demanding immediate gratification of biological drives (Eros: life/sexual drive; Thanatos: death/aggression drive), with no concern for reality or morality."),
+  card("Approaches","full","Psychodynamic Approach","What is the Ego?","The rational, partly conscious part of personality that develops from the Id in early childhood. It operates on the reality principle — finding realistic, socially acceptable ways to satisfy the Id's demands while managing the Superego's moral demands."),
+  card("Approaches","full","Psychodynamic Approach","What is the Superego?","The moral part of personality, internalised from parental and societal rules (developing around age 5). It operates on the morality principle and creates guilt when its standards are violated. Conflict between Id and Superego generates anxiety managed by the Ego."),
+  card("Approaches","full","Psychodynamic Approach","What are defence mechanisms?","Unconscious strategies used by the Ego to manage anxiety when it cannot balance the Id's demands, the Superego's morality and external reality. They protect the person by distorting or denying aspects of reality."),
+  card("Approaches","full","Psychodynamic Approach","What is repression?","The fundamental defence mechanism — pushing distressing memories, desires or impulses into the unconscious, where they are no longer accessible to conscious awareness. Repressed material still influences behaviour through dreams, slips of the tongue and neurotic symptoms."),
+  card("Approaches","full","Psychodynamic Approach","What is denial?","A defence mechanism in which an individual refuses to accept an unpleasant external reality — e.g. refusing to accept a terminal diagnosis or denying a problem with substance use. The Ego is protected from overwhelming anxiety."),
+  card("Approaches","full","Psychodynamic Approach","What is displacement?","A defence mechanism in which feelings directed at a threatening source are redirected to a safer substitute — e.g. taking frustration from work out on a family member. The real source of emotion remains unconscious."),
+  card("Approaches","full","Psychodynamic Approach","What are the five psychosexual stages?","Oral (0–1yr), Anal (1–3yr), Phallic (3–6yr), Latency (6yr–puberty), Genital (puberty+). Libidinal energy focuses on a different body zone at each stage. Unresolved conflict causes fixation, producing characteristic adult personality traits or neuroses."),
+  card("Approaches","full","Psychodynamic Approach","What is the Oedipus complex?","In the phallic stage, a boy develops unconscious desire for his mother and rivalry with his father. Castration anxiety leads him to repress these feelings and identify with his father, internalising male values and forming the Superego."),
+  card("Approaches","full","Psychodynamic Approach","What is the Electra complex?","The female equivalent: a girl desires her father and experiences penis envy. She resolves this by identifying with her mother. Freud controversially argued female superego development is weaker due to the absence of equivalent castration anxiety."),
+  card("Approaches","full","Psychodynamic Approach","What is a Freudian slip (parapraxis)?","An error in speech, memory or action that Freud believed reveals unconscious thoughts breaking through — e.g. accidentally calling a new partner by an ex's name, revealing a suppressed feeling."),
+  card("Approaches","full","Psychodynamic Approach","What is a strength of the psychodynamic approach?","Pioneering: introduced the concepts of the unconscious mind, the importance of childhood experience, and talking therapies (psychoanalysis). Freud's case study method advanced the study of abnormal psychology and inspired vast subsequent theory and research."),
+  card("Approaches","full","Psychodynamic Approach","What is the gender bias criticism of Freud?","Concepts like penis envy and the weaker female Superego reflect Victorian patriarchal assumptions rather than empirical evidence. The theory is androcentric — built around male experience and applied inappropriately to women. Horney strongly critiqued this."),
+  card("Approaches","full","Psychodynamic Approach","What is the cultural bias criticism of Freud?","Freud based his theory on a narrow, middle-class Viennese sample. The Oedipus complex assumes a nuclear family structure not universal across cultures. Some cultures (e.g. China historically) suppressed public discussion of mental health, making key Freudian concepts hard to apply or test."),
+  card("Approaches","full","Psychodynamic Approach","What is the scientific criticism of Freud?","Key concepts (the unconscious, the Id) are difficult to operationalise and test empirically — making the theory largely unfalsifiable. Popper argued this makes psychoanalysis a pseudoscience. Evidence came from unrepresentative case studies with no control conditions."),
 ];
 
-// ── EXTERNAL FACTORS — GENDER ─────────────────────────────────────────────
-const GENDER_EXTERNAL_FULL = [
-  card("Education", "full", "External factors — gender", "What is gender socialisation and how does it affect achievement?", "Oakley: girls are socialised from birth into femininity — passivity, cooperation, reading. These traits suit formal schooling. Boys socialised into risk-taking and outdoor activity, which can clash with school demands. Differential socialisation creates the gender gap before school even starts."),
-  card("Education", "full", "External factors — gender", "What is 'bedroom culture' and how does it explain the gender gap?", "McRobbie: girls' leisure is home-based and literacy-rich — reading magazines, talking, writing diaries. Boys' culture is more outdoor and physical. This gives girls a head-start in literacy and the kind of reflective skills schools reward."),
-  card("Education", "full", "External factors — gender", "What is the 'crisis of masculinity' and how does it affect boys' attainment?", "Mac an Ghail: deindustrialisation destroyed the traditional male manual working-class jobs. School qualifications feel irrelevant to a 'laddish' masculine identity when there are no longer factories to walk into. Boys from WC backgrounds especially affected. Francis and Skelton support this."),
-  card("Education", "full", "External factors — gender", "How have changes in employment affected girls' aspirations?", "The shift to a service-sector economy has opened more graduate careers to women. Sharpe (1970s vs 1990s): girls' priorities shifted from marriage and family to careers and independence. Greater female role models in professions have raised aspirations (Norman; Francis)."),
-  card("Education", "full", "External factors — gender", "How has feminism affected gender and education?", "Second-wave feminism raised awareness of female potential and changed cultural expectations. Girls now expect to work and are encouraged to achieve. GIST and WISE campaigns in schools aimed to encourage girls into science and technology. Mitsos and Browne: girls benefit from higher aspirations."),
-  card("Education", "full", "External factors — gender", "How do literacy skills relate to the gender gap?", "Girls develop verbal and language skills earlier on average. Jackson: the current assessment style — extended writing, coursework, literacy tasks — suits girls' strengths. Some argue this is biological; others (Epstein) say it reflects gendered socialisation and reading habits."),
+// ── HUMANISTIC APPROACH ───────────────────────────────────────────────
+const HUMANISTIC_FULL = [
+  card("Approaches","full","Humanistic Approach","What is the core claim of the humanistic approach?","Humans are unique, conscious beings with free will, motivated by the desire for personal growth. Psychology should study the whole person and their subjective experience — it must not reduce human behaviour to biological drives or conditioned responses."),
+  card("Approaches","full","Humanistic Approach","What does the humanistic approach reject?","Reductionism (breaking humans into parts — genes, neurons, conditioned reflexes) and determinism (behaviour is fixed by forces outside our control). Humanists argue we have genuine free will and conscious choice over how we live."),
+  card("Approaches","full","Humanistic Approach","What is Maslow's hierarchy of needs?","A motivational pyramid of five levels. Bottom to top: Physiological (food, water, sleep) → Safety (security, shelter) → Love and Belonging (relationships, community) → Esteem (self-respect, achievement) → Self-Actualisation (realising full potential). Lower needs must generally be met before higher ones can be pursued. Mnemonic: Some Elephants Love Salted Potatoes."),
+  card("Approaches","full","Humanistic Approach","What is self-actualisation?","The highest level of Maslow's hierarchy — the ongoing realisation of one's full potential: creativity, peak experiences and authentic living. Maslow estimated fewer than 1% of people consistently achieve it. Examples he cited: Beethoven, Einstein, Lincoln."),
+  card("Approaches","full","Humanistic Approach","What are Rogers' three selves?","The self-concept (who you perceive yourself to be), the ideal self (who you want to be), and the real self (who you actually are). Psychological health depends on how aligned these three are. Mnemonic: RIR (Real, Ideal, Real-perceived). Sometimes called the self-concept triad."),
+  card("Approaches","full","Humanistic Approach","What is congruence in Rogers' theory?","When the self-concept and ideal self are closely aligned, the person experiences psychological wellbeing and is able to grow towards self-actualisation. Incongruence — a wide gap between them — causes anxiety, depression and defensiveness."),
+  card("Approaches","full","Humanistic Approach","What are conditions of worth?","When significant others (parents, teachers) give conditional positive regard — love and approval only when the person meets certain standards. This forces people to disown their real self to match others' expectations, creating incongruence and psychological distress."),
+  card("Approaches","full","Humanistic Approach","What is unconditional positive regard (UPR)?","Accepting and valuing a person completely, regardless of their behaviour, thoughts or feelings. Central to Rogers' client-centred therapy — the therapist must offer UPR at all times. The opposite of conditions of worth."),
+  card("Approaches","full","Humanistic Approach","What is client-centred therapy?","Rogers' non-directive therapeutic approach — the therapist provides UPR, empathy and congruence, creating conditions in which clients can explore their real self, reduce incongruence and move toward self-actualisation without being directed or judged."),
+  card("Approaches","full","Humanistic Approach","What research supports the humanistic approach?","Studies of adolescents found that those who adopted a false self to gain parental approval had significantly higher rates of depression and lower wellbeing — directly supporting Rogers' claim that conditions of worth and incongruence harm psychological health."),
+  card("Approaches","full","Humanistic Approach","What is the non-scientific criticism of the humanistic approach?","Concepts like self-actualisation and congruence are abstract and difficult to operationalise or test experimentally. The approach is largely unfalsifiable, relies on subjective self-report data and lacks the scientific rigour of behaviourism or cognitive psychology."),
+  card("Approaches","full","Humanistic Approach","What is the cultural bias criticism of the humanistic approach?","Maslow's hierarchy and Rogers' focus on individual self-actualisation reflect individualistic Western values. In many collectivist cultures (Japan, China, parts of Africa), group harmony and community needs take precedence over personal self-fulfilment, making the hierarchy less applicable."),
 ];
 
-// ── INTERNAL PROCESSES — GENDER ───────────────────────────────────────────
-const GENDER_INTERNAL_FULL = [
-  card("Education", "full", "Internal processes — gender", "What is the 'feminisation of education' argument?", "Sewell, Epstein: the shift to coursework, group work and teacher assessment favours girls' socialised learning styles. Boys prefer competitive, exam-based formats. Critics argue this is oversimplified — boys do outperform girls in some exam-only subjects."),
-  card("Education", "full", "Internal processes — gender", "How do teacher expectations affect gender achievement?", "Francis and Skelton: teachers spend more time disciplining boys, giving girls more uninterrupted learning time. Teachers also tend to give girls more academic encouragement. Lobban: older textbooks showed women in passive roles — now less common but imagery still matters."),
-  card("Education", "full", "Internal processes — gender", "What are laddish subcultures and how do they affect boys?", "Francis and Skelton: some male peer groups define hard work as 'uncool' or feminine. Being seen as academic threatens masculine identity. Jackson: boys who work hard may be labelled a 'nerd' or 'gay' — so underachievement becomes a performance of masculinity."),
-  card("Education", "full", "Internal processes — gender", "What are gender domains and how do they shape subject choice?", "Paetcher: subjects are coded as masculine or feminine — physics = male, English = female. Peer pressure reinforces these codes. Teachers may unconsciously steer pupils. Ball: girls in mixed schools sometimes avoid science to avoid appearing 'unfeminine'."),
-  card("Education", "full", "Internal processes — gender", "What is the male gaze in education?", "Lobban and later Mitsos and Browne: school readers and textbooks historically portrayed women as passive and domestic, reinforcing low aspirations. Now updated in most schools, but gendered imagery in subject materials (e.g. male scientists in physics textbooks) still shapes who 'belongs'."),
-  card("Education", "full", "Internal processes — gender", "What is gendered subject imagery and how does it affect choices?", "Physics books feature male scientists; humanities books feature female figures. This signals to pupils who the 'natural' students are (Paetcher). Girls opting out of physics or computing is partly a response to not seeing themselves represented in the subject's cultural identity."),
-  card("Education", "full", "Internal processes — gender", "What did Boaler find about girls and maths?", "Boaler: girls are disadvantaged by the competitive, timed, test-based culture of maths teaching. When maths was taught through collaborative projects, the gender gap reduced significantly. This suggests internal school processes — not ability — explain the gender gap in maths."),
+// ── CONDENSED OVERVIEW CARDS — ALL APPROACHES ─────────────────────────
+const APPROACHES_CONDENSED = [
+  card("Approaches","condensed","Origins of Psychology","Origins of Psychology","Wundt (1879, Leipzig): 1st psychology lab. Used introspection (systematic self-report) to study conscious experience — called structuralism. Aim: identify building blocks of the mind.\n\nEmpiricism: knowledge from sensory experience; underpins scientific psychology.\n\nWatson (1913): rejected introspection — unverifiable, behaviour unobservable. Founded behaviourism.\n\n✓ Introduced controlled lab methods and scientific rigour.\n✗ Nisbett & Wilson (1977): introspective reports are inaccurate — people confabulate causes of their own behaviour."),
+  card("Approaches","condensed","Classical Conditioning","Classical Conditioning","Pavlov: learning through association.\nNS + UCS → CS → CR\n\nHumans born with biological reflexes (blank slate otherwise).\nExtinction: CR fades if CS presented alone repeatedly.\nSpontaneous recovery: CR can briefly return after a rest.\n\nApplication: systematic desensitisation (phobias); aversion therapy.\n\n✓ Controlled lab studies (Pavlov; Watson & Rayner — Little Albert).\n✗ Ignores cognition and voluntary behaviour; only explains some types of learning."),
+  card("Approaches","condensed","Operant Conditioning","Operant Conditioning","Skinner: consequences shape behaviour.\n\n+ Reinforcement → add reward → repeat behaviour\n− Reinforcement → remove unpleasant → repeat behaviour\n+ Punishment → add unpleasant → reduce behaviour\n− Punishment → remove reward → reduce behaviour\n\nSchedules: variable-ratio is the most persistent (gambling).\nVicarious reinforcement: learn by watching others' consequences.\n\nApplication: token economies.\n✓ Real-world applications. ✗ Reductionist; ignores cognition; ethical issues with animal studies."),
+  card("Approaches","condensed","Social Learning Theory","Social Learning Theory","Bandura: learn through observation + imitation of models.\n\nMediational processes (ARRM): Attention → Retention → Reproduction → Motivation.\nVicarious reinforcement: observe others' consequences → shapes motivation.\nIdentification: similar/admired model = more likely to imitate.\n\nBobo doll study (1961/1963): children imitated aggressive model's specific actions.\n\n✓ Akers (1998): deviant models increase crime. Fox & Bailenson (2009): similar avatars increase imitation.\n✗ Selection effect: deviant youth may seek similar peers. Bobo doll: ethical issues + low ecological validity."),
+  card("Approaches","condensed","Cognitive Approach","Cognitive Approach","Internal mental processes (memory, attention, perception) mediate S → R. Cannot be directly observed — studied by inference from behaviour.\n\nComputer analogy: input → process (encode/store) → output → theoretical models (MSM, WMM).\nCognitive neuroscience: links brain structure to cognition (fMRI, EEG).\n\nApplication: CBT for depression, anxiety, OCD.\n\n✓ Scientific lab methods; effective therapy applications.\n✗ Computer analogy oversimplified; relies on inference; ignores emotion and social context."),
+  card("Approaches","condensed","Biological Approach","Biological Approach","Behaviour explained through biology: genes, brain, hormones, neurotransmitters, evolution.\n\nGenotype (DNA) → Phenotype (expressed traits × environment).\nCNS: brain + spinal cord — controls all behaviour and cognition.\nExcitatory NTs (e.g. glutamate, dopamine): increase neural firing.\nInhibitory NTs (e.g. GABA): reduce neural firing.\nNatural selection: adaptive behaviours passed down.\n\nApplication: drug therapies (SSRIs, antipsychotics, anxiolytics).\n✓ Effective treatments; scientific lab studies.\n✗ Reductionist (ignores social/cognitive factors); low ecological validity; animal studies may not generalise."),
+  card("Approaches","condensed","Psychodynamic Approach","Psychodynamic Approach","Freud: unconscious mind drives behaviour; childhood experience shapes adult personality.\n\nTripartite mind: Id (pleasure principle) | Ego (reality principle) | Superego (morality principle).\nDefence mechanisms: repression, denial, displacement.\nPsychosexual stages: Oral → Anal → Phallic (Oedipus ♂ / Electra ♀ complex) → Latency → Genital.\nFreudian slip (parapraxis): unconscious breaks through into speech/action.\n\n✓ Pioneering — unconscious, childhood experience, talking therapy, case studies.\n✗ Unfalsifiable (pseudoscience per Popper); gender biased (penis envy); culturally biased (Viennese sample); no control in case studies."),
+  card("Approaches","condensed","Humanistic Approach","Humanistic Approach","Free will, unique, conscious, growth-oriented. Rejects reductionism + determinism.\n\nMaslow's hierarchy (SELSEP): Physiological → Safety → Love/Belonging → Esteem → Self-Actualisation.\nRogers' three selves: self-concept | ideal self | real self.\nCongruence (alignment) = wellbeing → self-actualisation.\nConditions of worth → incongruence → anxiety and depression.\nClient-centred therapy: UPR + empathy + genuineness.\n\n✓ Teen false-self research supports Rogers — incongruence linked to depression.\n✗ Non-scientific; unfalsifiable; culturally biased (individualistic Western values); cannot explain specific disorders."),
 ];
-
-// ── ETHNICITY TRENDS ──────────────────────────────────────────────────────
-const ETHNICITY_TRENDS_FULL = [
-  card("Education", "full", "Ethnicity trends", "What are the key ethnicity attainment trends at GCSE?", "Chinese and Indian pupils consistently outperform the national average. Black Caribbean pupils, especially boys, significantly underperform. Pakistani and Bangladeshi pupils have historically underperformed but the gap is narrowing. White British working-class pupils are now among the lowest-attaining groups overall."),
-  card("Education", "full", "Ethnicity trends", "Why must we be specific about ethnic group trends?", "AQA Exam Gold: Not all ethnic minority groups have the same experience. Saying 'ethnic minorities underperform' is wrong — Chinese and Indian pupils outperform most White British pupils. Always name the specific group and use named research evidence. Vague claims = lower marks."),
-  card("Education", "full", "Ethnicity trends", "What does the data say about Black Caribbean pupils specifically?", "Gillborn and Mirza: Black Caribbean pupils are the most likely to be permanently excluded and among the lowest-attaining groups at GCSE. Black Caribbean boys are particularly disadvantaged. The gap opens up during secondary school, suggesting in-school processes (not just external factors) are key."),
-  card("Education", "full", "Ethnicity trends", "What does the data say about Chinese and Indian pupils?", "Chinese pupils are the highest-achieving ethnic group at GCSE in England. Indian pupils also consistently outperform the national average. Modood: South Asian families place very high cultural value on education and parental support is strong. This challenges cultural deprivation arguments."),
-];
-
-// ── EXTERNAL FACTORS — ETHNICITY ──────────────────────────────────────────
-const ETHNICITY_EXTERNAL_FULL = [
-  card("Education", "full", "External factors — ethnicity", "What material factors affect the attainment of some ethnic groups?", "Some ethnic minority groups face higher rates of poverty — Black and Bangladeshi families in particular (Gillborn and Mirza; Strand). Poverty means poor diet, overcrowded housing (less revision space), fewer books and resources. Class and ethnicity intersect — many ethnic minority pupils are also WC. ONS data on relative deprivation supports this."),
-  card("Education", "full", "External factors — ethnicity", "What cultural differences explain variation in ethnic group attainment?", "Modood: South Asian families place high cultural value on education — parental pressure and community support are strong. Flannery: language barriers for recently arrived families can reduce parental support. Ball and Walters: parental knowledge of how to 'work' the school system varies by group. Not all cultural explanations are deficit models."),
-  card("Education", "full", "External factors — ethnicity", "What is the cultural deprivation argument for ethnic minority underachievement?", "Bernstein and Douglas: some families lack the 'elaborated code' and cultural capital schools reward. Applied to ethnicity: some argue working-class Black Caribbean families lack the values that promote educational success. Criticism: this is a deficit model that blames the victim and ignores structural racism. Sewell disputes this — argues Black culture does value education."),
-  card("Education", "full", "External factors — ethnicity", "How does cultural capital relate to ethnic group attainment?", "Bourdieu applied to ethnicity: some ethnic minority groups have cultural capital that differs from the white MC norm schools reward. However, Modood shows some South Asian groups have cultural capital that matches school expectations well (valuing education, parental involvement). Basit: Muslim girls' cultural capital is compatible with school success."),
-  card("Education", "full", "External factors — ethnicity", "What is the impact of government immigration policy on attainment?", "Pupils who have recently arrived may face language barriers and a lack of familiarity with the UK school system. Asylum seeker children may experience trauma affecting learning. Barnard and Turner: newly arrived pupils often placed in lower sets unfairly. Government policies on EAL (English as an Additional Language) support are inconsistent."),
-];
-
-// ── INTERNAL PROCESSES — ETHNICITY ────────────────────────────────────────
-const ETHNICITY_INTERNAL_FULL = [
-  card("Education", "full", "Internal processes — ethnicity", "What is teacher racism and how does it affect attainment?", "Wright: Black and Asian pupils receive less teacher time, more criticism and lower expectations in classroom interactions — even from teachers who do not consider themselves racist. This is not always intentional but creates differential learning experiences. Troyna and Williams support this finding."),
-  card("Education", "full", "Internal processes — ethnicity", "What is institutional racism in education?", "Macpherson (1999): racism that exists in the policies, practices and culture of institutions — not just individual prejudice. Schools can be institutionally racist through: exclusion rates, streaming decisions, curriculum content and assessment formats that all disadvantage some ethnic minority pupils. Gillborn argues the exam system systematically disadvantages Black pupils."),
-  card("Education", "full", "Internal processes — ethnicity", "What is the ethnocentric curriculum?", "Coard (1971): the curriculum centres White/Western history, literature and values. Minority ethnic cultures are absent or marginalised. This makes Black and Asian pupils feel their heritage is invisible or inferior, damaging self-esteem and engagement. Still partially true today — e.g. history curriculum debates about Empire."),
-  card("Education", "full", "Internal processes — ethnicity", "How does labelling affect ethnic minority pupils?", "Gillborn: teachers racialise expectations — perceiving Black pupils as more threatening or less able, even with identical behaviour to White pupils. This becomes a self-fulfilling prophecy (Rosenthal and Jacobsen applied to race): lower expectations → lower effort → lower attainment. Rist: labelling begins in primary school."),
-  card("Education", "full", "Internal processes — ethnicity", "What is educational triage and how does it disadvantage Black pupils?", "Gillborn and Youdell: schools under pressure to hit grade boundaries focus resources on C/D borderline pupils. Black pupils are disproportionately placed in 'hopeless cases' or 'safe bets' categories and get less teacher attention. This is a form of institutional racism embedded in performance management culture."),
-  card("Education", "full", "Internal processes — ethnicity", "How are ethnic subcultures formed in response to school processes?", "Sewell: Black boys respond to racism in four ways — rebels (reject school entirely), retreatists (disengage quietly), conformists (assimilate), innovators (stay committed to education but resist racism). The 'rebel' identity gets most teacher attention but is a minority. Most Black boys are actually pro-school."),
-  card("Education", "full", "Internal processes — ethnicity", "What are speech hierarchies and how do they disadvantage some pupils?", "Bernstein's restricted vs elaborated code — applied to ethnicity: pupils whose home language or dialect differs from standard English (e.g. AAVE, patois, EAL speakers) may be judged less intelligent by teachers. Coard: Black children's linguistic style was devalued in 1970s schools. Still relevant in assessment contexts."),
-  card("Education", "full", "Internal processes — ethnicity", "What did Connolly find about racism and young children?", "Connolly: racist attitudes and racialised identities form very early — even in nursery and Key Stage 1. Teachers had different expectations of Black and South Asian children from the start of school. This shows that racism in education begins before secondary school, challenging the idea it is about teen peer culture."),
-];
-
-// ── SELECTION POLICIES ────────────────────────────────────────────────────
-const SELECTION_FULL = [
-  card("Education", "full", "Selection policies", "What was the tripartite system?", "Introduced by the 1944 Butler Education Act. Three types of school: grammar (academic), secondary modern (vocational), technical (craft/trades). Selection via the 11+ exam. Hugely class-biased — MC children more likely to pass. Abolished in most areas from the 1960s with comprehensive schools."),
-  card("Education", "full", "Selection policies", "How do comprehensive schools differ from the tripartite system?", "Comprehensives (introduced 1960s–70s) have a mixed-ability intake from the local area — no selection by academic ability. Aimed to reduce class inequality in education. But: internal streaming and setting within schools recreated some of the same class divisions (Ball: 'Beachside Comprehensive')."),
-  card("Education", "full", "Selection policies", "What is 'selection by mortgage'?", "Ball: in a marketised system, parents buy homes in the catchment areas of high-performing schools. House prices near good schools are higher. This means that middle-class families effectively buy access to better schools — selection by wealth, not ability. Gewitz et al support this finding."),
-  card("Education", "full", "Selection policies", "What is covert selection?", "Schools in a market system select 'desirable' pupils without openly saying so: interviews, requiring uniform from day one, off-putting prospectuses, visiting days on weekdays only. Filters out poorer, less engaged or potentially disruptive pupils. Tough and Brooks: grammar schools use covert selection even in entry exams."),
-  card("Education", "full", "Selection policies", "What is streaming and how does it affect class achievement?", "Streaming: pupils placed in different teaching groups for all subjects based on ability (set = per subject). Lacey: differentiation and polarisation — streaming divides pupils, who then polarise into pro-school (top sets) and anti-school (bottom sets) subcultures. Bottom sets predominantly working-class (Ball; Gillborn and Youdell)."),
-];
-
-// ── MARKETISATION AND PRIVATISATION ──────────────────────────────────────
-const MARKET_FULL = [
-  card("Education", "full", "Marketisation and privatisation", "What was the Education Reform Act 1988 and why is it so important?", "Key turning point introduced by Thatcher's New Right government. Created an education market through: league tables (public school rankings), OFSTED inspections, formula funding (per-pupil budget), open enrolment (parental choice), National Curriculum, and Local Management of Schools (schools control their own budget). Transformed education into a quasi-market."),
-  card("Education", "full", "Marketisation and privatisation", "What are the key features of marketisation in education?", "1. League tables — schools ranked publicly; parents can compare. 2. OFSTED — inspections and published results. 3. Formula funding — popular schools get more money. 4. Parental choice — open enrolment. 5. Specialist/faith/free schools — diversity of providers. 6. Academies — schools outside local authority control. Chubb and Moe: market forces drive up standards through competition."),
-  card("Education", "full", "Marketisation and privatisation", "What is the difference between endogenous and exogenous privatisation?", "Ball: Endogenous privatisation = private sector values/methods introduced into state schools (performance targets, performance-related pay, management culture). Exogenous privatisation = private companies actually run schools (e.g. academy chains, multi-academy trusts, private tutoring firms). Both shift education from a public good to a commodity."),
-  card("Education", "full", "Marketisation and privatisation", "What are free schools and academy schools?", "Academies (from 2000, expanded 2010): state-funded schools outside local authority control, can set own curriculum, pay and admissions. Free schools (from 2010): set up by parents, teachers or charities. Both types can be run by multi-academy trusts (MATs) — private organisations. By 2023, majority of secondary schools in England are academies."),
-  card("Education", "full", "Marketisation and privatisation", "What is the New Right argument for marketisation?", "Chubb and Moe (US study): state education is ineffective because it is a bureaucratic monopoly with no incentive to improve. A market creates competition — schools that attract pupils thrive; poor schools lose pupils and must improve or close. Parental choice gives power to consumers. Standards rise overall. Schultz: investment in education as human capital benefits the economy."),
-  card("Education", "full", "Marketisation and privatisation", "What are the Marxist and social democratic criticisms of marketisation?", "Ball and Gewitz: marketisation benefits the MC who are better at 'playing the system' — choosing schools, writing applications, transport. Whitty: league tables narrow the curriculum (teaching to the test) and disadvantage schools in deprived areas. Benn and David: competition between schools damages cooperation and increases inequality. The market creates more inequality, not less."),
-  card("Education", "full", "Marketisation and privatisation", "What is 'cream-skimming' and 'silt-shifting'?", "Gewitz et al: in a marketised system, schools compete for the best pupils ('cream-skimming' — selecting high-attaining students to boost league table position) and avoid pupils who might lower their results ('silt-shifting' — excluding or discouraging SEN, EAL or low-attaining pupils). League tables incentivise schools to prioritise results over inclusion."),
-  card("Education", "full", "Marketisation and privatisation", "What did Ball say about the three types of parents in a market?", "Ball et al: Privileged/skilled choosers (MC — use all available information, transport, can visit multiple schools). Semi-skilled choosers (some WC — want to choose but lack knowledge/resources). Disconnected choosers (WC — prioritise proximity, familiarity, rely on reputation). Market benefits those with most cultural capital."),
-];
-
-// ── POLICIES TO IMPROVE EQUALITY ──────────────────────────────────────────
-const EQUALITY_POLICY_FULL = [
-  card("Education", "full", "Equality policies", "What were the main post-war policies aimed at reducing class inequality?", "1944 Butler Act: free secondary education for all. 1960s: comprehensive schools to abolish selection. Sure Start (1999, Labour): early intervention for deprived families — nurseries, parenting support, health services in deprived areas. EMA (Education Maintenance Allowance, 2004): cash payments to keep 16–18 WC pupils in education (abolished 2010)."),
-  card("Education", "full", "Equality policies", "What is the Pupil Premium and is it effective?", "Introduced 2011 (Coalition): extra funding for schools per pupil eligible for Free School Meals (FSM) — aimed at closing the class attainment gap. Schools have discretion in how to use it. Evaluation (Kendall; Allen): some evidence it narrows the gap but inconsistent — depends on how schools spend the money. Critics: amount too small given scale of disadvantage."),
-  card("Education", "full", "Equality policies", "What is Aim Higher and similar aspiration-raising policies?", "Labour policies aimed at raising aspirations of WC and ethnic minority pupils to go to university: Aim Higher, Aimhigher (university outreach programmes), mentoring schemes, campus visits. Ball: these assume the problem is attitudes, ignoring material and structural barriers. Keddie: policy focuses on individual pupils rather than changing structures."),
-  card("Education", "full", "Equality policies", "What are GIST and WISE and what were they trying to do?", "GIST (Girls Into Science and Technology) and WISE (Women Into Science and Engineering): 1980s–90s initiatives to encourage girls into male-dominated subjects. Brought female scientists into schools as role models, changed textbook imagery, made classrooms more girl-friendly. Some success — girls' science GCSE entry increased. Feminist critique: doesn't change the underlying gendered culture of science."),
-  card("Education", "full", "Equality policies", "What multicultural and anti-racist policies have been used in education?", "Multicultural education: includes diverse cultures in curriculum, celebrates cultural events, resources represent multiple ethnicities. Anti-racist education (Troyna): goes further — actively challenges racism and institutional discrimination. Ethnocentric curriculum critique (Coard) inspired both. Ball: multicultural education risks being tokenistic ('sari, samosa and steel band') without tackling structural racism."),
-  card("Education", "full", "Equality policies", "What does Progress 8 measure and is it fairer?", "Progress 8 (introduced 2016): measures pupils' progress across 8 subjects relative to their starting point (Key Stage 2 results). Intended to be fairer than raw attainment (Attainment 8) as it rewards schools for improving all pupils, not just those near grade boundaries. Criticism: still favours schools in affluent areas with higher-attaining intakes; doesn't solve underlying inequality."),
-  card("Education", "full", "Equality policies", "What is the social mobility strategy and what are its limitations?", "Government social mobility strategy (various versions under Labour and Conservative): targets WC pupils for university entry, professional careers. Critics: social mobility assumes individuals can move up without structural change — Goldthorpe: social mobility is a 'zero-sum game', for someone to move up another must move down. Does not address root causes of class inequality."),
-];
-
-// ── GLOBALISATION AND EDUCATION ───────────────────────────────────────────
-const GLOBALISATION_EDU_FULL = [
-  card("Education", "full", "Globalisation and education", "What is the impact of globalisation on educational policy?", "Globalisation creates international competition between economies — governments respond by reforming education to produce a more skilled, flexible workforce. PISA and TIMSS international rankings make governments compare their systems and adopt 'successful' policies from abroad (e.g. UK importing Finnish or East Asian methods). Ball: 'policy tourism'."),
-  card("Education", "full", "Globalisation and education", "What are PISA and TIMSS and why do they matter?", "PISA (Programme for International Student Assessment, OECD) and TIMSS (Trends in International Mathematics and Science Study): international tests ranking countries by pupil attainment in literacy, maths and science. UK governments use poor rankings to justify reforms. Critics (Alexander; Tomlinson): rankings oversimplify and ignore cultural context; they drive narrow, testable curriculum."),
-  card("Education", "full", "Globalisation and education", "How has globalisation led to the expansion of private education providers?", "Globalisation enables multinational education companies to operate across borders: private tutoring firms (Kumon), EdTech platforms (Khan Academy, Pearson), academy chain management, university franchising. Ball: the 'global education industry' is worth billions. Exogenous privatisation is partly driven by global capital seeking new markets in public services."),
-  card("Education", "full", "Globalisation and education", "What is the 'knowledge economy' argument in education?", "Globalisation shifts developed economies from manufacturing to knowledge-based industries (finance, tech, media). Governments argue education must produce 'knowledge workers' — critical, flexible, IT-literate graduates. This drives: literacy and numeracy strategies, compulsory maths and English to 18, expansion of universities and focus on STEM subjects."),
-  card("Education", "full", "Globalisation and education", "How has globalisation affected the curriculum?", "Literacy and numeracy strategies (National Literacy Strategy 1998): standardised teaching to raise basic skills. Compulsory maths and English to 18 (post-2013): reflects global economy's demand for numerate workers. Reforms to curriculum content to include computing (coding). Critics (Alexander; Tomlinson): globalisation-driven curriculum is narrow and kills creativity."),
-  card("Education", "full", "Globalisation and education", "What did Ball argue about the impact of globalisation on education?", "Ball: globalisation drives a 'new managerialism' in schools — performance targets, inspection regimes, league tables — imported from business culture. It also enables policy transfer across nations ('travelling policies'). The result is convergence of education systems worldwide around market principles, which may not suit all national contexts."),
-  card("Education", "full", "Globalisation and education", "What is the role of international organisations in shaping education policy?", "World Bank and IMF structural adjustment programmes have required developing countries to privatise/reform education as a condition of loans. OECD's PISA rankings shape policy in developed countries. EU free movement affected UK school demographics. Tomlinson: UK education reform cannot be understood without understanding its global economic context."),
-];
-
-// ── PRIVATE SCHOOLING ─────────────────────────────────────────────────────
-const PRIVATE_SCHOOL_FULL = [
-  card("Education", "full", "Private and independent schools", "What is the independent school sector?", "Around 7% of UK pupils attend fee-paying independent schools (also called private or public schools). Fees average £15,000–£45,000 per year. They are exempt from the National Curriculum and OFSTED inspection regime (inspected by ISI instead). They include famous schools like Eton, Harrow, and Winchester."),
-  card("Education", "full", "Private and independent schools", "How do independent schools affect class inequality?", "Sutton Trust: privately educated pupils are massively over-represented in elite positions — 65% of senior judges, 57% of senior civil servants and 52% of diplomats attended private school (despite being 7% of all pupils). Attending private school provides superior resources, small class sizes, and crucially, social networks ('old boy network') that persist into working life."),
-  card("Education", "full", "Private and independent schools", "What is the 'old boy network' and how does it reproduce inequality?", "Private schools create social networks among the elite — shared contacts, mutual trust, and social capital that advantage graduates in job markets and professions. Bourdieu: this is social capital (connections) combined with cultural capital. It is not just qualifications that matter — who you know, how you speak and carry yourself all give private school pupils advantages."),
-  card("Education", "full", "Private and independent schools", "What is the New Right view of private schools?", "New Right (Chubb and Moe): private schools are more effective because they are free from bureaucratic state control, are directly accountable to fee-paying parents, and have stronger incentives to perform. They argue this model should be extended to all schools through academies, free schools and voucher systems."),
-  card("Education", "full", "Private and independent schools", "What is the Marxist/critical view of private schools?", "Private schools reproduce class advantage across generations — they are the mechanism by which the ruling class reproduces itself. Gramsci: elite schools create cultural hegemony — graduates who share the same values, accents and contacts go on to run institutions. The state's failure to abolish private schools shows the limits of reform within capitalism."),
-  card("Education", "full", "Private and independent schools", "What is the debate about charitable status for private schools?", "Most private schools have charitable status, giving them significant tax advantages (estimated £1.5 billion per year in tax relief). Critics argue this public subsidy for elite institutions deepens inequality. Some schools offer bursaries or state partnerships in exchange. The Labour government's 2024 move to apply VAT to private school fees reignited this debate."),
-];
-
-// ── CONDENSED CARDS ───────────────────────────────────────────────────────
-const GENDER_TRENDS_CONDENSED = [
-  card("Education", "condensed", "Gender trends", "Gender: attainment trends", "GCSE: girls 69% vs boys 62% grade 4+ Eng+Maths. Gap largest in English.\nA Level: girls = humanities; boys = maths/physics (~80% male). Girls more A grades overall.\nUniversity: 57% female, 43% male. Girls dominate most subjects.\nWider: 77% exclusions are male. Girls lead at all Key Stages 1–5. Gap narrowing at A Level only."),
-];
-
-const GENDER_EXTERNAL_CONDENSED = [
-  card("Education", "condensed", "External factors — gender", "Why do girls outperform boys? (External)", "Socialisation (Oakley): girls raised to be cooperative, patient, literary — suits school.\nBedroom culture (McRobbie): girls' leisure is home-based/literacy-rich.\nChanges in employment (Norman, Sharpe): service economy opened careers for women; aspirations rose.\nFeminism: raised girls' expectations. GIST/WISE: encouraged girls into science.\nCrisis of masculinity (Mac an Ghail): WC male jobs gone — school feels irrelevant. Laddish culture devalues effort."),
-];
-
-const GENDER_INTERNAL_CONDENSED = [
-  card("Education", "condensed", "Internal processes — gender", "Gender inside schools", "Feminisation of education (Sewell, Epstein): coursework suits girls' learning styles.\nTeacher expectations (Francis & Skelton): boys disciplined more; girls get more academic support.\nLaddish subcultures (Jackson): working hard seen as 'uncool' or 'feminine' by some male peer groups.\nGender domains (Paetcher): subjects coded male/female; peer pressure reinforces gender-typed choices.\nBoaler: competitive maths culture disadvantages girls; collaborative teaching closes the gap."),
-];
-
-const ETHNICITY_CONDENSED = [
-  card("Education", "condensed", "Ethnicity trends", "Ethnicity: attainment trends", "Be SPECIFIC — not all ethnic minority groups underperform!\nChinese: highest achieving. Indian: above average.\nBlack Caribbean: significantly below average, especially boys; most excluded (Gillborn & Mirza).\nPakistani/Bangladeshi: historically below average, gap narrowing.\nWhite WC: now among lowest attaining overall.\nGap widens during secondary school → internal school processes matter."),
-  card("Education", "condensed", "External factors — ethnicity", "Ethnicity: external factors", "Material: poverty (Black/Bangladeshi families disproportionately affected) → poor resources, housing, diet (Strand; Gillborn & Mirza).\nCultural: Modood — South Asian families highly value education (pro-education culture). Flannery — language barriers for new arrivals.\nCultural capital: some ethnic groups' capital matches school expectations well (Basit on Muslim girls); others face mismatch.\nDon't use deficit models — avoids blaming the victim."),
-  card("Education", "condensed", "Internal processes — ethnicity", "Ethnicity: inside schools", "Teacher racism (Wright): less time, more criticism for Black/Asian pupils.\nInstitutional racism (Macpherson): embedded in policies, not just individual prejudice — exclusion rates, streaming.\nEthnocentric curriculum (Coard): White/Western-centred; minority cultures marginalised.\nLabelling + self-fulfilling prophecy (Gillborn): racialised low expectations → lower attainment.\nEducational triage (Gillborn & Youdell): Black pupils disproportionately classed as 'hopeless cases'.\nSewell: Black boys — rebels, retreatists, conformists, innovators. Most are actually pro-school."),
-];
-
-const SELECTION_CONDENSED = [
-  card("Education", "condensed", "Selection policies", "Selection policies", "Tripartite (1944): grammar/secondary modern/technical via 11+. Class-biased — MC advantage.\nComprehensive (1960s): mixed ability, local intake — aimed to reduce inequality. But streaming recreated class divisions inside school (Ball: Beachside).\nSelection by mortgage (Ball): MC buy houses in good-school catchment areas — market = wealth buys access.\nCovert selection (Gewitz): schools filter pupils via interviews, uniform, prospectuses.\nStreaming: differentiation → polarisation (Lacey). Bottom sets = WC. Educational triage (Gillborn & Youdell)."),
-];
-
-const MARKET_CONDENSED = [
-  card("Education", "condensed", "Marketisation and privatisation", "Marketisation and privatisation", "ERA 1988 (Thatcher): league tables, OFSTED, formula funding, open enrolment, National Curriculum, LMS.\nAcademies/free schools: outside LA control. MATs = private chains run schools.\nEndogenous privatisation (Ball): private sector VALUES in schools (targets, performance pay).\nExogenous privatisation: private COMPANIES run schools.\nNew Right (Chubb & Moe): competition raises standards.\nCritique: Ball, Gewitz — benefits MC 'skilled choosers'. Cream-skimming/silt-shifting. Whitty — narrows curriculum. More inequality, not less."),
-];
-
-const EQUALITY_CONDENSED = [
-  card("Education", "condensed", "Equality policies", "Policies to improve equality", "Class: Sure Start (early intervention), EMA (abolished 2010), Pupil Premium (per-FSM pupil funding — mixed evidence), Aim Higher (aspiration raising — ignores structural barriers).\nGender: GIST/WISE (girls into science — some success), Progress 8 (measures progress not just attainment).\nEthnicity: multicultural education (Troyna: too tokenistic), anti-racist education (challenges structure), EAL support.\nCritique: social mobility policy ignores structural causes of inequality (Goldthorpe: zero-sum game)."),
-];
-
-const GLOBALISATION_EDU_CONDENSED = [
-  card("Education", "condensed", "Globalisation and education", "Globalisation and education", "Global competition → government reform education for 'knowledge economy' (STEM, literacy, numeracy).\nPISA/TIMSS rankings: drive policy — UK borrows from 'high performing' systems (Ball: 'policy tourism'). Critics (Alexander, Tomlinson): rankings narrow curriculum, ignore cultural context.\nPrivate providers expand globally: EdTech, tutoring firms, academy chains = global education industry (Ball).\nNew managerialism: business culture imported into schools — targets, inspections, performance data.\nWorld Bank/IMF: force developing countries to privatise education as loan condition."),
-];
-
-const PRIVATE_SCHOOL_CONDENSED = [
-  card("Education", "condensed", "Private and independent schools", "Private and independent schools", "7% of pupils, disproportionate elite outcomes: 65% senior judges, 57% senior civil servants privately educated (Sutton Trust).\nOld boy network: social capital + cultural capital → career advantage beyond qualifications (Bourdieu).\nNew Right (Chubb & Moe): private schools more effective — market accountability.\nMarxist view: mechanism for ruling class to reproduce itself (Gramsci: hegemony).\nCharitable status: ~£1.5bn tax relief — public subsidy for elite. 2024: Labour applied VAT to fees.\nKey evaluative point: private school advantage is about networks and capital, not just teaching quality."),
-];
-
 
 const ECONOMICS_THEME2_FULL = [
   card("Theme 2", "full", "UK economy performance", "What is gross domestic product (GDP)?", "The total value of goods and services produced in an economy over a period of time, usually a year."),
@@ -1572,40 +1369,50 @@ const ECONOMICS_THEME4_CONDENSED = [
   card("Theme 4", "condensed", "Evaluation", "Theme 4: essay judgement", "Judgement usually depends on the country, the time horizon and whether the goal is growth, stability, equality or external balance.")
 ];
 
+
+
 const ALL_CARDS = [
-  ...EDUCATION_FULL,
-  ...EDUCATION_CONDENSED,
-  ...GENDER_TRENDS_FULL,
-  ...GENDER_TRENDS_CONDENSED,
-  ...GENDER_EXTERNAL_FULL,
-  ...GENDER_EXTERNAL_CONDENSED,
-  ...GENDER_INTERNAL_FULL,
-  ...GENDER_INTERNAL_CONDENSED,
-  ...ETHNICITY_TRENDS_FULL,
-  ...ETHNICITY_CONDENSED,
-  ...ETHNICITY_EXTERNAL_FULL,
-  ...ETHNICITY_INTERNAL_FULL,
-  ...SELECTION_FULL,
-  ...SELECTION_CONDENSED,
-  ...MARKET_FULL,
-  ...MARKET_CONDENSED,
-  ...EQUALITY_POLICY_FULL,
-  ...EQUALITY_CONDENSED,
-  ...GLOBALISATION_EDU_FULL,
-  ...GLOBALISATION_EDU_CONDENSED,
-  ...PRIVATE_SCHOOL_FULL,
-  ...PRIVATE_SCHOOL_CONDENSED,
-  ...METHODS_IN_CONTEXT_FULL,
-  ...METHODS_IN_CONTEXT_CONDENSED,
-  ...THEORY_METHODS_FULL,
-  ...THEORY_METHODS_CONDENSED,
+  // Psychology — Approaches
+  ...ORIGINS_FULL,
+  ...CLASSICAL_FULL,
+  ...OPERANT_FULL,
+  ...SLT_FULL,
+  ...COGNITIVE_FULL,
+  ...BIOLOGICAL_FULL,
+  ...PSYCHODYNAMIC_FULL,
+  ...HUMANISTIC_FULL,
+  ...APPROACHES_CONDENSED,
+  // Economics
   ...ECONOMICS_THEME2_FULL,
   ...ECONOMICS_THEME2_CONDENSED,
   ...ECONOMICS_THEME4_FULL,
-  ...ECONOMICS_THEME4_CONDENSED
+  ...ECONOMICS_THEME4_CONDENSED,
 ];
 
+const TOPIC_SUBHEADINGS = {
+  'Approaches': [
+    { label: 'The Origins of Psychology', topics: ['Origins of Psychology'] },
+    { label: 'Behaviourism', topics: ['Classical Conditioning', 'Operant Conditioning'] },
+    { label: 'Learning & Cognition', topics: ['Social Learning Theory', 'Cognitive Approach'] },
+    { label: 'Biology & Personality', topics: ['Biological Approach', 'Psychodynamic Approach', 'Humanistic Approach'] },
+  ],
+};
 
+const GROUP_META = [
+  { name: 'Approaches', note: 'Origins, Behaviourism, SLT, Cognitive, Biological, Psychodynamic, Humanistic' },
+];
+const GROUP_NAMES = GROUP_META.map(u => u.name);
+const DEFAULT_GROUPS = [...GROUP_NAMES];
+
+const GROUP_META_BY_SUBJECT = {
+  Psychology: [
+    { name: 'Approaches', note: 'Origins, Behaviourism (Classical + Operant), SLT, Cognitive, Biological, Psychodynamic, Humanistic' },
+  ],
+  Economics: [
+    { name: 'Theme 2', note: 'UK performance, policy and inequality' },
+    { name: 'Theme 4', note: 'Globalisation, trade and development' },
+  ],
+};
 
 const SUPABASE_URL = 'https://chwnfwfjgjoadkvmmkdi.supabase.co';
 
@@ -1615,29 +1422,28 @@ const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 
 
-const GROUP_META = [
-  { name: "Education", note: "Functionalism, Marxism, New Right, class, gender, ethnicity, selection, marketisation, policies, globalisation" },
-  { name: "Research Methods + Methods in Context", note: "Methods in context, research methods, theory and methods" }
-];
 
-const GROUP_NAMES = GROUP_META.map(unit => unit.name);
-const DEFAULT_GROUPS = [...GROUP_NAMES];
-const UNIT_TO_GROUP = {
-  'Education': 'Education',
-  'Research Methods + Methods in Context': 'Research Methods + Methods in Context',
-  'Theory & Methods': 'Research Methods + Methods in Context'
-};
 
-const GROUP_META_BY_SUBJECT = {
-  Sociology: [
-    { name: 'Education', note: 'Functionalism, Marxism, New Right, class, gender, ethnicity, selection, marketisation, policies, globalisation' },
-    { name: 'Research Methods + Methods in Context', note: 'Methods, theory, MIC and exam technique' }
-  ],
-  Economics: [
-    { name: 'Theme 2', note: 'UK performance, policy and inequality' },
-    { name: 'Theme 4', note: 'Globalisation, trade and development' }
-  ]
-};
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function formatDate(ts) {
+  const d = new Date(ts);
+  const now = new Date();
+  const diff = ts - Date.now();
+  if (diff < 60000) return 'in < 1 min';
+  if (diff < 3600000) return `in ${Math.round(diff/60000)}m`;
+  if (diff < 86400000) return `in ${Math.round(diff/3600000)}h`;
+  const opts = d.getFullYear() === now.getFullYear()
+    ? { month:'short', day:'numeric' }
+    : { year:'numeric', month:'short', day:'numeric' };
+  return d.toLocaleDateString(undefined, opts);
+}
 
 let profileMap = {};
 let cardIdMap = {};
@@ -1672,9 +1478,9 @@ function saveCondensedMode() {
 function loadSelectedSubject() {
   try {
     const saved = localStorage.getItem(lk('subject'));
-    return saved === 'Economics' ? 'Economics' : 'Sociology';
+    return saved === 'Economics' ? 'Economics' : 'Psychology';
   } catch {
-    return 'Sociology';
+    return 'Psychology';
   }
 }
 function saveSelectedSubject() {
@@ -1722,16 +1528,15 @@ function saveTypedAnswers() {
 function typedKey(cardData) { return cid(cardData); }
 function cardGroup(cardData) {
   const unit = String(cardData.unit || '');
-  if (unit === 'Education') return 'Education';
-  if (unit === 'Research Methods + Methods in Context' || unit === 'Theory & Methods') return 'Research Methods + Methods in Context';
+  if (unit === 'Approaches') return 'Approaches';
   if (unit === 'Theme 2') return 'Theme 2';
   if (unit === 'Theme 4') return 'Theme 4';
-  return unit || 'Education';
+  return unit || 'Approaches';
 }
 function cardSubject(cardData) {
   const group = cardGroup(cardData);
   if (group === 'Theme 2' || group === 'Theme 4') return 'Economics';
-  return 'Sociology';
+  return 'Psychology';
 }
 function availableTopicsForGroup(groupName) {
   return [...new Set(
@@ -1742,8 +1547,12 @@ function availableTopicsForGroup(groupName) {
 }
 function selectedTopicsForGroup(groupName) {
   const available = availableTopicsForGroup(groupName);
-  const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-  return saved.length ? saved : available;
+  // hasOwnProperty check: if key exists, respect it even if empty (explicit deselect-all)
+  if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) {
+    return available;
+  }
+  const saved = selectedTopics[groupName];
+  return Array.isArray(saved) ? saved.filter(t => available.includes(t)) : available;
 }
 
 function normalizeSelections() {
@@ -1761,8 +1570,13 @@ function normalizeSelections() {
 
   selectedGroups.forEach(groupName => {
     const available = availableTopicsForGroup(groupName);
-    const saved = Array.isArray(selectedTopics[groupName]) ? selectedTopics[groupName].filter(topic => available.includes(topic)) : [];
-    selectedTopics[groupName] = saved.length ? saved : available;
+    if (!Object.prototype.hasOwnProperty.call(selectedTopics, groupName)) {
+      selectedTopics[groupName] = [...available]; // fresh — default all
+    } else {
+      // Preserve explicit selection, including [] (all deselected by user)
+      const saved = selectedTopics[groupName];
+      selectedTopics[groupName] = Array.isArray(saved) ? saved.filter(t => available.includes(t)) : [...available];
+    }
   });
 
   saveSelectedGroups();
@@ -1770,8 +1584,8 @@ function normalizeSelections() {
 }
 function setSelectedTopicsForGroup(groupName, topics) {
   const available = availableTopicsForGroup(groupName);
-  const cleaned = [...new Set(topics)].filter(topic => available.includes(topic));
-  selectedTopics[groupName] = cleaned.length ? cleaned : available;
+  // Allow empty array — user explicitly deselected everything
+  selectedTopics[groupName] = [...new Set(topics)].filter(t => available.includes(t));
   saveSelectedTopics();
 }
 function getTypedAnswer(cardData) { return typedAnswers[typedKey(cardData)] || ''; }
@@ -1875,58 +1689,75 @@ function setSyncStatus(state, label) {
 }
 
 function topicSummaryText() {
-  const groupLabel = selectedSubject;
-  const fallbackGroups = groupsForSubject(selectedSubject);
-  const chunkCount = fallbackGroups.reduce((total, groupName) => total + selectedTopicsForGroup(groupName).length, 0);
-  const sectionCount = fallbackGroups.length || selectedGroups.length || 0;
-  return `${groupLabel} · ${sectionCount} sections · ${chunkCount} chunks · ${condensedMode ? 'Condensed notes' : 'Full deck'}`;
+  const groups = groupsForSubject(selectedSubject);
+  const totalTopics = groups.reduce((s, g) => s + availableTopicsForGroup(g).length, 0);
+  const selTopics = groups.reduce((s, g) => s + selectedTopicsForGroup(g).length, 0);
+  return `${selectedSubject} · ${selTopics}/${totalTopics} topics · ${condensedMode ? 'Condensed' : 'Full deck'}`;
 }
 
 function renderSubjectButtons() {
-  const sociBtn = document.getElementById('btnSociology');
+  document.querySelectorAll('.subject-pill').forEach(b => b.classList.remove('active'));
+  const psychBtn = document.getElementById('btnPsychology');
   const econBtn = document.getElementById('btnEconomics');
-  const buttons = document.querySelectorAll('.subject-pill');
-  buttons.forEach(btn => btn.classList.remove('active'));
+  if (psychBtn) { psychBtn.classList.toggle('active', selectedSubject === 'Psychology'); psychBtn.setAttribute('aria-pressed', String(selectedSubject === 'Psychology')); }
+  if (econBtn) { econBtn.classList.toggle('active', selectedSubject === 'Economics'); econBtn.setAttribute('aria-pressed', String(selectedSubject === 'Economics')); }
+}
 
-  if (sociBtn) {
-    sociBtn.classList.toggle('active', selectedSubject === 'Sociology');
-    sociBtn.setAttribute('aria-pressed', String(selectedSubject === 'Sociology'));
-  }
-  if (econBtn) {
-    econBtn.classList.toggle('active', selectedSubject === 'Economics');
-    econBtn.setAttribute('aria-pressed', String(selectedSubject === 'Economics'));
-  }
+function cardCountForTopic(groupName, topic) {
+  const variant = condensedMode ? 'condensed' : 'full';
+  return ALL_CARDS.filter(c => cardGroup(c) === groupName && c.t === topic && c.variant === variant).length;
 }
 
 function renderTopicFilters() {
-  normalizeSelections();
   const host = document.getElementById('topicFilter');
   const groups = groupsForSubject(selectedSubject);
+  const subheadingMap = (typeof TOPIC_SUBHEADINGS !== 'undefined') ? TOPIC_SUBHEADINGS : {};
+
   host.innerHTML = groups.map(groupName => {
     const meta = ((GROUP_META_BY_SUBJECT[selectedSubject] || []).find(item => item.name === groupName)) || { note: '' };
     const topics = availableTopicsForGroup(groupName);
     const checkedTopics = selectedTopicsForGroup(groupName);
-    return `
-      <details class="topic-accordion" open>
-        <summary>
-          <span>${groupName}</span>
-          <span class="summary-meta">${meta.note}</span>
-        </summary>
-        <div class="topic-accordion-body">
-          <div class="topic-grid">
-            ${topics.map(topic => `
-              <label class="check-pill ${checkedTopics.includes(topic) ? 'is-selected' : ''}">
-                <input class="topic-toggle" data-group="${groupName}" type="checkbox" value="${topic}" ${checkedTopics.includes(topic) ? 'checked' : ''} />
-                <div>
-                  <strong>${topic}</strong>
-                  <span>Chunk</span>
-                </div>
-              </label>
-            `).join('')}
-          </div>
+    const allChecked = topics.length > 0 && topics.every(t => checkedTopics.includes(t));
+    const noneChecked = checkedTopics.length === 0;
+    const subheadings = subheadingMap[groupName];
+
+    function pillHTML(topic) {
+      const count = cardCountForTopic(groupName, topic);
+      const isChecked = checkedTopics.includes(topic);
+      return `<label class="check-pill ${isChecked ? 'is-selected' : ''}">
+        <input class="topic-toggle" data-group="${groupName}" type="checkbox" value="${topic}" ${isChecked ? 'checked' : ''} />
+        <div><strong>${topic}</strong><span>${count} card${count !== 1 ? 's' : ''}</span></div>
+      </label>`;
+    }
+
+    let gridHTML = '';
+    if (subheadings) {
+      subheadings.forEach(sh => {
+        const shTopics = sh.topics.filter(t => topics.includes(t));
+        if (!shTopics.length) return;
+        gridHTML += `<div class="topic-subheading">${sh.label}</div>`;
+        gridHTML += shTopics.map(pillHTML).join('');
+      });
+      const covered = new Set(subheadings.flatMap(sh => sh.topics));
+      topics.filter(t => !covered.has(t)).forEach(t => { gridHTML += pillHTML(t); });
+    } else {
+      gridHTML = topics.map(pillHTML).join('');
+    }
+
+    return `<details class="topic-accordion" open>
+      <summary>
+        <span>${groupName}</span>
+        <span class="summary-meta">${meta.note}</span>
+      </summary>
+      <div class="topic-accordion-body">
+        <div class="quick-select-row">
+          <button class="quick-sel-btn" data-group="${groupName}" data-action="all" ${allChecked ? 'disabled' : ''}>✓ Select all</button>
+          <button class="quick-sel-btn danger" data-group="${groupName}" data-action="none" ${noneChecked ? 'disabled' : ''}>✕ Deselect all</button>
+          <span class="sel-count">${checkedTopics.length}/${topics.length} selected</span>
         </div>
-      </details>
-    `;
+        <div class="topic-grid">${gridHTML}</div>
+      </div>
+    </details>`;
   }).join('');
 
   document.getElementById('topicSummary').textContent = topicSummaryText();
@@ -1934,19 +1765,25 @@ function renderTopicFilters() {
   host.querySelectorAll('input.topic-toggle').forEach(input => {
     input.addEventListener('change', () => {
       const groupName = input.dataset.group;
-      const checked = [...host.querySelectorAll(`input.topic-toggle[data-group="${groupName}"]:checked`)].map(node => node.value);
+      const checked = [...host.querySelectorAll(`input.topic-toggle[data-group="${groupName}"]:checked`)].map(n => n.value);
       setSelectedTopicsForGroup(groupName, checked);
-      normalizeSelections();
       renderTopicFilters();
-      flipped = false;
-      currentId = null;
-      buildDeck();
-      updateReviewQueue();
-      populateTypingArea();
+      flipped = false; currentId = null;
+      buildDeck(); updateReviewQueue(); populateTypingArea();
+    });
+  });
+
+  host.querySelectorAll('.quick-sel-btn').forEach(btn => {
+    btn.addEventListener('click', e => {
+      e.preventDefault();
+      const groupName = btn.dataset.group;
+      setSelectedTopicsForGroup(groupName, btn.dataset.action === 'all' ? availableTopicsForGroup(groupName) : []);
+      renderTopicFilters();
+      flipped = false; currentId = null;
+      buildDeck(); updateReviewQueue(); populateTypingArea();
     });
   });
 }
-
 function updateProfileUI() {
   const profileButtons = document.querySelectorAll('.profile-pill');
   profileButtons.forEach(btn => btn.classList.remove('active'));
@@ -2183,8 +2020,7 @@ function activeCatalog() {
     return topics.includes(cardData.t);
   });
 
-  if (filtered.length) return filtered;
-  return cards.length ? cards : ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
+  return filtered; // May be empty if user deselected all topics — handled by buildDeck
 }
 
 function currentCard() { return deck[idx]; }
@@ -2240,9 +2076,9 @@ function renderEmptyState() {
   deck = [];
   idx = 0;
   currentId = null;
-  document.getElementById('cardQ').textContent = 'No cards match these filters yet.';
-  document.getElementById('cardA').textContent = 'Reset the subject filters above if you want to see a different deck.';
-  document.getElementById('cardASolo').textContent = 'Reset the subject filters above if you want to see a different deck.';
+  document.getElementById('cardQ').textContent = 'No topics selected — tap Select all above to load cards.';
+  document.getElementById('cardA').textContent = 'Use Select all in the topic panel above, or choose a different topic.';
+  document.getElementById('cardASolo').textContent = 'Use Select all in the topic panel above, or choose a different topic.';
   document.getElementById('cardTopic').textContent = 'Deck';
   document.getElementById('cardTopicB').textContent = 'Deck';
   document.getElementById('cardMeta').textContent = 'Adjust the filters above';
@@ -2263,14 +2099,8 @@ function buildDeck() {
 
   let source = activeCatalog();
   if (!source.length) {
-    // Self-heal from any stale saved filters by falling back to the active subject deck.
-    source = ALL_CARDS.filter(cardData => cardSubject(cardData) === selectedSubject && cardData.variant === (condensedMode ? 'condensed' : 'full'));
-  }
-  if (!source.length) {
-    source = ALL_CARDS.filter(cardData => cardData.variant === (condensedMode ? 'condensed' : 'full'));
-  }
-  if (!source.length) {
-    source = [...ALL_CARDS];
+    renderEmptyState();
+    return;
   }
 
   let cards = [...source];
@@ -2561,6 +2391,7 @@ document.getElementById('typePanel').addEventListener('click', e => e.stopPropag
 window.addEventListener('keydown', onKey);
 
 init();
+
 </script>
 </body>
 </html>

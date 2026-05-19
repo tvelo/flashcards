@@ -63,6 +63,12 @@ button.active{
   color:#fff;
   box-shadow:0 4px 18px rgba(122,168,255,.35);
 }
+#predictionsToggle.active{
+  background:linear-gradient(135deg,#f0c040,#e08020);
+  border-color:transparent;
+  color:#1a1000;
+  box-shadow:0 4px 18px rgba(240,192,64,.35);
+}
 select,textarea,input{
   border:1px solid var(--line);
   color:var(--text);
@@ -242,7 +248,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 }
 .controls{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;
   gap:10px;
   margin:16px 0 14px;
 }
@@ -1000,6 +1006,7 @@ html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rg
       <option value="mixed">Mixed topics</option>
     </select>
     <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
+    <button id="predictionsToggle" class="secondary" aria-pressed="false" title="Filter to predicted Paper 2 topics only">Predictions: Off</button>
     <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
     <button id="shuffleBtn" class="secondary">Shuffle</button>
     <button id="resetBtn" class="secondary">Reset progress</button>
@@ -1301,6 +1308,236 @@ const APPROACHES_CONDENSED = [
   card("Approaches","condensed","Humanistic Approach","Humanistic Approach","Free will, unique, conscious, growth-oriented. Rejects reductionism + determinism.\n\nMaslow's hierarchy (SELSEP): Physiological → Safety → Love/Belonging → Esteem → Self-Actualisation.\nRogers' three selves: self-concept | ideal self | real self.\nCongruence (alignment) = wellbeing → self-actualisation.\nConditions of worth → incongruence → anxiety and depression.\nClient-centred therapy: UPR + empathy + genuineness.\n\n✓ Teen false-self research supports Rogers — incongruence linked to depression.\n✗ Non-scientific; unfalsifiable; culturally biased (individualistic Western values); cannot explain specific disorders."),
 ];
 
+// ═══════════════════════════════════════════════════════════════════════
+//  PSYCHOLOGY — AQA A-LEVEL RESEARCH METHODS
+// ═══════════════════════════════════════════════════════════════════════
+
+const RESEARCH_METHODS_FULL = [
+  // ── Experiments ──
+  card("Research Methods","full","Experiments","What is a laboratory experiment?","A study conducted in a controlled environment where the researcher manipulates the IV and controls extraneous variables through standardisation. +High internal validity; can establish cause and effect. −Low ecological validity; participants may show demand characteristics."),
+  card("Research Methods","full","Experiments","What is a field experiment?","Research conducted in a naturalistic real-world setting with the researcher still manipulating the IV. +High ecological validity; participants less likely to show demand characteristics. −Extraneous variables harder to control; harder to replicate; ethical issues (no consent)."),
+  card("Research Methods","full","Experiments","What is a natural experiment?","The IV varies naturally — the researcher does not manipulate it, only measures the DV. Participants are not randomly assigned. +High ecological validity; allows study of events that cannot be manipulated ethically. −Cannot establish causation; extraneous variables uncontrolled; cannot be replicated."),
+  card("Research Methods","full","Experiments","What is a quasi-experiment?","The IV is a naturally existing characteristic of participants (e.g. gender, age, diagnosis) and cannot be manipulated. Often the only ethical way to compare naturally occurring groups. −Participant variables may act as confounds; no random allocation means causation cannot be confirmed."),
+
+  // ── Observations ──
+  card("Research Methods","full","Observations","What are the key types of observational research?","Controlled vs Natural (setting); Overt vs Covert (researcher visibility); Participant vs Non-Participant (researcher involvement). Each dimension is independent — a study can be, for example, a covert naturalistic non-participant observation."),
+  card("Research Methods","full","Observations","What is a naturalistic observation?","Behaviour is watched and recorded in its real-world setting with no manipulation. +High ecological validity. −Cannot control extraneous variables; behaviour may be unrepresentative; replication difficult; ethical issues if covert."),
+  card("Research Methods","full","Observations","What is a controlled observation?","The environment in which participants are observed is structured by the researcher (e.g. Ainsworth's Strange Situation). +High internal validity; replicable. −May lack ecological validity; participants may behave unnaturally."),
+  card("Research Methods","full","Observations","What is overt vs covert observation?","Overt: participants know they are being observed. +Ethical — consent obtained. −Demand characteristics and observer effect may alter behaviour. Covert: participants are unaware. +Higher validity as behaviour is natural. −Ethical issues: no informed consent, possible deception."),
+  card("Research Methods","full","Observations","What is participant vs non-participant observation?","Participant: the researcher joins the group being studied. +Builds rapport; richer qualitative insight. −Risk of losing objectivity; going native. Non-participant: researcher stays separate. +More objective. −Less access; some behaviour may be missed."),
+
+  // ── Observational Design ──
+  card("Research Methods","full","Observational Design","What is operationalisation in observations?","Making target behaviours clearly defined, specific and measurable so that different observers recording the same event will agree on what counts as each behaviour (e.g. defining 'aggression' as pushing, hitting or verbally threatening)."),
+  card("Research Methods","full","Observational Design","What is time sampling?","Behaviour is recorded at regular, pre-set intervals (e.g. every 30 seconds). +Systematic; manageable; flexible — can capture a range of behaviours. −May miss behaviours occurring between intervals."),
+  card("Research Methods","full","Observational Design","What is event sampling?","Only pre-defined, operationalised target behaviours are recorded each time they occur. +All occurrences of the target behaviour are captured; easy to tally. −Less flexible; behaviours outside the list are ignored, potentially missing important data."),
+  card("Research Methods","full","Observational Design","What is inter-rater reliability in observation?","The degree of agreement between two or more independent observers coding the same behaviour. Measured by correlating their records — a correlation of ≥ +0.80 is typically considered acceptable. Low inter-rater reliability indicates the behavioural categories are not clearly operationalised."),
+
+  // ── Self-Report ──
+  card("Research Methods","full","Self-Report","What is a questionnaire and what are its types of question?","A written self-report where participants answer questions about themselves. Closed questions give fixed-choice answers — produce quantitative data, easy to analyse, but may not capture nuance. Open questions allow free responses — produce rich qualitative data but are harder to analyse and compare."),
+  card("Research Methods","full","Self-Report","What are the principles of good questionnaire design?","Avoid leading questions (which suggest a desired answer); avoid double-barrelled questions; use clear, jargon-free language; include filler questions to reduce demand characteristics; pilot the questionnaire before full use; ensure anonymity to encourage honest responses."),
+  card("Research Methods","full","Self-Report","What is a structured interview?","A formal interview in which the researcher follows a fixed list of questions in a set order with no deviation. +Standardised — easy to replicate and compare results across participants; produces quantitative data. −Inflexible; may miss important qualitative detail; interviewer cannot probe unexpected responses."),
+  card("Research Methods","full","Self-Report","What is an unstructured interview?","A conversational interview with no fixed questions — the researcher follows up on the participant's responses freely. +Rich, in-depth qualitative data; more naturalistic. −Low standardisation makes replication and comparison difficult; interviewer bias possible; time-consuming."),
+  card("Research Methods","full","Self-Report","What is social desirability bias in self-report?","Participants give answers they believe are socially acceptable or that present themselves favourably, rather than truthful responses. This reduces the internal validity of self-report measures. Anonymity and guarantees of confidentiality can help reduce it."),
+
+  // ── Correlation ──
+  card("Research Methods","full","Correlation","What is a correlation?","A statistical technique that measures the strength and direction of the relationship between two co-variables — neither is manipulated. Produces a correlation coefficient (r) between −1 and +1."),
+  card("Research Methods","full","Correlation","What do the values of a correlation coefficient mean?","Perfect positive correlation: +1.0; Strong positive: ~+0.8; Moderate: ~+0.5; Weak: ~+0.2; No correlation: 0; Weak negative: ~−0.2; Moderate negative: ~−0.5; Strong negative: ~−0.8; Perfect negative: −1.0."),
+  card("Research Methods","full","Correlation","What is a key limitation of correlations?","Correlation does not imply causation. A third variable (intervening variable) may explain the relationship. For example, ice cream sales and drowning deaths both correlate with hot weather — neither causes the other."),
+  card("Research Methods","full","Correlation","What is the difference between positive and negative correlation?","Positive: as one co-variable increases, the other also increases (e.g. hours of sleep and exam performance). Negative: as one co-variable increases, the other decreases (e.g. stress and immune function). A scattergraph shows the direction and strength visually."),
+
+  // ── Content Analysis ──
+  card("Research Methods","full","Content Analysis","What is content analysis?","An indirect observational technique used to study behaviour through analysing human artefacts — often written texts, images, media or transcripts. The researcher identifies and codes themes or behavioural categories found within the material."),
+  card("Research Methods","full","Content Analysis","What is thematic analysis in content analysis?","A qualitative approach in which the researcher reads all the material first, allowing themes to emerge naturally from the content rather than imposing categories in advance. +Prevents researcher bias from pre-determined categories; rich qualitative data. −Subjective interpretation; themes may vary between researchers."),
+  card("Research Methods","full","Content Analysis","How is reliability assessed in content analysis?","Test-retest: the same researcher codes the same material on two separate occasions to check consistency. Inter-rater reliability: two independent coders analyse the same material and their results are correlated. A correlation of ≥ +0.80 is typically required."),
+  card("Research Methods","full","Content Analysis","What are strengths and limitations of content analysis?","+High ecological validity — uses real-world material. +Can analyse behaviour that would be unethical to investigate directly. +Can be replicated. −Researcher interpretation may be subjective. −Only analyses recorded material — behaviour that was never documented cannot be studied."),
+
+  // ── Case Studies ──
+  card("Research Methods","full","Case Studies","What is a case study?","An in-depth investigation of a single individual, group or event, typically collecting data through multiple methods (interviews, observation, psychological tests). Used where in-depth understanding is needed and where experimental research would be unethical."),
+  card("Research Methods","full","Case Studies","What are strengths of the case study method?","+Rich, detailed qualitative data that captures complexity. +Allows study of rare or unique cases (e.g. H.M.'s amnesia, Phineas Gage) that reveal important psychological insights. +Can generate new hypotheses."),
+  card("Research Methods","full","Case Studies","What are limitations of the case study method?","−Low generalisability: findings from one individual cannot be applied to the wider population. −Researcher subjectivity in interpreting data. −Retrospective case studies rely on memory and existing records, which may be inaccurate. −Ethical issues: maintaining confidentiality; risk of harm through intrusive investigation."),
+
+  // ── Aims and Hypotheses ──
+  card("Research Methods","full","Aims and Hypotheses","What is the difference between an aim and a hypothesis?","An aim is a general statement of what the researcher intends to investigate (e.g. 'to investigate the effect of caffeine on memory'). A hypothesis is a specific, testable, operationalised prediction — it must state the IV, DV and the expected relationship."),
+  card("Research Methods","full","Aims and Hypotheses","What is a null hypothesis?","States there is no relationship between the IV and DV and any observed difference or correlation is due to chance. It is the default position that the study attempts to disprove. Example: 'There will be no significant difference in memory scores between the caffeine and no-caffeine conditions.'"),
+  card("Research Methods","full","Aims and Hypotheses","What is an alternative hypothesis?","States there is a relationship between the IV and DV. One-tailed (directional): specifies the direction of the effect (e.g. 'caffeine will increase memory scores'). Two-tailed (non-directional): states a difference exists but does not specify direction. Use directional only when prior research clearly supports a specific direction."),
+  card("Research Methods","full","Aims and Hypotheses","When should a directional (one-tailed) hypothesis be used?","Only when there is strong prior research evidence predicting the direction of the effect. If theory or previous findings clearly indicate whether the IV will increase or decrease the DV, a directional hypothesis is justified. Otherwise, use a non-directional (two-tailed) hypothesis."),
+
+  // ── Sampling ──
+  card("Research Methods","full","Sampling","What is random sampling?","Every member of the target population has an equal chance of being selected (e.g. via a random number generator). +Free from researcher bias. −Time-consuming to list the entire population; by chance the sample may still be unrepresentative."),
+  card("Research Methods","full","Sampling","What is systematic sampling?","Every nth person from a list of the target population is selected (e.g. every 10th name). +Free from researcher bias; simple and quick. −Can still produce an unrepresentative sample if the list has a hidden pattern."),
+  card("Research Methods","full","Sampling","What is opportunity sampling?","The researcher selects whoever is most readily available and willing to take part from the target population. +Quick and easy to conduct. −Likely to be unrepresentative (e.g. selecting only people near a university); researcher bias in who is approached."),
+  card("Research Methods","full","Sampling","What is volunteer (self-selecting) sampling?","Participants put themselves forward, typically in response to an advertisement or notice. +Reaches large numbers easily; participants are motivated. −Volunteer bias: volunteers may be more curious, co-operative, or anxious than the broader population, reducing representativeness."),
+  card("Research Methods","full","Sampling","What is stratified sampling?","The researcher identifies subgroups (strata) in the target population (e.g. by age, gender, ethnicity) then randomly selects participants from each stratum in proportion to their representation. +Highly representative. −Time-consuming; difficult to identify all relevant strata accurately."),
+
+  // ── Experimental Designs ──
+  card("Research Methods","full","Experimental Designs","What is an independent measures design?","Different participants are randomly assigned to different conditions of the IV (one condition per participant). Produces unrelated data. +No order effects or demand characteristics between conditions. −Participant variables may differ across conditions; needs twice as many participants."),
+  card("Research Methods","full","Experimental Designs","What is a repeated measures design?","The same participants take part in all conditions of the IV. Produces related data. +Controls for participant variables. −Order effects (fatigue, practice, boredom); participants may guess the aim and show demand characteristics."),
+  card("Research Methods","full","Experimental Designs","What is counterbalancing and why is it used?","Splitting participants so half complete conditions in order A then B, and the other half complete B then A. Used in repeated measures designs to control for order effects — any effect of order is balanced across conditions."),
+  card("Research Methods","full","Experimental Designs","What is a matched pairs design?","Participants are paired based on variables that could affect the DV (e.g. IQ, age), then one from each pair is randomly assigned to each condition. Produces related data. +Reduces participant variables without order effects. −Time-consuming; impossible to match on all relevant characteristics."),
+
+  // ── Variables and Controls ──
+  card("Research Methods","full","Variables and Controls","What is the difference between a confounding variable and an extraneous variable?","An extraneous variable is any variable other than the IV that could affect the DV. A confounding variable is a specific type of extraneous variable that systematically varies with the IV — meaning it changes across conditions in a way that makes it impossible to determine whether the IV or the confound caused changes in the DV."),
+  card("Research Methods","full","Variables and Controls","What is a pilot study and why is it important?","A small-scale trial run of the main study conducted before the full research, using a small sample. It identifies any ambiguous instructions, methodological flaws, or extraneous variables, allowing the researcher to refine procedures before investing in the full study."),
+  card("Research Methods","full","Variables and Controls","What is single-blind and double-blind procedure?","Single-blind: participants do not know which condition they are in, reducing demand characteristics. Double-blind: neither the participant nor the researcher administering the study knows which condition is which, also controlling for investigator effects and researcher bias. Double-blind provides stronger control."),
+  card("Research Methods","full","Variables and Controls","What is standardisation and why is it important?","Using identical procedures, instructions and materials for all participants across all conditions. Ensures that the only systematic difference between conditions is the IV — any change in the DV can therefore be attributed to the IV rather than procedural differences."),
+
+  // ── Ethics ──
+  card("Research Methods","full","Ethics","What are the BPS ethical guidelines?","The British Psychological Society (BPS) guidelines include: informed consent, right to withdraw, protection from harm, confidentiality/anonymity, deception (only if justified and followed by debrief), and debrief. These protect participants and maintain public trust in psychological research."),
+  card("Research Methods","full","Ethics","What is informed consent in psychology research?","Before participating, individuals must be given accurate information about the study's purpose, procedures, risks and their rights. They then provide voluntary, written consent. For children under 16, parental consent is required. Informed consent cannot be given retroactively."),
+  card("Research Methods","full","Ethics","What is the right to withdraw?","Participants must be told they may leave the study at any time, without penalty or pressure, even after data has been collected. The researcher must also allow participants to withdraw their data after the study has ended if they wish."),
+  card("Research Methods","full","Ethics","What is debriefing in research?","After the study, participants are informed of the true aims, procedures and any deception used. They are offered support if distressed and their right to withdraw data is confirmed. Debriefing does not make unethical research ethical, but is required after any deception is used."),
+  card("Research Methods","full","Ethics","What is the ethical principle of protection from harm?","Participants should not leave the study in a worse physical, psychological or emotional state than when they arrived. Researchers must assess risks beforehand and stop the study if harm occurs. The level of risk should be no greater than encountered in everyday life."),
+
+  // ── Reliability ──
+  card("Research Methods","full","Reliability","What is reliability in psychological research?","The consistency of a measure — a reliable measure produces the same or very similar results when repeated under the same conditions. Without reliability, findings cannot be trusted or built upon by other researchers."),
+  card("Research Methods","full","Reliability","What is external reliability?","The consistency of a measure over time — if you use the same test on the same group at two different time points and get similar results, the measure has high external reliability. Assessed using the test-retest method."),
+  card("Research Methods","full","Reliability","What is internal reliability?","The consistency of a measure within a single study or test — all items within a measure should be assessing the same underlying construct. Assessed using split-half reliability (correlating odd vs even items on a test)."),
+  card("Research Methods","full","Reliability","What is the test-retest method?","The same participants complete the same test or measure twice, separated by a suitable time interval. If the correlation between the two sets of scores is ≥ +0.80, the measure is considered to have acceptable reliability."),
+  card("Research Methods","full","Reliability","What is inter-rater reliability?","Two or more independent coders or raters analyse the same data or behaviour and their results are correlated. A correlation of ≥ +0.80 is usually required for acceptable agreement. Low inter-rater reliability suggests categories are not clearly operationalised."),
+  card("Research Methods","full","Reliability","How can reliability be improved?","Through standardisation of procedures and instructions; clear operationalisation of variables; training observers or interviewers; using structured (rather than unstructured) interviews or observation schedules; and piloting measures before use."),
+
+  // ── Validity ──
+  card("Research Methods","full","Validity","What is validity in psychological research?","The extent to which a study measures what it claims to measure (internal validity) and whether findings can be generalised beyond the study context (external validity). A study can be reliable without being valid, but a valid study must also be reliable."),
+  card("Research Methods","full","Validity","What is internal validity?","Whether the observed change in the DV was genuinely caused by the IV, rather than by a confounding variable or extraneous variable. Threats to internal validity include demand characteristics, investigator effects, and poor standardisation."),
+  card("Research Methods","full","Validity","What is external (ecological) validity?","The extent to which findings can be generalised beyond the specific research setting. Ecological validity refers to generalising across settings; population validity across different groups; temporal validity across different time periods."),
+  card("Research Methods","full","Validity","What is face validity?","The most basic check — whether the measure appears to test what it is supposed to measure at face value. Assessed by inspection rather than statistical analysis. Necessary but not sufficient on its own."),
+  card("Research Methods","full","Validity","What is concurrent validity?","Assessed by comparing a new measure with an existing, established measure of the same construct at the same time. If the two correlate highly (≥ +0.80), the new measure is considered to have acceptable concurrent validity."),
+  card("Research Methods","full","Validity","How can validity be assessed and improved?","Assessed through: concurrent validity (comparing with an established measure), triangulation (using multiple methods and checking for consistency), and experimental manipulation checks. Improved by: controlling extraneous variables, using double-blind procedures, realistic tasks, and representative samples."),
+  card("Research Methods","full","Validity","What is the relationship between reliability and validity?","Reliability is a prerequisite for validity — if a measure gives inconsistent results it cannot be measuring anything meaningful. However, a measure can be highly reliable (consistent) but still invalid (measuring the wrong thing). Both are essential for good psychological research."),
+
+  // ── Scientific Approach ──
+  card("Research Methods","full","Scientific Approach","What makes psychology scientific?","Psychology uses empiricism (knowledge from observation and measurement), objectivity (removing researcher bias), replicability (studies can be repeated by others), falsifiability (hypotheses can be tested and potentially disproven), and peer review to scrutinise findings."),
+  card("Research Methods","full","Scientific Approach","What is a paradigm and a paradigm shift?","A paradigm is the shared set of assumptions, methods and accepted knowledge within a scientific discipline. A paradigm shift (Kuhn, 1962) occurs when accumulated anomalies force a revolutionary change in the dominant framework — e.g. the shift from behaviourism to cognitive psychology in the 1950s–60s."),
+  card("Research Methods","full","Scientific Approach","What is peer review?","Before publication, research is scrutinised by independent experts in the same field who check methodology, analysis and conclusions. This maintains quality standards and prevents flawed or fraudulent research from entering the scientific record. Can be slow and may contain bias."),
+  card("Research Methods","full","Scientific Approach","What is the role of replication in science?","A study that cannot be replicated cannot be trusted. Replication verifies findings, establishes whether effects are real and generalisable, and forms the basis for building cumulative scientific knowledge. The 'replication crisis' in psychology (c. 2010s) found many classic studies failed to replicate."),
+
+  // ── Descriptive Statistics ──
+  card("Research Methods","full","Descriptive Statistics","What are measures of central tendency?","Single values that summarise the typical or central score in a dataset. Mean: arithmetic average (affected by outliers). Median: middle value when ordered (unaffected by outliers). Mode: most frequently occurring value."),
+  card("Research Methods","full","Descriptive Statistics","When should the mean, median or mode be used?","Mean: interval data with no extreme outliers — uses all values. Median: ordinal data or when outliers distort the mean. Mode: nominal data or to identify the most common category. The median is most appropriate for skewed distributions."),
+  card("Research Methods","full","Descriptive Statistics","What are measures of dispersion?","Single values summarising the spread of data. Range: highest minus lowest value (simple but affected by outliers). Standard deviation: the average distance of all scores from the mean — uses all data points; a small SD indicates scores are clustered close to the mean."),
+  card("Research Methods","full","Descriptive Statistics","What are the levels of measurement?","Nominal: data in categories with no order (e.g. hair colour). Ordinal: data with a natural order but unequal intervals (e.g. Likert scales, race finishing positions). Interval: data with equal, measurable intervals between points (e.g. temperature in °C, reaction time in ms). The level of measurement determines which statistical test to use."),
+
+  // ── Data Presentation ──
+  card("Research Methods","full","Data Presentation","What types of graph are used in psychology?","Bar chart: frequency or mean scores for categories (bars do NOT touch). Histogram: frequency of continuous data (bars DO touch — no gaps). Pie chart: proportional data expressed as percentages. Scattergraph: relationship between two co-variables. Line graph: changes in a variable over time or conditions."),
+  card("Research Methods","full","Data Presentation","What is a normal distribution and what does it look like?","A symmetrical, bell-shaped curve where the mean, median and mode all fall at the same central point. Most scores cluster around the average, with progressively fewer scores towards the extremes. Many naturally occurring psychological variables (e.g. IQ, height) approximate a normal distribution."),
+  card("Research Methods","full","Data Presentation","What are skewed distributions?","Positive skew: the tail extends to the right; scores cluster at the low end; the mode < median < mean. Negative skew: the tail extends to the left; scores cluster at the high end; mean < median < mode. Skew affects which measure of central tendency is most appropriate."),
+  card("Research Methods","full","Data Presentation","What is the difference between a bar chart and a histogram?","Bar chart: used for discrete/categorical data (nominal or ordinal); bars have gaps between them. Histogram: used for continuous data (interval or ratio); bars have no gaps because the data is continuous — gaps would imply no data exists between values."),
+
+  // ── Inferential Statistics ──
+  card("Research Methods","full","Inferential Statistics","What is inferential statistics?","A set of mathematical tools used to determine whether observed results in a sample are likely to reflect a true effect in the target population, or whether they could have occurred by chance. Allows researchers to make probabilistic statements about a hypothesis."),
+  card("Research Methods","full","Inferential Statistics","What is the significance level (p-value) in psychology?","The conventional significance threshold in psychology is p ≤ 0.05 — meaning there is no more than a 5% probability the results occurred by chance. If a test statistic meets this threshold, the null hypothesis is rejected and the alternative hypothesis is accepted."),
+  card("Research Methods","full","Inferential Statistics","What is a Type I error?","Rejecting the null hypothesis when it is actually true — concluding there is an effect when there isn't one (a 'false positive'). More likely when using a lenient significance level (e.g. p ≤ 0.10). Sometimes called an alpha error."),
+  card("Research Methods","full","Inferential Statistics","What is a Type II error?","Failing to reject the null hypothesis when it is actually false — concluding there is no effect when there really is one (a 'false negative'). More likely when using a very strict significance level (e.g. p ≤ 0.01). Sometimes called a beta error."),
+  card("Research Methods","full","Inferential Statistics","How do you choose the correct statistical test?","Use the table: rows = experimental design (related/RMD vs unrelated/IMD vs correlation); columns = level of measurement (nominal, ordinal, interval). Memory tool — Someone who ranks / Champions may know / Champions Special Powers: Sign test · Wilcoxon · Related T-test / Chi-squared · Mann-Whitney · Unrelated T-test / Chi-squared · Spearman Rho · Pearson's R"),
+  card("Research Methods","full","Inferential Statistics","How do you calculate the Sign test?","1. Subtract Condition A from Condition B for each participant. 2. Record the sign of the difference (+ or −). 3. N = total number of non-zero differences. 4. S = the count of the less frequent sign. 5. Compare S to the critical value table at the chosen significance level — if S ≤ critical value, the result is significant."),
+
+  // ── How to Design a Study ──
+  card("Research Methods","full","How to Design a Study","What is the first step when designing a psychological study?","Start with a clear aim and operationalised hypothesis. Identify your IV and DV precisely, decide whether your hypothesis is directional or non-directional, and state your null hypothesis. Everything else in the design flows from this."),
+  card("Research Methods","full","How to Design a Study","How do you choose a research method?","Consider your research question: if you want cause-and-effect, use an experiment. If studying behaviour in context, use an observation. If gathering self-report data, use a questionnaire or interview. If exploring a relationship between variables, use a correlation. Each method has different strengths regarding internal and external validity."),
+  card("Research Methods","full","How to Design a Study","How do you decide on an experimental design?","Ask: do participant variables threaten the DV? If yes, use repeated measures or matched pairs. Is order effects a risk with repeated measures? If so, counterbalance. If conditions must be kept completely separate (e.g. memory tasks participants would remember), use independent measures. Always consider whether you have enough participants."),
+  card("Research Methods","full","How to Design a Study","How do you choose a sampling method?","Random or stratified sampling produces the most representative samples but requires time and a full population list. Opportunity sampling is quick but risks bias. Volunteer sampling is easy but suffers volunteer bias. Choose the method that balances representativeness with the practical constraints of your research."),
+  card("Research Methods","full","How to Design a Study","What controls should you build into a study design?","Standardise all procedures and instructions. Use single- or double-blind where appropriate. Counterbalance if using repeated measures. Conduct a pilot study first. Identify and control likely extraneous variables. Ensure the DV is measured in a valid and reliable way. Obtain ethical approval before collecting any data."),
+  card("Research Methods","full","How to Design a Study","What ethical considerations must be addressed in study design?","Gain informed consent (or parental consent for under-16s). Ensure right to withdraw at any time. Guarantee confidentiality and anonymity of data. Brief participants on the true aims afterwards (debrief). Minimise risk of harm. If deception is necessary, it must be justified and followed by a full debrief."),
+  card("Research Methods","full","How to Design a Study","How do you decide which statistical test to use?","Three questions: (1) Is the data nominal, ordinal or interval? (2) Is the design related (RMD/matched pairs) or unrelated (IMD)? (3) Are you testing for difference or correlation? Map these onto the statistical test table to identify the correct test (e.g. ordinal + related + difference = Wilcoxon)."),
+  card("Research Methods","full","How to Design a Study","What is the difference between qualitative and quantitative data, and when should each be used?","Quantitative data is numerical — allows statistical analysis, comparison, and is more objective. Qualitative data is descriptive — captures depth, meaning and context that numbers cannot. Many studies use mixed methods to gain both breadth (quantitative) and depth (qualitative). The research question should dictate the approach."),
+];
+
+const RESEARCH_METHODS_CONDENSED = [
+  card("Research Methods","condensed","Experiments","Research Methods: Experiments","Lab: controlled, high internal validity, low ecological validity. Field: natural setting, high ecological validity, EVs harder to control. Natural: IV already occurred, high EV, cannot establish causation. Quasi: IV is innate (e.g. gender), only way to compare such groups, possible confounds."),
+  card("Research Methods","condensed","Observations","Research Methods: Observations","Controlled vs Natural (setting); Overt vs Covert (researcher known or not); Participant vs Non-Participant (researcher involvement). Time sampling: regular intervals. Event sampling: pre-listed behaviours only. Inter-rater reliability ≥ 0.80 needed. Operationalise behaviour clearly."),
+  card("Research Methods","condensed","Self-Report","Research Methods: Self-Report","Questionnaires: closed questions → quantitative; open → qualitative. Structured interview: fixed questions, replicable but inflexible. Unstructured: flexible, rich data, hard to replicate. Design tips: no leading/double-barrelled questions, pilot first, use filler questions, ensure anonymity."),
+  card("Research Methods","condensed","Correlation","Research Methods: Correlation","Measures strength and direction between two co-variables. +1.0 = perfect positive; −1.0 = perfect negative; 0 = no relationship. Scattergraph shows pattern. Key limit: correlation ≠ causation — a third variable may explain the link."),
+  card("Research Methods","condensed","Content Analysis","Research Methods: Content Analysis","Indirect observation of human artefacts (texts, media). Thematic analysis: themes emerge naturally, prevents imposed bias. Reliability via test-retest or inter-rater (≥ 0.80). +High EV, ethical access to sensitive topics. −Subjective, only recorded material can be analysed."),
+  card("Research Methods","condensed","Case Studies","Research Methods: Case Studies","In-depth study of one individual/group using multiple methods. +Rich qualitative data; uncovers what can't be ethically experimented on. −Cannot generalise; researcher bias; low sample size; ethical issues of confidentiality."),
+  card("Research Methods","condensed","Aims and Hypotheses","Research Methods: Aims & Hypotheses","Aim: general statement of intent. Hypothesis: specific, operationalised, testable prediction. Null = no effect (chance). Alternative = there is an effect. One-tailed (directional): only use if prior research supports the direction. Two-tailed (non-directional): when direction is unknown."),
+  card("Research Methods","condensed","Sampling","Research Methods: Sampling","Random: RNG, unbiased but slow. Systematic: every nth, unbiased but may be unrepresentative. Opportunity: quick, easy, biased. Volunteer: easy, volunteer bias. Stratified: RNG within subgroups, most representative, time-consuming."),
+  card("Research Methods","condensed","Experimental Designs","Research Methods: Experimental Designs","IMD (unrelated data): different participants per condition — no order effects but participant variables. RMD (related data): same participants in all conditions — no participant variables but order effects; counterbalance. Matched pairs (related): pairs matched on relevant variables — controls participant variables without order effects."),
+  card("Research Methods","condensed","Variables and Controls","Research Methods: Variables & Controls","Extraneous variable: any uncontrolled variable. Confounding variable: systematically varies with IV — makes causation unclear. Controls: standardisation, single/double-blind, pilot study, counterbalancing. Pilot study: small-scale trial to identify flaws before the full study."),
+  card("Research Methods","condensed","Ethics","Research Methods: Ethics","BPS guidelines: Informed consent (parental if under 16). Right to withdraw at any time. Protection from harm. Confidentiality/anonymity. Deception only if justified + debrief follows. Debrief: inform of true aims, offer support, confirm right to withdraw data."),
+  card("Research Methods","condensed","Reliability","Research Methods: Reliability","Reliability = consistency of measurement. External reliability: consistency over time → test-retest (r ≥ 0.80). Internal reliability: consistency within a measure → split-half. Inter-rater reliability: agreement between observers (r ≥ 0.80). Improve via standardisation, clear operationalisation, training."),
+  card("Research Methods","condensed","Validity","Research Methods: Validity","Internal validity: IV caused the DV change (not a confound). External/ecological validity: findings generalise beyond the lab. Face validity: appears to measure what it claims. Concurrent validity: correlates with an existing measure (r ≥ 0.80). Reliability is necessary but not sufficient for validity."),
+  card("Research Methods","condensed","Scientific Approach","Research Methods: Scientific Approach","Empiricism: knowledge from observation. Objectivity: no bias. Replicability: can be repeated. Falsifiability: can be proven false. Paradigm: shared scientific framework. Paradigm shift (Kuhn): when anomalies force a new framework. Peer review: expert scrutiny before publication."),
+  card("Research Methods","condensed","Descriptive Statistics","Research Methods: Descriptive Statistics","Central tendency: Mean (all data, affected by outliers), Median (middle, outlier-resistant), Mode (most frequent). Dispersion: Range (highest − lowest), SD (average spread — small SD = consistent data). Levels of measurement: Nominal (categories) → Ordinal (ranked) → Interval (equal gaps)."),
+  card("Research Methods","condensed","Data Presentation","Research Methods: Data Presentation","Bar chart: categories, bars don't touch. Histogram: continuous data, bars touch. Pie chart: percentages. Scattergraph: two co-variables. Line graph: over time. Normal distribution: symmetrical bell curve — mean = median = mode. Positive skew: tail right. Negative skew: tail left."),
+  card("Research Methods","condensed","Inferential Statistics","Research Methods: Inferential Statistics","p ≤ 0.05 = significant (5% chance probability). Type I error: reject null when true (false positive). Type II error: accept null when false (false negative). Test choice: level of data (N/O/I) × design (related/unrelated) × type (difference/correlation). Sign test steps: subtract, sign, N (non-zero), S (least frequent sign), check critical value."),
+  card("Research Methods","condensed","How to Design a Study","Research Methods: How to Design a Study","1. Operationalised aim + hypothesis (IV, DV, null). 2. Choose method (experiment, observation, self-report, correlation). 3. Choose experimental design (IMD/RMD/matched pairs). 4. Choose sampling method. 5. Plan controls (standardise, blind, pilot, counterbalance). 6. Ethical approval. 7. Choose correct statistical test. 8. Collect and analyse data."),
+];
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PSYCHOLOGY — AQA A-LEVEL BIOPSYCHOLOGY
+// ═══════════════════════════════════════════════════════════════════════
+
+const BIOPSYCHOLOGY_FULL = [
+  // ── Nervous System ──
+  card("Biopsychology","full","Nervous System","What are the main divisions of the nervous system?","The Central Nervous System (CNS: brain + spinal cord) directs complex thought and behaviour. The Peripheral Nervous System (PNS) connects the CNS to the rest of the body. PNS divides into: Somatic NS (voluntary skeletal muscle control, transmits sensory info to CNS) and Autonomic NS (involuntary — regulates internal organs via sympathetic and parasympathetic branches)."),
+  card("Biopsychology","full","Nervous System","What is the function of the autonomic nervous system?","Controls involuntary bodily functions — heart rate, digestion, breathing, glandular secretions. Divided into: Sympathetic NS (activates the body for fight or flight — accelerates heart rate, dilates pupils, inhibits digestion) and Parasympathetic NS (calms the body back to homeostasis after stress — slows heart rate, promotes digestion)."),
+  card("Biopsychology","full","Nervous System","What is the reflex arc?","A rapid, involuntary pathway: stimulus → sensory receptor → sensory neuron → relay neuron (in spinal cord) → motor neuron → effector (muscle/gland). Bypasses the brain for speed. Allows protective reactions (e.g. pulling hand from flame) before conscious awareness."),
+
+  // ── Neurons and Synaptic Transmission ──
+  card("Biopsychology","full","Neurons and Synaptic Transmission","What are the three types of neuron?","Sensory neurons: carry signals from receptors (skin, eyes) to the CNS; have long dendrites, short axons. Relay (interneurons): connect sensory to motor neurons within the CNS; short dendrites and axons. Motor neurons: carry signals from the CNS to effectors (muscles, glands); long axons with short dendrites."),
+  card("Biopsychology","full","Neurons and Synaptic Transmission","What are the key structural components of a neuron?","Cell body (soma): contains nucleus. Dendrites: branch-like extensions that receive incoming signals from other neurons. Axon: long fibre that carries electrical impulses away from the cell body. Myelin sheath: fatty insulating layer (from Schwann cells) that speeds up transmission. Nodes of Ranvier: gaps in the myelin sheath where the impulse 'jumps' (saltatory conduction). Axon terminal: releases neurotransmitters."),
+  card("Biopsychology","full","Neurons and Synaptic Transmission","What is synaptic transmission?","When a nerve impulse reaches the axon terminal, vesicles release neurotransmitters into the synaptic cleft (gap). Neurotransmitters bind to receptor sites on the postsynaptic membrane. If excitatory (e.g. glutamate, dopamine): increases the likelihood of the next neuron firing. If inhibitory (e.g. GABA): decreases the likelihood of firing. Unused neurotransmitters are reabsorbed (reuptake) or broken down by enzymes."),
+  card("Biopsychology","full","Neurons and Synaptic Transmission","What is the difference between excitatory and inhibitory neurotransmitters?","Excitatory NTs (e.g. glutamate, dopamine, noradrenaline, adrenaline) increase the probability that the postsynaptic neuron will fire — they depolarise the membrane. Inhibitory NTs (e.g. GABA, serotonin in some pathways) decrease the probability of firing — they hyperpolarise the membrane. The combined effect determines whether the neuron fires."),
+
+  // ── Endocrine System ──
+  card("Biopsychology","full","Endocrine System","What is the endocrine system?","A chemical messaging network of glands that secrete hormones directly into the bloodstream. Hormones travel to target organs and produce slower but longer-lasting effects than neural signals. The pituitary gland ('master gland') controls the release of most other hormones, itself controlled by the hypothalamus."),
+  card("Biopsychology","full","Endocrine System","What are the key glands and hormones in the endocrine system?","Hypothalamus: connects NS to endocrine system, maintains homeostasis. Pituitary: master gland, releases ACTH. Pineal: releases melatonin (regulates sleep-wake cycle). Thyroid: releases thyroxine (regulates metabolism). Adrenal medulla: releases adrenaline/noradrenaline (fight or flight). Adrenal cortex: releases cortisol (stress response). Pancreas: releases insulin (blood sugar). Ovaries: oestrogen. Testes: testosterone."),
+
+  // ── Fight or Flight ──
+  card("Biopsychology","full","Fight or Flight","What triggers the fight or flight response?","A perceived threat is processed by the hypothalamus. It activates both the SAM (Sympathetic-Adrenomedullary) pathway for an immediate response and the HPA (Hypothalamic-Pituitary-Adrenal) axis for a sustained response. Once the threat passes, the parasympathetic NS restores homeostasis."),
+  card("Biopsychology","full","Fight or Flight","What is the SAM pathway?","Sympathetic Adrenomedullary pathway: the hypothalamus activates the sympathetic branch of the ANS → signals the adrenal medulla → releases adrenaline and noradrenaline into the bloodstream. Produces immediate fight or flight effects: increased heart rate, dilated pupils, bronchodilation, diverted blood to muscles, inhibited digestion."),
+  card("Biopsychology","full","Fight or Flight","What is the HPA axis?","Hypothalamic-Pituitary-Adrenal axis: hypothalamus releases CRH → triggers the pituitary to release ACTH → ACTH travels to the adrenal cortex → releases cortisol. Cortisol mobilises energy by converting stored glycogen to glucose and suppresses the immune system. This sustained response maintains readiness during prolonged threat."),
+  card("Biopsychology","full","Fight or Flight","What are the criticisms of the fight or flight theory?","Reductionist — reduces complex stress responses to a simple biological mechanism. Gender differences: Taylor et al. (2000) proposed a 'tend-and-befriend' response in females (driven by oxytocin) rather than fight or flight. Maladaptive in modern life — the same response is triggered by non-physical threats (e.g. exam stress) where fighting or fleeing is not appropriate. Ignores the freeze response."),
+
+  // ── Localisation of Function ──
+  card("Biopsychology","full","Localisation of Function","What is the principle of localisation of function?","Different regions of the brain are specialised for different psychological functions. This is supported by case studies of brain-damaged patients and modern brain scanning techniques. Damage to a specific area produces predictable and consistent deficits."),
+  card("Biopsychology","full","Localisation of Function","What is lateralisation of brain function?","The two cerebral hemispheres are each specialised for different functions. Left hemisphere: predominantly controls language, logic and analytical thought. Right hemisphere: predominantly controls spatial ability, creativity and emotional processing. The hemispheres communicate via the corpus callosum (200–300 million nerve fibres)."),
+  card("Biopsychology","full","Localisation of Function","What functions does each brain lobe control?","Frontal lobe: higher cognitive functions, decision-making, motor cortex (voluntary movement), Broca's area (speech production). Parietal lobe: sensory processing — somatosensory cortex (touch, temperature). Temporal lobe: auditory processing, Wernicke's area (speech comprehension). Occipital lobe: visual processing."),
+  card("Biopsychology","full","Localisation of Function","What is Broca's area and what happens if it is damaged?","Located in the left frontal lobe, Broca's area controls speech production. Damage causes Broca's aphasia — the patient understands language but cannot produce fluent speech. They typically speak in slow, effortful, telegraphic sentences. First identified by Paul Broca via a patient known as 'Tan' who could only say the word 'tan'."),
+  card("Biopsychology","full","Localisation of Function","What is Wernicke's area and what happens if it is damaged?","Located in the left temporal lobe, Wernicke's area is responsible for language comprehension. Damage causes Wernicke's aphasia — speech is fluent and grammatically correct but meaningless ('word salad'). The patient cannot understand language spoken to them. Provides a double dissociation with Broca's aphasia."),
+  card("Biopsychology","full","Localisation of Function","What evidence supports localisation of function?","+Broca (1861): Patient Tan had damage to the left frontal lobe → speech production deficit. +Wernicke (1874): Patients with left temporal damage had comprehension deficits but fluent speech — a double dissociation. +fMRI studies show consistent patterns of activation (e.g. visual cortex active during visual tasks). −Brain-damaged patients are rare, atypical; damage is rarely clean and localised."),
+
+  // ── Ways of Studying the Brain ──
+  card("Biopsychology","full","Ways of Studying the Brain","What is an fMRI and what are its strengths and limitations?","Functional Magnetic Resonance Imaging measures changes in blood oxygenation (BOLD signal) to identify active brain regions during tasks. +Good spatial resolution (mm); non-invasive; no radiation. −Poor temporal resolution (seconds delay); expensive; participant must stay still; only measures relative, not absolute, activity."),
+  card("Biopsychology","full","Ways of Studying the Brain","What is an EEG and what are its strengths and limitations?","Electroencephalogram records electrical activity across the scalp via electrodes. Used to study sleep stages, epilepsy, and brain states. +Excellent temporal resolution (milliseconds). −Poor spatial resolution — cannot pinpoint which brain structure is active. Usually studied as patterns (alpha, theta, delta waves)."),
+  card("Biopsychology","full","Ways of Studying the Brain","What are post-mortem studies and what are their limitations?","Examining a deceased person's brain to link observed behaviour during life with anatomical abnormalities found after death. +Provided foundational knowledge (Broca, Tan). −Cause-and-effect is unclear (did the damage cause the behaviour?); brain changes may occur after death; rare and ethically sensitive."),
+
+  // ── Brain Plasticity ──
+  card("Biopsychology","full","Brain Plasticity","What is neural plasticity?","The brain's ability to change its structure and function in response to experience, learning or injury throughout life. In young children, plasticity is especially high. Even adult brains can reorganise through axonal sprouting, synaptic pruning and functional recovery."),
+  card("Biopsychology","full","Brain Plasticity","What is synaptic pruning?","Neural connections (synapses) that are regularly used are strengthened ('fire together, wire together'), while unused synapses are eliminated. Most intense during early childhood and adolescence, refining neural circuits for efficiency. Overproduction of synapses occurs first, then selective pruning."),
+  card("Biopsychology","full","Brain Plasticity","What is functional recovery after brain injury?","After damage, healthy brain areas can take over the functions of damaged regions. Mechanisms include: axonal sprouting (existing neurons grow new axons to connect with adjacent neurons); recruitment of homologous areas in the opposite hemisphere; and formation of new synaptic connections."),
+  card("Biopsychology","full","Brain Plasticity","What research supports neural plasticity?","Maguire et al. (2000/2010): London taxi drivers had significantly greater volume in the posterior hippocampus compared to non-taxi drivers; volume increased with years of experience — demonstrating experience-driven structural brain change in adults. +Practical applications for rehabilitation. −Individual differences in recovery (age, gender, rehabilitation access)."),
+
+  // ── Split-Brain Research ──
+  card("Biopsychology","full","Split-Brain Research","What is split-brain research and who conducted it?","Sperry and Gazzaniga studied 11 patients who had undergone a corpus callosotomy (severing the corpus callosum) to treat severe epilepsy. By presenting information exclusively to one visual field (and therefore one hemisphere), they tested what each hemisphere could do independently."),
+  card("Biopsychology","full","Split-Brain Research","What did Sperry and Gazzaniga find from split-brain research?","When an image was shown to the right visual field (left hemisphere), patients could name it verbally. When shown to the left visual field (right hemisphere), they could not name it but could select the matching object with their left hand. This demonstrated the left hemisphere is dominant for language; the right is superior at spatial tasks."),
+
+  // ── Biological Rhythms ──
+  card("Biopsychology","full","Biological Rhythms","What are the three types of biological rhythm?","Circadian rhythms: approximately 24-hour cycles (e.g. sleep-wake cycle, core body temperature). Infradian rhythms: cycles longer than 24 hours (e.g. menstrual cycle ≈ 28 days, seasonal affective disorder ≈ annual). Ultradian rhythms: cycles shorter than 24 hours (e.g. sleep stages cycle approximately every 90 minutes)."),
+  card("Biopsychology","full","Biological Rhythms","What controls the circadian sleep-wake cycle?","The suprachiasmatic nucleus (SCN) in the hypothalamus acts as the main endogenous pacemaker. It detects light via the retina and signals the pineal gland. In response to light, the pineal gland reduces melatonin secretion (promoting wakefulness). In the dark, melatonin levels rise (inducing sleep)."),
+  card("Biopsychology","full","Biological Rhythms","What is the evidence for endogenous pacemakers in circadian rhythms?","Siffre (1975): spent 6 months in a cave with only artificial light; his sleep-wake cycle extended to approximately 25 hours, demonstrating an endogenous clock — but also showing that external light cues (exogenous zeitgebers) normally entrain it to 24 hours. Ralph et al. (1990): transplanting SCN with the tau mutation from hamsters altered the recipient's sleep cycle from 24 to 20 hours."),
+  card("Biopsychology","full","Biological Rhythms","What is the infradian rhythm of the menstrual cycle?","Approximately 28 days: Menstrual phase → Follicular phase → Ovulation (oestrogen peaks) → Luteal phase (progesterone peaks). Stern and McClintock (1998): women exposed to donor pads from other women in different cycle phases had their own cycles speeded up or slowed down — suggesting pheromones as exogenous zeitgebers. However, findings have been mixed and the effect may reflect simply different natural cycle lengths."),
+  card("Biopsychology","full","Biological Rhythms","What are exogenous zeitgebers?","External environmental cues that synchronise biological rhythms with the 24-hour world. The most powerful is light — detected by the retina and transmitted to the SCN. Others include social cues (meal times, alarm clocks), temperature, and exercise. Without zeitgebers, endogenous rhythms drift from external time."),
+  card("Biopsychology","full","Biological Rhythms","What are the practical applications and evaluations of biological rhythms research?","+Practical uses: informs management of shift work, jet lag, and sleep disorders. +Research supports the role of both the SCN (endogenous) and light (exogenous). −Methodological issues: Siffre had access to artificial light which can act as a zeitgeber; individual differences in rhythm timing (chronotypes: larks vs owls). −Reductionist to focus only on biological mechanisms."),
+
+  // ── Sleep ──
+  card("Biopsychology","full","Sleep","What are the stages of sleep and how are they measured?","Sleep is measured by EEG. Stages 1–3 are non-REM (nREM) sleep. Stage 1 (N1): light sleep — low amplitude, high-frequency theta waves. Stage 2: sleep spindles. Stage 3 (N3): deep sleep — high amplitude, low-frequency delta waves. Stage 4: REM sleep (rapid eye movement) — EEG resembles wakefulness; vivid dreaming occurs. A complete cycle of stages takes approximately 90 minutes and repeats 4–5 times per night."),
+  card("Biopsychology","full","Sleep","What is the importance of REM sleep?","REM sleep is associated with memory consolidation and emotional processing. Haider et al. found patients recovering from drug overdoses showed elevated REM sleep — suggesting its role in recovery and brain restoration. Individual differences: newborns spend approximately 80% of sleep in REM; adults 20–25%."),
+];
+
+const BIOPSYCHOLOGY_CONDENSED = [
+  card("Biopsychology","condensed","Nervous System","Biopsychology: The Nervous System","CNS (brain + spinal cord): complex thought. PNS: body-wide messaging. Somatic NS: voluntary skeletal movement. Autonomic NS: involuntary internal organs — Sympathetic (fight/flight: activates) vs Parasympathetic (homeostasis: calms). Reflex arc: stimulus → sensory neuron → relay neuron (spinal cord) → motor neuron → effector."),
+  card("Biopsychology","condensed","Neurons and Synaptic Transmission","Biopsychology: Neurons & Synaptic Transmission","Sensory: long dendrites, carry to CNS. Relay: CNS interconnectors. Motor: long axons, carry from CNS to effectors. Structure: cell body → dendrites → axon → myelin sheath (speed) → nodes of Ranvier → axon terminal. Synapse: vesicles release NTs into cleft → bind to receptors → excitatory (glutamate, dopamine: fire) or inhibitory (GABA: reduce firing) → reuptake."),
+  card("Biopsychology","condensed","Endocrine System","Biopsychology: Endocrine System","Hypothalamus (connects NS to endocrine; homeostasis) → Pituitary (master gland, releases ACTH) → Other glands. Key glands: Pineal (melatonin, sleep-wake). Thyroid (thyroxine, metabolism). Adrenal medulla (adrenaline: SAM). Adrenal cortex (cortisol: HPA). Pancreas (insulin, blood sugar). Ovaries (oestrogen). Testes (testosterone)."),
+  card("Biopsychology","condensed","Fight or Flight","Biopsychology: Fight or Flight","SAM: Hypothalamus → sympathetic ANS → adrenal medulla → adrenaline/noradrenaline (immediate response). HPA: Hypothalamus → pituitary (ACTH) → adrenal cortex → cortisol (sustained response: glucose mobilisation, immune suppression). Parasympathetic NS restores homeostasis. Criticism: maladaptive in modern world; gender bias (tend-and-befriend, Taylor et al.); ignores freeze response; reductionist."),
+  card("Biopsychology","condensed","Localisation of Function","Biopsychology: Localisation of Function","Different brain areas = different functions. Frontal: motor cortex + Broca's area (speech production). Parietal: somatosensory (touch). Temporal: auditory + Wernicke's area (speech comprehension). Occipital: visual. Lateralisation: left = language; right = spatial. Corpus callosum connects hemispheres. Evidence: Broca ('Tan'), Wernicke's aphasia, fMRI. Limitation: damage rarely clean; brain-damaged patients atypical."),
+  card("Biopsychology","condensed","Ways of Studying the Brain","Biopsychology: Studying the Brain","fMRI: measures blood oxygenation (BOLD) — good spatial resolution, slow temporal resolution, expensive. EEG: scalp electrodes measure electrical activity — excellent temporal resolution, poor spatial resolution. Post-mortem: link brain anatomy to behaviour — provided early evidence (Tan/Broca) but no causation, rare."),
+  card("Biopsychology","condensed","Brain Plasticity","Biopsychology: Brain Plasticity","Plasticity: brain changes structure and function with experience/injury. Synaptic pruning: unused synapses eliminated; used ones strengthened. Axonal sprouting: neurons grow new axons to adjacent areas. Functional recovery: healthy areas compensate for damaged ones. Maguire et al. (2000/2010): taxi drivers had greater posterior hippocampal mass — experience-driven structural change. Factors affecting recovery: age (younger = better), gender (females recover better), rehabilitation."),
+  card("Biopsychology","condensed","Split-Brain Research","Biopsychology: Split-Brain Research","Sperry & Gazzaniga: 11 split-brain patients (corpus callosum severed). Right visual field → left hemisphere: can name objects verbally. Left visual field → right hemisphere: cannot name verbally but can select by touch. Shows left hemisphere dominates language; right hemisphere dominates spatial processing. Supports lateralisation."),
+  card("Biopsychology","condensed","Biological Rhythms","Biopsychology: Biological Rhythms","Circadian (24hr): sleep-wake cycle — SCN (hypothalamus, endogenous pacemaker) detects light via retina → signals pineal gland → melatonin reduced (wake) or released (sleep). Infradian (>24hr): menstrual cycle (28 days) — oestrogen peaks at ovulation, progesterone in luteal phase. Ultradian (<24hr): sleep stages cycle ≈ 90 min. Exogenous zeitgebers: light (most powerful), social cues, temperature. Siffre (1975): 25hr cycle without light cues. Ralph (1990): SCN transplant altered hamster cycles."),
+  card("Biopsychology","condensed","Sleep","Biopsychology: Sleep","Measured by EEG. N1 (light): theta waves (high freq, low amp). N3 (deep): delta waves (low freq, high amp). REM: eye movement, dreaming, brain active — important for memory consolidation. Full cycle ≈ 90 mins; 4–5 cycles per night. Haider: drug overdose patients showed more REM — suggests importance in recovery. Individual differences: newborns 80% REM; adults 20–25%."),
+];
+
 const ECONOMICS_THEME2_FULL = [
   card("Theme 2", "full", "UK economy performance", "What is gross domestic product (GDP)?", "The total value of goods and services produced in an economy over a period of time, usually a year."),
   card("Theme 2", "full", "UK economy performance", "What is real GDP growth?", "An increase in the volume of output after adjusting for inflation."),
@@ -1382,6 +1619,12 @@ const ALL_CARDS = [
   ...PSYCHODYNAMIC_FULL,
   ...HUMANISTIC_FULL,
   ...APPROACHES_CONDENSED,
+  // Psychology — Research Methods
+  ...RESEARCH_METHODS_FULL,
+  ...RESEARCH_METHODS_CONDENSED,
+  // Psychology — Biopsychology
+  ...BIOPSYCHOLOGY_FULL,
+  ...BIOPSYCHOLOGY_CONDENSED,
   // Economics
   ...ECONOMICS_THEME2_FULL,
   ...ECONOMICS_THEME2_CONDENSED,
@@ -1396,6 +1639,17 @@ const TOPIC_SUBHEADINGS = {
     { label: 'Learning & Cognition', topics: ['Social Learning Theory', 'Cognitive Approach'] },
     { label: 'Biology & Personality', topics: ['Biological Approach', 'Psychodynamic Approach', 'Humanistic Approach'] },
   ],
+  'Research Methods': [
+    { label: 'Research Design', topics: ['Experiments', 'Observations', 'Observational Design', 'Self-Report', 'Correlation', 'Content Analysis', 'Case Studies'] },
+    { label: 'Planning a Study', topics: ['Aims and Hypotheses', 'Sampling', 'Experimental Designs', 'Variables and Controls', 'Ethics', 'How to Design a Study'] },
+    { label: 'Data & Analysis', topics: ['Descriptive Statistics', 'Data Presentation', 'Reliability', 'Validity', 'Scientific Approach', 'Inferential Statistics'] },
+  ],
+  'Biopsychology': [
+    { label: 'The Nervous System', topics: ['Nervous System', 'Neurons and Synaptic Transmission', 'Endocrine System'] },
+    { label: 'The Brain', topics: ['Localisation of Function', 'Ways of Studying the Brain', 'Brain Plasticity', 'Split-Brain Research'] },
+    { label: 'Stress & Autonomic Response', topics: ['Fight or Flight'] },
+    { label: 'Biological Rhythms & Sleep', topics: ['Biological Rhythms', 'Sleep'] },
+  ],
 };
 
 const GROUP_META = [
@@ -1407,6 +1661,8 @@ const DEFAULT_GROUPS = [...GROUP_NAMES];
 const GROUP_META_BY_SUBJECT = {
   Psychology: [
     { name: 'Approaches', note: 'Origins, Behaviourism (Classical + Operant), SLT, Cognitive, Biological, Psychodynamic, Humanistic' },
+    { name: 'Research Methods', note: 'Experiments, Observations, Self-Report, Correlation, Content Analysis, Stats, Validity, Ethics' },
+    { name: 'Biopsychology', note: 'Nervous System, Brain, Fight or Flight, Plasticity, Biological Rhythms, Sleep' },
   ],
   Economics: [
     { name: 'Theme 2', note: 'UK performance, policy and inequality' },
@@ -1460,7 +1716,15 @@ let streak = 0;
 let touchStartX = 0, touchStartY = 0;
 let typeMode = localStorage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
+let predictionsMode = localStorage.getItem('aqa_predictions_mode') === '1';
 let selectedGroups = loadSelectedGroups();
+
+// Paper 2 predicted topics
+const PREDICTED_TOPICS = {
+  'Biopsychology': ['Biological Rhythms', 'Fight or Flight', 'Localisation of Function'],
+  'Approaches': ['Origins of Psychology', 'Classical Conditioning', 'Operant Conditioning', 'Social Learning Theory', 'Humanistic Approach', 'Biological Approach', 'Cognitive Approach'],
+  'Research Methods': ['Content Analysis', 'Reliability', 'Validity'],
+};
 let selectedTopics = loadSelectedTopics();
 let typedAnswers = loadTypedAnswers();
 
@@ -1529,6 +1793,8 @@ function typedKey(cardData) { return cid(cardData); }
 function cardGroup(cardData) {
   const unit = String(cardData.unit || '');
   if (unit === 'Approaches') return 'Approaches';
+  if (unit === 'Research Methods') return 'Research Methods';
+  if (unit === 'Biopsychology') return 'Biopsychology';
   if (unit === 'Theme 2') return 'Theme 2';
   if (unit === 'Theme 4') return 'Theme 4';
   return unit || 'Approaches';
@@ -1692,7 +1958,8 @@ function topicSummaryText() {
   const groups = groupsForSubject(selectedSubject);
   const totalTopics = groups.reduce((s, g) => s + availableTopicsForGroup(g).length, 0);
   const selTopics = groups.reduce((s, g) => s + selectedTopicsForGroup(g).length, 0);
-  return `${selectedSubject} · ${selTopics}/${totalTopics} topics · ${condensedMode ? 'Condensed' : 'Full deck'}`;
+  const modeTag = predictionsMode ? ' · 🔮 Predictions' : (condensedMode ? ' · Condensed' : ' · Full deck');
+  return `${selectedSubject} · ${selTopics}/${totalTopics} topics${modeTag}`;
 }
 
 function renderSubjectButtons() {
@@ -1799,6 +2066,9 @@ function updateProfileUI() {
   document.getElementById('condensedToggle').classList.toggle('active', condensedMode);
   document.getElementById('condensedToggle').setAttribute('aria-pressed', String(condensedMode));
   document.getElementById('condensedToggle').textContent = `Condensed: ${condensedMode ? 'On' : 'Off'}`;
+  document.getElementById('predictionsToggle').classList.toggle('active', predictionsMode);
+  document.getElementById('predictionsToggle').setAttribute('aria-pressed', String(predictionsMode));
+  document.getElementById('predictionsToggle').textContent = `Predictions: ${predictionsMode ? 'On' : 'Off'}`;
   document.getElementById('typeToggle').classList.toggle('active', typeMode);
   document.getElementById('typeToggle').setAttribute('aria-pressed', String(typeMode));
   document.getElementById('typeToggle').textContent = `Type mode: ${typeMode ? 'On' : 'Off'}`;
@@ -1820,6 +2090,17 @@ function setTypeMode(on) {
 function setCondensedMode(on) {
   condensedMode = !!on;
   saveCondensedMode();
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+}
+
+function setPredictionsMode(on) {
+  predictionsMode = !!on;
+  try { localStorage.setItem('aqa_predictions_mode', predictionsMode ? '1' : '0'); } catch {}
   flipped = false;
   currentId = null;
   updateProfileUI();
@@ -2019,6 +2300,14 @@ function activeCatalog() {
     const topics = selectedTopicsForGroup(groupName);
     return topics.includes(cardData.t);
   });
+
+  if (predictionsMode) {
+    return filtered.filter(cardData => {
+      const groupName = cardGroup(cardData);
+      const predicted = PREDICTED_TOPICS[groupName];
+      return predicted && predicted.includes(cardData.t);
+    });
+  }
 
   return filtered; // May be empty if user deselected all topics — handled by buildDeck
 }
@@ -2342,6 +2631,7 @@ document.getElementById('modeSel').addEventListener('change', () => {
   populateTypingArea();
 });
 document.getElementById('condensedToggle').addEventListener('click', () => setCondensedMode(!condensedMode));
+document.getElementById('predictionsToggle').addEventListener('click', () => setPredictionsMode(!predictionsMode));
 document.getElementById('shuffleBtn').addEventListener('click', () => {
   deck = shuffle([...deck]);
   idx = 0;

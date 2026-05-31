@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>AQA Psychology &amp; Economics Flashcards</title>
-<link rel="manifest" href="manifest.json" />
+<title>AQA Psychology, Economics &amp; Sociology Flashcards</title>
+<link rel="icon" href="data:," />
 <style>
 :root{
   --bg:#0b0f17;
@@ -880,6 +880,56 @@ html[data-subject="Economics"] .quick-sel-btn{
   background:rgba(52,211,153,.10) !important; border-color:rgba(52,211,153,.22) !important; color:#a7f3d0 !important;
 }
 html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rgba(52,211,153,.2) !important}
+
+/* Sociology: amber-rose shift */
+html[data-subject="Sociology"] {
+  --accent:#f59e0b;
+  --accent-2:#e11d48;
+}
+html[data-subject="Sociology"] body {
+  background:
+    radial-gradient(circle at top, rgba(245,158,11,.12) 0%, rgba(245,158,11,.06) 25%, rgba(245,158,11,0) 70%),
+    radial-gradient(circle at 20% 20%, rgba(225,29,72,.08) 0%, rgba(225,29,72,.03) 20%, rgba(225,29,72,0) 60%),
+    #120d0c;
+  background-color:#120d0c;
+  background-attachment:fixed;
+}
+html[data-subject="Sociology"] .profile-pill.active,
+html[data-subject="Sociology"] .subject-pill.active,
+html[data-subject="Sociology"] button.active,
+html[data-subject="Sociology"] .check-pill input:checked,
+html[data-subject="Sociology"] .fill,
+html[data-subject="Sociology"] .sql-step.active .sql-step-num {
+  background:linear-gradient(135deg,#f59e0b,#e11d48) !important;
+}
+html[data-subject="Sociology"] .topic {
+  background:rgba(245,158,11,.12);
+  border-color:rgba(245,158,11,.24);
+  color:#fed7aa;
+}
+html[data-subject="Sociology"] .filter-summary {
+  border-color:rgba(245,158,11,.24);
+  background:rgba(245,158,11,.10);
+  color:#fed7aa;
+}
+html[data-subject="Sociology"] .check-pill.is-selected {
+  border-color:rgba(245,158,11,.38);
+  background:rgba(245,158,11,.10);
+}
+html[data-subject="Sociology"] .sql-lang-dot {
+  background:linear-gradient(135deg,#f59e0b,#e11d48);
+}
+html[data-subject="Sociology"] .sql-btn.primary {
+  background:linear-gradient(135deg,#f59e0b,#e11d48);
+  box-shadow:0 4px 14px rgba(245,158,11,.3);
+}
+html[data-subject="Sociology"] .profile-pill.active {
+  box-shadow:0 10px 24px rgba(245,158,11,.28) !important;
+}
+html[data-subject="Sociology"] .quick-sel-btn{
+  background:rgba(245,158,11,.10) !important; border-color:rgba(245,158,11,.22) !important; color:#fed7aa !important;
+}
+html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rgba(245,158,11,.2) !important}
 </style>
 </head>
 <body>
@@ -960,13 +1010,14 @@ html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rg
     <div class="subject-pills">
       <button class="subject-pill" id="btnPsychology" onclick="switchSubject('Psychology')">Psychology</button>
       <button class="subject-pill" id="btnEconomics" onclick="switchSubject('Economics')">Economics</button>
+      <button class="subject-pill" id="btnSociology" onclick="switchSubject('Sociology')">Sociology</button>
     </div>
   </div>
 
   <div class="header">
     <div class="title">
-      <h1>AQA Psychology + Economics Flashcards</h1>
-      <p>Built for active recall, spaced repetition, and fast exam prep. Choose Psychology or Economics, then select the topics you want to revise. Grade honestly — weak cards come back sooner.</p>
+      <h1>AQA Psychology + Economics + Sociology Flashcards</h1>
+      <p>Built for active recall, spaced repetition, and fast exam prep. Choose a subject, then select the topics you want to revise. Grade honestly — weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
       <div class="pill">Tap card to flip</div>
@@ -979,11 +1030,11 @@ html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rg
     <details>
       <summary>How to study with this deck</summary>
       <div class="study-grid">
-        <div class="study-step"><strong>1.</strong> Use the top-level area buttons to focus on Education or Research Methods + Methods in Context.</div>
-        <div class="study-step"><strong>2.</strong> Pick the exact subtopic chunks you want so 25-marker practice stays targeted.</div>
+        <div class="study-step"><strong>1.</strong> Use the top-level area buttons to focus on the subject unit you need right now.</div>
+        <div class="study-step"><strong>2.</strong> Pick the exact subtopic chunks you want so essay and short-answer practice stays targeted.</div>
         <div class="study-step"><strong>3.</strong> Use type mode when you want to write your own answer first.</div>
       </div>
-      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly. The deck follows the AQA Paper 1 structure so 25-marker revision stays focused.</div>
+      <div class="study-note">Best on phones: use one thumb to type and tap reveal. Swipe left or right to move through cards quickly. The deck keeps topics separated so final exam revision stays focused.</div>
     </details>
   </section>
 
@@ -991,7 +1042,7 @@ html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rg
     <div class="filter-top">
       <div>
         <strong>Topic selector</strong>
-        <p>Choose a main area, then narrow it to the exact Paper 1 chunks you want to revise. Education and Research Methods + Methods in Context are kept separate.</p>
+        <p>Choose a main area, then narrow it to the exact chunks you want to revise. Each subject keeps its exam units separate.</p>
       </div>
       <div class="filter-summary" id="topicSummary">Psychology</div>
     </div>
@@ -1006,7 +1057,7 @@ html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rg
       <option value="mixed">Mixed topics</option>
     </select>
     <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
-    <button id="predictionsToggle" class="secondary" aria-pressed="false" title="Filter to predicted Paper 2 topics only">Predictions: Off</button>
+    <button id="predictionsToggle" class="secondary" aria-pressed="false" title="Filter to high-priority predicted topics only">Predictions: Off</button>
     <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
     <button id="shuffleBtn" class="secondary">Shuffle</button>
     <button id="resetBtn" class="secondary">Reset progress</button>
@@ -1091,7 +1142,7 @@ html[data-subject="Economics"] .quick-sel-btn:not(:disabled):hover{background:rg
   </div>
 
   <div class="footer-note">
-    Progress syncs to Supabase separately for each profile. AQA Psychology Approaches + Economics live in this file — card IDs are synced so topic packs can be added without losing history.
+    Progress syncs to Supabase separately for each profile. AQA Psychology, Economics and Sociology live in this file — card IDs are synced so topic packs can be added without losing history.
   </div>
 </div>
 
@@ -1170,6 +1221,290 @@ function card(unit, variant, topic, question, answer, options = {}) {
   };
 }
 
+function cardsFromRows(unit, variant, rows) {
+  return rows.map(([topic, question, answer]) => card(unit, variant, topic, question, answer));
+}
+
+
+// ═══════════════════════════════════════════════════════════════════════
+//  PSYCHOLOGY — AQA A-LEVEL PAPER 3: ISSUES + OPTIONS
+// ═══════════════════════════════════════════════════════════════════════
+
+const PSYCH_ISSUES_DEBATES_FULL = cardsFromRows("Issues and Debates", "full", [
+  ["Gender and Culture", "What is gender bias in psychology?", "Gender bias is when psychological theory or research misrepresents behaviour because of assumptions about gender. Androcentrism treats male behaviour as the norm. Alpha bias exaggerates gender differences. Beta bias minimises or ignores gender differences, often by applying male findings to everyone."],
+  ["Gender and Culture", "What is androcentrism?", "Androcentrism means male behaviour is treated as the standard for normal behaviour. Female behaviour may then be judged as abnormal or deficient when it differs from male norms. AO3: this lowers validity and can reinforce harmful stereotypes."],
+  ["Gender and Culture", "What is alpha bias?", "Alpha bias exaggerates differences between men and women. Example: Freud's claim that girls have a weaker superego than boys presents female morality as inferior. AO3: alpha bias can support stereotypes, but recognising real differences can sometimes improve support or treatment."],
+  ["Gender and Culture", "What is beta bias?", "Beta bias minimises or ignores gender differences. Example: research using only male participants but generalising the findings to women too. AO3: this can create invalid theories or treatments because sex and gender differences are overlooked."],
+  ["Gender and Culture", "How can feminist psychology reduce gender bias?", "Feminist psychology challenges androcentric assumptions, values women's experiences, and asks whether research questions, methods and interpretations reproduce inequality. AO3: it improves social relevance, although critics may argue it risks replacing one bias with another if evidence is ignored."],
+  ["Gender and Culture", "What is cultural bias?", "Cultural bias is judging behaviour through the standards of one culture. It often occurs when Western theories or tests are applied universally. AO3: it reduces population validity and can pathologise normal behaviour in non-Western cultures."],
+  ["Gender and Culture", "What is ethnocentrism?", "Ethnocentrism means seeing one's own culture as normal or superior, and judging other cultures against it. Example: using Western IQ tests or diagnostic categories as if they are universal. It can create cultural beta bias and invalid conclusions."],
+  ["Gender and Culture", "What is cultural relativism?", "Cultural relativism is the idea that behaviour should be understood in the culture where it occurs. AO3: it can reduce ethnocentrism, but extreme relativism may make it difficult to identify universal human processes or compare findings across cultures."],
+  ["Gender and Culture", "What are emic and etic approaches?", "An emic approach studies behaviour from inside a culture, focusing on local meanings. An etic approach studies behaviour from outside a culture, searching for universal principles. Good cross-cultural psychology often combines both."],
+  ["Gender and Culture", "What is a strong AO3 point for gender and culture bias?", "Bias matters because psychology has real-world authority. Biased research can affect diagnosis, education, law and treatment. However, psychology can correct bias through diverse samples, reflexivity, culturally sensitive tools and theory testing across groups."],
+  ["Free Will and Determinism", "What is free will?", "Free will is the view that people can make conscious choices and are not fully controlled by internal or external forces. Humanistic psychology strongly supports free will through ideas such as self-actualisation and personal agency."],
+  ["Free Will and Determinism", "What is determinism?", "Determinism is the view that behaviour is caused by forces outside conscious control. Biological determinism emphasises genes, hormones and brain activity. Environmental determinism emphasises learning and reinforcement. Psychic determinism emphasises unconscious conflicts and childhood experiences."],
+  ["Free Will and Determinism", "What is hard determinism?", "Hard determinism claims free will is an illusion and all behaviour is fully caused by prior factors. Example: behaviourism suggests behaviour is shaped by reinforcement histories. AO3: it supports scientific prediction but can be socially problematic because it reduces responsibility."],
+  ["Free Will and Determinism", "What is soft determinism?", "Soft determinism accepts that behaviour has causes, but people still have some conscious control within those constraints. The cognitive approach often fits soft determinism because thoughts influence behaviour but can be changed."],
+  ["Free Will and Determinism", "What is the scientific emphasis on causal explanations?", "Science seeks cause-and-effect explanations so behaviour can be predicted and controlled. Determinist explanations fit this aim better than pure free will. AO3: this increases scientific status, but may oversimplify complex human decision-making."],
+  ["Free Will and Determinism", "What is an AO3 argument against free will?", "Free will may be an illusion. Neuroscience evidence suggests brain activity linked to action can occur before conscious awareness of deciding. Behaviourists also argue choices may reflect past reinforcement rather than true freedom."],
+  ["Free Will and Determinism", "What is an AO3 argument against determinism?", "Determinism can be reductionist and may ignore human experience of choice. It can also create ethical problems if people use biology, childhood or environment to excuse harmful behaviour. A balanced answer often supports soft determinism."],
+  ["Nature-Nurture", "What is the nature-nurture debate?", "The nature-nurture debate asks whether behaviour is mainly shaped by biological inheritance or environmental experience. Nature includes genes, evolution and neurochemistry. Nurture includes learning, upbringing, culture and social experience."],
+  ["Nature-Nurture", "What is the interactionist approach in nature-nurture?", "The interactionist approach argues nature and nurture work together. Genes may create vulnerability or potential, while the environment influences whether that potential is expressed. Examples include diathesis-stress explanations and genotype-environment interaction."],
+  ["Nature-Nurture", "What is genotype-environment interaction?", "Genotype-environment interaction means genes influence the environments people experience. Passive interaction: parents provide genes and environment. Evocative interaction: a child's traits elicit responses. Active interaction: people select environments that fit their traits."],
+  ["Nature-Nurture", "How does epigenetics support interactionism?", "Epigenetics shows that environmental factors can switch genes on or off without changing DNA sequence. This supports the view that nature and nurture are not separate causes, but interact across development."],
+  ["Nature-Nurture", "What is a strong AO3 point on nature-nurture?", "Extreme nature or nurture explanations are too simplistic. Twin and adoption studies suggest genetic influence, but concordance is rarely 100%, showing environmental factors matter too. The best answers usually judge the relative contribution and interaction."],
+  ["Holism and Reductionism", "What is holism?", "Holism explains behaviour by looking at whole systems rather than separate parts. Humanistic psychology is holistic because it considers subjective experience, emotions, meaning and personal growth. AO3: it captures complexity but can be less scientific."],
+  ["Holism and Reductionism", "What is reductionism?", "Reductionism explains behaviour by breaking it into simpler components. Biological reductionism explains behaviour through genes, hormones, brain structures or neurotransmitters. Environmental reductionism explains behaviour through stimulus-response learning."],
+  ["Holism and Reductionism", "What are levels of explanation?", "Levels of explanation range from lower biological levels, such as genes and neurotransmitters, to higher social and cultural levels. A behaviour can be explained at multiple levels, and stronger answers often compare which level is most useful."],
+  ["Holism and Reductionism", "What is biological reductionism?", "Biological reductionism explains behaviour through biological mechanisms such as genes, dopamine, brain areas or hormones. AO3: it supports objective evidence and treatments, but can ignore cognition, emotion and social context."],
+  ["Holism and Reductionism", "What is environmental reductionism?", "Environmental reductionism explains behaviour through learned stimulus-response links. Behaviourism is the key example. AO3: it is testable and useful for treatments, but may ignore mental processes, biology and free will."],
+  ["Holism and Reductionism", "What is a strong AO3 point for holism vs reductionism?", "Reductionism is useful because it creates clear, testable explanations and treatments. However, complex behaviours such as addiction, relationships or schizophrenia usually need multi-level explanations, so overly simple accounts can lack validity."],
+  ["Idiographic and Nomothetic", "What is the idiographic approach?", "The idiographic approach studies individuals in depth, often using case studies, interviews and qualitative data. It aims to understand unique experience rather than produce general laws. Examples include humanistic and psychodynamic case studies."],
+  ["Idiographic and Nomothetic", "What is the nomothetic approach?", "The nomothetic approach studies groups to establish general laws of behaviour. It often uses experiments, questionnaires, statistics and quantitative data. Examples include behaviourist laws of learning and biological research on neurotransmitters."],
+  ["Idiographic and Nomothetic", "What is a strength of the idiographic approach?", "It produces rich, detailed insight into complex experiences and can generate hypotheses for later testing. It is useful for unusual cases and therapy. AO3: findings may lack generalisability because samples are small or unique."],
+  ["Idiographic and Nomothetic", "What is a strength of the nomothetic approach?", "It supports scientific aims by using standardised methods, objective measurement and statistical testing. AO3: it can overlook individual meaning and may create averages that do not fit any one person well."],
+  ["Social Sensitivity and Ethics", "What are ethical implications?", "Ethical implications are the possible social consequences of research findings or theories. They include how findings may affect participants, groups, policy, public attitudes or legal decisions."],
+  ["Social Sensitivity and Ethics", "What is socially sensitive research?", "Socially sensitive research investigates topics that may have consequences for particular groups, such as gender, culture, intelligence, mental illness, crime or addiction. Sieber and Stanley argued researchers should consider implications throughout the research process."],
+  ["Social Sensitivity and Ethics", "What ethical issues should socially sensitive research consider?", "Researchers should consider the research question, methodology, institutional context and interpretation/application of findings. They must ask who might be harmed, stigmatised, misrepresented or unfairly treated by the conclusions."],
+  ["Social Sensitivity and Ethics", "What is a strength of socially sensitive research?", "It can benefit society by challenging prejudice, improving treatments, informing policy and giving visibility to neglected groups. Avoiding sensitive topics may allow inequality or harm to continue unchallenged."],
+  ["Social Sensitivity and Ethics", "What is a limitation of socially sensitive research?", "Findings can be misused to justify discrimination or blame individuals for social problems. Examples include culturally biased testing or deterministic claims about offending. Researchers must communicate limitations carefully."],
+  ["Exam Skills: Issues and Debates", "How should you answer a 16-marker in Issues and Debates?", "Define the issue clearly, use at least two psychology examples from across the course, evaluate both sides, and finish with a judgement. For example, nature-nurture can be illustrated with schizophrenia, addiction, attachment or aggression."],
+  ["Exam Skills: Issues and Debates", "What are the high-priority Issues and Debates areas for this deck?", "High-priority revision: gender and culture bias, nature-nurture, holism vs reductionism, ethics and socially sensitive research, plus research methods as its own group. These are priorities, not guaranteed exam questions."]
+]);
+
+const PSYCH_ISSUES_DEBATES_CONDENSED = cardsFromRows("Issues and Debates", "condensed", [
+  ["Gender and Culture", "Gender and culture bias: night-before summary", "Gender bias: androcentrism, alpha bias, beta bias. Culture bias: ethnocentrism and cultural relativism. Evaluate with validity, stereotypes, real-world consequences, diverse samples and culturally sensitive methods."],
+  ["Free Will and Determinism", "Free will/determinism: night-before summary", "Free will = conscious choice. Hard determinism = no choice. Soft determinism = causes plus some agency. Types: biological, environmental, psychic. Evaluate with science, prediction, responsibility and reductionism."],
+  ["Nature-Nurture", "Nature-nurture: night-before summary", "Nature = genes/biology/evolution. Nurture = learning/environment/culture. Best answer is interactionist: genes create vulnerability/potential and environment affects expression. Use diathesis-stress or genotype-environment interaction."],
+  ["Holism and Reductionism", "Holism/reductionism: night-before summary", "Holism explains whole systems and subjective experience. Reductionism explains behaviour through smaller parts. Biological and environmental reductionism are scientific but may oversimplify complex behaviour."],
+  ["Idiographic and Nomothetic", "Idiographic/nomothetic: night-before summary", "Idiographic = in-depth unique cases, rich but low generalisability. Nomothetic = general laws, scientific but may ignore individuality. Best judgement: both can complement each other."],
+  ["Social Sensitivity and Ethics", "Ethics/social sensitivity: night-before summary", "Socially sensitive research can harm groups through stigma or misuse, but can also improve policy and challenge prejudice. Evaluate question, method, interpretation and application."],
+  ["Exam Skills: Issues and Debates", "Issues 16-marker formula", "Define issue, give two course examples, evaluate both sides, then judge. Always link the debate back to validity, usefulness, social consequences or scientific status."],
+  ["Exam Skills: Issues and Debates", "Predicted Issues priorities", "Prioritise gender/culture, nature-nurture, holism/reductionism, ethics/social sensitivity, and Research Methods as a separate group. Predictions are high-priority revision only."]
+]);
+
+const PSYCH_RELATIONSHIPS_FULL = cardsFromRows("Relationships", "full", [
+  ["Self-Disclosure", "What is self-disclosure in romantic relationships?", "Self-disclosure is revealing personal information to a partner. Social penetration theory argues relationships develop as disclosure increases in breadth and depth, creating intimacy and trust."],
+  ["Self-Disclosure", "What did Altman and Taylor argue about self-disclosure?", "Altman and Taylor's social penetration theory says relationships move from superficial disclosure to deeper, more personal disclosure. Breadth means range of topics; depth means how intimate the information is."],
+  ["Self-Disclosure", "How does reciprocity affect self-disclosure?", "Reciprocity means partners respond to disclosure with disclosure of their own. This creates balance, trust and intimacy. If disclosure is one-sided, the relationship may feel unequal or unsafe."],
+  ["Self-Disclosure", "What research supports self-disclosure?", "Sprecher and Hendrick found strong associations between self-disclosure, relationship satisfaction and commitment in dating couples. AO3: much evidence is correlational, so disclosure may be a result of satisfaction rather than the cause."],
+  ["Self-Disclosure", "Evaluate self-disclosure as an explanation of attraction.", "Strength: supported by evidence linking disclosure to satisfaction. Limitation: cultural bias, because disclosure may matter more in individualist cultures than collectivist cultures. Also, too much disclosure too early can reduce attraction."],
+  ["Physical Attractiveness", "How does physical attractiveness affect attraction?", "Physical attractiveness can act as a cue to health, fertility and social desirability. It may be especially important in early attraction because it is immediately visible before deeper information is available."],
+  ["Physical Attractiveness", "What is the matching hypothesis?", "The matching hypothesis, linked to Walster, says people seek partners with a similar level of social desirability, especially physical attractiveness. People make realistic choices to avoid rejection."],
+  ["Physical Attractiveness", "What did Walster et al. find in the computer dance study?", "Walster et al. randomly paired students at a dance and found physical attractiveness was the strongest predictor of wanting another date. This challenged the matching hypothesis because participants preferred attractive dates regardless of their own attractiveness."],
+  ["Physical Attractiveness", "What is the halo effect?", "The halo effect is when attractive people are assumed to have other positive traits, such as kindness, intelligence or sociability. AO3: this helps explain why attractiveness influences first impressions."],
+  ["Physical Attractiveness", "Evaluate physical attractiveness explanations.", "Strength: research supports attractiveness as important in initial attraction. Limitations: effects may be short-term, culturally variable and influenced by other assets such as status, humour or personality. Matching may be complex rather than purely physical."],
+  ["Filter Theory", "What is filter theory?", "Kerckhoff and Davis' filter theory says people choose romantic partners by passing through filters: social demography, similarity in attitudes, and complementarity. Different filters matter at different relationship stages."],
+  ["Filter Theory", "What is the social demography filter?", "Social demography means people are more likely to meet and date others who are geographically close and similar in class, education, ethnicity, religion or age. This limits the field of available partners."],
+  ["Filter Theory", "What is the similarity in attitudes filter?", "Similarity in attitudes means shared beliefs, values and interests become important after initial contact. Byrne's law of attraction suggests similarity is rewarding because it validates our own views."],
+  ["Filter Theory", "What is complementarity in filter theory?", "Complementarity means partners meet each other's needs, such as one partner liking to care and the other liking to be cared for. Kerckhoff and Davis argued it becomes more important in longer-term relationships."],
+  ["Filter Theory", "Evaluate filter theory.", "Strength: it explains stages of partner choice and why the field narrows. Limitations: it may be dated because online dating widens the field, and research is correlational, so similarity may result from relationships rather than cause them."],
+  ["Theories of Romantic Relationships", "What is social exchange theory?", "Social exchange theory says relationships are based on rewards, costs, profit and comparison levels. People are satisfied when rewards outweigh costs and the outcome exceeds expectations."],
+  ["Theories of Romantic Relationships", "What is the comparison level in SET?", "The comparison level is the standard a person expects from a relationship, based on past experience and social norms. If outcomes exceed this level, satisfaction is likely."],
+  ["Theories of Romantic Relationships", "What is the comparison level for alternatives?", "The comparison level for alternatives is whether a person thinks they could get a better relationship elsewhere. If alternatives seem better, commitment may fall even if the current relationship is satisfying."],
+  ["Theories of Romantic Relationships", "Evaluate social exchange theory.", "Strength: it explains why satisfaction and alternatives affect commitment. Limitations: it is economically reductionist, ignores emotions and may fit short-term or individualist relationships better than long-term committed ones."],
+  ["Theories of Romantic Relationships", "What is equity theory?", "Equity theory says satisfaction depends on fairness, not just profit. Partners compare their input-output ratio. Inequity causes distress, whether a person is under-benefited or over-benefited."],
+  ["Theories of Romantic Relationships", "How does inequity affect relationships?", "Inequity creates dissatisfaction and motivates change. Under-benefited partners may feel anger; over-benefited partners may feel guilt. The greater the inequity, the stronger the pressure to restore fairness."],
+  ["Theories of Romantic Relationships", "Evaluate equity theory.", "Strength: research links perceived fairness to satisfaction. Limitations: cultural bias, because equity may matter more in individualist cultures, while collectivist cultures may emphasise duty and family expectations."],
+  ["Theories of Romantic Relationships", "What is Rusbult's investment model?", "Rusbult's investment model explains commitment through satisfaction, comparison with alternatives and investment size. Commitment is strongest when satisfaction and investment are high and alternatives are poor."],
+  ["Theories of Romantic Relationships", "What is investment size in Rusbult's model?", "Investment size means resources put into a relationship that would be lost if it ended. Intrinsic investments include time, emotion and self-disclosure. Extrinsic investments include shared friends, children, money or possessions."],
+  ["Theories of Romantic Relationships", "How does the investment model explain abusive relationships?", "People may stay in harmful relationships if investments are high and alternatives seem poor. AO3: this is useful because it explains commitment even when satisfaction is low."],
+  ["Theories of Romantic Relationships", "Evaluate Rusbult's investment model.", "Strength: strong research support and useful real-world application. Limitation: it may describe commitment better than explain relationship quality, and much evidence relies on self-report."],
+  ["Relationship Breakdown", "What is Duck's phase model of relationship breakdown?", "Duck's model describes breakdown as stages: intra-psychic, dyadic, social and grave-dressing. It focuses on communication and how dissatisfaction becomes public."],
+  ["Relationship Breakdown", "What happens in the intra-psychic phase?", "One partner privately focuses on dissatisfaction and relationship problems. They may brood over costs and compare alternatives, but do not yet confront the partner."],
+  ["Relationship Breakdown", "What happens in the dyadic phase?", "Partners discuss dissatisfaction directly. Arguments, negotiation and attempts at repair may occur. The relationship may be saved if communication improves."],
+  ["Relationship Breakdown", "What happens in the social and grave-dressing phases?", "In the social phase, breakup becomes public and friends/family are involved. In the grave-dressing phase, partners create a story about why the relationship ended to preserve self-esteem and prepare for future relationships."],
+  ["Online Relationships", "How can online relationships affect self-disclosure?", "Online communication can increase self-disclosure because people feel more anonymous and less judged. The absence of immediate physical presence can make disclosure faster and more intimate."],
+  ["Online Relationships", "What is the hyperpersonal model?", "Walther's hyperpersonal model argues online relationships can become more intimate than face-to-face ones because selective self-presentation, editing and rapid disclosure intensify impressions."],
+  ["Online Relationships", "What is absence of gating?", "Absence of gating means online relationships remove barriers that may stop face-to-face relationships forming, such as physical attractiveness, disability, anxiety or stammering. This can allow deeper connection based on personality."],
+  ["Online Relationships", "How does deception affect online relationships?", "Online relationships allow selective self-presentation and deception about age, appearance, gender or interests. AO3: some deception may be minor or strategic, but major deception can reduce trust when discovered."],
+  ["Online Relationships", "Evaluate online/virtual relationship research.", "Strength: explains modern relationships and why disclosure can be intense online. Limitations: online communication is diverse, and as video/social media become normal, the difference from offline relationships may be smaller."],
+  ["Parasocial Relationships", "What is a parasocial relationship?", "A parasocial relationship is a one-sided relationship with a media figure, celebrity or fictional character. The fan invests emotion, but the target does not know them personally."],
+  ["Parasocial Relationships", "What are the levels of parasocial relationships?", "McCutcheon described three levels: entertainment-social, where the celebrity is a source of gossip; intense-personal, involving strong personal feelings; and borderline-pathological, involving obsession or extreme behaviour."],
+  ["Parasocial Relationships", "What is the absorption-addiction model?", "The absorption-addiction model says people may become absorbed in a celebrity to compensate for identity deficits or weak real relationships. Over time, they need stronger involvement, like an addiction, to maintain satisfaction."],
+  ["Parasocial Relationships", "How does attachment theory explain parasocial relationships?", "Attachment theory suggests insecure attachment, especially anxious-resistant attachment, can make people more likely to form parasocial relationships because they seek closeness but fear rejection in real relationships."],
+  ["Parasocial Relationships", "Evaluate parasocial relationship explanations.", "Strength: links to attachment and celebrity attitude research. Limitations: most evidence is correlational and not all parasocial relationships are harmful; some provide entertainment, identity and social connection."],
+  ["Exam Skills: Relationships", "Relationships 16-marker formula", "Define the theory/factor, explain key components, use named research, then evaluate with research support, culture/gender bias, determinism/reductionism and real-world application. Finish with a judgement about when the explanation works best."],
+  ["Exam Skills: Relationships", "What are the high-priority Relationships predictions?", "High-priority revision: self-disclosure, online/virtual relationships, investment model, attachment theory explanation of parasocial relationships, and physical attractiveness. These are priorities, not guarantees."]
+]);
+
+const PSYCH_RELATIONSHIPS_CONDENSED = cardsFromRows("Relationships", "condensed", [
+  ["Self-Disclosure", "Self-disclosure: night-before summary", "Altman and Taylor: breadth and depth increase intimacy. Reciprocity matters. Evaluate with support from relationship satisfaction research, cultural bias and correlation problems."],
+  ["Physical Attractiveness", "Physical attractiveness: night-before summary", "Attractiveness affects early attraction through halo effect and evolutionary cues. Matching hypothesis says people choose similar attractiveness. Evaluate with Walster, cultural variation and short-term effects."],
+  ["Filter Theory", "Filter theory: night-before summary", "Kerckhoff and Davis: social demography, similarity in attitudes, complementarity. Good for stages, but online dating and correlational evidence weaken it."],
+  ["Theories of Romantic Relationships", "SET, equity and investment: night-before summary", "SET = rewards minus costs and alternatives. Equity = fairness of input/output ratios. Investment model = commitment from satisfaction, alternatives and investment size."],
+  ["Relationship Breakdown", "Duck breakdown: night-before summary", "Intra-psychic: private dissatisfaction. Dyadic: confrontation. Social: breakup becomes public. Grave-dressing: story of ending. Evaluate as descriptive and culturally limited."],
+  ["Online Relationships", "Online relationships: night-before summary", "Online disclosure may be faster due to anonymity and absence of gating. Hyperpersonal model says online relationships can become intense. Evaluate deception and changing technology."],
+  ["Parasocial Relationships", "Parasocial relationships: night-before summary", "Levels: entertainment-social, intense-personal, borderline-pathological. Explanations: absorption-addiction and attachment theory. Evaluate with correlational evidence and possible benefits."],
+  ["Exam Skills: Relationships", "Predicted Relationships priorities", "Prioritise self-disclosure, virtual relationships, investment model, parasocial attachment theory and physical attractiveness. Still revise all spec bullets."]
+]);
+
+const PSYCH_SCHIZOPHRENIA_FULL = cardsFromRows("Schizophrenia", "full", [
+  ["Classification and Diagnosis", "What is schizophrenia?", "Schizophrenia is a psychotic disorder involving a loss of contact with reality and disturbances in thinking, perception, emotion and behaviour. AQA requires positive symptoms, negative symptoms and issues in diagnosis."],
+  ["Classification and Diagnosis", "What are positive symptoms of schizophrenia?", "Positive symptoms are additions to normal experience. AQA specifies hallucinations and delusions. Other examples can include disorganised speech or catatonic behaviour, but hallucinations and delusions are the named spec examples."],
+  ["Classification and Diagnosis", "What are hallucinations?", "Hallucinations are sensory experiences without external stimuli. They can occur in any sense, but auditory hallucinations, such as hearing voices, are especially common in schizophrenia."],
+  ["Classification and Diagnosis", "What are delusions?", "Delusions are strongly held false beliefs that are resistant to evidence. Examples include delusions of persecution, grandeur, control or reference."],
+  ["Classification and Diagnosis", "What are negative symptoms of schizophrenia?", "Negative symptoms are reductions or losses of normal functioning. AQA specifies speech poverty and avolition."],
+  ["Classification and Diagnosis", "What is speech poverty?", "Speech poverty is reduced amount or quality of speech. It may involve short answers, reduced fluency or less complex syntax, reflecting disrupted thought processes."],
+  ["Classification and Diagnosis", "What is avolition?", "Avolition is a reduction in motivation and self-initiated goal-directed behaviour. It can affect work, relationships, self-care and everyday functioning."],
+  ["Reliability and Validity", "What is reliability in schizophrenia diagnosis?", "Reliability means consistency of diagnosis. Inter-rater reliability means different clinicians agree. Test-retest reliability means the same person receives the same diagnosis over time."],
+  ["Reliability and Validity", "What is validity in schizophrenia diagnosis?", "Validity means diagnosis is accurate and meaningful. Predictive validity concerns prognosis/treatment response. Descriptive validity concerns whether symptoms are distinct. Aetiological validity concerns whether the same causes underlie the disorder."],
+  ["Reliability and Validity", "How does co-morbidity affect schizophrenia diagnosis?", "Co-morbidity means two or more disorders occur together. If schizophrenia often overlaps with depression, OCD or substance abuse, it raises questions about whether it is a distinct valid category."],
+  ["Reliability and Validity", "How does symptom overlap affect diagnosis?", "Symptom overlap occurs when schizophrenia symptoms resemble symptoms of other disorders, such as bipolar disorder or depression with psychotic features. This reduces validity because clinicians may classify similar symptoms differently."],
+  ["Reliability and Validity", "How can culture bias affect diagnosis?", "Culture bias occurs when clinicians misinterpret culturally normal beliefs or experiences as symptoms. Copeland found US psychiatrists diagnosed schizophrenia more often than British psychiatrists from the same case description, suggesting cultural diagnostic differences."],
+  ["Reliability and Validity", "How can gender bias affect diagnosis?", "Gender bias may occur if clinicians interpret symptoms differently in men and women. Some evidence suggests women may be underdiagnosed because they often function better socially, or because diagnostic expectations are based more on male presentations."],
+  ["Reliability and Validity", "What did Rosenhan's study suggest about validity?", "Rosenhan's pseudo-patients were admitted to psychiatric hospitals after reporting hearing voices, then behaved normally but were not detected as sane. This challenged the validity of psychiatric diagnosis. AO3: DSM systems have improved since DSM-II."],
+  ["Biological Explanations", "How do genetics explain schizophrenia?", "Genetic explanations argue vulnerability is inherited. Family, twin and adoption studies show risk increases with genetic relatedness. AO3: concordance is not 100%, so genes cannot be the whole explanation."],
+  ["Biological Explanations", "What does twin evidence suggest about schizophrenia?", "Twin studies generally find higher concordance in MZ twins than DZ twins, supporting genetic influence. AO3: shared environments may inflate genetic estimates, and modern views are polygenic rather than one-gene explanations."],
+  ["Biological Explanations", "What is the dopamine hypothesis?", "The dopamine hypothesis argues schizophrenia is linked to abnormal dopamine activity. Hyperdopaminergia in subcortical areas may relate to positive symptoms; hypodopaminergia in cortical areas may relate to negative symptoms and cognitive impairment."],
+  ["Biological Explanations", "What are neural correlates in schizophrenia?", "Neural correlates are brain structures or activity patterns associated with schizophrenia symptoms. Examples include reduced ventral striatum activity linked to avolition and abnormal temporal/frontal activity linked to hallucinations."],
+  ["Biological Explanations", "Evaluate biological explanations of schizophrenia.", "Strength: evidence from family/twin studies and drug action supports biological factors. Limitations: biological accounts can be reductionist, cause and effect is difficult, and environmental triggers are needed to explain incomplete concordance."],
+  ["Psychological Explanations", "What is family dysfunction as an explanation?", "Family dysfunction explanations suggest abnormal family communication or relationships contribute to schizophrenia. Examples include the schizophrenogenic mother, double-bind communication and expressed emotion."],
+  ["Psychological Explanations", "What is the double-bind theory?", "Bateson argued children may receive contradictory messages from parents and be punished for responding incorrectly. Repeated double-bind communication may make reality confusing and contribute to symptoms."],
+  ["Psychological Explanations", "What is expressed emotion?", "Expressed emotion refers to family climates with high criticism, hostility or emotional over-involvement. High expressed emotion is linked to relapse in schizophrenia."],
+  ["Psychological Explanations", "What are cognitive explanations of schizophrenia?", "Cognitive explanations focus on dysfunctional thought processing, such as impaired attention, faulty source monitoring and metarepresentation. These may explain hallucinations and delusions."],
+  ["Psychological Explanations", "Evaluate psychological explanations of schizophrenia.", "Strength: cognitive explanations link well to symptoms and CBT. Limitations: family explanations can be socially sensitive because they may blame parents, and cognitive problems may be consequences rather than causes."],
+  ["Drug Therapy", "How do typical antipsychotics treat schizophrenia?", "Typical antipsychotics, such as chlorpromazine, mainly block dopamine D2 receptors. This reduces dopamine activity and can reduce positive symptoms such as hallucinations and delusions."],
+  ["Drug Therapy", "How do atypical antipsychotics treat schizophrenia?", "Atypical antipsychotics, such as clozapine and risperidone, act on dopamine and serotonin systems. They may help positive and some negative symptoms and often produce fewer motor side effects than typical drugs."],
+  ["Drug Therapy", "Evaluate antipsychotic drug therapy.", "Strength: evidence supports symptom reduction and relapse prevention. Limitations: side effects can be severe, drugs may treat symptoms rather than causes, and effectiveness varies between patients."],
+  ["CBT and Family Therapy", "How is CBT used for schizophrenia?", "CBT helps patients identify and challenge irrational beliefs, understand triggers, normalise symptoms and develop coping strategies. It does not simply remove symptoms but can reduce distress and improve functioning."],
+  ["CBT and Family Therapy", "Evaluate CBT for schizophrenia.", "Strength: can reduce distress and improve coping, especially alongside medication. Limitations: it requires motivation and insight, may not work during severe acute symptoms, and effect sizes are debated."],
+  ["CBT and Family Therapy", "How is family therapy used for schizophrenia?", "Family therapy aims to reduce expressed emotion, improve communication, educate relatives and create relapse-prevention strategies. It treats the family environment as important for recovery and relapse."],
+  ["CBT and Family Therapy", "Evaluate family therapy for schizophrenia.", "Strength: evidence suggests it reduces relapse and improves family functioning. Limitations: it requires family involvement and may be less useful where family relationships are absent or unsafe."],
+  ["Interactionist Approach", "What is the interactionist approach to schizophrenia?", "The interactionist approach combines biological and psychological factors. It argues schizophrenia is best explained and treated through interaction between vulnerability and stress, rather than one cause alone."],
+  ["Interactionist Approach", "What is the diathesis-stress model?", "The diathesis-stress model says schizophrenia develops when a vulnerability, such as genetic risk or trauma, is triggered by stress. Modern versions allow multiple biological and psychological vulnerabilities."],
+  ["Interactionist Approach", "How does the interactionist approach inform treatment?", "It supports combined treatment: antipsychotic medication can reduce biological symptoms, while CBT or family therapy addresses psychological and environmental factors. This is more holistic than single treatments."],
+  ["Interactionist Approach", "Evaluate the interactionist approach.", "Strength: it explains why not everyone with genetic risk develops schizophrenia and supports combined treatments. Limitation: it can be difficult to measure exactly how vulnerability and stress interact."],
+  ["Exam Skills: Schizophrenia", "Schizophrenia 16-marker formula", "Define the focus, explain core AO1, add named evidence, evaluate with reliability/validity, reductionism, treatment usefulness, side effects, social sensitivity or interactionism, then make a clear judgement."],
+  ["Exam Skills: Schizophrenia", "What are the high-priority Schizophrenia predictions?", "High-priority revision: CBT, interactionist approach, and reliability/validity/classification/diagnosis. Still revise symptoms, explanations and treatments because all are on the AQA spec."]
+]);
+
+const PSYCH_SCHIZOPHRENIA_CONDENSED = cardsFromRows("Schizophrenia", "condensed", [
+  ["Classification and Diagnosis", "Symptoms: night-before summary", "Positive symptoms add experience: hallucinations and delusions. Negative symptoms reduce functioning: speech poverty and avolition. Use examples for AO2 stem questions."],
+  ["Reliability and Validity", "Diagnosis issues: night-before summary", "Reliability = consistency. Validity = accuracy. Issues: co-morbidity, symptom overlap, culture bias and gender bias. Rosenhan/Copeland are useful evidence."],
+  ["Biological Explanations", "Biological explanations: night-before summary", "Genetics increases vulnerability; dopamine dysfunction links to symptoms; neural correlates link brain activity/structure to symptoms. Evaluate with support, reductionism and incomplete concordance."],
+  ["Psychological Explanations", "Psychological explanations: night-before summary", "Family dysfunction: double bind and expressed emotion. Cognitive: dysfunctional thought processing/source monitoring. Evaluate with social sensitivity and cause-effect problems."],
+  ["Drug Therapy", "Antipsychotics: night-before summary", "Typical drugs block D2 receptors. Atypicals affect dopamine and serotonin. Evaluate with effectiveness, relapse reduction, side effects and treating symptoms not causes."],
+  ["CBT and Family Therapy", "CBT/family therapy: night-before summary", "CBT challenges beliefs and improves coping. Family therapy reduces expressed emotion and relapse. Best evaluation: useful with medication but not always suitable in acute cases."],
+  ["Interactionist Approach", "Interactionist approach: night-before summary", "Diathesis-stress = vulnerability plus trigger. Supports combined treatment: drugs plus CBT/family therapy. Strong because it is holistic; weaker because interactions are hard to measure."],
+  ["Exam Skills: Schizophrenia", "Predicted Schizophrenia priorities", "Prioritise CBT, interactionist approach and diagnosis reliability/validity. Prepare 16-mark plans for each with AO1, evidence, AO3 and judgement."]
+]);
+
+const PSYCH_ADDICTION_FULL = cardsFromRows("Addiction", "full", [
+  ["Describing Addiction", "What is addiction?", "Addiction is a compulsive dependence on a substance or behaviour despite harmful consequences. AQA requires physical dependence, psychological dependence, tolerance and withdrawal syndrome."],
+  ["Describing Addiction", "What is physical dependence?", "Physical dependence means the body relies on a substance or behaviour to function normally and avoid unpleasant physical symptoms. Withdrawal can include sweating, shaking, headaches, insomnia and irritability."],
+  ["Describing Addiction", "What is psychological dependence?", "Psychological dependence means the person feels a strong mental or emotional need to continue the addictive behaviour. It involves cravings, preoccupation and the belief that the behaviour is needed for wellbeing."],
+  ["Describing Addiction", "What is tolerance?", "Tolerance means needing more of a substance or behaviour to achieve the same effect. It can be metabolic, receptor-based or learned, and helps explain escalation of addictive behaviour."],
+  ["Describing Addiction", "What is withdrawal syndrome?", "Withdrawal syndrome is the set of unpleasant symptoms that occur when the addictive substance or behaviour is reduced or stopped. Withdrawal can maintain addiction through negative reinforcement."],
+  ["Risk Factors", "What risk factors does AQA specify for addiction?", "AQA specifies genetic vulnerability, stress, personality, family influences and peers. These should be linked to initiation, maintenance or relapse where possible."],
+  ["Risk Factors", "How does genetic vulnerability increase addiction risk?", "Genetic vulnerability may affect dopamine receptors, reward sensitivity or impulsivity. Twin studies suggest genetic influence for nicotine and gambling addiction. AO3: genes interact with environment, so this is not destiny."],
+  ["Risk Factors", "How does stress increase addiction risk?", "Stress can increase addiction through self-medication, cortisol effects, reduced self-control and negative reinforcement. Substances or gambling may provide temporary relief, making repeated use more likely."],
+  ["Risk Factors", "How does personality increase addiction risk?", "Traits such as impulsivity, novelty seeking and sensation seeking can increase risk. Cloninger linked novelty seeking to dopamine systems. AO3: personality may predict risk but does not cause addiction alone."],
+  ["Risk Factors", "How do family influences affect addiction?", "Family influences include modelling, permissive attitudes, poor supervision and family stress. Social learning theory explains how children may imitate addictive behaviour seen in parents or relatives."],
+  ["Risk Factors", "How do peers affect addiction?", "Peers can influence addiction through modelling, social identity, norms and reinforcement. People may start or maintain addictive behaviour to gain approval or belong to a group."],
+  ["Risk Factors", "Evaluate risk factor explanations.", "Strength: risk factors help identify vulnerable people and target prevention. Limitations: much evidence is correlational, and risk factors interact, making single-cause explanations reductionist."],
+  ["Nicotine Addiction", "How does brain neurochemistry explain nicotine addiction?", "Nicotine activates reward pathways, especially dopamine release in the mesolimbic system. It acts quickly after inhalation, producing pleasure and reinforcing smoking behaviour."],
+  ["Nicotine Addiction", "What is the role of dopamine in nicotine addiction?", "Dopamine is released in reward pathways such as the nucleus accumbens, creating pleasure and motivation to repeat smoking. Nicotine also affects systems such as glutamate and GABA, amplifying reward."],
+  ["Nicotine Addiction", "How does learning theory explain nicotine initiation?", "Initiation can occur through social learning and positive reinforcement. Young people may observe role models smoking and expect rewards such as pleasure, status or stress relief."],
+  ["Nicotine Addiction", "How does learning theory explain nicotine maintenance?", "Maintenance occurs through positive reinforcement from pleasure and negative reinforcement from avoiding withdrawal. Smoking removes unpleasant withdrawal symptoms, strengthening the behaviour."],
+  ["Nicotine Addiction", "What is cue reactivity in nicotine addiction?", "Cue reactivity means environmental cues associated with smoking, such as cigarette smell, pubs or stress, trigger cravings. Classical conditioning explains why cues can cause relapse after withdrawal has ended."],
+  ["Nicotine Addiction", "Evaluate nicotine explanations.", "Strength: neurochemistry explains powerful physiological effects, and learning explains cues and relapse. Limitation: each alone is reductionist, so an interactionist account is stronger."],
+  ["Gambling Addiction", "How does learning theory explain gambling addiction?", "Gambling can be learned through operant conditioning. Wins positively reinforce gambling, and near misses or escaping boredom/stress can maintain behaviour. Social learning may also occur through family or peers."],
+  ["Gambling Addiction", "What is partial reinforcement in gambling?", "Partial reinforcement means rewards are given only some of the time. Behaviours learned on partial reinforcement are resistant to extinction because the gambler keeps trying despite losses."],
+  ["Gambling Addiction", "What is variable reinforcement in gambling?", "Variable reinforcement means rewards are unpredictable. Slot machines and betting outcomes reward at uncertain intervals, producing persistent gambling because the next win always feels possible."],
+  ["Gambling Addiction", "What is cognitive theory of gambling addiction?", "Cognitive theory argues gambling is maintained by irrational thinking and cognitive bias, such as overestimating control, selective memory for wins, and believing a win is due after losses."],
+  ["Gambling Addiction", "What is the gambler's fallacy?", "The gambler's fallacy is the mistaken belief that past random outcomes affect future ones, such as believing a win is due after a losing streak. This can maintain gambling despite losses."],
+  ["Gambling Addiction", "What is illusion of control in gambling?", "Illusion of control is the belief that personal actions or rituals can influence random outcomes, such as choosing a lucky machine or throwing dice in a certain way."],
+  ["Gambling Addiction", "Evaluate gambling learning theory.", "Strength: partial and variable reinforcement explain why gambling persists. Limitation: learning theory ignores irrational beliefs and individual differences, so cognitive theory adds important explanation."],
+  ["Gambling Addiction", "Evaluate cognitive explanations of gambling.", "Strength: cognitive biases are common in gamblers and CBT targets them directly. Limitation: cognitive biases may be consequences of gambling rather than original causes."],
+  ["Reducing Addiction", "How does drug therapy reduce addiction?", "Drug therapy targets biological mechanisms, such as reducing cravings, replacing the addictive substance or blocking pleasurable effects. It is most relevant to substance addictions such as nicotine."],
+  ["Reducing Addiction", "Evaluate drug therapy for addiction.", "Strength: can reduce withdrawal and cravings, supporting abstinence. Limitations: side effects, relapse after stopping, and it may not address psychological or social causes."],
+  ["Reducing Addiction", "What are behavioural interventions for addiction?", "Behavioural interventions use learning principles to change addiction. AQA specifies aversion therapy and covert sensitisation."],
+  ["Reducing Addiction", "What is aversion therapy?", "Aversion therapy pairs the addictive behaviour with an unpleasant stimulus so the person develops a negative association. Example: alcohol paired with nausea. AO3: ethical issues and high relapse can limit usefulness."],
+  ["Reducing Addiction", "What is covert sensitisation?", "Covert sensitisation asks the person to imagine the addictive behaviour followed by unpleasant consequences. It avoids some practical issues of aversion therapy but depends on imagination and motivation."],
+  ["Reducing Addiction", "How does CBT reduce addiction?", "CBT helps identify and challenge irrational beliefs, recognise triggers, develop coping strategies and prevent relapse. It is especially relevant for gambling because it targets cognitive bias."],
+  ["Reducing Addiction", "Evaluate CBT for addiction.", "Strength: addresses cognitive causes and relapse prevention. Limitations: requires motivation, takes time, and may be less effective without social support or biological help."],
+  ["Behaviour Change", "What is the theory of planned behaviour?", "Ajzen's theory of planned behaviour says intention predicts behaviour. Intention is influenced by attitudes, subjective norms and perceived behavioural control. It can explain attempts to start or stop addictive behaviour."],
+  ["Behaviour Change", "How do attitudes affect addiction in TPB?", "Attitudes are beliefs about the costs and benefits of behaviour. If someone believes quitting will improve health and money, intention to quit may increase. If gambling is seen as exciting, intention to gamble may increase."],
+  ["Behaviour Change", "How do subjective norms affect addiction in TPB?", "Subjective norms are perceived social pressures. If friends approve of smoking or gambling, addictive behaviour may be more likely. If family supports quitting, intention to stop may increase."],
+  ["Behaviour Change", "How does perceived behavioural control affect addiction in TPB?", "Perceived behavioural control is the person's belief that they can perform the behaviour. High control over resisting urges increases intention and may directly affect success."],
+  ["Behaviour Change", "Evaluate the theory of planned behaviour.", "Strength: useful for designing interventions that target attitudes, norms and control. Limitations: intention does not always lead to behaviour, especially when addiction involves cravings and withdrawal."],
+  ["Behaviour Change", "What is Prochaska's six-stage model?", "Prochaska's model describes behaviour change through stages: precontemplation, contemplation, preparation, action, maintenance and termination. Relapse can occur and people may cycle through stages more than once."],
+  ["Behaviour Change", "How can Prochaska's model be applied to addiction?", "Interventions can be matched to stage. Precontemplation needs awareness; contemplation needs weighing pros and cons; preparation needs planning; action needs coping strategies; maintenance needs relapse prevention."],
+  ["Behaviour Change", "Evaluate Prochaska's model.", "Strength: it recognises change as a process and helps tailor treatment. Limitations: stages may be too rigid, boundaries are unclear, and relapse can make progress non-linear."],
+  ["Exam Skills: Addiction", "Addiction 16-marker formula", "Define the behaviour or treatment, explain mechanisms, use examples from nicotine/gambling, evaluate with evidence, reductionism, real-world application, ethics and relapse, then make a judgement."],
+  ["Exam Skills: Addiction", "What are the high-priority Addiction predictions?", "High-priority revision: gambling explanations, gambling learning theory, theory of planned behaviour and Prochaska's model. Still revise nicotine, risk factors and treatments because they are spec content."]
+]);
+
+const PSYCH_ADDICTION_CONDENSED = cardsFromRows("Addiction", "condensed", [
+  ["Describing Addiction", "Describing addiction: night-before summary", "Addiction involves compulsion despite harm. Key features: physical dependence, psychological dependence, tolerance and withdrawal. Link withdrawal to negative reinforcement."],
+  ["Risk Factors", "Risk factors: night-before summary", "Risk factors: genetic vulnerability, stress, personality, family influences and peers. Evaluate as useful for prevention but correlational and interactionist."],
+  ["Nicotine Addiction", "Nicotine: night-before summary", "Brain neurochemistry: nicotine increases dopamine reward. Learning theory: initiation by modelling/reward, maintenance by withdrawal relief, relapse by cue reactivity."],
+  ["Gambling Addiction", "Gambling explanations: night-before summary", "Learning theory: partial and variable reinforcement make gambling resistant to extinction. Cognitive theory: gambler's fallacy, illusion of control and selective memory maintain gambling."],
+  ["Reducing Addiction", "Reducing addiction: night-before summary", "Drug therapy targets biology. Behavioural interventions: aversion therapy and covert sensitisation. CBT targets irrational thoughts and relapse triggers."],
+  ["Behaviour Change", "TPB: night-before summary", "Theory of planned behaviour: attitudes, subjective norms and perceived behavioural control shape intentions, which influence behaviour. Evaluate intention-behaviour gap in addiction."],
+  ["Behaviour Change", "Prochaska: night-before summary", "Stages: precontemplation, contemplation, preparation, action, maintenance, termination. Useful for matching interventions, but stage boundaries can be vague and relapse is common."],
+  ["Exam Skills: Addiction", "Predicted Addiction priorities", "Prioritise gambling addiction explanations, gambling learning theory, TPB and Prochaska. Use gambling examples for AO2 if likely gambling is the main focus."]
+]);
+
+const PSYCH_RESEARCH_METHODS_FULL = cardsFromRows("Research Methods", "full", [
+  ["Research Design", "What is an aim?", "An aim is a general statement of what the researcher intends to investigate. It is broader than a hypothesis and usually describes the purpose of the study."],
+  ["Research Design", "What is a directional hypothesis?", "A directional hypothesis predicts the direction of a difference or relationship, such as participants receiving CBT will report lower addiction scores than a control group."],
+  ["Research Design", "What is a non-directional hypothesis?", "A non-directional hypothesis predicts that there will be a difference or relationship but does not state the direction. Use it when previous evidence is mixed or limited."],
+  ["Research Design", "What is the independent variable?", "The independent variable is the factor manipulated by the researcher in an experiment, or the naturally occurring difference between groups in a quasi-experiment."],
+  ["Research Design", "What is the dependent variable?", "The dependent variable is the measured outcome. It should be operationalised clearly so another researcher could measure it in the same way."],
+  ["Research Design", "What are extraneous and confounding variables?", "Extraneous variables are uncontrolled variables that may affect the DV. A confounding variable varies systematically with the IV, making it unclear whether the IV caused the effect."],
+  ["Experiments", "What is a lab experiment?", "A lab experiment is conducted in a controlled setting where the IV is manipulated and extraneous variables are controlled. Strength: high control and replicability. Limitation: lower ecological validity."],
+  ["Experiments", "What is a field experiment?", "A field experiment manipulates an IV in a natural setting. Strength: higher ecological validity. Limitation: less control and harder replication."],
+  ["Experiments", "What is a natural experiment?", "A natural experiment uses a naturally occurring IV, such as a policy change or life event. Strength: useful when manipulation is unethical. Limitation: less control over participant allocation."],
+  ["Experiments", "What is a quasi-experiment?", "A quasi-experiment uses a naturally existing participant variable, such as gender or diagnosis. Strength: useful for real differences. Limitation: causality is weaker because random allocation is impossible."],
+  ["Experimental Design", "What is an independent groups design?", "Different participants are used in each condition. Strength: no order effects. Limitation: participant variables may affect results, so random allocation is important."],
+  ["Experimental Design", "What is a repeated measures design?", "The same participants take part in every condition. Strength: controls participant variables. Limitation: order effects, such as practice or fatigue, so counterbalancing may be needed."],
+  ["Experimental Design", "What is a matched pairs design?", "Participants are paired on relevant variables and each member of the pair is placed in a different condition. Strength: reduces participant variables. Limitation: matching is difficult and time-consuming."],
+  ["Sampling", "What is random sampling?", "Random sampling gives every member of the target population an equal chance of selection. Strength: less researcher bias. Limitation: requires a sampling frame and may still be unrepresentative by chance."],
+  ["Sampling", "What is opportunity sampling?", "Opportunity sampling uses people who are available. Strength: quick and practical. Limitation: biased and unrepresentative."],
+  ["Sampling", "What is volunteer sampling?", "Volunteer sampling uses participants who self-select. Strength: ethical and easy to recruit. Limitation: volunteer bias, because volunteers may be more motivated or unusual."],
+  ["Sampling", "What is stratified sampling?", "Stratified sampling divides the target population into subgroups and samples proportionally from each. Strength: highly representative. Limitation: time-consuming and requires population data."],
+  ["Self-Report Methods", "What is a questionnaire?", "A questionnaire is a set of written questions. It can collect large amounts of data quickly. Closed questions produce quantitative data; open questions produce qualitative data."],
+  ["Self-Report Methods", "What is an interview?", "An interview asks participants questions face to face, online or by phone. Structured interviews are standardised; unstructured interviews are flexible and produce richer data."],
+  ["Observations", "What is a naturalistic observation?", "A naturalistic observation records behaviour in a real-world setting. Strength: high ecological validity. Limitation: low control and potential observer bias."],
+  ["Observations", "What is a controlled observation?", "A controlled observation records behaviour in a structured setting. Strength: more control and easier replication. Limitation: behaviour may be less natural."],
+  ["Observations", "What are behavioural categories?", "Behavioural categories are operationalised behaviours recorded in an observation. They should be objective, clear and non-overlapping."],
+  ["Correlations", "What is a correlation?", "A correlation measures the association between two co-variables. Positive means both increase together; negative means one increases as the other decreases; zero means no relationship."],
+  ["Correlations", "Why can correlations not show causation?", "Correlations do not show which variable causes which, and a third variable may explain the relationship. They are useful for prediction and when experiments are unethical."],
+  ["Content Analysis", "What is content analysis?", "Content analysis is a systematic method for analysing media, texts or communication by coding themes or categories. It can turn qualitative material into quantitative data."],
+  ["Case Studies", "What is a case study?", "A case study is an in-depth investigation of one person, group or event using multiple methods. Strength: rich detail. Limitation: low generalisability."],
+  ["Reliability and Validity", "What is reliability?", "Reliability means consistency. Internal reliability concerns consistency within a measure. External reliability concerns consistency over time. Inter-rater reliability concerns agreement between observers."],
+  ["Reliability and Validity", "How can reliability be improved?", "Use standardised procedures, clear behavioural categories, pilot testing, training observers, test-retest checks and inter-rater reliability checks."],
+  ["Reliability and Validity", "What is validity?", "Validity means measuring what is intended. Internal validity concerns whether the IV caused the DV. Ecological validity concerns whether findings generalise to real settings. Population validity concerns generalising to other people."],
+  ["Reliability and Validity", "How can validity be improved?", "Control extraneous variables, use realistic tasks, avoid demand characteristics, use representative samples, pilot procedures and check measures against established criteria."],
+  ["Ethics", "What are the main ethical issues?", "Main ethical issues include informed consent, deception, protection from harm, privacy, confidentiality and the right to withdraw. Ethical costs should be balanced against scientific value."],
+  ["Ethics", "How can ethical issues be managed?", "Researchers can use consent forms, standardised debriefs, confidentiality procedures, withdrawal reminders, risk assessments and ethics committees."],
+  ["Data Handling", "What is the mean?", "The mean is the arithmetic average. It uses all scores, so it is sensitive to extreme values. It is best for interval or ratio data without serious outliers."],
+  ["Data Handling", "What is the median?", "The median is the middle score when data are ordered. It is less affected by extreme values and useful for skewed data or ordinal data."],
+  ["Data Handling", "What is the mode?", "The mode is the most frequent score or category. It is useful for nominal data but may be unrepresentative if there are multiple modes."],
+  ["Data Handling", "What are range and standard deviation?", "Range is the highest score minus lowest score, often plus one in AQA mark schemes when appropriate. Standard deviation measures spread around the mean; larger SD means more dispersion."],
+  ["Data Handling", "What are nominal, ordinal and interval data?", "Nominal data are categories. Ordinal data are ordered/ranked but intervals are not equal. Interval data use equal units. Data type affects which statistical test is appropriate."],
+  ["Graphs and Displays", "When should you use a bar chart?", "Use a bar chart for separate categories or nominal data. Bars should not touch because categories are discrete."],
+  ["Graphs and Displays", "When should you use a histogram?", "Use a histogram for continuous data grouped into intervals. Bars touch because the data are continuous."],
+  ["Graphs and Displays", "When should you use a scattergram?", "Use a scattergram for correlations. Each point represents paired scores on two co-variables, showing direction and strength of association."],
+  ["Inferential Testing", "What is statistical significance?", "Statistical significance means the result is unlikely to have occurred by chance at the chosen probability level, usually p <= 0.05 in psychology."],
+  ["Inferential Testing", "What are Type I and Type II errors?", "A Type I error is accepting a false positive by setting the significance level too lenient. A Type II error is missing a real effect by setting the level too strict or using low power."],
+  ["Inferential Testing", "How do you choose a statistical test?", "Choose based on design, data type and whether the study tests difference or correlation. Sign test is for related nominal data; chi-square is for unrelated nominal association/difference; Spearman's rho is for correlation with ordinal/interval data."],
+  ["Paper 3 Application", "How can research methods appear in Paper 3?", "Research methods can be embedded in Paper 3 topics. You may need to apply validity, reliability, sampling, ethics, design or data analysis to studies on schizophrenia, relationships or addiction."],
+  ["Exam Skills: Research Methods", "Research Methods short-answer formula", "Define the term, apply it to the stem, and give one clear strength or limitation if asked. For design questions, always operationalise variables and control extraneous variables."]
+]);
+
+const PSYCH_RESEARCH_METHODS_CONDENSED = cardsFromRows("Research Methods", "condensed", [
+  ["Research Design", "Variables and hypotheses: night-before summary", "Aim = general purpose. Directional hypothesis predicts direction; non-directional predicts effect only. IV is manipulated; DV is measured. Operationalise both."],
+  ["Experiments", "Experiment types: night-before summary", "Lab = high control, low EV. Field = natural, less control. Natural = IV naturally occurs. Quasi = participant variable, weaker causality."],
+  ["Experimental Design", "Designs: night-before summary", "Independent groups avoids order effects but has participant variables. Repeated measures controls participants but has order effects. Matched pairs balances both but is hard to match."],
+  ["Sampling", "Sampling: night-before summary", "Random reduces bias but needs list. Opportunity is quick but biased. Volunteer has volunteer bias. Stratified is representative but time-consuming."],
+  ["Reliability and Validity", "Reliability/validity: night-before summary", "Reliability = consistency; improve with standardisation and inter-rater/test-retest. Validity = accuracy; improve with controls, realistic tasks and representative samples."],
+  ["Ethics", "Ethics: night-before summary", "Consent, deception, harm, privacy, confidentiality, right to withdraw. Manage with consent, debrief, anonymity, risk assessment and ethics committees."],
+  ["Data Handling", "Data/stats: night-before summary", "Mean uses all scores but outliers affect it. Median handles skew. Mode for categories. Range/SD show spread. Nominal/ordinal/interval determine test choice."],
+  ["Paper 3 Application", "Paper 3 RM priorities", "Practise applying methods to Paper 3 stems: sampling, ethics, reliability, validity, correlation, experiments, questionnaires, observations, graphs and stats."]
+]);
 
 
 // ═══════════════════════════════════════════════════════════════════════
@@ -1607,66 +1942,227 @@ const ECONOMICS_THEME4_CONDENSED = [
 ];
 
 
+// ═══════════════════════════════════════════════════════════════════════
+//  SOCIOLOGY — AQA A-LEVEL PAPER 2: FAMILIES AND HOUSEHOLDS + THE MEDIA
+// ═══════════════════════════════════════════════════════════════════════
+
+const SOCIOLOGY_FAMILIES_FULL = cardsFromRows("Families and Households", "full", [
+  ["Family Types and Perspectives", "What family types must you be able to define for AQA Families and Households?", "Nuclear family: two parents and dependent children. Extended family: relatives beyond parents and children. Lone-parent family: one parent with children. Reconstituted family: step-family formed after separation or divorce. Same-sex family: family headed by same-sex partners. Beanpole family: vertically extended across generations but with fewer siblings/cousins. Cohabiting family: unmarried partners living together."],
+  ["Family Types and Perspectives", "What is Murdock's functionalist view of the family?", "Murdock argued the nuclear family is universal because it performs four essential functions: sexual regulation, reproduction, socialisation of children, and economic cooperation. AO3: critics say this is too positive, ignores family diversity, ignores conflict inside families, and assumes one family form is universal."],
+  ["Family Types and Perspectives", "What is Parsons' functional fit theory?", "Parsons argued family structure fits the needs of society. In pre-industrial society, extended families suited production and welfare. In industrial society, the isolated nuclear family is better because it is geographically mobile and socially mobile. It performs two irreducible functions: primary socialisation and stabilisation of adult personalities."],
+  ["Family Types and Perspectives", "How do Marxists explain the family?", "Marxists argue the family supports capitalism by socialising children into hierarchy, reproducing labour power, acting as a unit of consumption, passing on private property through inheritance, and cushioning workers from alienation. Key names: Engels, Zaretsky, Althusser."],
+  ["Family Types and Perspectives", "What is Zaretsky's Marxist view of the family?", "Zaretsky argued the family appears to be a private haven from capitalism, but this is an illusion. It cushions workers emotionally so they can return to exploitation, and it encourages consumption as families buy goods to compensate for alienated work."],
+  ["Family Types and Perspectives", "How do feminists criticise the family?", "Feminists argue the family can reproduce patriarchy through gender role socialisation, unequal domestic labour, male control of decision-making, domestic violence, and women's emotional labour. Liberal feminists emphasise legal reform; Marxist feminists link women's oppression to capitalism; radical feminists see the family as a key site of male power; intersectional feminists argue experiences vary by class, ethnicity and sexuality."],
+  ["Family Types and Perspectives", "What is the New Right view of the family?", "The New Right argue the conventional nuclear family is best for social stability because it provides socialisation, clear gender roles and discipline. They criticise divorce, cohabitation, lone parenthood and welfare dependency. Charles Murray links lone-parent families to an underclass. AO3: this blames families, ignores poverty and ignores successful diverse families."],
+  ["Family Types and Perspectives", "What is the postmodern view of the family?", "Postmodernists argue there is no single best family type. Greater choice, individualisation and diversity mean people create family forms that suit their identities and life course. Stacey argues people construct varied family arrangements. AO3: critics say choice is limited by class, gender, ethnicity and state policy."],
+  ["Family, Economy and Social Policy", "How does the AQA spec link families to social structure and social change?", "You must explain how the family relates to wider structures such as the economy and state policies. This means connecting family forms to capitalism, industrialisation, welfare policy, gender equality laws, divorce laws, child protection, housing, migration, employment and changing norms."],
+  ["Family, Economy and Social Policy", "How can the economy affect family life?", "Economic change affects whether families need dual earners, whether young adults can afford to leave home, whether care is provided privately or by the state, and whether migration creates transnational families. Recessions can delay marriage, childbearing and home ownership; rising female employment changes domestic roles and power."],
+  ["Family, Economy and Social Policy", "How do social policies affect families?", "Social policies are government laws and actions that shape family life. Examples: Divorce Reform Act made divorce easier; Equal Pay Act and sex discrimination law supported women's employment; child benefit and welfare affect poverty; education laws made childhood more dependent; same-sex marriage law increased legal recognition; child protection law increased state intervention."],
+  ["Family, Economy and Social Policy", "How do functionalists evaluate social policy?", "Functionalists such as Fletcher argue welfare, health, housing and education policies can support the family in performing its functions. Policies may protect children and reduce hardship. AO3: this is too positive because policies can also regulate, surveil or reinforce inequality."],
+  ["Family, Economy and Social Policy", "How do New Right sociologists evaluate social policy?", "The New Right argue generous welfare can create dependency and encourage lone parenthood by weakening incentives to marry or work. They prefer policies that support the nuclear family. AO3: critics argue this blames vulnerable groups and ignores structural causes such as low wages, housing costs and domestic violence."],
+  ["Family, Economy and Social Policy", "What is Donzelot's view of social policy and families?", "Donzelot used Foucault's ideas to argue professionals such as doctors, teachers and social workers police families through surveillance. Social policy is not just support; it can monitor and regulate families, especially working-class families, under the language of child welfare."],
+  ["Family, Economy and Social Policy", "What is an essay-ready AO3 point on social policy?", "Social policy is contradictory: it can expand choice and protection, such as divorce rights and child safeguarding, but it can also impose norms about good parenting, childhood and family responsibility. The strongest answer judges policy by asking whose family is supported, whose is controlled, and which inequalities remain."],
+  ["Changing Family Patterns", "What are the key changing family patterns in the AQA spec?", "Marriage, cohabitation, separation, divorce, childbearing, the life course, sociology of personal life, and diversity of contemporary family and household structures. Do not only revise divorce: AQA can link changing patterns to gender roles, childhood, social policy or demography."],
+  ["Changing Family Patterns", "Why have marriage rates declined?", "Reasons include secularisation, changing attitudes, rising cohabitation, women's financial independence, fear of divorce, cost of weddings, later childbearing, and individualisation. Marriage has not disappeared, but it is less compulsory and often delayed."],
+  ["Changing Family Patterns", "Why has cohabitation increased?", "Cohabitation has increased because stigma has declined, contraception separates sex from marriage, secularisation weakens religious pressure, couples may test relationships before marriage, and legal/social norms are more accepting. AO3: cohabiting couples usually have fewer legal rights than married couples."],
+  ["Changing Family Patterns", "Why did divorce increase after the 1960s?", "Legal changes made divorce easier; women's employment made leaving possible; secularisation reduced stigma; rising expectations of marriage made people less willing to tolerate unhappy relationships; feminist ideas challenged patriarchal marriage; and the privatised nuclear family can create emotional pressure."],
+  ["Changing Family Patterns", "How can divorce affect family diversity?", "Divorce can increase lone-parent families, reconstituted families, single-person households, co-parenting arrangements and serial monogamy. It also changes the life course because people may move through several family forms rather than one permanent nuclear family."],
+  ["Changing Family Patterns", "How have childbearing patterns changed?", "Birth rates have fallen, women have children later, average family size has declined, more children are born outside marriage, and some adults choose voluntary childlessness. Causes include contraception, women's education/employment, cost of children, housing, changing norms and declining infant mortality."],
+  ["Changing Family Patterns", "How might falling birth rates affect gender roles?", "Smaller families can reduce women's childcare burden, increase female employment, create dual-earner households, improve women's financial independence, and encourage joint conjugal roles. AO3: this does not automatically create equality because women may still carry the dual burden and mental load."],
+  ["Family Diversity and Personal Life", "What is family diversity?", "Family diversity means there is a range of family and household forms rather than one dominant type. Diversity can be organisational, cultural, class-based, life-course, generational or sexual. Key sociologists include Rapoport and Rapoport, Stacey, Weeks, Chester and the New Right."],
+  ["Family Diversity and Personal Life", "What did Rapoport and Rapoport argue about family diversity?", "They argued family diversity is central to modern Britain. They identified organisational diversity, cultural diversity, social class diversity, life-course diversity and cohort/generational diversity. AO3: Chester argues diversity is overstated because most people still experience a nuclear family phase."],
+  ["Family Diversity and Personal Life", "What is Chester's neo-conventional family?", "Chester argues the nuclear family has not disappeared but changed into the neo-conventional family: a dual-earner nuclear family. Most people still marry or cohabit, have children and live in a family unit at some point. AO3: this underplays lone-parent, same-sex, reconstituted and single-person households."],
+  ["Family Diversity and Personal Life", "What is the personal life perspective?", "The personal life perspective focuses on the meanings people give to their relationships rather than assuming family is only blood or marriage. Smart argues sociologists should study connectedness, memory, biography and chosen relationships, including friends, pets and donor-conceived kinship."],
+  ["Family Diversity and Personal Life", "How does individualisation explain family diversity?", "Beck and Beck-Gernsheim argue tradition has weakened and individuals must construct their own biographies. Relationships become negotiated and chosen rather than fixed by duty. This creates diversity, but also uncertainty and instability."],
+  ["Family Diversity and Personal Life", "What is a key AO3 criticism of individualisation?", "The choice thesis can exaggerate freedom. Class, gender, ethnicity, religion, sexuality, housing costs, welfare rules and childcare costs all limit choices. For example, a working-class lone parent may have fewer real choices than an affluent professional couple."],
+  ["Family Diversity and Personal Life", "How can migration and globalisation affect family diversity?", "Migration can create transnational families, multi-ethnic families, extended kin networks, remittances, cultural diversity and changing gender roles. Global care chains may mean migrant women care for richer families while relatives care for their own children elsewhere."],
+  ["Domestic Labour and Power", "What are conjugal roles?", "Conjugal roles are roles performed by partners in a relationship. Segregated roles mean partners have separate tasks and leisure; joint roles mean tasks, decisions and leisure are shared. This links directly to domestic labour and power."],
+  ["Domestic Labour and Power", "What is the symmetrical family?", "Young and Willmott argued families have become more symmetrical: men and women share housework, childcare and leisure more equally, helped by women's employment, better living standards and home-centred leisure. AO3: Oakley argues this exaggerates equality."],
+  ["Domestic Labour and Power", "How did Oakley criticise the symmetrical family?", "Oakley found men were often described as helping if they did small or occasional tasks. She argued housework and childcare remained mainly women's responsibility. This challenges Young and Willmott's claim that domestic labour had become genuinely equal."],
+  ["Domestic Labour and Power", "What are the dual burden and triple shift?", "Dual burden: women perform paid work and most domestic labour. Triple shift: women perform paid work, housework/childcare and emotion work. Duncombe and Marsden argue women often manage emotional care in families as well as practical work."],
+  ["Domestic Labour and Power", "How does decision-making show power relationships in families?", "Pahl and Vogler studied money management. Allowance systems often give men more power because women manage a limited household budget. Pooling can look equal, but control depends on income, access and who makes major decisions."],
+  ["Domestic Labour and Power", "How does domestic violence link to family power?", "Domestic violence shows that family life is not always harmonious. Dobash and Dobash argue domestic violence is linked to patriarchal power and male control. Radical feminists use this to challenge functionalist views of the family as a warm bath or safe haven."],
+  ["Domestic Labour and Power", "How can same-sex relationships be used to evaluate domestic labour debates?", "Dunne found lesbian couples often shared domestic labour more equally because they were not shaped by traditional heterosexual gender scripts. This suggests inequality is socially constructed through gender norms, not naturally caused by biology."],
+  ["Domestic Labour and Power", "How might globalisation affect domestic labour?", "Globalisation can increase migrant domestic workers and global care chains, making affluent families' housework easier while shifting care burdens onto poorer women. It can also spread technology and labour-saving devices, but these do not automatically make men do equal housework."],
+  ["Childhood", "What is meant by childhood as a social construction?", "Childhood as a social construction means ideas about what children are, need and should do vary across time and culture. Childhood is not purely biological. Aries argued medieval children were treated like mini-adults, while modern society separates and protects children."],
+  ["Childhood", "How has the status of children changed?", "Children have become more protected, dependent and central to family life. Laws restrict child labour, require education, protect children from abuse and create age-based rights/restrictions. The modern family is often child-centred."],
+  ["Childhood", "What is child-centred society?", "A child-centred society places children at the emotional and financial centre of family and policy. Parents invest heavily in children's education, safety and leisure. AO3: this may apply more to middle-class children, while class, gender and ethnicity shape childhood experiences."],
+  ["Childhood", "What is Postman's disappearance of childhood thesis?", "Postman argued childhood is disappearing because television and media expose children to adult knowledge such as sex, violence and consumer culture. AO3: critics argue childhood is not disappearing; children are still highly regulated by schooling, law and safeguarding."],
+  ["Childhood", "How do conflict sociologists criticise the march of progress view of childhood?", "They argue not all children benefit equally. Class affects poverty and educational opportunities; gender affects socialisation and control; ethnicity affects racism; and global inequalities mean some children face labour, war or exploitation. Childhood is unequal, not simply improving."],
+  ["Childhood", "How can social policies affect children's status?", "Education laws make children dependent and separate from adults; child protection laws define children as vulnerable; age restrictions limit work, sex, alcohol and voting; welfare policies can reduce child poverty. AO3: policies protect children but also increase state surveillance of families."],
+  ["Childhood", "How can falling birth rates affect childhood?", "Fewer children can mean more parental investment per child, more child-centred family life, and more pressure on children to succeed. It can also increase the value placed on children as a scarce emotional project."],
+  ["Demographic Change", "What demographic trends since 1900 must AQA students know?", "Birth rates, death rates, family size, life expectancy, ageing population, migration and globalisation. Strong answers link these trends to family structure, childhood, domestic labour, care, dependency ratio, policy and diversity."],
+  ["Demographic Change", "Why has the birth rate fallen in the UK?", "Reasons include contraception, legal abortion, women's education and paid work, later marriage, secularisation, child costs, lower infant mortality, changing aspirations and less need for children as economic assets."],
+  ["Demographic Change", "Why has the death rate fallen?", "Death rates have fallen because of improved nutrition, sanitation, clean water, housing, medical care, vaccination, health education and welfare. This increases life expectancy and contributes to an ageing population."],
+  ["Demographic Change", "What is the ageing population?", "An ageing population means the average age rises because life expectancy increases and birth rates fall. Effects include higher dependency ratio, more one-person pensioner households, more beanpole families, more care responsibilities and greater pressure on health/social care."],
+  ["Demographic Change", "What is the dependency ratio?", "The dependency ratio compares dependants, such as children and older people, to the working-age population. An ageing population can increase dependency, but this is not automatic because many older people work, provide childcare, volunteer and support families financially."],
+  ["Demographic Change", "How does ageing affect family life?", "Ageing can create beanpole families, more grandparent involvement, more care for elderly relatives, sandwich-generation pressure, one-person elderly households, and inheritance issues. It can intensify gender inequality because women often provide unpaid care."],
+  ["Demographic Change", "How does migration affect families and households?", "Migration affects family size, age structure, birth rates, ethnic diversity, transnational families and care chains. Migrants are often younger adults, which can reduce population ageing in the short term, while cultural norms can affect household composition."],
+  ["Exam Skills: Families", "How should you answer a 10-mark outline and explain question in Families?", "Make two separate developed points. For each: identify the way, explain the mechanism, use a named concept/study or example, and link directly to the wording. Evaluation is not required, but analysis is: show why or how the effect happens."],
+  ["Exam Skills: Families", "How should you answer a 10-mark item question in Families?", "Use two hooks from the item. For each hook: quote or paraphrase the item briefly, apply sociological knowledge, develop the causal link, and analyse the effect. Do not ignore the item and do not write a mini 20-marker."],
+  ["Exam Skills: Families", "How should you structure a 20-mark Families essay?", "Use an introduction with the debate, three or four developed paragraphs, item application throughout, explicit AO3 after each paragraph, and a judgement conclusion. A strong paragraph is AO1 theory/study, AO2 item/example, AO3 evaluation, then link back to the question."],
+  ["Exam Skills: Families", "What are strong 20-mark essay judgements for Families?", "Avoid saying simply both sides are valid. Judge by conditions: time period, social class, gender, ethnicity, policy context and whether the question asks about extent, usefulness or impact. For example, family diversity is real, but choice is uneven and the nuclear family remains statistically and ideologically important."],
+]);
+
+const SOCIOLOGY_FAMILIES_CONDENSED = cardsFromRows("Families and Households", "condensed", [
+  ["Family Types and Perspectives", "Families: perspectives in one card", "Functionalism: family benefits society (Murdock, Parsons). Marxism: supports capitalism (Engels, Zaretsky, Althusser). Feminism: reproduces patriarchy/domestic inequality. New Right: nuclear family best, welfare/divorce/lone parents criticised. Postmodernism/personal life: diversity, choice, negotiated relationships. Always evaluate with diversity, inequality and social change."],
+  ["Family, Economy and Social Policy", "Families: economy and social policy", "Families are shaped by work, capitalism, welfare, law and state intervention. Policies can support families (benefits, child protection, equality law, same-sex marriage) or control them (Donzelot: surveillance). New Right criticise welfare dependency; feminists ask whether policies challenge patriarchy; Marxists ask whether policies reproduce capitalism."],
+  ["Changing Family Patterns", "Families: changing patterns", "Marriage down/later; cohabitation up; divorce increased after legal/social change; childbearing later and fewer children; family life course more varied. Causes: secularisation, contraception, women's employment, individualisation, changing expectations, less stigma. Effects: lone-parent, reconstituted, cohabiting, same-sex and single-person households."],
+  ["Family Diversity and Personal Life", "Families: diversity and personal life", "Rapoports: organisational, cultural, class, life-course and cohort diversity. Chester: diversity overstated, neo-conventional dual-earner nuclear family remains common. Personal life perspective: study meanings and chosen ties, not only blood/marriage. AO3: choice is limited by class, gender, ethnicity, sexuality, policy and money."],
+  ["Domestic Labour and Power", "Families: domestic labour and power", "Young and Willmott: symmetrical family. Oakley: men only help, inequality remains. Dual burden/triple shift: paid work + housework + emotion work. Pahl/Vogler: money management shows power. Dobash and Dobash: domestic violence exposes patriarchy. Dunne: same-sex couples show gender roles are socially constructed."],
+  ["Childhood", "Families: childhood", "Childhood is socially constructed: Aries says children were once mini-adults; modern childhood is protected, dependent and child-centred. March of progress: childhood improved through laws/schooling. Conflict view: childhood unequal by class, gender, ethnicity and global location. Postman: media erodes childhood; critics say children remain highly regulated."],
+  ["Demographic Change", "Families: demography", "Know birth rates, death rates, family size, life expectancy, ageing, migration and globalisation since 1900. Falling birth rate: contraception, women's work, costs. Falling death rate: medicine, sanitation, nutrition. Ageing: beanpole families, care burden, dependency ratio. Migration: diversity, transnational families, younger workforce."],
+  ["Exam Skills: Families", "Families: 20-marker formula", "Intro: debate. Paragraphs: AO1 theory/study, AO2 item/example, AO3 evaluation, link. Include named sociologists and policies. Conclude with judgement by extent, time period and group. For prediction revision, prioritise social policy, domestic labour/power, childhood, changing patterns, diversity and demography."],
+]);
+
+const SOCIOLOGY_MEDIA_FULL = cardsFromRows("The Media", "full", [
+  ["New Media", "What is new media?", "New media are digital, interactive, networked and often user-generated media such as social media, streaming, blogs, online news, smartphones and platforms. They differ from old media because audiences can respond, share, remix and produce content rather than only receive one-way broadcasts."],
+  ["New Media", "What is media convergence?", "Convergence is the merging of media technologies and platforms. A smartphone can be a television, radio, newspaper, camera, game console and social network. Jenkins argues convergence creates participatory culture because audiences follow and produce content across platforms."],
+  ["New Media", "What is the global village?", "McLuhan argued electronic media shrink distance and connect people globally, creating a global village. AO2: global crises, wars, protests and celebrity events are experienced in real time across borders. AO3: access is unequal and global media can still be dominated by powerful Western corporations."],
+  ["New Media", "What is the digital divide?", "The digital divide is inequality in access, skills and outcomes from digital media. It can be based on class, age, disability, region and global inequality. It challenges optimistic claims that new media automatically empower everyone."],
+  ["New Media", "What are prosumers?", "Prosumers both produce and consume media. Toffler used the term to describe active users who upload, remix, review, comment and share. AO3: Marxists argue platforms still own the infrastructure and profit from unpaid user labour and data."],
+  ["New Media", "What is citizen journalism?", "Citizen journalism is news reporting by ordinary people using phones, blogs or social media. It can expose events quickly and bypass traditional gatekeepers. AO3: it raises problems of verification, fake news, deepfakes, bias and unequal access to publishing power."],
+  ["New Media", "What is an optimistic view of new media?", "Optimists argue new media increase democracy, participation, citizen journalism, political mobilisation, minority voices and global awareness. Shirky argues digital tools make collective action easier. AO3: this may become slacktivism and platforms shape visibility through algorithms."],
+  ["New Media", "What is a pessimistic view of new media?", "Pessimists argue new media increase surveillance, misinformation, isolation, digital inequality, addictive use and corporate/state control. Algorithms create filter bubbles and platform owners collect data. AO3: users can resist, create communities and challenge mainstream narratives."],
+  ["Ownership, Control and Regulation", "What is the pluralist view of media ownership?", "Pluralists argue media owners must respond to audience demand because consumers can choose between many outlets. Competition, regulation and professional journalism limit owner control. Audiences are active and diverse. AO3: Marxists argue ownership is still concentrated and choices are shaped by powerful corporations."],
+  ["Ownership, Control and Regulation", "What is the instrumental Marxist view of media ownership?", "Instrumental Marxists argue owners directly control media content to protect ruling-class interests. Miliband sees the media as an instrument of capitalist ideology. Curran and Seaton argue media concentration narrows viewpoints and threatens democracy."],
+  ["Ownership, Control and Regulation", "What is the hegemonic Marxist view of the media?", "Hegemonic Marxists argue control is indirect. Journalists and editors share middle-class assumptions and work within routines that make ruling-class ideas seem natural. The Glasgow University Media Group found news often frames issues in ways favourable to powerful groups."],
+  ["Ownership, Control and Regulation", "How does new media affect ownership and control?", "New media can challenge old ownership by allowing alternative voices, citizen journalism and influencers. However, control may be reconcentrated in platform giants such as Meta, Alphabet, Apple, Amazon, ByteDance and X, which control algorithms, data, advertising and visibility."],
+  ["Ownership, Control and Regulation", "How is UK broadcasting regulated?", "Ofcom regulates broadcasting and communications. It can protect audiences from harm, enforce impartiality rules, regulate the watershed, investigate complaints, issue fines and revoke licences. AO3: it does not remove ownership concentration and online platforms are harder to regulate."],
+  ["Ownership, Control and Regulation", "How is the UK press regulated?", "IPSO regulates many newspapers and magazines through the Editors' Code. It handles complaints and can require corrections. AO3: critics argue it is self-regulation with limited power; supporters argue it protects press freedom and avoids state censorship."],
+  ["Ownership, Control and Regulation", "What is a strong AO3 point on media regulation?", "Regulation is always balancing protection and freedom. Too little regulation can allow harm, misinformation and owner power; too much can threaten free speech and investigative journalism. New media make regulation harder because content moves globally and rapidly."],
+  ["Globalisation and Popular Culture", "How does media globalisation affect culture?", "Media globalisation spreads cultural products, identities and meanings across borders through streaming, social media, transnational corporations and global advertising. It can create cultural hybridity and global awareness, but also cultural imperialism if Western media dominate."],
+  ["Globalisation and Popular Culture", "What is cultural imperialism?", "Cultural imperialism is the idea that powerful countries spread their values through global media, weakening local cultures. Marxists link this to transnational corporations and Western capitalist ideology. AO3: audiences may reinterpret media locally, producing hybrid cultures rather than passive imitation."],
+  ["Globalisation and Popular Culture", "What is popular culture?", "Popular culture is culture enjoyed by many people, often commercially produced and widely accessible, such as TV, music, film, sport, memes, streaming and social media trends. In media essays, link popular culture to globalisation, identity, consumption and audience choice."],
+  ["Globalisation and Popular Culture", "What is cultural hybridity?", "Cultural hybridity means global and local cultures mix to create new forms. Examples include global music styles being adapted locally or diasporic communities using media to blend identities. This challenges simple cultural imperialism because audiences are active and creative."],
+  ["Globalisation and Popular Culture", "How can globalisation affect news content?", "Globalisation speeds up news through smartphones, social media and 24-hour coverage. It increases global stories and citizen footage, but also creates pressure for instant updates, sensationalism and reduced verification. Global agencies and Western news values may still shape what counts as news."],
+  ["News Selection and Presentation", "What are news values?", "News values are criteria journalists use to select stories. Galtung and Ruge identify values such as negativity, threshold, unexpectedness, personalisation, elite persons, elite nations, continuity and composition. They explain why some events become news while others are ignored."],
+  ["News Selection and Presentation", "What is agenda setting?", "Agenda setting means the media may not tell audiences exactly what to think, but it influences what they think about by selecting which issues receive attention. This gives editors, owners and algorithms power over public debate."],
+  ["News Selection and Presentation", "What is gatekeeping?", "Gatekeeping is the process by which journalists, editors, owners, algorithms or platforms decide what content is selected, filtered, promoted or excluded. New media changes gatekeeping because algorithms and users also shape visibility."],
+  ["News Selection and Presentation", "What is a moral panic?", "Cohen argued a moral panic occurs when media exaggerate a group or behaviour as a threat to social values. The group becomes a folk devil. Examples can include youth subcultures, knife crime, migrants or benefit claimants. AO3: not every concern is purely media-created."],
+  ["News Selection and Presentation", "How do Marxists explain news selection?", "Marxists argue news selection reflects ruling-class interests. Owners, advertisers and elite sources shape what is reported. GUMG found industrial disputes may be framed against workers by using official sources and presenting managers as credible."],
+  ["News Selection and Presentation", "How do pluralists explain news selection?", "Pluralists argue news reflects audience demand and professional news values rather than direct owner control. Journalists select stories that audiences find relevant, dramatic or important. AO3: this ignores structural power, source dependence and concentrated ownership."],
+  ["Representations: Class, Age and Gender", "What is media representation?", "Representation is the way media construct images and meanings about groups. Media do not simply mirror reality; they select, frame and encode meanings. Representations can stereotype, marginalise, normalise or challenge social inequalities."],
+  ["Representations: Class, Age and Gender", "How is social class represented in the media?", "Working-class people are often represented through poverty, crime, welfare dependency, comedy or lack of taste, while middle-class lifestyles are normalised and upper-class privilege may be glamourised. Marxists argue this legitimises inequality; pluralists argue new media allows working-class self-representation."],
+  ["Representations: Class, Age and Gender", "How are young people represented in the media?", "Young people are often represented as trouble, risk, consumers, folk devils or digitally obsessed. Cohen's moral panic can be applied to youth. AO3: youth media and social media also allow young people to represent themselves and challenge stereotypes."],
+  ["Representations: Class, Age and Gender", "How are older people represented in the media?", "Older people may be underrepresented or stereotyped as dependent, lonely, vulnerable, grumpy, technologically incompetent or a burden. Positive representations may show active ageing. AO3: representations vary by class, gender and celebrity status."],
+  ["Representations: Class, Age and Gender", "How are women represented in the media?", "Feminists argue women are often sexualised, domestic, emotional, judged by appearance, or symbolically annihilated. Tuchman used symbolic annihilation for underrepresentation/trivialisation. Mulvey's male gaze argues visual media position women as objects for heterosexual male viewers."],
+  ["Representations: Class, Age and Gender", "How are men represented in the media?", "Men are often represented through hegemonic masculinity: strength, control, heterosexuality, rationality and authority. New media and advertising may show more diverse masculinities, but stereotypes around dominance, sport, violence and emotional restraint remain common."],
+  ["Representations: Ethnicity, Sexuality and Disability", "How are ethnic minorities represented in the media?", "Ethnic minorities may be stereotyped as criminal, exotic, threatening, victims or outsiders. Van Dijk argues news can reproduce racism through problem-focused framing. Hall argues representations are encoded with meanings that support dominant power. AO3: minority-owned and social media can challenge stereotypes."],
+  ["Representations: Ethnicity, Sexuality and Disability", "How are migrants represented in the media?", "Migrants are often framed through numbers, crisis, threat, illegality, pressure on services or cultural difference. This can create moral panics and support exclusionary politics. AO3: humanitarian framing and migrant-produced media can challenge these narratives."],
+  ["Representations: Ethnicity, Sexuality and Disability", "How is sexuality represented in the media?", "LGBTQ+ people were historically underrepresented, mocked or stereotyped. Recent media show more visibility and diversity, including same-sex families and queer identities. AO3: representation may still be tokenistic, commercialised, focused on white middle-class gay identities, or shaped by heteronormativity."],
+  ["Representations: Ethnicity, Sexuality and Disability", "How is disability represented in the media?", "Disabled people may be symbolically annihilated or stereotyped as tragic victims, inspirational supercrips, dependent burdens or objects of charity. The social model argues disability is created by social barriers; media often individualise it. AO3: disabled creators increasingly challenge these frames online."],
+  ["Representations: Ethnicity, Sexuality and Disability", "What is symbolic annihilation?", "Symbolic annihilation means a group is absent, trivialised or condemned in media representation. Tuchman used it for women, but it can also apply to disabled people, older people, ethnic minorities, working-class voices and LGBTQ+ people."],
+  ["Audiences", "What is the hypodermic syringe model?", "The hypodermic syringe model sees audiences as passive and directly injected with media messages. It is linked to early media effects and moral panic thinking. AO3: it is too deterministic because audiences interpret media differently and evidence for direct effects is limited."],
+  ["Audiences", "What is the two-step flow model?", "Katz and Lazarsfeld argue media influence flows through opinion leaders. People are influenced by trusted individuals who interpret media messages. This suggests audiences are not simply passive, but media can still influence through social networks and influencers."],
+  ["Audiences", "What is uses and gratifications theory?", "Blumler and Katz argue audiences actively use media for needs: diversion, personal relationships, personal identity and surveillance/information. AO3: it may exaggerate choice because algorithms, class, age and ownership shape what audiences can access."],
+  ["Audiences", "What is Hall's encoding/decoding model?", "Hall argues producers encode preferred meanings, but audiences decode them in dominant, negotiated or oppositional ways. Meaning is shaped by social position, culture and experience. This is a strong bridge between media content and active audiences."],
+  ["Audiences", "What was Morley's Nationwide study?", "Morley found different social groups decoded the same programme differently. Managers were more likely to accept dominant meanings; trade unionists were more oppositional. This supports Hall's view that class and social position affect audience interpretation."],
+  ["Audiences", "What is the cultural effects model?", "The cultural effects model argues media influence is gradual and cumulative, shaping norms over time rather than directly causing behaviour. It is useful for stereotypes, gender roles and consumerism. AO3: effects are hard to isolate because audiences also learn from family, peers and education."],
+  ["Audiences", "How do algorithms affect audiences?", "Algorithms personalise feeds, recommend content and shape what audiences see. This can create filter bubbles, amplify extreme content, intensify surveillance and make platform power less visible. AO3: users can still search, block, follow alternatives and interpret content actively."],
+  ["Exam Skills: Media", "How should you answer a 10-mark Media outline question?", "Give two developed ways. Each should include a concept/theorist, explanation, example and direct link. For example, ownership affects news through direct owner influence and through advertising/source dependence; new media affects audiences through interactivity and algorithmic personalisation."],
+  ["Exam Skills: Media", "How should you answer a 10-mark Media item question?", "Use two item hooks explicitly. For each, apply a media concept and analyse the mechanism. If the item says smartphones and uploads, discuss citizen journalism or prosumers. If it says exciting stories, discuss news values such as negativity, threshold and personalisation."],
+  ["Exam Skills: Media", "How should you structure a 20-mark Media essay?", "Intro with debate, then 3 or 4 paragraphs. Each paragraph needs AO1 theory/study, AO2 item/current example, AO3 evaluation and a link. For media representation questions, compare Marxist, feminist, pluralist, postmodern and active audience explanations where relevant."],
+  ["Exam Skills: Media", "What are strong 20-mark Media judgements?", "Judge by ownership, platform, audience group and historical change. For example, new media gives audiences more voice, but platform ownership, algorithms and digital inequality mean power has changed form rather than disappeared."],
+]);
+
+const SOCIOLOGY_MEDIA_CONDENSED = cardsFromRows("The Media", "condensed", [
+  ["New Media", "Media: new media", "New media = digital, interactive, convergent, networked. Key terms: convergence, prosumer, citizen journalism, global village, digital divide, algorithms. Optimists: democracy, participation, minority voices. Pessimists: surveillance, misinformation, platform power, inequality. Evaluate by asking who owns infrastructure and who gets heard."],
+  ["Ownership, Control and Regulation", "Media: ownership/control/regulation", "Pluralists: choice, competition, active audiences, regulation. Instrumental Marxists: owners directly control ideology. Hegemonic Marxists/GUMG: journalists share elite assumptions. New media challenges old owners but concentrates power in platforms. Ofcom regulates broadcasting; IPSO regulates much press but has limited self-regulatory power."],
+  ["Globalisation and Popular Culture", "Media: globalisation/popular culture", "Globalisation spreads media across borders. Cultural imperialism: Western/corporate values dominate. Hybridity: audiences mix global and local culture. Popular culture is mass accessible and commercial. Global news is faster through smartphones/social media, but speed can reduce verification and increase sensationalism."],
+  ["News Selection and Presentation", "Media: news selection", "News values: negativity, threshold, unexpectedness, personalisation, elite persons/nations, continuity, composition. Gatekeeping decides what enters news; agenda setting shapes public priorities. Moral panic: media exaggerates folk devils. Evaluate: professional routines vs ownership, elite sources, algorithms and audience demand."],
+  ["Representations: Class, Age and Gender", "Media: class, age, gender representations", "Representation constructs meaning. Class: working class often criminal/welfare/tasteless; middle class normalised. Age: youth folk devils, elderly dependent. Gender: Tuchman symbolic annihilation, Mulvey male gaze, hegemonic masculinity. Evaluate with new media self-representation and changing diversity."],
+  ["Representations: Ethnicity, Sexuality and Disability", "Media: ethnicity, sexuality, disability", "Ethnicity/migration often framed as threat/problem; Hall and Van Dijk useful. Sexuality: more LGBTQ+ visibility but tokenism/heteronormativity remain. Disability: tragic victim, burden, supercrip, charity framing; social model challenges this. Evaluate with minority creators and platform access."],
+  ["Audiences", "Media: audiences", "Passive: hypodermic syringe and cultural effects. Active: uses and gratifications, two-step flow, Hall encoding/decoding, Morley Nationwide. Audiences decode dominant, negotiated or oppositional meanings. Algorithms complicate this: audiences choose, but feeds are curated by platforms."],
+  ["Exam Skills: Media", "Media: 20-marker formula", "Intro debate. Paragraphs: theory/study, item hook/example, explicit evaluation, link. For representation essays compare Marxism, feminism, pluralism, postmodernism and active audiences. For predictions prioritise audiences, news selection, globalisation/popular culture, representations, and ownership/control under new media."],
+]);
+
 
 const ALL_CARDS = [
-  // Psychology — Approaches
-  ...ORIGINS_FULL,
-  ...CLASSICAL_FULL,
-  ...OPERANT_FULL,
-  ...SLT_FULL,
-  ...COGNITIVE_FULL,
-  ...BIOLOGICAL_FULL,
-  ...PSYCHODYNAMIC_FULL,
-  ...HUMANISTIC_FULL,
-  ...APPROACHES_CONDENSED,
-  // Psychology — Research Methods
-  ...RESEARCH_METHODS_FULL,
-  ...RESEARCH_METHODS_CONDENSED,
-  // Psychology — Biopsychology
-  ...BIOPSYCHOLOGY_FULL,
-  ...BIOPSYCHOLOGY_CONDENSED,
+  // Psychology — Paper 3
+  ...PSYCH_ISSUES_DEBATES_FULL,
+  ...PSYCH_ISSUES_DEBATES_CONDENSED,
+  ...PSYCH_RELATIONSHIPS_FULL,
+  ...PSYCH_RELATIONSHIPS_CONDENSED,
+  ...PSYCH_SCHIZOPHRENIA_FULL,
+  ...PSYCH_SCHIZOPHRENIA_CONDENSED,
+  ...PSYCH_ADDICTION_FULL,
+  ...PSYCH_ADDICTION_CONDENSED,
+  ...PSYCH_RESEARCH_METHODS_FULL,
+  ...PSYCH_RESEARCH_METHODS_CONDENSED,
   // Economics
   ...ECONOMICS_THEME2_FULL,
   ...ECONOMICS_THEME2_CONDENSED,
   ...ECONOMICS_THEME4_FULL,
   ...ECONOMICS_THEME4_CONDENSED,
+  // Sociology
+  ...SOCIOLOGY_FAMILIES_FULL,
+  ...SOCIOLOGY_FAMILIES_CONDENSED,
+  ...SOCIOLOGY_MEDIA_FULL,
+  ...SOCIOLOGY_MEDIA_CONDENSED,
 ];
 
 const TOPIC_SUBHEADINGS = {
-  'Approaches': [
-    { label: 'The Origins of Psychology', topics: ['Origins of Psychology'] },
-    { label: 'Behaviourism', topics: ['Classical Conditioning', 'Operant Conditioning'] },
-    { label: 'Learning & Cognition', topics: ['Social Learning Theory', 'Cognitive Approach'] },
-    { label: 'Biology & Personality', topics: ['Biological Approach', 'Psychodynamic Approach', 'Humanistic Approach'] },
+  'Issues and Debates': [
+    { label: 'Bias & Determinism', topics: ['Gender and Culture', 'Free Will and Determinism'] },
+    { label: 'Core Debates', topics: ['Nature-Nurture', 'Holism and Reductionism', 'Idiographic and Nomothetic'] },
+    { label: 'Ethics & Exam Technique', topics: ['Social Sensitivity and Ethics', 'Exam Skills: Issues and Debates'] },
+  ],
+  'Relationships': [
+    { label: 'Attraction', topics: ['Self-Disclosure', 'Physical Attractiveness', 'Filter Theory'] },
+    { label: 'Relationship Theories', topics: ['Theories of Romantic Relationships', 'Relationship Breakdown'] },
+    { label: 'Online & Parasocial', topics: ['Online Relationships', 'Parasocial Relationships', 'Exam Skills: Relationships'] },
+  ],
+  'Schizophrenia': [
+    { label: 'Diagnosis', topics: ['Classification and Diagnosis', 'Reliability and Validity'] },
+    { label: 'Explanations', topics: ['Biological Explanations', 'Psychological Explanations', 'Interactionist Approach'] },
+    { label: 'Treatments & Exam Technique', topics: ['Drug Therapy', 'CBT and Family Therapy', 'Exam Skills: Schizophrenia'] },
+  ],
+  'Addiction': [
+    { label: 'Description & Risk', topics: ['Describing Addiction', 'Risk Factors'] },
+    { label: 'Explanations', topics: ['Nicotine Addiction', 'Gambling Addiction'] },
+    { label: 'Treatment & Change', topics: ['Reducing Addiction', 'Behaviour Change', 'Exam Skills: Addiction'] },
   ],
   'Research Methods': [
-    { label: 'Research Design', topics: ['Experiments', 'Observations', 'Observational Design', 'Self-Report', 'Correlation', 'Content Analysis', 'Case Studies'] },
-    { label: 'Planning a Study', topics: ['Aims and Hypotheses', 'Sampling', 'Experimental Designs', 'Variables and Controls', 'Ethics', 'How to Design a Study'] },
-    { label: 'Data & Analysis', topics: ['Descriptive Statistics', 'Data Presentation', 'Reliability', 'Validity', 'Scientific Approach', 'Inferential Statistics'] },
+    { label: 'Design & Sampling', topics: ['Research Design', 'Experiments', 'Experimental Design', 'Sampling'] },
+    { label: 'Methods & Quality', topics: ['Self-Report Methods', 'Observations', 'Correlations', 'Content Analysis', 'Case Studies', 'Reliability and Validity', 'Ethics'] },
+    { label: 'Data & Paper 3 Application', topics: ['Data Handling', 'Graphs and Displays', 'Inferential Testing', 'Paper 3 Application', 'Exam Skills: Research Methods'] },
   ],
-  'Biopsychology': [
-    { label: 'The Nervous System', topics: ['Nervous System', 'Neurons and Synaptic Transmission', 'Endocrine System'] },
-    { label: 'The Brain', topics: ['Localisation of Function', 'Ways of Studying the Brain', 'Brain Plasticity', 'Split-Brain Research'] },
-    { label: 'Stress & Autonomic Response', topics: ['Fight or Flight'] },
-    { label: 'Biological Rhythms & Sleep', topics: ['Biological Rhythms', 'Sleep'] },
+  'Families and Households': [
+    { label: 'Perspectives & Policy', topics: ['Family Types and Perspectives', 'Family, Economy and Social Policy'] },
+    { label: 'Patterns & Diversity', topics: ['Changing Family Patterns', 'Family Diversity and Personal Life'] },
+    { label: 'Inside Families', topics: ['Domestic Labour and Power', 'Childhood'] },
+    { label: 'Demography & Exam Technique', topics: ['Demographic Change', 'Exam Skills: Families'] },
+  ],
+  'The Media': [
+    { label: 'Media Power', topics: ['New Media', 'Ownership, Control and Regulation'] },
+    { label: 'Global Media & News', topics: ['Globalisation and Popular Culture', 'News Selection and Presentation'] },
+    { label: 'Representations', topics: ['Representations: Class, Age and Gender', 'Representations: Ethnicity, Sexuality and Disability'] },
+    { label: 'Audiences & Exam Technique', topics: ['Audiences', 'Exam Skills: Media'] },
   ],
 };
 
 const GROUP_META = [
-  { name: 'Approaches', note: 'Origins, Behaviourism, SLT, Cognitive, Biological, Psychodynamic, Humanistic' },
+  { name: 'Issues and Debates', note: 'Gender, culture, determinism, nature-nurture, reductionism, methods and ethics' },
 ];
 const GROUP_NAMES = GROUP_META.map(u => u.name);
 const DEFAULT_GROUPS = [...GROUP_NAMES];
 
 const GROUP_META_BY_SUBJECT = {
   Psychology: [
-    { name: 'Approaches', note: 'Origins, Behaviourism (Classical + Operant), SLT, Cognitive, Biological, Psychodynamic, Humanistic' },
-    { name: 'Research Methods', note: 'Experiments, Observations, Self-Report, Correlation, Content Analysis, Stats, Validity, Ethics' },
-    { name: 'Biopsychology', note: 'Nervous System, Brain, Fight or Flight, Plasticity, Biological Rhythms, Sleep' },
+    { name: 'Issues and Debates', note: 'Compulsory Paper 3 debates, ethics and essay-ready examples' },
+    { name: 'Relationships', note: 'Attraction, relationship theories, breakdown, online and parasocial relationships' },
+    { name: 'Schizophrenia', note: 'Diagnosis, explanations, treatments and interactionist approach' },
+    { name: 'Addiction', note: 'Risk factors, nicotine, gambling, treatments and behaviour change' },
+    { name: 'Research Methods', note: 'Standalone methods, data and Paper 3-style application' },
   ],
   Economics: [
     { name: 'Theme 2', note: 'UK performance, policy and inequality' },
     { name: 'Theme 4', note: 'Globalisation, trade and development' },
+  ],
+  Sociology: [
+    { name: 'Families and Households', note: 'Perspectives, policy, changing patterns, diversity, power, childhood and demography' },
+    { name: 'The Media', note: 'New media, ownership, globalisation, news, representations and audiences' },
   ],
 };
 
@@ -1717,13 +2213,18 @@ let touchStartX = 0, touchStartY = 0;
 let typeMode = localStorage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
 let predictionsMode = localStorage.getItem('aqa_predictions_mode') === '1';
+const PSYCHOLOGY_DECK_VERSION = 'paper3_2026_v2';
 let selectedGroups = loadSelectedGroups();
 
-// Paper 2 predicted topics
+// High-priority predicted topics
 const PREDICTED_TOPICS = {
-  'Biopsychology': ['Biological Rhythms', 'Fight or Flight', 'Localisation of Function'],
-  'Approaches': ['Origins of Psychology', 'Classical Conditioning', 'Operant Conditioning', 'Social Learning Theory', 'Humanistic Approach', 'Biological Approach', 'Cognitive Approach'],
-  'Research Methods': ['Content Analysis', 'Reliability', 'Validity'],
+  'Issues and Debates': ['Gender and Culture', 'Nature-Nurture', 'Holism and Reductionism', 'Social Sensitivity and Ethics', 'Exam Skills: Issues and Debates'],
+  'Relationships': ['Self-Disclosure', 'Physical Attractiveness', 'Theories of Romantic Relationships', 'Online Relationships', 'Parasocial Relationships', 'Exam Skills: Relationships'],
+  'Schizophrenia': ['Classification and Diagnosis', 'Reliability and Validity', 'CBT and Family Therapy', 'Interactionist Approach', 'Exam Skills: Schizophrenia'],
+  'Addiction': ['Gambling Addiction', 'Behaviour Change', 'Exam Skills: Addiction'],
+  'Research Methods': ['Research Design', 'Experiments', 'Experimental Design', 'Sampling', 'Reliability and Validity', 'Ethics', 'Data Handling', 'Inferential Testing', 'Paper 3 Application', 'Exam Skills: Research Methods'],
+  'Families and Households': ['Family, Economy and Social Policy', 'Changing Family Patterns', 'Family Diversity and Personal Life', 'Domestic Labour and Power', 'Childhood', 'Demographic Change'],
+  'The Media': ['New Media', 'Ownership, Control and Regulation', 'Globalisation and Popular Culture', 'News Selection and Presentation', 'Representations: Class, Age and Gender', 'Representations: Ethnicity, Sexuality and Disability', 'Audiences'],
 };
 let selectedTopics = loadSelectedTopics();
 let typedAnswers = loadTypedAnswers();
@@ -1742,7 +2243,7 @@ function saveCondensedMode() {
 function loadSelectedSubject() {
   try {
     const saved = localStorage.getItem(lk('subject'));
-    return saved === 'Economics' ? 'Economics' : 'Psychology';
+    return ['Psychology', 'Economics', 'Sociology'].includes(saved) ? saved : 'Psychology';
   } catch {
     return 'Psychology';
   }
@@ -1759,6 +2260,12 @@ function defaultGroupsForSubject(subject) {
 }
 function loadSelectedGroups() {
   try {
+    if (selectedSubject === 'Psychology' && localStorage.getItem(subjectKey('deck_version')) !== PSYCHOLOGY_DECK_VERSION) {
+      localStorage.setItem(subjectKey('deck_version'), PSYCHOLOGY_DECK_VERSION);
+      localStorage.removeItem(subjectKey('selected_groups'));
+      localStorage.removeItem(subjectKey('selected_topics'));
+      return defaultGroupsForSubject(selectedSubject);
+    }
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_groups')));
     const validGroups = groupsForSubject(selectedSubject);
     const valid = Array.isArray(saved) ? saved.filter(group => validGroups.includes(group)) : [];
@@ -1773,6 +2280,12 @@ function saveSelectedGroups() {
 }
 function loadSelectedTopics() {
   try {
+    if (selectedSubject === 'Psychology' && localStorage.getItem(subjectKey('deck_version')) !== PSYCHOLOGY_DECK_VERSION) {
+      localStorage.setItem(subjectKey('deck_version'), PSYCHOLOGY_DECK_VERSION);
+      localStorage.removeItem(subjectKey('selected_groups'));
+      localStorage.removeItem(subjectKey('selected_topics'));
+      return {};
+    }
     const saved = JSON.parse(localStorage.getItem(subjectKey('selected_topics')));
     return saved && typeof saved === 'object' ? saved : {};
   } catch {
@@ -1797,11 +2310,14 @@ function cardGroup(cardData) {
   if (unit === 'Biopsychology') return 'Biopsychology';
   if (unit === 'Theme 2') return 'Theme 2';
   if (unit === 'Theme 4') return 'Theme 4';
+  if (unit === 'Families and Households') return 'Families and Households';
+  if (unit === 'The Media') return 'The Media';
   return unit || 'Approaches';
 }
 function cardSubject(cardData) {
   const group = cardGroup(cardData);
   if (group === 'Theme 2' || group === 'Theme 4') return 'Economics';
+  if (group === 'Families and Households' || group === 'The Media') return 'Sociology';
   return 'Psychology';
 }
 function availableTopicsForGroup(groupName) {
@@ -1841,7 +2357,12 @@ function normalizeSelections() {
     } else {
       // Preserve explicit selection, including [] (all deselected by user)
       const saved = selectedTopics[groupName];
-      selectedTopics[groupName] = Array.isArray(saved) ? saved.filter(t => available.includes(t)) : [...available];
+      if (Array.isArray(saved)) {
+        const validSaved = saved.filter(t => available.includes(t));
+        selectedTopics[groupName] = saved.length && !validSaved.length ? [...available] : validSaved;
+      } else {
+        selectedTopics[groupName] = [...available];
+      }
     }
   });
 
@@ -1966,8 +2487,10 @@ function renderSubjectButtons() {
   document.querySelectorAll('.subject-pill').forEach(b => b.classList.remove('active'));
   const psychBtn = document.getElementById('btnPsychology');
   const econBtn = document.getElementById('btnEconomics');
+  const socBtn = document.getElementById('btnSociology');
   if (psychBtn) { psychBtn.classList.toggle('active', selectedSubject === 'Psychology'); psychBtn.setAttribute('aria-pressed', String(selectedSubject === 'Psychology')); }
   if (econBtn) { econBtn.classList.toggle('active', selectedSubject === 'Economics'); econBtn.setAttribute('aria-pressed', String(selectedSubject === 'Economics')); }
+  if (socBtn) { socBtn.classList.toggle('active', selectedSubject === 'Sociology'); socBtn.setAttribute('aria-pressed', String(selectedSubject === 'Sociology')); }
 }
 
 function cardCountForTopic(groupName, topic) {
@@ -2214,15 +2737,28 @@ function needsCardUpdate(row, cardData) {
   return row.topic !== cardData.t || row.question !== cardData.q || row.answer !== cardData.a;
 }
 
+const CARD_FETCH_PAGE_SIZE = 1000;
+
+async function fetchRowsPaged(selectClause) {
+  const rows = [];
+  for (let from = 0; ; from += CARD_FETCH_PAGE_SIZE) {
+    const to = from + CARD_FETCH_PAGE_SIZE - 1;
+    const { data, error } = await db.from('cards').select(selectClause).range(from, to);
+    if (error) return { data: rows, error };
+    rows.push(...(data || []));
+    if (!data || data.length < CARD_FETCH_PAGE_SIZE) return { data: rows, error: null };
+  }
+}
+
 async function fetchCardRows() {
-  const extended = await db.from('cards').select('id,slug,unit,topic,variant,question,answer');
+  const extended = await fetchRowsPaged('id,slug,unit,topic,variant,question,answer');
   if (!extended.error) {
     extendedCardSchema = true;
     return extended.data || [];
   }
   if (!isMissingCardColumn(extended.error)) throw extended.error;
 
-  const legacy = await db.from('cards').select('id,topic,question,answer');
+  const legacy = await fetchRowsPaged('id,topic,question,answer');
   if (legacy.error) throw legacy.error;
   extendedCardSchema = false;
   return legacy.data || [];
@@ -2257,14 +2793,16 @@ async function syncCardCatalog() {
 
   for (const batch of chunkArray(inserts)) {
     if (!batch.length) continue;
-    const { error } = await db.from('cards').insert(batch);
+    const { error } = extendedCardSchema
+      ? await db.from('cards').upsert(batch, { onConflict: 'slug' })
+      : await db.from('cards').insert(batch);
     if (error) throw error;
   }
 
   for (const batch of chunkArray(updates)) {
     if (!batch.length) continue;
     if (extendedCardSchema) {
-      const { error } = await db.from('cards').upsert(batch);
+      const { error } = await db.from('cards').upsert(batch, { onConflict: 'slug' });
       if (error) throw error;
       continue;
     }

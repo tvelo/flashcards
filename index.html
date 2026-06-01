@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>AQA Psychology, Economics &amp; Sociology Flashcards</title>
+<title>AQA Psychology/Sociology &amp; Edexcel Economics Flashcards</title>
 <link rel="icon" href="data:," />
 <style>
 :root{
@@ -248,7 +248,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
 }
 .controls{
   display:grid;
-  grid-template-columns:1fr 1fr 1fr 1fr 1fr 1fr;
+  grid-template-columns:repeat(auto-fit,minmax(132px,1fr));
   gap:10px;
   margin:16px 0 14px;
 }
@@ -414,6 +414,7 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   transform-style:preserve-3d;
   transition:transform .45s cubic-bezier(.2,.8,.2,1);
   border-radius:calc(var(--radius) + 4px);
+  overflow:hidden;
 }
 .card.flipped{transform:rotateY(180deg)}
 .face{
@@ -429,8 +430,11 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   display:flex;
   flex-direction:column;
   gap:12px;
+  overflow:auto;
+  scrollbar-gutter:stable;
 }
 .back{transform:rotateY(180deg)}
+.back .face-body{justify-content:flex-start}
 .face-body{
   flex:1;
   display:flex;
@@ -541,6 +545,33 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   white-space:pre-wrap;
 }
 .compare-card.muted p{color:var(--muted)}
+.diagram-box{
+  display:none;
+  margin:12px auto 0;
+  width:100%;
+  max-width:440px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  padding:10px;
+}
+.diagram-box.show{display:block}
+.diagram-box svg{
+  width:100%;
+  height:auto;
+  max-height:min(28vh,220px);
+  display:block;
+}
+.diagram-title{font-size:12px;font-weight:800;color:var(--muted);text-align:left;margin:0 0 8px}
+.diagram-note{font-size:12px;color:var(--muted);text-align:left;margin:8px 0 0;line-height:1.35}
+.diagram-axis{stroke:rgba(237,242,255,.78);stroke-width:2}
+.diagram-line{stroke:#7aa8ff;stroke-width:3;fill:none;stroke-linecap:round}
+.diagram-line.alt{stroke:#5bd68a}
+.diagram-line.warn{stroke:#f0c040}
+.diagram-line.bad{stroke:#ff6b6b}
+.diagram-dash{stroke-dasharray:5 5}
+.diagram-label{fill:#edf2ff;font-size:12px;font-weight:700}
+.diagram-muted{fill:#9aa8c7;font-size:11px}
 
 .actions{
   display:grid;
@@ -1016,7 +1047,7 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
 
   <div class="header">
     <div class="title">
-      <h1>AQA Psychology + Economics + Sociology Flashcards</h1>
+      <h1>AQA Psychology + Sociology, Edexcel Economics Flashcards</h1>
       <p>Built for active recall, spaced repetition, and fast exam prep. Choose a subject, then select the topics you want to revise. Grade honestly — weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
@@ -1057,6 +1088,8 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
       <option value="mixed">Mixed topics</option>
     </select>
     <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
+    <button id="bareToggle" class="secondary" aria-pressed="false" title="Economics only: filter to the Bare 10 Paper 3 clusters">Bare 10: Off</button>
+    <button id="diagramOnlyToggle" class="secondary" aria-pressed="false" title="Economics only: show diagram practice cards">Diagram Only: Off</button>
     <button id="predictionsToggle" class="secondary" aria-pressed="false" title="Filter to high-priority predicted topics only">Predictions: Off</button>
     <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
     <button id="shuffleBtn" class="secondary">Shuffle</button>
@@ -1117,9 +1150,11 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
   <div class="compare-card" id="officialAnswerBox">
     <strong>Official answer</strong>
     <p class="a" id="cardA"></p>
+    <div class="diagram-box" id="diagramBox"></div>
   </div>
 </div>
 <p class="a" id="cardASolo" style="text-align:center; white-space:pre-wrap;"></p>
+<div class="diagram-box" id="diagramSolo"></div>
           </div>
         </div>
       </div>
@@ -1142,7 +1177,7 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
   </div>
 
   <div class="footer-note">
-    Progress syncs to Supabase separately for each profile. AQA Psychology, Economics and Sociology live in this file — card IDs are synced so topic packs can be added without losing history.
+    Progress syncs to Supabase separately for each profile. AQA Psychology/Sociology and Edexcel Economics live in this file — card IDs are synced so topic packs can be added without losing history.
   </div>
 </div>
 
@@ -1217,12 +1252,14 @@ function card(unit, variant, topic, question, answer, options = {}) {
     q: question,
     a: answer,
     slug: options.slug || slugify([unit, variant, topic, question].join("-")),
-    legacyKey: options.legacyKey || null
+    legacyKey: options.legacyKey || null,
+    bare: !!options.bare,
+    diagram: options.diagram || null
   };
 }
 
 function cardsFromRows(unit, variant, rows) {
-  return rows.map(([topic, question, answer]) => card(unit, variant, topic, question, answer));
+  return rows.map(([topic, question, answer, options]) => card(unit, variant, topic, question, answer, options || {}));
 }
 
 
@@ -1941,6 +1978,141 @@ const ECONOMICS_THEME4_CONDENSED = [
   card("Theme 4", "condensed", "Evaluation", "Theme 4: essay judgement", "Judgement usually depends on the country, the time horizon and whether the goal is growth, stability, equality or external balance.")
 ];
 
+const ECON_P3_MACRO_FULL = cardsFromRows("Macro Core and Policy", "full", [
+  ["AD/AS, Growth and Productivity", "How do AD/AS, inflation, growth and productivity link together?", "Master the core chain: AD = C + I + G + (X-M). A demand shock changes real GDP, unemployment and inflationary pressure in the short run. LRAS/productivity shifts change potential output. Evaluation: spare capacity, multiplier size, time lags, confidence, supply constraints and whether growth is sustainable.", { bare: true }],
+  ["AD/AS, Growth and Productivity", "Sketch an AD/AS diagram for a positive demand shock.", "Checklist: axes labelled price level and real GDP; AD shifts right; real GDP rises from Y1 to Y2; price level rises from P1 to P2; evaluation depends on spare capacity and slope of SRAS. Common mistake: saying growth rises without explaining inflationary pressure.", { bare: true, diagram: "adas-shift" }],
+  ["AD/AS, Growth and Productivity", "What is the difference between actual growth and potential growth?", "Actual growth is an increase in real GDP, often from higher AD. Potential growth is an increase in productive capacity, shown by an outward LRAS shift. Paper 3 often rewards linking short-run growth to demand and long-run growth to productivity, investment, skills and technology."],
+  ["AD/AS, Growth and Productivity", "How does productivity affect inflation and competitiveness?", "Higher productivity lowers unit labour costs, increases SRAS/LRAS, supports non-inflationary growth and can improve price competitiveness. Evaluation: productivity gains need investment, skills, infrastructure and management quality, so effects are slow and uneven across sectors.", { bare: true }],
+  ["Inflation and Monetary Policy", "How can inflation and monetary policy be linked in Paper 3?", "Inflation can be demand-pull, cost-push or imported. Monetary policy uses interest rates, QE/QT and forward guidance to influence borrowing, saving, asset prices, exchange rates and AD. Evaluation: time lags, debt levels, confidence, mortgage exposure, exchange-rate pass-through and supply-side causes.", { bare: true }],
+  ["Inflation and Monetary Policy", "How can higher interest rates reduce inflation?", "Higher interest rates increase saving incentives and borrowing costs, lowering consumption and investment. AD shifts left, reducing demand-pull inflation. They may also appreciate the exchange rate, reducing import prices. Evaluation: weak if inflation is cost-push or if consumers have fixed-rate debt."],
+  ["Inflation and Monetary Policy", "Evaluate monetary policy for cost-push inflation.", "It can reduce second-round wage-price effects by cooling demand, but it may deepen recession and unemployment while not directly solving the original supply shock. Strong answers compare monetary policy with supply-side measures or targeted fiscal support."],
+  ["Fiscal and Supply-Side Policy", "How do fiscal, monetary and supply-side policies differ?", "Fiscal policy changes taxation and government spending; monetary policy changes the price/quantity of money; supply-side policy increases productive capacity and market efficiency. Paper 3 judgement: best policy depends on the cause, time horizon, fiscal space, inflation, inequality and external competitiveness.", { bare: true }],
+  ["Fiscal and Supply-Side Policy", "How can expansionary fiscal policy affect an economy?", "Higher government spending or lower taxation increases injections, shifts AD right and can raise real GDP and employment. Evaluation: crowding out, national debt, multiplier size, imports leakage, inflationary pressure and whether spare capacity exists."],
+  ["Fiscal and Supply-Side Policy", "How can fiscal policy reduce inequality?", "Progressive taxation, welfare benefits, public services, education and healthcare can redistribute income and improve equality of opportunity. Evaluation: possible disincentive effects, tax avoidance, administrative costs and trade-offs with growth or public finances."],
+  ["Fiscal and Supply-Side Policy", "What are market-based supply-side policies?", "Policies that increase incentives and competition: lower corporation/income tax, deregulation, privatisation, trade liberalisation, weakening trade unions and reducing welfare disincentives. Evaluation: may increase inequality or reduce worker protection."],
+  ["Fiscal and Supply-Side Policy", "What are interventionist supply-side policies?", "Policies where government directly improves productive capacity: education, training, infrastructure, industrial policy, R&D subsidies and healthcare. Evaluation: expensive, slow, risk of government failure, but often stronger for long-term productivity.", { bare: true }],
+  ["Labour Markets and Inequality", "How do labour markets, inequality and living standards connect?", "Know labour demand/MRP, labour supply, unemployment types, minimum wages, monopsony, wage inequality, poverty and real incomes. Paper 3 often blends labour markets with macro outcomes: productivity, inflation, public finances, living standards and competitiveness.", { bare: true }],
+  ["Labour Markets and Inequality", "Sketch a labour market diagram for a minimum wage above equilibrium.", "Checklist: wage on vertical axis, quantity of labour on horizontal; labour demand slopes down and supply slopes up; minimum wage above equilibrium creates excess supply/unemployment. Evaluation: if set in a monopsony, employment may rise.", { bare: true, diagram: "labour-market" }],
+  ["Labour Markets and Inequality", "How does unemployment affect living standards and public finances?", "Unemployment reduces household income, consumption and tax revenue while increasing welfare spending. It can worsen mental health and hysteresis as skills erode. Evaluation: impact depends on duration, benefit generosity, household savings and regional labour mobility."],
+  ["Labour Markets and Inequality", "How can inequality affect economic performance?", "High inequality may weaken social mobility, reduce human capital, increase poverty and reduce social cohesion. However, some inequality can create incentives for enterprise and work. Judgement: effects depend on equality of opportunity and whether incomes reflect productivity."],
+  ["Living Standards and Real Incomes", "Why is real GDP per capita an incomplete measure of living standards?", "It ignores income distribution, unpaid work, leisure, environmental quality, health, education, informal activity and regional differences. Use HDI, poverty measures, real wages, unemployment and inequality to strengthen Paper 3 evaluation."],
+  ["Living Standards and Real Incomes", "How does inflation affect households differently?", "Inflation lowers real incomes if wages or benefits lag behind prices. It hurts savers and fixed-income groups, but debtors may gain if nominal debts are eroded. Impact depends on inflation cause, basket of goods, wage bargaining power and interest-rate exposure."],
+  ["Exam Skills: Macro", "How should you evaluate a 25-mark macro policy question?", "Use a two-sided judgement: effectiveness depends on cause of problem, time lags, multiplier, spare capacity, confidence, elasticity, global conditions, government finances and distributional effects. Always link policy to AD/AS and to the extract context.", { bare: true }]
+]);
+
+const ECON_P3_MARKETS_FULL = cardsFromRows("Markets and Intervention", "full", [
+  ["Market Failure and Government Failure", "How do market failure, government failure and intervention connect?", "Market failure occurs when free markets misallocate resources. Core causes: externalities, public goods, information gaps, immobility, inequality and market power. Government failure occurs when intervention worsens allocation or creates unintended consequences.", { bare: true }],
+  ["Market Failure and Government Failure", "What is a negative externality of production?", "A cost imposed on third parties by producers, so MSC exceeds MPC and output is above the socially optimal level. Examples: pollution, congestion and carbon emissions. Policy options include indirect taxes, regulation, permits and subsidies for cleaner alternatives."],
+  ["Market Failure and Government Failure", "Sketch a negative production externality diagram.", "Checklist: MPB/MSB demand, MPC supply, MSC above MPC; market output Qm exceeds socially optimum Qs; welfare loss triangle between MSC and MSB over excess output. Common mistake: shifting demand instead of supply for production externalities.", { bare: true, diagram: "negative-externality" }],
+  ["Market Failure and Government Failure", "What is government failure?", "Government failure is when intervention causes a net welfare loss or worsens market outcomes. Causes include information failure, regulatory capture, administrative costs, unintended consequences, moral hazard, political incentives and poor policy design.", { bare: true }],
+  ["Government Intervention", "What are the main forms of government intervention in markets?", "Indirect taxes, subsidies, regulation, pollution permits, price controls, minimum wages, public provision, nationalisation, privatisation, competition policy and information campaigns. Evaluation depends on elasticity, cost, enforceability and risk of unintended effects.", { bare: true }],
+  ["Government Intervention", "Sketch an indirect tax diagram.", "Checklist: supply shifts left/up by the tax; price paid by consumers rises; price received by producers falls; quantity falls; tax revenue rectangle and welfare loss can be shown. Incidence depends on PED/PES.", { bare: true, diagram: "demand-supply-tax" }],
+  ["Government Intervention", "How do maximum prices affect markets?", "A maximum price below equilibrium can improve affordability but creates excess demand/shortages. Evaluation: may require rationing, subsidies or public provision; black markets and lower quality can emerge."],
+  ["Government Intervention", "How do minimum prices affect markets?", "A minimum price above equilibrium raises producer revenue if demand is inelastic but creates excess supply. Evaluation: storage, waste, illegal sales and government purchase schemes may be needed."],
+  ["Environment and Energy Markets", "Why are environment and energy markets strongly synoptic?", "Energy/environment questions usually combine externalities, elasticities, costs, inflation, regulation and energy security. Know carbon taxes, subsidies, permits, price caps, investment incentives and trade-offs between affordability, sustainability and reliability.", { bare: true }],
+  ["Environment and Energy Markets", "Why can energy markets fail?", "Energy markets can fail due to negative externalities from fossil fuels, information gaps, monopoly power, volatile global prices, underinvestment in grids/storage and energy insecurity. Evaluation: market design matters and policy goals may conflict."],
+  ["Environment and Energy Markets", "Evaluate a carbon tax.", "A carbon tax internalises external costs and incentivises cleaner production/consumption. It raises revenue but can be regressive, reduce competitiveness and be ineffective if demand is inelastic or firms relocate. Strong evaluation compares with permits, regulation and subsidies."],
+  ["Environment and Energy Markets", "How can energy price caps help and harm consumers?", "Caps can protect households from sudden price rises and reduce fuel poverty. But if set too low they reduce supplier profits, discourage investment, cause shortages or require taxpayer support. Judgement depends on wholesale prices and market structure."],
+  ["Elasticities", "How can elasticities strengthen Paper 3 evaluation?", "Know PED, PES, YED and XED. Elasticities improve evaluation: tax incidence, subsidy effectiveness, price cap effects, export response to exchange rates, wage/employment effects and revenue changes all depend on responsiveness.", { bare: true }],
+  ["Elasticities", "How does PED affect tax incidence?", "If demand is price inelastic, consumers bear more tax and quantity falls less, so tax revenue is higher but behaviour change is weaker. If demand is elastic, producers bear more tax and quantity falls more."],
+  ["Elasticities", "How does PES affect supply shocks?", "If PES is inelastic, supply cannot respond quickly, so price changes are larger. This matters in energy, housing, food and labour markets. Evaluation: PES often increases over time as firms invest or capacity adjusts."],
+  ["Elasticities", "How can YED help evaluate living standards and growth?", "Normal goods have positive YED; inferior goods have negative YED. Luxury goods are income elastic. During growth, demand for luxury imports may rise, affecting firms and the current account; during recessions, inferior goods may benefit."],
+  ["Exam Skills: Markets", "How do you evaluate market intervention questions?", "Use the intervention's aim, elasticity, information needs, enforcement, fiscal cost, distributional impact, time horizon and risk of government failure. Always ask whether the policy fixes the market failure or merely shifts the problem.", { bare: true }]
+]);
+
+const ECON_P3_FIRMS_FULL = cardsFromRows("Firms and Competition", "full", [
+  ["Competition and Market Structures", "How do competition, market structures and business growth link?", "Know perfect competition, monopolistic competition, oligopoly, monopoly, contestability, barriers to entry, efficiency and consumer welfare. Paper 3 often links market structure to prices, investment, innovation, productivity and living standards.", { bare: true }],
+  ["Competition and Market Structures", "How does monopoly power affect consumers and efficiency?", "Monopoly can lead to higher prices, lower output and allocative inefficiency, but may allow economies of scale, dynamic efficiency and investment. Evaluation: impact depends on regulation, contestability, innovation and whether profits are reinvested."],
+  ["Competition and Market Structures", "Sketch a monopoly profit diagram.", "Checklist: output where MC=MR; price read from AR; AR above AC creates supernormal profit; allocative inefficiency because P exceeds MC. Evaluation: monopoly profit may fund innovation or economies of scale may lower AC.", { diagram: "monopoly" }],
+  ["Competition and Market Structures", "Sketch a long-run perfect competition diagram.", "Checklist: AR=MR is horizontal; firm produces where MC=MR and AC is minimised; in long-run equilibrium AR=AC so only normal profit is made. Common mistake: drawing supernormal profit in the long run.", { diagram: "perfect-competition" }],
+  ["Competition and Market Structures", "What is contestability?", "Contestability is the ease with which new firms can enter and leave a market. Even a concentrated market can behave competitively if barriers to entry/exit are low and hit-and-run entry is credible."],
+  ["Competition and Market Structures", "Evaluate competition policy.", "Competition policy can reduce monopoly power, protect consumers and improve efficiency through merger control, fines and market investigations. Limitations: enforcement is slow, global digital firms are difficult to regulate, and some mergers create efficiencies."],
+  ["Business Growth and Economies of Scale", "Why might firms want to grow?", "Growth can create economies of scale, market power, brand recognition, access to finance, risk spreading and international reach. Evaluation: diseconomies of scale, culture clashes, regulatory scrutiny and management problems can limit gains.", { bare: true }],
+  ["Business Growth and Economies of Scale", "What can constrain business growth?", "Constraints include finance, skills shortages, regulation, market size, weak demand, supply-chain limits, management capacity, competition, energy costs and macro uncertainty. Paper 3 often rewards linking firm constraints to macro conditions."],
+  ["Business Growth and Economies of Scale", "What are economies of scale?", "Economies of scale are falling long-run average costs as output increases. Types include purchasing, technical, managerial, financial, marketing and risk-bearing economies. They can improve competitiveness but may raise barriers to entry.", { bare: true }],
+  ["Business Growth and Economies of Scale", "What are diseconomies of scale?", "Diseconomies of scale occur when long-run average costs rise as firms become too large. Causes include communication problems, coordination issues, weaker motivation and bureaucracy."],
+  ["Costs, Revenue and Profit", "What cost, revenue and profit ideas are essential for firm diagrams?", "Know fixed/variable/total costs, average/marginal costs, total/average/marginal revenue, normal/supernormal profit, shutdown logic and efficiency. Many Paper 3 12-mark questions reward accurate cost-revenue diagrams.", { bare: true }],
+  ["Costs, Revenue and Profit", "Sketch a cost-revenue diagram for supernormal profit.", "Checklist: output where MC=MR; price from AR at that output; AC below AR; supernormal profit rectangle between price and AC. Axes: costs/revenue and quantity. Common mistake: choosing output where AC is lowest instead of MC=MR.", { bare: true, diagram: "cost-revenue-profit" }],
+  ["Costs, Revenue and Profit", "What is the difference between normal and supernormal profit?", "Normal profit is the minimum profit needed to keep enterprise in the market and is included in costs. Supernormal profit is profit above normal profit, where AR exceeds AC at the profit-maximising output."],
+  ["Costs, Revenue and Profit", "How can higher energy costs affect firms?", "Higher energy costs increase variable costs, shifting MC/AC upward. Firms may raise prices, cut output, reduce profit or invest in efficiency. Evaluation: pass-through depends on PED, competition, contracts and ability to substitute energy inputs."],
+  ["Efficiency", "What are allocative, productive and dynamic efficiency?", "Allocative efficiency occurs where P=MC. Productive efficiency occurs at minimum AC. Dynamic efficiency is long-run innovation and investment. Paper 3 evaluation often asks which efficiency matters most for consumers over time."],
+  ["Efficiency", "How can competition affect dynamic efficiency?", "Competition can force firms to innovate to survive, but monopoly profits may finance R&D. Judgement depends on market contestability, intellectual property, scale economies and whether firms reinvest profits."],
+  ["Exam Skills: Firms", "How do you use firm diagrams in Paper 3?", "Draw only the diagram needed for the argument, label axes/curves/output/price/profit, then write the chain in words. Evaluation: PED, market structure, time period, cost conditions and whether firms can pass costs on.", { bare: true }]
+]);
+
+const ECON_P3_GLOBAL_FULL = cardsFromRows("Global and Financial", "full", [
+  ["Globalisation and Trade", "How do globalisation, trade, protectionism, exchange rates and the current account connect?", "Master the trade chain: specialisation and comparative advantage can raise output and lower prices, but globalisation creates winners/losers. Evaluate with inequality, structural unemployment, supply chains, environment, exchange rates and current account effects.", { bare: true }],
+  ["Globalisation and Trade", "What are the benefits and costs of globalisation?", "Benefits: larger markets, lower prices, FDI, technology transfer, competition and economies of scale. Costs: job losses, dependency, tax avoidance, environmental damage, inequality and vulnerability to external shocks."],
+  ["Globalisation and Trade", "What is comparative advantage?", "A country has comparative advantage when it can produce a good at a lower opportunity cost. Trade based on comparative advantage can increase total output and welfare, assuming low transport costs, mobility and no major externalities."],
+  ["Globalisation and Trade", "How is absolute advantage different from comparative advantage?", "Absolute advantage means producing more with the same resources. Comparative advantage means lower opportunity cost. Paper 3 may test both directly in development/trade contexts.", { bare: true }],
+  ["Protectionism", "Evaluate tariffs as a form of protectionism.", "Tariffs raise import prices, reduce imports and protect domestic firms/jobs. But they raise consumer prices, create welfare losses, reduce choice and risk retaliation. Judgement: depends on infant industry potential, unemployment and trading partner response.", { bare: true }],
+  ["Protectionism", "Sketch a tariff diagram.", "Checklist: world price below domestic equilibrium; tariff raises price; domestic supply rises; domestic demand falls; imports shrink; government revenue and welfare loss can be shown. Common mistake: drawing a normal tax diagram without world price/imports.", { bare: true, diagram: "tariff" }],
+  ["Exchange Rates and Current Account", "How can exchange-rate depreciation affect the current account?", "Depreciation makes exports cheaper and imports more expensive, potentially improving the current account if PEDx + PEDm > 1. In the short run, the J-curve may worsen the balance because contracts and inelastic demand delay volume changes.", { bare: true }],
+  ["Exchange Rates and Current Account", "Sketch an exchange-rate diagram for higher demand for pounds.", "Checklist: vertical axis is price of pound in foreign currency; horizontal axis quantity of pounds; demand for pounds shifts right; pound appreciates. Link to exports, imports, inflation and current account.", { bare: true, diagram: "exchange-rate" }],
+  ["Exchange Rates and Current Account", "What causes current account deficits?", "High import demand, weak export competitiveness, strong domestic growth, overvalued exchange rate, low productivity and dependence on imported energy/capital goods. Evaluation: deficits are not always harmful if financed sustainably or linked to investment."],
+  ["Competitiveness", "What is international competitiveness?", "The ability of an economy's firms to sell goods and services in global markets. Price competitiveness depends on costs, productivity, exchange rates and inflation. Non-price competitiveness depends on quality, design, branding, reliability and innovation.", { bare: true }],
+  ["Financial Markets and Banking", "What roles do financial markets perform?", "They channel savings into investment, provide liquidity, price risk, enable borrowing, allocate capital and facilitate payments. Well-functioning financial markets support growth, but instability can create systemic risk."],
+  ["Financial Markets and Banking", "How can financial market failure damage the wider economy?", "Information gaps, moral hazard, excessive risk-taking and asset bubbles can cause bank failures and credit crunches. This reduces lending, investment and confidence, shifting AD left and damaging long-run capacity.", { bare: true }],
+  ["Financial Markets and Banking", "What is the role of central banks in financial stability?", "Central banks act as lender of last resort, regulate banks, set capital/liquidity requirements, conduct monetary policy and support payment systems. Evaluation: support may create moral hazard if banks expect rescue."],
+  ["Exam Skills: Global", "How do you evaluate trade and exchange-rate essays?", "Use elasticities, time lags, spare capacity, import dependence, retaliation, inflation, productivity, quality and the state of global demand. Always connect micro firm effects to macro outcomes.", { bare: true }]
+]);
+
+const ECON_P3_DEVELOPMENT_FULL = cardsFromRows("Development and Synoptic Evaluation", "full", [
+  ["Development, HDI and Demographics", "How do development, HDI, demographics and competitiveness link?", "Development is broader than growth: income, health, education, institutions, rights and living standards matter. Know HDI, poverty, demographics, Lewis model logic, aid, trade, FDI, debt relief, infrastructure and industrial policy.", { bare: true }],
+  ["Development, HDI and Demographics", "Why is HDI useful and limited?", "HDI combines income, life expectancy and education, so it is broader than GDP per capita. Limitations: ignores inequality, environment, political freedom, regional differences, informal economy and quality of education/healthcare.", { bare: true }],
+  ["Development, HDI and Demographics", "How can demographics affect growth and development?", "A young population can create a future demographic dividend if education and jobs exist, but can raise dependency costs. Ageing raises pension/healthcare spending and may reduce labour supply. Migration can fill skills gaps and send remittances."],
+  ["Development, HDI and Demographics", "What is the Lewis model?", "The Lewis model suggests surplus labour moves from low-productivity agriculture to higher-productivity manufacturing, raising output and development. Limitations: assumes jobs exist, workers can move, and profits are reinvested productively."],
+  ["Development Strategies", "How can FDI support development?", "FDI can bring capital, jobs, tax revenue, technology and export access. Evaluation: profits may be repatriated, jobs may be low paid, regulation may be weak and host economies may become dependent."],
+  ["Development Strategies", "Evaluate aid as a development strategy.", "Aid can fund infrastructure, health, education and emergency support. Limitations: dependency, corruption, tied aid, poor targeting and crowding out local enterprise. Judgement depends on governance and whether aid builds capacity."],
+  ["Development Strategies", "How can trade promote development?", "Trade can expand markets, create export revenue, attract FDI and encourage specialisation. Evaluation: primary product dependency, volatile commodity prices, protectionism by richer countries and unequal bargaining power can limit gains."],
+  ["Development Strategies", "What are barriers to growth and development?", "Poor infrastructure, weak institutions, corruption, low education, poor healthcare, debt, capital flight, conflict, primary product dependency, climate risk and limited access to finance."],
+  ["Synoptic Evaluation", "What makes a Paper 3 answer synoptic?", "It combines micro and macro: firms, markets, consumers, labour, government, global links and macro objectives. For example, energy costs affect firms' MC, prices/inflation, household real incomes, current account, government policy and long-run competitiveness.", { bare: true }],
+  ["Synoptic Evaluation", "What are the best evaluation lenses for Paper 3?", "Use time period, elasticity, magnitude, stakeholder impact, opportunity cost, market structure, state of the economy, global conditions, policy conflicts and data reliability. Strong judgement says which factor matters most and why.", { bare: true }],
+  ["Synoptic Evaluation", "How do you structure a 25-mark Paper 3 essay?", "Intro: define and set context. Paragraphs: KAA chain with diagram/data, then evaluation. Use at least one micro and one macro route. Conclusion: weigh factors/policies by short run vs long run, stakeholders and context.", { bare: true }],
+  ["Predicted Priorities", "What are high-priority 2026 Paper 3 areas?", "High-priority revision, not guaranteed: energy/environment, government intervention, labour markets/living standards, business costs/growth, trade/exchange rates/current account, financial stability and development/competitiveness. This is based on recent past-paper patterns and public revision/predicted-practice sources."]
+]);
+
+const ECON_P3_MACRO_CONDENSED = cardsFromRows("Macro Core and Policy", "condensed", [
+  ["AD/AS, Growth and Productivity", "AD/AS, inflation, growth and productivity", "AD/AS is the skeleton of Paper 3. AD shifts change output/unemployment/inflation short run; LRAS/productivity shifts change potential growth. Evaluate with spare capacity, SRAS slope, confidence, multiplier and supply constraints.", { bare: true, diagram: "adas-shift" }],
+  ["Fiscal and Supply-Side Policy", "Fiscal, monetary and supply-side policy", "Fiscal = tax/spending; monetary = rates/QE; supply-side = capacity/incentives/productivity. Best policy depends on cause, time lag, fiscal space, inflation pressure, inequality and global context.", { bare: true }],
+  ["Labour Markets and Inequality", "Labour markets, inequality and living standards", "Labour market diagrams, unemployment types, wages, monopsony/minimum wage, real incomes and poverty. Link to productivity, inflation, public finances, competitiveness and inequality.", { bare: true, diagram: "labour-market" }],
+]);
+
+const ECON_P3_MARKETS_CONDENSED = cardsFromRows("Markets and Intervention", "condensed", [
+  ["Market Failure and Government Failure", "Market failure, government failure and intervention", "Market failure: externalities, public goods, information gaps, inequality, market power. Intervention: taxes, subsidies, regulation, price controls, permits. Evaluation: elasticity, cost, information and unintended effects.", { bare: true, diagram: "negative-externality" }],
+  ["Environment and Energy Markets", "Environment and energy markets", "Energy links externalities, elasticity, costs, inflation, fuel poverty, security and regulation. Policies: carbon tax, permits, subsidies, price caps, public investment. Evaluate affordability vs sustainability vs reliability.", { bare: true }],
+  ["Elasticities", "Elasticities", "PED/PES/YED/XED sharpen evaluation: tax incidence, subsidy impact, price controls, wage effects, exchange-rate/current-account response and firm revenue. Always mention short run vs long run.", { bare: true }],
+]);
+
+const ECON_P3_FIRMS_CONDENSED = cardsFromRows("Firms and Competition", "condensed", [
+  ["Competition and Market Structures", "Competition, market structures and business growth", "Market structures affect price, output, profit, efficiency and innovation. Business growth can lower costs and increase investment, but can create market power and diseconomies.", { bare: true }],
+  ["Costs, Revenue and Profit", "Costs, revenue, profit and economies of scale", "Know MC, AC, AR, MR, profit max at MC=MR, normal/supernormal profit and LRAC economies/diseconomies. Use firm diagrams for costs, closures, competition and profitability.", { bare: true, diagram: "cost-revenue-profit" }],
+]);
+
+const ECON_P3_GLOBAL_CONDENSED = cardsFromRows("Global and Financial", "condensed", [
+  ["Globalisation and Trade", "Globalisation, trade, protectionism, exchange rates and current account", "Trade raises choice/specialisation but creates winners and losers. Protectionism protects jobs but raises prices and welfare loss. Exchange rates affect exports, imports, inflation and current account through elasticity/time lags.", { bare: true, diagram: "tariff" }],
+]);
+
+const ECON_P3_DEVELOPMENT_CONDENSED = cardsFromRows("Development and Synoptic Evaluation", "condensed", [
+  ["Development, HDI and Demographics", "Development, HDI, demographics and competitiveness", "Development is broader than growth. Use HDI, demographics, Lewis model, FDI, aid, trade, debt and institutions. Link competitiveness to productivity, quality, exchange rates and infrastructure.", { bare: true }]
+]);
+
+const ECON_P3_ALL_FULL = [
+  ...ECON_P3_MACRO_FULL,
+  ...ECON_P3_MARKETS_FULL,
+  ...ECON_P3_FIRMS_FULL,
+  ...ECON_P3_GLOBAL_FULL,
+  ...ECON_P3_DEVELOPMENT_FULL,
+];
+
+const ECON_P3_ALL_CONDENSED = [
+  ...ECON_P3_MACRO_CONDENSED,
+  ...ECON_P3_MARKETS_CONDENSED,
+  ...ECON_P3_FIRMS_CONDENSED,
+  ...ECON_P3_GLOBAL_CONDENSED,
+  ...ECON_P3_DEVELOPMENT_CONDENSED,
+];
+
 
 // ═══════════════════════════════════════════════════════════════════════
 //  SOCIOLOGY — AQA A-LEVEL PAPER 2: FAMILIES AND HOUSEHOLDS + THE MEDIA
@@ -2091,10 +2263,8 @@ const ALL_CARDS = [
   ...PSYCH_RESEARCH_METHODS_FULL,
   ...PSYCH_RESEARCH_METHODS_CONDENSED,
   // Economics
-  ...ECONOMICS_THEME2_FULL,
-  ...ECONOMICS_THEME2_CONDENSED,
-  ...ECONOMICS_THEME4_FULL,
-  ...ECONOMICS_THEME4_CONDENSED,
+  ...ECON_P3_ALL_FULL,
+  ...ECON_P3_ALL_CONDENSED,
   // Sociology
   ...SOCIOLOGY_FAMILIES_FULL,
   ...SOCIOLOGY_FAMILIES_CONDENSED,
@@ -2128,6 +2298,26 @@ const TOPIC_SUBHEADINGS = {
     { label: 'Methods & Quality', topics: ['Self-Report Methods', 'Observations', 'Correlations', 'Content Analysis', 'Case Studies', 'Reliability and Validity', 'Ethics'] },
     { label: 'Data & Paper 3 Application', topics: ['Data Handling', 'Graphs and Displays', 'Inferential Testing', 'Paper 3 Application', 'Exam Skills: Research Methods'] },
   ],
+  'Macro Core and Policy': [
+    { label: 'Core Macro', topics: ['AD/AS, Growth and Productivity', 'Inflation and Monetary Policy', 'Living Standards and Real Incomes'] },
+    { label: 'Policy and Labour', topics: ['Fiscal and Supply-Side Policy', 'Labour Markets and Inequality', 'Exam Skills: Macro'] },
+  ],
+  'Markets and Intervention': [
+    { label: 'Failure and Intervention', topics: ['Market Failure and Government Failure', 'Government Intervention'] },
+    { label: 'Energy and Elasticity', topics: ['Environment and Energy Markets', 'Elasticities', 'Exam Skills: Markets'] },
+  ],
+  'Firms and Competition': [
+    { label: 'Market Structures', topics: ['Competition and Market Structures', 'Efficiency'] },
+    { label: 'Firms and Diagrams', topics: ['Business Growth and Economies of Scale', 'Costs, Revenue and Profit', 'Exam Skills: Firms'] },
+  ],
+  'Global and Financial': [
+    { label: 'Trade and External Balance', topics: ['Globalisation and Trade', 'Protectionism', 'Exchange Rates and Current Account', 'Competitiveness'] },
+    { label: 'Finance', topics: ['Financial Markets and Banking', 'Exam Skills: Global'] },
+  ],
+  'Development and Synoptic Evaluation': [
+    { label: 'Development', topics: ['Development, HDI and Demographics', 'Development Strategies'] },
+    { label: 'Paper 3 Technique', topics: ['Synoptic Evaluation', 'Predicted Priorities'] },
+  ],
   'Families and Households': [
     { label: 'Perspectives & Policy', topics: ['Family Types and Perspectives', 'Family, Economy and Social Policy'] },
     { label: 'Patterns & Diversity', topics: ['Changing Family Patterns', 'Family Diversity and Personal Life'] },
@@ -2157,8 +2347,11 @@ const GROUP_META_BY_SUBJECT = {
     { name: 'Research Methods', note: 'Standalone methods, data and Paper 3-style application' },
   ],
   Economics: [
-    { name: 'Theme 2', note: 'UK performance, policy and inequality' },
-    { name: 'Theme 4', note: 'Globalisation, trade and development' },
+    { name: 'Macro Core and Policy', note: 'AD/AS, inflation, productivity, growth, living standards, policy and labour markets' },
+    { name: 'Markets and Intervention', note: 'Market failure, government failure, intervention, energy, environment and elasticities' },
+    { name: 'Firms and Competition', note: 'Market structures, business growth, economies of scale, costs, revenue and profit' },
+    { name: 'Global and Financial', note: 'Trade, protectionism, exchange rates, current account, finance and competitiveness' },
+    { name: 'Development and Synoptic Evaluation', note: 'Development, HDI, demographics and Paper 3 synoptic judgement' },
   ],
   Sociology: [
     { name: 'Families and Households', note: 'Perspectives, policy, changing patterns, diversity, power, childhood and demography' },
@@ -2171,6 +2364,23 @@ const SUPABASE_URL = 'https://chwnfwfjgjoadkvmmkdi.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImNod25md2ZqZ2pvYWRrdm1ta2RpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg1MTUzMDksImV4cCI6MjA5NDA5MTMwOX0.tzO3b2wQbabbJ1pQzTSgZzlxUTubDMM_DhfY2TR8fyk';
 
 const db = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const storage = (() => {
+  const memory = new Map();
+  const fallback = {
+    getItem: key => memory.has(key) ? memory.get(key) : null,
+    setItem: (key, value) => { memory.set(key, String(value)); },
+    removeItem: key => { memory.delete(key); }
+  };
+  try {
+    const candidate = window.localStorage;
+    const testKey = '__flashcards_storage_test__';
+    candidate.setItem(testKey, '1');
+    candidate.removeItem(testKey);
+    return candidate;
+  } catch {
+    return fallback;
+  }
+})();
 
 
 
@@ -2202,7 +2412,7 @@ let cardIdMap = {};
 let reviewsCache = {};
 let supabaseReady = false;
 let extendedCardSchema = false;
-let activeProfileName = localStorage.getItem('aqa_active_profile') || 'Elisha';
+let activeProfileName = storage.getItem('aqa_active_profile') || 'Elisha';
 let selectedSubject = loadSelectedSubject();
 let deck = [];
 let idx = 0;
@@ -2210,10 +2420,14 @@ let flipped = false;
 let currentId = null;
 let streak = 0;
 let touchStartX = 0, touchStartY = 0;
-let typeMode = localStorage.getItem('aqa_type_mode') === '1';
+let typeMode = storage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
-let predictionsMode = localStorage.getItem('aqa_predictions_mode') === '1';
+let predictionsMode = storage.getItem('aqa_predictions_mode') === '1';
+let bareMode = storage.getItem('aqa_economics_bare_mode') === '1';
+let diagramOnlyMode = storage.getItem('aqa_economics_diagram_only_mode') === '1';
 const PSYCHOLOGY_DECK_VERSION = 'paper3_2026_v2';
+const ECONOMICS_DECK_VERSION = 'paper3_2026_v1';
+const ECONOMICS_GROUP_NAMES = ['Macro Core and Policy', 'Markets and Intervention', 'Firms and Competition', 'Global and Financial', 'Development and Synoptic Evaluation'];
 let selectedGroups = loadSelectedGroups();
 
 // High-priority predicted topics
@@ -2223,6 +2437,11 @@ const PREDICTED_TOPICS = {
   'Schizophrenia': ['Classification and Diagnosis', 'Reliability and Validity', 'CBT and Family Therapy', 'Interactionist Approach', 'Exam Skills: Schizophrenia'],
   'Addiction': ['Gambling Addiction', 'Behaviour Change', 'Exam Skills: Addiction'],
   'Research Methods': ['Research Design', 'Experiments', 'Experimental Design', 'Sampling', 'Reliability and Validity', 'Ethics', 'Data Handling', 'Inferential Testing', 'Paper 3 Application', 'Exam Skills: Research Methods'],
+  'Macro Core and Policy': ['AD/AS, Growth and Productivity', 'Inflation and Monetary Policy', 'Fiscal and Supply-Side Policy', 'Labour Markets and Inequality', 'Living Standards and Real Incomes', 'Exam Skills: Macro'],
+  'Markets and Intervention': ['Market Failure and Government Failure', 'Government Intervention', 'Environment and Energy Markets', 'Elasticities'],
+  'Firms and Competition': ['Competition and Market Structures', 'Business Growth and Economies of Scale', 'Costs, Revenue and Profit', 'Exam Skills: Firms'],
+  'Global and Financial': ['Globalisation and Trade', 'Protectionism', 'Exchange Rates and Current Account', 'Financial Markets and Banking', 'Competitiveness'],
+  'Development and Synoptic Evaluation': ['Development, HDI and Demographics', 'Development Strategies', 'Synoptic Evaluation', 'Predicted Priorities'],
   'Families and Households': ['Family, Economy and Social Policy', 'Changing Family Patterns', 'Family Diversity and Personal Life', 'Domestic Labour and Power', 'Childhood', 'Demographic Change'],
   'The Media': ['New Media', 'Ownership, Control and Regulation', 'Globalisation and Popular Culture', 'News Selection and Presentation', 'Representations: Class, Age and Gender', 'Representations: Ethnicity, Sexuality and Disability', 'Audiences'],
 };
@@ -2235,21 +2454,21 @@ function cid(cardData) { return cardData.legacyKey || cardData.slug; }
 function subjectKey(suffix) { return `aqa_${activeProfileName.toLowerCase()}_${selectedSubject.toLowerCase().replace(/[^a-z0-9]+/g, '_')}_${suffix}`; }
 
 function loadCondensedMode() {
-  return localStorage.getItem(lk('condensed_mode')) === '1';
+  return storage.getItem(lk('condensed_mode')) === '1';
 }
 function saveCondensedMode() {
-  try { localStorage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
+  try { storage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
 }
 function loadSelectedSubject() {
   try {
-    const saved = localStorage.getItem(lk('subject'));
+    const saved = storage.getItem(lk('subject'));
     return ['Psychology', 'Economics', 'Sociology'].includes(saved) ? saved : 'Psychology';
   } catch {
     return 'Psychology';
   }
 }
 function saveSelectedSubject() {
-  try { localStorage.setItem(lk('subject'), selectedSubject); } catch {}
+  try { storage.setItem(lk('subject'), selectedSubject); } catch {}
 }
 function groupsForSubject(subject) {
   const meta = (typeof GROUP_META_BY_SUBJECT !== 'undefined' && GROUP_META_BY_SUBJECT[subject]) ? GROUP_META_BY_SUBJECT[subject] : [];
@@ -2260,13 +2479,14 @@ function defaultGroupsForSubject(subject) {
 }
 function loadSelectedGroups() {
   try {
-    if (selectedSubject === 'Psychology' && localStorage.getItem(subjectKey('deck_version')) !== PSYCHOLOGY_DECK_VERSION) {
-      localStorage.setItem(subjectKey('deck_version'), PSYCHOLOGY_DECK_VERSION);
-      localStorage.removeItem(subjectKey('selected_groups'));
-      localStorage.removeItem(subjectKey('selected_topics'));
+    const requiredVersion = selectedSubject === 'Psychology' ? PSYCHOLOGY_DECK_VERSION : selectedSubject === 'Economics' ? ECONOMICS_DECK_VERSION : null;
+    if (requiredVersion && storage.getItem(subjectKey('deck_version')) !== requiredVersion) {
+      storage.setItem(subjectKey('deck_version'), requiredVersion);
+      storage.removeItem(subjectKey('selected_groups'));
+      storage.removeItem(subjectKey('selected_topics'));
       return defaultGroupsForSubject(selectedSubject);
     }
-    const saved = JSON.parse(localStorage.getItem(subjectKey('selected_groups')));
+    const saved = JSON.parse(storage.getItem(subjectKey('selected_groups')));
     const validGroups = groupsForSubject(selectedSubject);
     const valid = Array.isArray(saved) ? saved.filter(group => validGroups.includes(group)) : [];
     return valid.length ? valid : defaultGroupsForSubject(selectedSubject);
@@ -2276,31 +2496,32 @@ function loadSelectedGroups() {
 }
 
 function saveSelectedGroups() {
-  try { localStorage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
+  try { storage.setItem(subjectKey('selected_groups'), JSON.stringify(selectedGroups)); } catch {}
 }
 function loadSelectedTopics() {
   try {
-    if (selectedSubject === 'Psychology' && localStorage.getItem(subjectKey('deck_version')) !== PSYCHOLOGY_DECK_VERSION) {
-      localStorage.setItem(subjectKey('deck_version'), PSYCHOLOGY_DECK_VERSION);
-      localStorage.removeItem(subjectKey('selected_groups'));
-      localStorage.removeItem(subjectKey('selected_topics'));
+    const requiredVersion = selectedSubject === 'Psychology' ? PSYCHOLOGY_DECK_VERSION : selectedSubject === 'Economics' ? ECONOMICS_DECK_VERSION : null;
+    if (requiredVersion && storage.getItem(subjectKey('deck_version')) !== requiredVersion) {
+      storage.setItem(subjectKey('deck_version'), requiredVersion);
+      storage.removeItem(subjectKey('selected_groups'));
+      storage.removeItem(subjectKey('selected_topics'));
       return {};
     }
-    const saved = JSON.parse(localStorage.getItem(subjectKey('selected_topics')));
+    const saved = JSON.parse(storage.getItem(subjectKey('selected_topics')));
     return saved && typeof saved === 'object' ? saved : {};
   } catch {
     return {};
   }
 }
 function saveSelectedTopics() {
-  try { localStorage.setItem(subjectKey('selected_topics'), JSON.stringify(selectedTopics)); } catch {}
+  try { storage.setItem(subjectKey('selected_topics'), JSON.stringify(selectedTopics)); } catch {}
 }
 function loadTypedAnswers() {
-  try { return JSON.parse(localStorage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
+  try { return JSON.parse(storage.getItem(`aqa_${activeProfileName.toLowerCase()}_typed`)) || {}; }
   catch { return {}; }
 }
 function saveTypedAnswers() {
-  try { localStorage.setItem(`aqa_${activeProfileName.toLowerCase()}_typed`, JSON.stringify(typedAnswers)); } catch {}
+  try { storage.setItem(`aqa_${activeProfileName.toLowerCase()}_typed`, JSON.stringify(typedAnswers)); } catch {}
 }
 function typedKey(cardData) { return cid(cardData); }
 function cardGroup(cardData) {
@@ -2316,7 +2537,7 @@ function cardGroup(cardData) {
 }
 function cardSubject(cardData) {
   const group = cardGroup(cardData);
-  if (group === 'Theme 2' || group === 'Theme 4') return 'Economics';
+  if (group === 'Theme 2' || group === 'Theme 4' || ECONOMICS_GROUP_NAMES.includes(group)) return 'Economics';
   if (group === 'Families and Households' || group === 'The Media') return 'Sociology';
   return 'Psychology';
 }
@@ -2385,10 +2606,10 @@ function clearTypedAnswer(cardData) {
   saveTypedAnswers();
 }
 
-function saveLocalReviews()  { try { localStorage.setItem(lk('reviews'), JSON.stringify(reviewsCache)); } catch {} }
-function loadLocalReviews()  { try { return JSON.parse(localStorage.getItem(lk('reviews'))) || {}; } catch { return {}; } }
-function saveLocalStreak()   { try { localStorage.setItem(lk('streak'), String(streak)); } catch {} }
-function loadLocalStreak()   { try { return parseInt(localStorage.getItem(lk('streak'))) || 0; } catch { return 0; } }
+function saveLocalReviews()  { try { storage.setItem(lk('reviews'), JSON.stringify(reviewsCache)); } catch {} }
+function loadLocalReviews()  { try { return JSON.parse(storage.getItem(lk('reviews'))) || {}; } catch { return {}; } }
+function saveLocalStreak()   { try { storage.setItem(lk('streak'), String(streak)); } catch {} }
+function loadLocalStreak()   { try { return parseInt(storage.getItem(lk('streak'))) || 0; } catch { return 0; } }
 
 async function loadReviews() {
   const profile = profileMap[activeProfileName];
@@ -2475,11 +2696,111 @@ function setSyncStatus(state, label) {
   text.textContent = label || defaults[state] || state;
 }
 
+function diagramSvg(type) {
+  const axis = `<line class="diagram-axis" x1="54" y1="276" x2="330" y2="276"/><line class="diagram-axis" x1="54" y1="276" x2="54" y2="34"/>`;
+  const guide = (x, y, label) => `<line class="diagram-line diagram-dash" x1="${x}" y1="${y}" x2="${x}" y2="276"/><line class="diagram-line diagram-dash" x1="54" y1="${y}" x2="${x}" y2="${y}"/><text class="diagram-muted" x="${x-8}" y="294">${label}</text>`;
+  const svg = (title, labels, body, note) => `<div class="diagram-title">${title}</div><svg viewBox="0 0 360 320" role="img" aria-label="${title}">${axis}${body}<text class="diagram-muted" x="300" y="305">${labels.x}</text><text class="diagram-muted" x="10" y="30">${labels.y}</text></svg><p class="diagram-note">${note}</p>`;
+  if (type === 'adas-shift') {
+    return svg('AD/AS: AD shifts right', { x:'Real GDP', y:'Price level' }, `
+      <path class="diagram-line" d="M78 246 C130 200 190 145 250 80"/><text class="diagram-label" x="250" y="76">SRAS</text>
+      <path class="diagram-line alt" d="M92 76 C140 130 190 190 252 250"/><text class="diagram-label" x="252" y="252">AD1</text>
+      <path class="diagram-line warn" d="M126 70 C174 124 224 184 286 244"/><text class="diagram-label" x="286" y="246">AD2</text>
+      ${guide(173,154,'Y1')}${guide(210,130,'Y2')}
+      <text class="diagram-muted" x="36" y="158">P1</text><text class="diagram-muted" x="36" y="134">P2</text>`, 'A rightward AD shift raises real GDP and the price level, unless spare capacity keeps inflationary pressure low.');
+  }
+  if (type === 'demand-supply-tax') {
+    return svg('Indirect tax: supply shifts left/up', { x:'Quantity', y:'Price' }, `
+      <path class="diagram-line" d="M82 250 C140 198 202 138 274 70"/><text class="diagram-label" x="276" y="72">S1</text>
+      <path class="diagram-line bad" d="M82 212 C140 160 202 100 274 40"/><text class="diagram-label" x="276" y="43">S2</text>
+      <path class="diagram-line alt" d="M82 70 C138 122 204 190 278 252"/><text class="diagram-label" x="280" y="254">D</text>
+      ${guide(190,150,'Q1')}${guide(166,170,'Q2')}
+      <text class="diagram-muted" x="34" y="154">P1</text><text class="diagram-muted" x="34" y="174">P2</text>`, 'Tax raises consumer price, lowers producer price, reduces quantity and creates tax revenue; incidence depends on elasticity.');
+  }
+  if (type === 'negative-externality') {
+    return svg('Negative production externality', { x:'Quantity', y:'Costs/benefits' }, `
+      <path class="diagram-line" d="M82 250 C140 196 202 136 274 70"/><text class="diagram-label" x="276" y="72">MPC</text>
+      <path class="diagram-line bad" d="M82 216 C140 162 202 102 274 36"/><text class="diagram-label" x="276" y="39">MSC</text>
+      <path class="diagram-line alt" d="M82 68 C144 124 206 190 282 254"/><text class="diagram-label" x="284" y="256">MSB</text>
+      ${guide(164,170,'Qs')}${guide(194,146,'Qm')}
+      <polygon points="164,170 194,146 194,120" fill="rgba(255,107,107,.18)" stroke="#ff6b6b"/>
+      <text class="diagram-muted" x="201" y="132">Welfare loss</text>`, 'Market output Qm is above social optimum Qs because MSC exceeds MPC.');
+  }
+  if (type === 'labour-market') {
+    return svg('Labour market: minimum wage', { x:'Labour', y:'Wage' }, `
+      <path class="diagram-line" d="M82 248 C138 198 202 132 276 64"/><text class="diagram-label" x="278" y="66">SL</text>
+      <path class="diagram-line alt" d="M82 64 C142 122 204 190 278 252"/><text class="diagram-label" x="280" y="254">DL/MRP</text>
+      <line class="diagram-line bad" x1="68" y1="130" x2="292" y2="130"/><text class="diagram-label" x="294" y="134">Min wage</text>
+      ${guide(152,130,'Ld')}${guide(222,130,'Ls')}
+      <text class="diagram-muted" x="164" y="114">Excess supply</text>`, 'A minimum wage above equilibrium can create unemployment; in monopsony it may raise both wages and employment.');
+  }
+  if (type === 'tariff') {
+    return svg('Tariff on imports', { x:'Quantity', y:'Price' }, `
+      <path class="diagram-line" d="M74 250 C132 198 196 134 272 66"/><text class="diagram-label" x="274" y="68">S domestic</text>
+      <path class="diagram-line alt" d="M76 72 C136 124 202 190 280 254"/><text class="diagram-label" x="245" y="254">D domestic</text>
+      <line class="diagram-line warn" x1="62" y1="198" x2="302" y2="198"/><text class="diagram-label" x="304" y="202">Pw</text>
+      <line class="diagram-line bad" x1="62" y1="166" x2="302" y2="166"/><text class="diagram-label" x="304" y="170">Pw+t</text>
+      ${guide(130,166,'Qs2')}${guide(230,166,'Qd2')}`, 'Tariff raises domestic price, increases domestic supply, lowers domestic demand and reduces imports, but creates welfare losses.');
+  }
+  if (type === 'exchange-rate') {
+    return svg('Exchange rate: demand for pounds rises', { x:'Quantity of pounds', y:'Price of pound' }, `
+      <path class="diagram-line" d="M86 246 C144 194 206 130 278 60"/><text class="diagram-label" x="280" y="62">S£</text>
+      <path class="diagram-line alt" d="M78 82 C134 134 196 198 270 256"/><text class="diagram-label" x="272" y="258">D1£</text>
+      <path class="diagram-line warn" d="M112 74 C168 126 230 190 304 248"/><text class="diagram-label" x="306" y="250">D2£</text>
+      ${guide(178,154,'Q1')}${guide(210,130,'Q2')}
+      <text class="diagram-muted" x="34" y="158">ER1</text><text class="diagram-muted" x="34" y="134">ER2</text>`, 'Higher demand for pounds appreciates sterling; exports become dearer and imports cheaper.');
+  }
+  if (type === 'cost-revenue-profit') {
+    return svg('Firm profit maximisation', { x:'Quantity', y:'Costs/revenue' }, `
+      <path class="diagram-line alt" d="M82 78 C142 126 204 190 278 254"/><text class="diagram-label" x="280" y="256">AR</text>
+      <path class="diagram-line warn" d="M82 118 C142 166 204 220 278 276"/><text class="diagram-label" x="280" y="278">MR</text>
+      <path class="diagram-line" d="M84 230 C128 160 188 118 274 76"/><text class="diagram-label" x="276" y="78">MC</text>
+      <path class="diagram-line bad" d="M84 210 C140 150 210 150 278 212"/><text class="diagram-label" x="280" y="214">AC</text>
+      <rect x="141" y="128" width="64" height="44" fill="rgba(91,214,138,.16)" stroke="#5bd68a"/>
+      ${guide(205,172,'Q*')}
+      <text class="diagram-muted" x="120" y="124">Supernormal profit</text>`, 'Profit maximising output is where MC=MR; price is read from AR; profit is the AR-AC rectangle.');
+  }
+  if (type === 'monopoly') {
+    return svg('Monopoly: supernormal profit', { x:'Quantity', y:'Costs/revenue' }, `
+      <path class="diagram-line alt" d="M82 76 C142 126 204 190 278 254"/><text class="diagram-label" x="280" y="256">AR/D</text>
+      <path class="diagram-line warn" d="M82 118 C142 166 204 220 278 276"/><text class="diagram-label" x="280" y="278">MR</text>
+      <path class="diagram-line" d="M84 230 C128 160 188 118 274 76"/><text class="diagram-label" x="276" y="78">MC</text>
+      <path class="diagram-line bad" d="M84 212 C140 152 210 152 278 214"/><text class="diagram-label" x="280" y="216">AC</text>
+      <rect x="140" y="128" width="64" height="46" fill="rgba(91,214,138,.16)" stroke="#5bd68a"/>
+      ${guide(204,174,'Qm')}
+      <text class="diagram-muted" x="112" y="122">P &gt; MC</text>`, 'Monopoly maximises profit where MC=MR, charges price from AR and can make supernormal profit.');
+  }
+  if (type === 'perfect-competition') {
+    return svg('Perfect competition: long-run normal profit', { x:'Quantity', y:'Costs/revenue' }, `
+      <line class="diagram-line alt" x1="84" y1="146" x2="284" y2="146"/><text class="diagram-label" x="286" y="150">AR=MR</text>
+      <path class="diagram-line" d="M84 232 C130 154 204 90 278 70"/><text class="diagram-label" x="280" y="72">MC</text>
+      <path class="diagram-line bad" d="M84 214 C136 142 218 142 278 218"/><text class="diagram-label" x="280" y="220">AC</text>
+      ${guide(178,146,'Q')}
+      <text class="diagram-muted" x="98" y="126">AR=AC: normal profit</text>`, 'Long-run perfect competition produces where MC=MR and AR=AC, so firms make normal profit.');
+  }
+  return '';
+}
+
+function renderCardDiagram(cardData) {
+  const html = cardData && cardData.diagram ? diagramSvg(cardData.diagram) : '';
+  ['diagramBox', 'diagramSolo'].forEach(id => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    const shouldShow = !!html && ((id === 'diagramBox' && typeMode) || (id === 'diagramSolo' && !typeMode));
+    el.innerHTML = html;
+    el.classList.toggle('show', shouldShow);
+  });
+}
+
 function topicSummaryText() {
   const groups = groupsForSubject(selectedSubject);
   const totalTopics = groups.reduce((s, g) => s + availableTopicsForGroup(g).length, 0);
   const selTopics = groups.reduce((s, g) => s + selectedTopicsForGroup(g).length, 0);
-  const modeTag = predictionsMode ? ' · 🔮 Predictions' : (condensedMode ? ' · Condensed' : ' · Full deck');
+  const tags = [];
+  if (selectedSubject === 'Economics' && bareMode) tags.push('Bare 10');
+  if (selectedSubject === 'Economics' && diagramOnlyMode) tags.push('Diagrams');
+  if (predictionsMode) tags.push('🔮 Predictions');
+  tags.push(condensedMode ? 'Condensed' : 'Full deck');
+  const modeTag = ` · ${tags.join(' · ')}`;
   return `${selectedSubject} · ${selTopics}/${totalTopics} topics${modeTag}`;
 }
 
@@ -2495,7 +2816,16 @@ function renderSubjectButtons() {
 
 function cardCountForTopic(groupName, topic) {
   const variant = condensedMode ? 'condensed' : 'full';
-  return ALL_CARDS.filter(c => cardGroup(c) === groupName && c.t === topic && c.variant === variant).length;
+  return ALL_CARDS.filter(c => {
+	    if (cardGroup(c) !== groupName || c.t !== topic || c.variant !== variant) return false;
+	    if (selectedSubject === 'Economics' && bareMode && !c.bare) return false;
+	    if (selectedSubject === 'Economics' && diagramOnlyMode && !c.diagram) return false;
+	    if (predictionsMode) {
+      const predicted = PREDICTED_TOPICS[groupName];
+      if (!predicted || !predicted.includes(c.t)) return false;
+    }
+    return true;
+  }).length;
 }
 
 function renderTopicFilters() {
@@ -2589,6 +2919,16 @@ function updateProfileUI() {
   document.getElementById('condensedToggle').classList.toggle('active', condensedMode);
   document.getElementById('condensedToggle').setAttribute('aria-pressed', String(condensedMode));
   document.getElementById('condensedToggle').textContent = `Condensed: ${condensedMode ? 'On' : 'Off'}`;
+  const bareToggle = document.getElementById('bareToggle');
+  bareToggle.style.display = selectedSubject === 'Economics' ? '' : 'none';
+  bareToggle.classList.toggle('active', selectedSubject === 'Economics' && bareMode);
+  bareToggle.setAttribute('aria-pressed', String(selectedSubject === 'Economics' && bareMode));
+  bareToggle.textContent = `Bare 10: ${bareMode ? 'On' : 'Off'}`;
+  const diagramOnlyToggle = document.getElementById('diagramOnlyToggle');
+  diagramOnlyToggle.style.display = selectedSubject === 'Economics' ? '' : 'none';
+  diagramOnlyToggle.classList.toggle('active', selectedSubject === 'Economics' && diagramOnlyMode);
+  diagramOnlyToggle.setAttribute('aria-pressed', String(selectedSubject === 'Economics' && diagramOnlyMode));
+  diagramOnlyToggle.textContent = `Diagram Only: ${diagramOnlyMode ? 'On' : 'Off'}`;
   document.getElementById('predictionsToggle').classList.toggle('active', predictionsMode);
   document.getElementById('predictionsToggle').setAttribute('aria-pressed', String(predictionsMode));
   document.getElementById('predictionsToggle').textContent = `Predictions: ${predictionsMode ? 'On' : 'Off'}`;
@@ -2599,13 +2939,14 @@ function updateProfileUI() {
   document.getElementById('frontHint').textContent = typeMode ? 'Type your answer first, then reveal it.' : 'Tap the card to reveal the answer.';
   document.getElementById('compareBox').style.display = typeMode ? '' : 'none';
   document.getElementById('cardASolo').style.display = typeMode ? 'none' : '';
+  if (deck.length) renderCardDiagram(currentCard());
   renderSubjectButtons();
   renderTopicFilters();
 }
 
 function setTypeMode(on) {
   typeMode = !!on;
-  localStorage.setItem('aqa_type_mode', typeMode ? '1' : '0');
+  storage.setItem('aqa_type_mode', typeMode ? '1' : '0');
   updateProfileUI();
   populateTypingArea();
 }
@@ -2621,9 +2962,31 @@ function setCondensedMode(on) {
   populateTypingArea();
 }
 
+function setBareMode(on) {
+  bareMode = !!on;
+  storage.setItem('aqa_economics_bare_mode', bareMode ? '1' : '0');
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+}
+
+function setDiagramOnlyMode(on) {
+  diagramOnlyMode = !!on;
+  storage.setItem('aqa_economics_diagram_only_mode', diagramOnlyMode ? '1' : '0');
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+}
+
 function setPredictionsMode(on) {
   predictionsMode = !!on;
-  try { localStorage.setItem('aqa_predictions_mode', predictionsMode ? '1' : '0'); } catch {}
+  try { storage.setItem('aqa_predictions_mode', predictionsMode ? '1' : '0'); } catch {}
   flipped = false;
   currentId = null;
   updateProfileUI();
@@ -2635,7 +2998,7 @@ function setPredictionsMode(on) {
 async function switchProfile(name) {
   if (name === activeProfileName) return;
   activeProfileName = name;
-  localStorage.setItem('aqa_active_profile', name);
+  storage.setItem('aqa_active_profile', name);
   selectedSubject = loadSelectedSubject();
   condensedMode = loadCondensedMode();
   selectedGroups = loadSelectedGroups();
@@ -2839,15 +3202,23 @@ function activeCatalog() {
     return topics.includes(cardData.t);
   });
 
+  const bareFiltered = selectedSubject === 'Economics' && bareMode
+    ? filtered.filter(cardData => cardData.bare)
+    : filtered;
+
+  const diagramFiltered = selectedSubject === 'Economics' && diagramOnlyMode
+    ? bareFiltered.filter(cardData => cardData.diagram)
+    : bareFiltered;
+
   if (predictionsMode) {
-    return filtered.filter(cardData => {
+    return diagramFiltered.filter(cardData => {
       const groupName = cardGroup(cardData);
       const predicted = PREDICTED_TOPICS[groupName];
       return predicted && predicted.includes(cardData.t);
     });
   }
 
-  return filtered; // May be empty if user deselected all topics — handled by buildDeck
+  return diagramFiltered; // May be empty if user deselected all topics — handled by buildDeck
 }
 
 function currentCard() { return deck[idx]; }
@@ -2914,6 +3285,7 @@ function renderEmptyState() {
   document.getElementById('nextDue').textContent = 'Next review: —';
   document.getElementById('typedAnswerView').textContent = '—';
   document.getElementById('answerInput').value = '';
+  renderCardDiagram(null);
   document.getElementById('cardInner').classList.remove('flipped');
   flipped = false;
   updateStats();
@@ -2973,6 +3345,7 @@ function render() {
   document.getElementById('cardQ').textContent = cardData.q;
   document.getElementById('cardA').textContent = cardData.a;
   document.getElementById('cardASolo').textContent = cardData.a;
+  renderCardDiagram(cardData);
   document.getElementById('compareBox').style.display = typeMode ? '' : 'none';
   document.getElementById('cardASolo').style.display = typeMode ? 'none' : '';
   document.getElementById('cardTopic').textContent = cardData.unit;
@@ -3075,9 +3448,9 @@ async function resetProgress() {
     await db.from('profiles').update({ streak: 0, last_study: '' }).eq('id', profile.id);
   }
 
-  localStorage.removeItem(lk('reviews'));
-  localStorage.removeItem(lk('streak'));
-  localStorage.removeItem(`aqa_${activeProfileName.toLowerCase()}_typed`);
+  storage.removeItem(lk('reviews'));
+  storage.removeItem(lk('streak'));
+  storage.removeItem(`aqa_${activeProfileName.toLowerCase()}_typed`);
   reviewsCache = {};
   typedAnswers = {};
   streak = 0;
@@ -3169,6 +3542,8 @@ document.getElementById('modeSel').addEventListener('change', () => {
   populateTypingArea();
 });
 document.getElementById('condensedToggle').addEventListener('click', () => setCondensedMode(!condensedMode));
+document.getElementById('bareToggle').addEventListener('click', () => setBareMode(!bareMode));
+document.getElementById('diagramOnlyToggle').addEventListener('click', () => setDiagramOnlyMode(!diagramOnlyMode));
 document.getElementById('predictionsToggle').addEventListener('click', () => setPredictionsMode(!predictionsMode));
 document.getElementById('shuffleBtn').addEventListener('click', () => {
   deck = shuffle([...deck]);

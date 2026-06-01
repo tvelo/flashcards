@@ -411,17 +411,12 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   position:relative;
   width:100%;
   min-height:58vh;
-  transform-style:preserve-3d;
-  transition:transform .45s cubic-bezier(.2,.8,.2,1);
   border-radius:calc(var(--radius) + 4px);
   overflow:hidden;
 }
-.card.flipped{transform:rotateY(180deg)}
 .face{
   position:absolute;
   inset:0;
-  backface-visibility:hidden;
-  -webkit-backface-visibility:hidden;
   border-radius:calc(var(--radius) + 4px);
   background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.05));
   border:1px solid var(--line-2);
@@ -432,8 +427,27 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   gap:12px;
   overflow:auto;
   scrollbar-gutter:stable;
+  opacity:0;
+  pointer-events:none;
+  transform:translateX(10px);
+  transition:opacity .2s ease, transform .2s ease;
 }
-.back{transform:rotateY(180deg)}
+.front{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateX(0);
+}
+.back{transform:translateX(10px)}
+.card.flipped .front{
+  opacity:0;
+  pointer-events:none;
+  transform:translateX(-10px);
+}
+.card.flipped .back{
+  opacity:1;
+  pointer-events:auto;
+  transform:translateX(0);
+}
 .back .face-body{justify-content:flex-start}
 .face-body{
   flex:1;

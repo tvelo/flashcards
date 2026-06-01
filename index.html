@@ -2020,7 +2020,7 @@ const ECON_P3_MARKETS_FULL = cardsFromRows("Markets and Intervention", "full", [
   ["Market Failure and Government Failure", "Sketch a negative production externality diagram.", "Checklist: MPB/MSB demand, MPC supply, MSC above MPC; market output Qm exceeds socially optimum Qs; welfare loss triangle between MSC and MSB over excess output. Common mistake: shifting demand instead of supply for production externalities.", { bare: true, diagram: "negative-externality" }],
   ["Market Failure and Government Failure", "What is government failure?", "Government failure is when intervention causes a net welfare loss or worsens market outcomes. Causes include information failure, regulatory capture, administrative costs, unintended consequences, moral hazard, political incentives and poor policy design.", { bare: true }],
   ["Government Intervention", "What are the main forms of government intervention in markets?", "Indirect taxes, subsidies, regulation, pollution permits, price controls, minimum wages, public provision, nationalisation, privatisation, competition policy and information campaigns. Evaluation depends on elasticity, cost, enforceability and risk of unintended effects.", { bare: true }],
-  ["Government Intervention", "Sketch an indirect tax diagram.", "Checklist: supply shifts left/up by the tax; price paid by consumers rises; price received by producers falls; quantity falls; tax revenue rectangle and welfare loss can be shown. Incidence depends on PED/PES.", { bare: true, diagram: "demand-supply-tax" }],
+  ["Government Intervention", "Sketch an indirect tax diagram.", "Checklist: supply shifts left/up by the tax; quantity falls from Q1 to Q2; consumer price rises to Pc; producer price falls to Pp; the tax wedge is Pc-Pp and tax revenue is Pc-Pp x Q2. Incidence depends on PED/PES.", { bare: true, diagram: "demand-supply-tax" }],
   ["Government Intervention", "How do maximum prices affect markets?", "A maximum price below equilibrium can improve affordability but creates excess demand/shortages. Evaluation: may require rationing, subsidies or public provision; black markets and lower quality can emerge."],
   ["Government Intervention", "How do minimum prices affect markets?", "A minimum price above equilibrium raises producer revenue if demand is inelastic but creates excess supply. Evaluation: storage, waste, illegal sales and government purchase schemes may be needed."],
   ["Environment and Energy Markets", "Why are environment and energy markets strongly synoptic?", "Energy/environment questions usually combine externalities, elasticities, costs, inflation, regulation and energy security. Know carbon taxes, subsidies, permits, price caps, investment incentives and trade-offs between affordability, sustainability and reliability.", { bare: true }],
@@ -2038,7 +2038,7 @@ const ECON_P3_FIRMS_FULL = cardsFromRows("Firms and Competition", "full", [
   ["Competition and Market Structures", "How do competition, market structures and business growth link?", "Know perfect competition, monopolistic competition, oligopoly, monopoly, contestability, barriers to entry, efficiency and consumer welfare. Paper 3 often links market structure to prices, investment, innovation, productivity and living standards.", { bare: true }],
   ["Competition and Market Structures", "How does monopoly power affect consumers and efficiency?", "Monopoly can lead to higher prices, lower output and allocative inefficiency, but may allow economies of scale, dynamic efficiency and investment. Evaluation: impact depends on regulation, contestability, innovation and whether profits are reinvested."],
   ["Competition and Market Structures", "Sketch a monopoly profit diagram.", "Checklist: output where MC=MR; price read from AR; AR above AC creates supernormal profit; allocative inefficiency because P exceeds MC. Evaluation: monopoly profit may fund innovation or economies of scale may lower AC.", { diagram: "monopoly" }],
-  ["Competition and Market Structures", "Sketch a long-run perfect competition diagram.", "Checklist: AR=MR is horizontal; firm produces where MC=MR and AC is minimised; in long-run equilibrium AR=AC so only normal profit is made. Common mistake: drawing supernormal profit in the long run.", { diagram: "perfect-competition" }],
+  ["Competition and Market Structures", "Sketch a long-run perfect competition diagram.", "Checklist: AR=MR is horizontal; MC crosses AC at the minimum point; firm produces where MC=MR; in long-run equilibrium AR=AC, so only normal profit is made. Common mistake: drawing supernormal profit in the long run.", { diagram: "perfect-competition" }],
   ["Competition and Market Structures", "What is contestability?", "Contestability is the ease with which new firms can enter and leave a market. Even a concentrated market can behave competitively if barriers to entry/exit are low and hit-and-run entry is credible."],
   ["Competition and Market Structures", "Evaluate competition policy.", "Competition policy can reduce monopoly power, protect consumers and improve efficiency through merger control, fines and market investigations. Limitations: enforcement is slow, global digital firms are difficult to regulate, and some mergers create efficiencies."],
   ["Business Growth and Economies of Scale", "Why might firms want to grow?", "Growth can create economies of scale, market power, brand recognition, access to finance, risk spreading and international reach. Evaluation: diseconomies of scale, culture clashes, regulatory scrutiny and management problems can limit gains.", { bare: true }],
@@ -2080,11 +2080,26 @@ const ECON_P3_DEVELOPMENT_FULL = cardsFromRows("Development and Synoptic Evaluat
   ["Development Strategies", "Evaluate aid as a development strategy.", "Aid can fund infrastructure, health, education and emergency support. Limitations: dependency, corruption, tied aid, poor targeting and crowding out local enterprise. Judgement depends on governance and whether aid builds capacity."],
   ["Development Strategies", "How can trade promote development?", "Trade can expand markets, create export revenue, attract FDI and encourage specialisation. Evaluation: primary product dependency, volatile commodity prices, protectionism by richer countries and unequal bargaining power can limit gains."],
   ["Development Strategies", "What are barriers to growth and development?", "Poor infrastructure, weak institutions, corruption, low education, poor healthcare, debt, capital flight, conflict, primary product dependency, climate risk and limited access to finance."],
-  ["Synoptic Evaluation", "What makes a Paper 3 answer synoptic?", "It combines micro and macro: firms, markets, consumers, labour, government, global links and macro objectives. For example, energy costs affect firms' MC, prices/inflation, household real incomes, current account, government policy and long-run competitiveness.", { bare: true }],
-  ["Synoptic Evaluation", "What are the best evaluation lenses for Paper 3?", "Use time period, elasticity, magnitude, stakeholder impact, opportunity cost, market structure, state of the economy, global conditions, policy conflicts and data reliability. Strong judgement says which factor matters most and why.", { bare: true }],
-  ["Synoptic Evaluation", "How do you structure a 25-mark Paper 3 essay?", "Intro: define and set context. Paragraphs: KAA chain with diagram/data, then evaluation. Use at least one micro and one macro route. Conclusion: weigh factors/policies by short run vs long run, stakeholders and context.", { bare: true }],
-  ["Predicted Priorities", "What are high-priority 2026 Paper 3 areas?", "High-priority revision, not guaranteed: energy/environment, government intervention, labour markets/living standards, business costs/growth, trade/exchange rates/current account, financial stability and development/competitiveness. This is based on recent past-paper patterns and public revision/predicted-practice sources."]
-]);
+	  ["Synoptic Evaluation", "What makes a Paper 3 answer synoptic?", "It combines micro and macro: firms, markets, consumers, labour, government, global links and macro objectives. For example, energy costs affect firms' MC, prices/inflation, household real incomes, current account, government policy and long-run competitiveness.", { bare: true }],
+	  ["Synoptic Evaluation", "What are the best evaluation lenses for Paper 3?", "Use time period, elasticity, magnitude, stakeholder impact, opportunity cost, market structure, state of the economy, global conditions, policy conflicts and data reliability. Strong judgement says which factor matters most and why.", { bare: true }],
+	  ["Synoptic Evaluation", "How do you structure a 25-mark Paper 3 essay?", "Intro: define and set context. Paragraphs: KAA chain with diagram/data, then evaluation. Use at least one micro and one macro route. Conclusion: weigh factors/policies by short run vs long run, stakeholders and context.", { bare: true }],
+	  ["Paper 3 A* Prep", "What A* evaluation sentence works for almost any policy?", "The policy is likely to be more effective when the main constraint is demand-side, the relevant elasticities are high, spare capacity exists, the fiscal/administrative cost is low, and the policy targets the root cause rather than symptoms. Final judgement should weigh the binding constraint in the extract."],
+	  ["Paper 3 A* Prep", "How can you use elasticities as A* evaluation?", "Elasticity changes the size and distribution of effects. PED/PES affect tax incidence, subsidy impact and price controls. Labour demand/supply elasticity affects wage policies. Export/import elasticities affect exchange-rate impacts. Strong judgement: effectiveness may rise in the long run as elasticities increase."],
+	  ["Paper 3 A* Prep", "How do you use a Lorenz curve/Gini coefficient in Paper 3?", "Use it when inequality, development or living standards appear. A more bowed Lorenz curve means higher income inequality; a higher Gini suggests more unequal distribution. Evaluation: Gini misses absolute living standards, regional inequality, wealth inequality and informal-sector income.", { diagram: "lorenz-curve" }],
+	  ["Paper 3 A* Prep", "Sketch a Lorenz curve and explain how it upgrades evaluation.", "Checklist: cumulative population on x-axis, cumulative income on y-axis, 45-degree equality line, Lorenz curve below it. Larger gap means higher inequality. Use it to judge whether growth, trade or policy improves distribution as well as GDP.", { diagram: "lorenz-curve" }],
+	  ["Paper 3 A* Prep", "How do you use the Laffer curve as high-level tax evaluation?", "The Laffer curve shows tax revenue may rise with tax rates up to a point, then fall if incentives, avoidance or evasion worsen. Use it carefully: it evaluates direct tax/incentive arguments, not every tax. Strong judgement depends on starting tax rate, labour elasticity and enforcement.", { diagram: "laffer-curve" }],
+	  ["Paper 3 A* Prep", "Sketch the Laffer curve for tax evaluation.", "Checklist: tax rate on x-axis, tax revenue on y-axis, inverted-U curve, revenue zero at 0% and 100%, revenue-maximising rate shown. Use it to evaluate income/corporation tax cuts, incentives, avoidance and government revenue.", { diagram: "laffer-curve" }],
+	  ["Paper 3 A* Prep", "How can the J-curve and Marshall-Lerner condition push trade essays higher?", "After depreciation, the current account may initially worsen because contracts and inelastic demand dominate, then improve if export/import volumes respond. Marshall-Lerner says improvement requires PED exports + PED imports greater than 1. Evaluation: time lags and import dependence matter.", { diagram: "j-curve" }],
+	  ["Paper 3 A* Prep", "Sketch the J-curve for exchange-rate evaluation.", "Checklist: time on x-axis, current account balance on y-axis; after depreciation, balance dips before improving. Explain that short-run demand is inelastic, but long-run volumes adjust if Marshall-Lerner holds.", { diagram: "j-curve" }],
+	  ["Paper 3 A* Prep", "How do output gaps improve macro judgement?", "Use output gaps to judge AD policies. If there is a negative output gap/spare capacity, expansionary demand-side policy may raise real output with less inflation. If near full capacity, the same policy mainly raises price level. This directly improves fiscal/monetary evaluation.", { diagram: "output-gap" }],
+	  ["Paper 3 A* Prep", "Sketch an AD/AS output gap diagram.", "Checklist: LRAS/potential output marked Yfe; AD intersects SRAS left of Yfe for a negative output gap. Explain spare capacity, unemployment and why demand-side stimulus may be less inflationary there.", { diagram: "output-gap" }],
+	  ["Paper 3 A* Prep", "How do you use multiplier analysis without sounding basic?", "Link multiplier size to leakages: MPS, MPT and MPM. Government spending has a larger final impact when spare capacity is high, confidence responds, and import leakages are low. Evaluation: crowding out, inflation and debt reduce the multiplier effect.", { diagram: "multiplier" }],
+	  ["Paper 3 A* Prep", "Sketch the multiplier process as an A* chain.", "Checklist: initial injection, successive rounds of spending, smaller increments due to leakages, larger final change in national income. Use it to evaluate fiscal stimulus, investment, exports or infrastructure spending.", { diagram: "multiplier" }],
+	  ["Paper 3 A* Prep", "What are the strongest policy conflict points for Paper 3 conclusions?", "Growth may conflict with inflation, equality, current account and environment. Competition may lower prices but reduce dynamic efficiency if profits fall. Protectionism may protect jobs but reduce efficiency and raise prices. Strong conclusions rank objectives using extract context."],
+	  ["Paper 3 A* Prep", "How do you turn data into A* evaluation?", "Question the magnitude, base year, real vs nominal values, per capita vs total, averages hiding inequality, short-run volatility, exchange-rate effects and whether the extract covers enough time. Then link the data limitation to a weaker or stronger policy judgement."],
+	  ["Paper 3 A* Prep", "What is the A* final judgement formula for a 25-marker?", "Answer the question directly; choose the most important factor or policy; justify why using context; add the main condition that could change your judgement. Example: most effective in the long run if productivity is the binding constraint, but weaker short run if demand is collapsing."],
+	  ["Predicted Priorities", "What are high-priority 2026 Paper 3 areas?", "High-priority revision, not guaranteed: energy/environment, government intervention, labour markets/living standards, business costs/growth, trade/exchange rates/current account, financial stability and development/competitiveness. This is based on recent past-paper patterns and public revision/predicted-practice sources."]
+	]);
 
 const ECON_P3_MACRO_CONDENSED = cardsFromRows("Macro Core and Policy", "condensed", [
   ["AD/AS, Growth and Productivity", "AD/AS, inflation, growth and productivity", "AD/AS is the skeleton of Paper 3. AD shifts change output/unemployment/inflation short run; LRAS/productivity shifts change potential growth. Evaluate with spare capacity, SRAS slope, confidence, multiplier and supply constraints.", { bare: true, diagram: "adas-shift" }],
@@ -2108,7 +2123,8 @@ const ECON_P3_GLOBAL_CONDENSED = cardsFromRows("Global and Financial", "condense
 ]);
 
 const ECON_P3_DEVELOPMENT_CONDENSED = cardsFromRows("Development and Synoptic Evaluation", "condensed", [
-  ["Development, HDI and Demographics", "Development, HDI, demographics and competitiveness", "Development is broader than growth. Use HDI, demographics, Lewis model, FDI, aid, trade, debt and institutions. Link competitiveness to productivity, quality, exchange rates and infrastructure.", { bare: true }]
+  ["Development, HDI and Demographics", "Development, HDI, demographics and competitiveness", "Development is broader than growth. Use HDI, demographics, Lewis model, FDI, aid, trade, debt and institutions. Link competitiveness to productivity, quality, exchange rates and infrastructure.", { bare: true }],
+  ["Paper 3 A* Prep", "A* evaluation toolkit", "Use elasticities, output gaps, multiplier/leakages, Lorenz/Gini, Laffer curve, J-curve/Marshall-Lerner, policy conflicts, data quality and binding-constraint judgement. Best conclusions rank what matters most in the extract, not in general.", { diagram: "output-gap" }]
 ]);
 
 const ECON_P3_ALL_FULL = [
@@ -2330,7 +2346,7 @@ const TOPIC_SUBHEADINGS = {
   ],
   'Development and Synoptic Evaluation': [
     { label: 'Development', topics: ['Development, HDI and Demographics', 'Development Strategies'] },
-    { label: 'Paper 3 Technique', topics: ['Synoptic Evaluation', 'Predicted Priorities'] },
+    { label: 'Paper 3 Technique', topics: ['Synoptic Evaluation', 'Paper 3 A* Prep', 'Predicted Priorities'] },
   ],
   'Families and Households': [
     { label: 'Perspectives & Policy', topics: ['Family Types and Perspectives', 'Family, Economy and Social Policy'] },
@@ -2455,7 +2471,7 @@ const PREDICTED_TOPICS = {
   'Markets and Intervention': ['Market Failure and Government Failure', 'Government Intervention', 'Environment and Energy Markets', 'Elasticities'],
   'Firms and Competition': ['Competition and Market Structures', 'Business Growth and Economies of Scale', 'Costs, Revenue and Profit', 'Exam Skills: Firms'],
   'Global and Financial': ['Globalisation and Trade', 'Protectionism', 'Exchange Rates and Current Account', 'Financial Markets and Banking', 'Competitiveness'],
-  'Development and Synoptic Evaluation': ['Development, HDI and Demographics', 'Development Strategies', 'Synoptic Evaluation', 'Predicted Priorities'],
+  'Development and Synoptic Evaluation': ['Development, HDI and Demographics', 'Development Strategies', 'Synoptic Evaluation', 'Paper 3 A* Prep', 'Predicted Priorities'],
   'Families and Households': ['Family, Economy and Social Policy', 'Changing Family Patterns', 'Family Diversity and Personal Life', 'Domestic Labour and Power', 'Childhood', 'Demographic Change'],
   'The Media': ['New Media', 'Ownership, Control and Regulation', 'Globalisation and Popular Culture', 'News Selection and Presentation', 'Representations: Class, Age and Gender', 'Representations: Ethnicity, Sexuality and Disability', 'Audiences'],
 };
@@ -2722,14 +2738,19 @@ function diagramSvg(type) {
       ${guide(173,154,'Y1')}${guide(210,130,'Y2')}
       <text class="diagram-muted" x="36" y="158">P1</text><text class="diagram-muted" x="36" y="134">P2</text>`, 'A rightward AD shift raises real GDP and the price level, unless spare capacity keeps inflationary pressure low.');
   }
-  if (type === 'demand-supply-tax') {
-    return svg('Indirect tax: supply shifts left/up', { x:'Quantity', y:'Price' }, `
-      <path class="diagram-line" d="M82 250 C140 198 202 138 274 70"/><text class="diagram-label" x="276" y="72">S1</text>
-      <path class="diagram-line bad" d="M82 212 C140 160 202 100 274 40"/><text class="diagram-label" x="276" y="43">S2</text>
-      <path class="diagram-line alt" d="M82 70 C138 122 204 190 278 252"/><text class="diagram-label" x="280" y="254">D</text>
-      ${guide(190,150,'Q1')}${guide(166,170,'Q2')}
-      <text class="diagram-muted" x="34" y="154">P1</text><text class="diagram-muted" x="34" y="174">P2</text>`, 'Tax raises consumer price, lowers producer price, reduces quantity and creates tax revenue; incidence depends on elasticity.');
-  }
+	  if (type === 'demand-supply-tax') {
+	    return svg('Indirect tax: supply shifts left/up', { x:'Quantity', y:'Price' }, `
+	      <path class="diagram-line" d="M82 250 C140 198 202 138 274 70"/><text class="diagram-label" x="276" y="72">S1</text>
+	      <path class="diagram-line bad" d="M82 212 C140 160 202 100 274 40"/><text class="diagram-label" x="276" y="43">S2</text>
+	      <path class="diagram-line alt" d="M82 70 C138 122 204 190 278 252"/><text class="diagram-label" x="280" y="254">D</text>
+	      <line class="diagram-line diagram-dash" x1="54" y1="150" x2="190" y2="150"/><line class="diagram-line diagram-dash" x1="190" y1="150" x2="190" y2="276"/>
+	      <line class="diagram-line diagram-dash bad" x1="54" y1="126" x2="166" y2="126"/><line class="diagram-line diagram-dash bad" x1="54" y1="188" x2="166" y2="188"/>
+	      <line class="diagram-line diagram-dash bad" x1="166" y1="126" x2="166" y2="276"/>
+	      <line class="diagram-line bad" x1="166" y1="126" x2="166" y2="188"/>
+	      <text class="diagram-muted" x="34" y="154">P1</text><text class="diagram-muted" x="34" y="130">Pc</text><text class="diagram-muted" x="34" y="192">Pp</text>
+	      <text class="diagram-muted" x="158" y="294">Q2</text><text class="diagram-muted" x="182" y="294">Q1</text>
+	      <text class="diagram-muted" x="172" y="162">Tax</text>`, 'A specific tax creates a vertical wedge: consumers pay Pc, producers receive Pp, quantity falls from Q1 to Q2, and incidence depends on elasticity.');
+	  }
   if (type === 'negative-externality') {
     return svg('Negative production externality', { x:'Quantity', y:'Costs/benefits' }, `
       <path class="diagram-line" d="M82 250 C140 196 202 136 274 70"/><text class="diagram-label" x="276" y="72">MPC</text>
@@ -2747,14 +2768,18 @@ function diagramSvg(type) {
       ${guide(152,130,'Ld')}${guide(222,130,'Ls')}
       <text class="diagram-muted" x="164" y="114">Excess supply</text>`, 'A minimum wage above equilibrium can create unemployment; in monopsony it may raise both wages and employment.');
   }
-  if (type === 'tariff') {
-    return svg('Tariff on imports', { x:'Quantity', y:'Price' }, `
-      <path class="diagram-line" d="M74 250 C132 198 196 134 272 66"/><text class="diagram-label" x="274" y="68">S domestic</text>
-      <path class="diagram-line alt" d="M76 72 C136 124 202 190 280 254"/><text class="diagram-label" x="245" y="254">D domestic</text>
-      <line class="diagram-line warn" x1="62" y1="198" x2="302" y2="198"/><text class="diagram-label" x="304" y="202">Pw</text>
-      <line class="diagram-line bad" x1="62" y1="166" x2="302" y2="166"/><text class="diagram-label" x="304" y="170">Pw+t</text>
-      ${guide(130,166,'Qs2')}${guide(230,166,'Qd2')}`, 'Tariff raises domestic price, increases domestic supply, lowers domestic demand and reduces imports, but creates welfare losses.');
-  }
+	  if (type === 'tariff') {
+	    return svg('Tariff on imports', { x:'Quantity', y:'Price' }, `
+	      <path class="diagram-line" d="M74 250 C132 198 196 134 272 66"/><text class="diagram-label" x="274" y="68">S domestic</text>
+	      <path class="diagram-line alt" d="M76 72 C136 124 202 190 280 254"/><text class="diagram-label" x="245" y="254">D domestic</text>
+	      <line class="diagram-line warn" x1="62" y1="198" x2="302" y2="198"/><text class="diagram-label" x="304" y="202">Pw</text>
+	      <line class="diagram-line bad" x1="62" y1="166" x2="302" y2="166"/><text class="diagram-label" x="304" y="170">Pw+t</text>
+	      <line class="diagram-line diagram-dash" x1="112" y1="198" x2="112" y2="276"/><line class="diagram-line diagram-dash" x1="248" y1="198" x2="248" y2="276"/>
+	      <line class="diagram-line diagram-dash bad" x1="130" y1="166" x2="130" y2="276"/><line class="diagram-line diagram-dash bad" x1="230" y1="166" x2="230" y2="276"/>
+	      <text class="diagram-muted" x="101" y="294">Qs1</text><text class="diagram-muted" x="236" y="294">Qd1</text>
+	      <text class="diagram-muted" x="119" y="310">Qs2</text><text class="diagram-muted" x="219" y="310">Qd2</text>
+	      <text class="diagram-muted" x="158" y="184">Imports fall</text>`, 'Tariff raises domestic price, increases domestic supply, lowers domestic demand and reduces imports from Qs1-Qd1 to Qs2-Qd2.');
+	  }
   if (type === 'exchange-rate') {
     return svg('Exchange rate: demand for pounds rises', { x:'Quantity of pounds', y:'Price of pound' }, `
       <path class="diagram-line" d="M86 246 C144 194 206 130 278 60"/><text class="diagram-label" x="280" y="62">S£</text>
@@ -2763,36 +2788,73 @@ function diagramSvg(type) {
       ${guide(178,154,'Q1')}${guide(210,130,'Q2')}
       <text class="diagram-muted" x="34" y="158">ER1</text><text class="diagram-muted" x="34" y="134">ER2</text>`, 'Higher demand for pounds appreciates sterling; exports become dearer and imports cheaper.');
   }
-  if (type === 'cost-revenue-profit') {
-    return svg('Firm profit maximisation', { x:'Quantity', y:'Costs/revenue' }, `
-      <path class="diagram-line alt" d="M82 78 C142 126 204 190 278 254"/><text class="diagram-label" x="280" y="256">AR</text>
-      <path class="diagram-line warn" d="M82 118 C142 166 204 220 278 276"/><text class="diagram-label" x="280" y="278">MR</text>
-      <path class="diagram-line" d="M84 230 C128 160 188 118 274 76"/><text class="diagram-label" x="276" y="78">MC</text>
-      <path class="diagram-line bad" d="M84 210 C140 150 210 150 278 212"/><text class="diagram-label" x="280" y="214">AC</text>
-      <rect x="141" y="128" width="64" height="44" fill="rgba(91,214,138,.16)" stroke="#5bd68a"/>
-      ${guide(205,172,'Q*')}
-      <text class="diagram-muted" x="120" y="124">Supernormal profit</text>`, 'Profit maximising output is where MC=MR; price is read from AR; profit is the AR-AC rectangle.');
-  }
-  if (type === 'monopoly') {
-    return svg('Monopoly: supernormal profit', { x:'Quantity', y:'Costs/revenue' }, `
-      <path class="diagram-line alt" d="M82 76 C142 126 204 190 278 254"/><text class="diagram-label" x="280" y="256">AR/D</text>
-      <path class="diagram-line warn" d="M82 118 C142 166 204 220 278 276"/><text class="diagram-label" x="280" y="278">MR</text>
-      <path class="diagram-line" d="M84 230 C128 160 188 118 274 76"/><text class="diagram-label" x="276" y="78">MC</text>
-      <path class="diagram-line bad" d="M84 212 C140 152 210 152 278 214"/><text class="diagram-label" x="280" y="216">AC</text>
-      <rect x="140" y="128" width="64" height="46" fill="rgba(91,214,138,.16)" stroke="#5bd68a"/>
-      ${guide(204,174,'Qm')}
-      <text class="diagram-muted" x="112" y="122">P &gt; MC</text>`, 'Monopoly maximises profit where MC=MR, charges price from AR and can make supernormal profit.');
-  }
-  if (type === 'perfect-competition') {
-    return svg('Perfect competition: long-run normal profit', { x:'Quantity', y:'Costs/revenue' }, `
-      <line class="diagram-line alt" x1="84" y1="146" x2="284" y2="146"/><text class="diagram-label" x="286" y="150">AR=MR</text>
-      <path class="diagram-line" d="M84 232 C130 154 204 90 278 70"/><text class="diagram-label" x="280" y="72">MC</text>
-      <path class="diagram-line bad" d="M84 214 C136 142 218 142 278 218"/><text class="diagram-label" x="280" y="220">AC</text>
-      ${guide(178,146,'Q')}
-      <text class="diagram-muted" x="98" y="126">AR=AC: normal profit</text>`, 'Long-run perfect competition produces where MC=MR and AR=AC, so firms make normal profit.');
-  }
-  return '';
-}
+	  if (type === 'cost-revenue-profit') {
+	    return svg('Firm profit maximisation', { x:'Quantity', y:'Costs/revenue' }, `
+	      <path class="diagram-line alt" d="M82 78 C142 126 204 190 278 254"/><text class="diagram-label" x="280" y="256">AR</text>
+	      <path class="diagram-line warn" d="M82 118 C142 166 204 220 278 276"/><text class="diagram-label" x="280" y="278">MR</text>
+	      <path class="diagram-line" d="M84 246 C126 246 156 222 181 191 C210 154 238 112 274 74"/><text class="diagram-label" x="276" y="77">MC</text>
+	      <path class="diagram-line bad" d="M84 152 C138 230 218 230 278 152"/><text class="diagram-label" x="280" y="154">AC</text>
+	      <rect x="116" y="150" width="65" height="72" fill="rgba(91,214,138,.16)" stroke="#5bd68a"/>
+	      <line class="diagram-line diagram-dash" x1="181" y1="191" x2="181" y2="276"/><line class="diagram-line diagram-dash" x1="54" y1="150" x2="181" y2="150"/><line class="diagram-line diagram-dash" x1="54" y1="222" x2="181" y2="222"/>
+	      <text class="diagram-muted" x="172" y="294">Q*</text><text class="diagram-muted" x="36" y="154">P</text><text class="diagram-muted" x="30" y="226">AC</text>
+	      <text class="diagram-muted" x="112" y="140">Supernormal profit</text>`, 'Profit maximising output is where MC=MR; price is read from AR; profit is the vertical gap between AR and AC at Q*.');
+	  }
+	  if (type === 'monopoly') {
+	    return svg('Monopoly: supernormal profit', { x:'Quantity', y:'Costs/revenue' }, `
+	      <path class="diagram-line alt" d="M82 76 C142 126 204 190 278 254"/><text class="diagram-label" x="280" y="256">AR/D</text>
+	      <path class="diagram-line warn" d="M82 118 C142 166 204 220 278 276"/><text class="diagram-label" x="280" y="278">MR</text>
+	      <path class="diagram-line" d="M84 246 C126 246 156 222 181 191 C210 154 238 112 274 74"/><text class="diagram-label" x="276" y="77">MC</text>
+	      <path class="diagram-line bad" d="M84 152 C138 230 218 230 278 152"/><text class="diagram-label" x="280" y="154">AC</text>
+	      <rect x="116" y="148" width="65" height="74" fill="rgba(91,214,138,.16)" stroke="#5bd68a"/>
+	      <line class="diagram-line diagram-dash" x1="181" y1="191" x2="181" y2="276"/><line class="diagram-line diagram-dash" x1="54" y1="148" x2="181" y2="148"/><line class="diagram-line diagram-dash" x1="54" y1="222" x2="181" y2="222"/>
+	      <text class="diagram-muted" x="169" y="294">Qm</text><text class="diagram-muted" x="35" y="152">Pm</text><text class="diagram-muted" x="30" y="226">AC</text>
+	      <text class="diagram-muted" x="111" y="136">Supernormal profit</text>`, 'Monopoly output is where MC=MR; price is read up to AR/D, with P above MC and supernormal profit if AR exceeds AC.');
+	  }
+	  if (type === 'perfect-competition') {
+	    return svg('Perfect competition: long-run normal profit', { x:'Quantity', y:'Costs/revenue' }, `
+	      <line class="diagram-line alt" x1="82" y1="224" x2="286" y2="224"/><text class="diagram-label" x="288" y="228">AR=MR</text>
+	      <path class="diagram-line" d="M86 256 C132 252 162 236 190 224 C220 188 246 128 276 72"/><text class="diagram-label" x="278" y="75">MC</text>
+	      <path class="diagram-line bad" d="M84 150 C138 224 218 224 278 150"/><text class="diagram-label" x="280" y="152">AC</text>
+	      <line class="diagram-line diagram-dash" x1="190" y1="224" x2="190" y2="276"/><line class="diagram-line diagram-dash" x1="54" y1="224" x2="190" y2="224"/>
+	      <text class="diagram-muted" x="183" y="294">Q</text><text class="diagram-muted" x="98" y="207">AR=AC: normal profit</text>`, 'Long-run perfect competition produces at MC=MR and at minimum AC; AR=AC, so only normal profit is made.');
+	  }
+	  if (type === 'lorenz-curve') {
+	    return svg('Lorenz curve and Gini coefficient', { x:'Cumulative population', y:'Cumulative income' }, `
+	      <line class="diagram-line" x1="68" y1="262" x2="294" y2="52"/><text class="diagram-label" x="210" y="86">Equality line</text>
+	      <path class="diagram-line bad" d="M68 262 C118 254 174 232 222 188 C254 158 276 112 294 52"/><text class="diagram-label" x="226" y="188">Lorenz curve</text>
+	      <path d="M68 262 C118 254 174 232 222 188 C254 158 276 112 294 52 L68 262" fill="rgba(255,107,107,.12)" stroke="none"/>
+	      <text class="diagram-muted" x="112" y="220">Gini area</text>`, 'A more bowed Lorenz curve indicates greater inequality; Gini summarises the inequality gap but hides absolute living standards.');
+	  }
+	  if (type === 'laffer-curve') {
+	    return svg('Laffer curve', { x:'Tax rate', y:'Tax revenue' }, `
+	      <path class="diagram-line warn" d="M70 258 C128 86 238 86 302 258"/><text class="diagram-label" x="194" y="88">Laffer curve</text>
+	      <line class="diagram-line diagram-dash" x1="186" y1="94" x2="186" y2="276"/><text class="diagram-muted" x="170" y="294">t*</text>
+	      <text class="diagram-muted" x="64" y="294">0%</text><text class="diagram-muted" x="288" y="294">100%</text>`, 'Tax revenue may rise then fall as tax rates increase; useful for evaluating incentives, avoidance and where the economy starts on the curve.');
+	  }
+	  if (type === 'j-curve') {
+	    return svg('J-curve after depreciation', { x:'Time', y:'Current account balance' }, `
+	      <line class="diagram-axis" x1="54" y1="158" x2="330" y2="158"/>
+	      <path class="diagram-line warn" d="M74 134 C112 176 142 214 184 198 C226 182 258 126 304 82"/><text class="diagram-label" x="248" y="94">J-curve</text>
+	      <line class="diagram-line diagram-dash" x1="104" y1="42" x2="104" y2="276"/><text class="diagram-muted" x="76" y="38">Depreciation</text>
+	      <text class="diagram-muted" x="62" y="150">0</text>`, 'After depreciation the current account can worsen first, then improve if export/import volumes respond and Marshall-Lerner holds.');
+	  }
+	  if (type === 'output-gap') {
+	    return svg('Negative output gap', { x:'Real GDP', y:'Price level' }, `
+	      <path class="diagram-line" d="M78 246 C130 200 190 145 250 80"/><text class="diagram-label" x="250" y="76">SRAS</text>
+	      <path class="diagram-line alt" d="M90 82 C138 134 190 194 252 252"/><text class="diagram-label" x="254" y="254">AD</text>
+	      <line class="diagram-line bad" x1="244" y1="54" x2="244" y2="276"/><text class="diagram-label" x="252" y="104">LRAS</text>
+	      ${guide(172,154,'Y1')}
+	      <text class="diagram-muted" x="236" y="294">Yfe</text><text class="diagram-muted" x="182" y="132">Negative output gap</text>`, 'A negative output gap means spare capacity; demand stimulus is more likely to raise output with less inflationary pressure.');
+	  }
+	  if (type === 'multiplier') {
+	    return svg('Multiplier process', { x:'Rounds of spending', y:'Added income' }, `
+	      <rect x="82" y="92" width="34" height="184" fill="rgba(122,168,255,.65)"/><text class="diagram-muted" x="82" y="84">Injection</text>
+	      <rect x="132" y="140" width="34" height="136" fill="rgba(91,214,138,.65)"/><rect x="182" y="176" width="34" height="100" fill="rgba(240,192,64,.65)"/>
+	      <rect x="232" y="206" width="34" height="70" fill="rgba(255,107,107,.55)"/><path class="diagram-line" d="M82 92 C132 140 182 176 266 206"/>
+	      <text class="diagram-muted" x="118" y="122">leakages reduce each round</text>`, 'The multiplier is larger when leakages to saving, tax and imports are lower and spare capacity allows output to expand.');
+	  }
+	  return '';
+	}
 
 function renderCardDiagram(cardData) {
   const html = cardData && cardData.diagram ? diagramSvg(cardData.diagram) : '';

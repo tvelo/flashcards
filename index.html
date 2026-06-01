@@ -1096,7 +1096,7 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
       <option value="mixed">Mixed topics</option>
     </select>
     <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
-    <button id="bareToggle" class="secondary" aria-pressed="false" title="Economics only: filter to the Bare 10 Paper 3 clusters">Bare 10: Off</button>
+    <button id="bareToggle" class="secondary" aria-pressed="false" title="Filter to the leanest high-transfer cards for this subject">Bare 10: Off</button>
     <button id="diagramOnlyToggle" class="secondary" aria-pressed="false" title="Economics only: show diagram practice cards">Diagram Only: Off</button>
     <button id="predictionsToggle" class="secondary" aria-pressed="false" title="Filter to high-priority predicted topics only">Predictions: Off</button>
     <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
@@ -2289,6 +2289,72 @@ const SOCIOLOGY_MEDIA_CONDENSED = cardsFromRows("The Media", "condensed", [
   ["Exam Skills: Media", "Media: 20-marker formula", "Intro debate. Paragraphs: theory/study, item hook/example, explicit evaluation, link. For representation essays compare Marxism, feminism, pluralism, postmodernism and active audiences. For predictions prioritise audiences, news selection, globalisation/popular culture, representations, and ownership/control under new media."],
 ]);
 
+const SOCIOLOGY_BARE_QUESTIONS = new Set([
+  "What is Murdock's functionalist view of the family?",
+  "What is Parsons' functional fit theory?",
+  "How do Marxists explain the family?",
+  "What is Zaretsky's Marxist view of the family?",
+  "How do feminists criticise the family?",
+  "What is the New Right view of the family?",
+  "What is the postmodern view of the family?",
+  "How do social policies affect families?",
+  "What is Donzelot's view of social policy and families?",
+  "What is an essay-ready AO3 point on social policy?",
+  "What are the key changing family patterns in the AQA spec?",
+  "Why did divorce increase after the 1960s?",
+  "What is family diversity?",
+  "What did Rapoport and Rapoport argue about family diversity?",
+  "What is the personal life perspective?",
+  "How does individualisation explain family diversity?",
+  "What is the symmetrical family?",
+  "How did Oakley criticise the symmetrical family?",
+  "What are the dual burden and triple shift?",
+  "How does decision-making show power relationships in families?",
+  "How does domestic violence link to family power?",
+  "What is meant by childhood as a social construction?",
+  "What is child-centred society?",
+  "What is Postman's disappearance of childhood thesis?",
+  "What demographic trends since 1900 must AQA students know?",
+  "What is the ageing population?",
+  "How does migration affect families and households?",
+  "How should you structure a 20-mark Families essay?",
+  "What is media convergence?",
+  "What is the global village?",
+  "What are prosumers?",
+  "What is an optimistic view of new media?",
+  "What is a pessimistic view of new media?",
+  "What is the pluralist view of media ownership?",
+  "What is the instrumental Marxist view of media ownership?",
+  "What is the hegemonic Marxist view of the media?",
+  "How does new media affect ownership and control?",
+  "What is a strong AO3 point on media regulation?",
+  "How does media globalisation affect culture?",
+  "What is cultural imperialism?",
+  "What are news values?",
+  "What is agenda setting?",
+  "What is gatekeeping?",
+  "What is a moral panic?",
+  "How do Marxists explain news selection?",
+  "What is media representation?",
+  "How are women represented in the media?",
+  "How are ethnic minorities represented in the media?",
+  "What is symbolic annihilation?",
+  "What is the hypodermic syringe model?",
+  "What is uses and gratifications theory?",
+  "What is Hall's encoding/decoding model?",
+  "What was Morley's Nationwide study?",
+  "How do algorithms affect audiences?",
+  "How should you structure a 20-mark Media essay?",
+]);
+
+function markSociologyBare(cards) {
+  return cards.map(cardData => (
+    cardData.variant === "condensed" || SOCIOLOGY_BARE_QUESTIONS.has(cardData.q)
+      ? { ...cardData, bare: true }
+      : cardData
+  ));
+}
+
 
 const ALL_CARDS = [
   // Psychology — Paper 3
@@ -2306,10 +2372,10 @@ const ALL_CARDS = [
   ...ECON_P3_ALL_FULL,
   ...ECON_P3_ALL_CONDENSED,
   // Sociology
-  ...SOCIOLOGY_FAMILIES_FULL,
-  ...SOCIOLOGY_FAMILIES_CONDENSED,
-  ...SOCIOLOGY_MEDIA_FULL,
-  ...SOCIOLOGY_MEDIA_CONDENSED,
+  ...markSociologyBare(SOCIOLOGY_FAMILIES_FULL),
+  ...markSociologyBare(SOCIOLOGY_FAMILIES_CONDENSED),
+  ...markSociologyBare(SOCIOLOGY_MEDIA_FULL),
+  ...markSociologyBare(SOCIOLOGY_MEDIA_CONDENSED),
 ];
 
 const TOPIC_SUBHEADINGS = {
@@ -2464,7 +2530,7 @@ let touchStartX = 0, touchStartY = 0;
 let typeMode = storage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
 let predictionsMode = storage.getItem('aqa_predictions_mode') === '1';
-let bareMode = storage.getItem('aqa_economics_bare_mode') === '1';
+let bareMode = loadBareModeForSubject(selectedSubject);
 let diagramOnlyMode = storage.getItem('aqa_economics_diagram_only_mode') === '1';
 const PSYCHOLOGY_DECK_VERSION = 'paper3_2026_v2';
 const ECONOMICS_DECK_VERSION = 'paper3_2026_v1';
@@ -2499,6 +2565,19 @@ function loadCondensedMode() {
 }
 function saveCondensedMode() {
   try { storage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
+}
+function subjectSupportsBare(subject = selectedSubject) {
+  return subject === 'Economics' || subject === 'Sociology';
+}
+function bareModeStorageKey(subject = selectedSubject) {
+  return subject === 'Sociology' ? 'aqa_sociology_bare_mode' : 'aqa_economics_bare_mode';
+}
+function loadBareModeForSubject(subject = selectedSubject) {
+  if (!subjectSupportsBare(subject)) return false;
+  try { return storage.getItem(bareModeStorageKey(subject)) === '1'; } catch { return false; }
+}
+function bareModeLabel(subject = selectedSubject) {
+  return subject === 'Sociology' ? 'Bare Sociologists' : 'Bare 10';
 }
 function loadSelectedSubject() {
   try {
@@ -2883,7 +2962,7 @@ function topicSummaryText() {
   const totalTopics = groups.reduce((s, g) => s + availableTopicsForGroup(g).length, 0);
   const selTopics = groups.reduce((s, g) => s + selectedTopicsForGroup(g).length, 0);
   const tags = [];
-  if (selectedSubject === 'Economics' && bareMode) tags.push('Bare 10');
+  if (subjectSupportsBare(selectedSubject) && bareMode) tags.push(bareModeLabel());
   if (selectedSubject === 'Economics' && diagramOnlyMode) tags.push('Diagrams');
   if (predictionsMode) tags.push('🔮 Predictions');
   tags.push(condensedMode ? 'Condensed' : 'Full deck');
@@ -2905,7 +2984,7 @@ function cardCountForTopic(groupName, topic) {
   const variant = condensedMode ? 'condensed' : 'full';
   return ALL_CARDS.filter(c => {
 	    if (cardGroup(c) !== groupName || c.t !== topic || c.variant !== variant) return false;
-	    if (selectedSubject === 'Economics' && bareMode && !c.bare) return false;
+	    if (subjectSupportsBare(selectedSubject) && bareMode && !c.bare) return false;
 	    if (selectedSubject === 'Economics' && diagramOnlyMode && !c.diagram) return false;
 	    if (predictionsMode) {
       const predicted = PREDICTED_TOPICS[groupName];
@@ -3007,10 +3086,11 @@ function updateProfileUI() {
   document.getElementById('condensedToggle').setAttribute('aria-pressed', String(condensedMode));
   document.getElementById('condensedToggle').textContent = `Condensed: ${condensedMode ? 'On' : 'Off'}`;
   const bareToggle = document.getElementById('bareToggle');
-  bareToggle.style.display = selectedSubject === 'Economics' ? '' : 'none';
-  bareToggle.classList.toggle('active', selectedSubject === 'Economics' && bareMode);
-  bareToggle.setAttribute('aria-pressed', String(selectedSubject === 'Economics' && bareMode));
-  bareToggle.textContent = `Bare 10: ${bareMode ? 'On' : 'Off'}`;
+  const showBareToggle = subjectSupportsBare(selectedSubject);
+  bareToggle.style.display = showBareToggle ? '' : 'none';
+  bareToggle.classList.toggle('active', showBareToggle && bareMode);
+  bareToggle.setAttribute('aria-pressed', String(showBareToggle && bareMode));
+  bareToggle.textContent = `${bareModeLabel()}: ${bareMode ? 'On' : 'Off'}`;
   const diagramOnlyToggle = document.getElementById('diagramOnlyToggle');
   diagramOnlyToggle.style.display = selectedSubject === 'Economics' ? '' : 'none';
   diagramOnlyToggle.classList.toggle('active', selectedSubject === 'Economics' && diagramOnlyMode);
@@ -3051,7 +3131,7 @@ function setCondensedMode(on) {
 
 function setBareMode(on) {
   bareMode = !!on;
-  storage.setItem('aqa_economics_bare_mode', bareMode ? '1' : '0');
+  storage.setItem(bareModeStorageKey(), bareMode ? '1' : '0');
   flipped = false;
   currentId = null;
   updateProfileUI();
@@ -3088,6 +3168,7 @@ async function switchProfile(name) {
   storage.setItem('aqa_active_profile', name);
   selectedSubject = loadSelectedSubject();
   condensedMode = loadCondensedMode();
+  bareMode = loadBareModeForSubject(selectedSubject);
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
   typedAnswers = loadTypedAnswers();
@@ -3118,6 +3199,7 @@ async function switchSubject(name) {
   selectedSubject = name;
   document.documentElement.dataset.subject = name;
   saveSelectedSubject();
+  bareMode = loadBareModeForSubject(selectedSubject);
   selectedGroups = loadSelectedGroups();
   selectedTopics = loadSelectedTopics();
   normalizeSelections();
@@ -3289,7 +3371,7 @@ function activeCatalog() {
     return topics.includes(cardData.t);
   });
 
-  const bareFiltered = selectedSubject === 'Economics' && bareMode
+  const bareFiltered = subjectSupportsBare(selectedSubject) && bareMode
     ? filtered.filter(cardData => cardData.bare)
     : filtered;
 

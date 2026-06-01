@@ -427,28 +427,22 @@ textarea:focus,select:focus,input:focus,button:focus-visible{
   gap:12px;
   overflow:auto;
   scrollbar-gutter:stable;
-  opacity:0;
   pointer-events:none;
-  transform:translateX(10px);
-  transition:opacity .2s ease, transform .2s ease;
 }
 .front{
-  opacity:1;
   pointer-events:auto;
-  transform:translateX(0);
 }
-.back{transform:translateX(10px)}
+.back{display:none}
 .card.flipped .front{
-  opacity:0;
+  display:none;
   pointer-events:none;
-  transform:translateX(-10px);
 }
 .card.flipped .back{
-  opacity:1;
+  display:flex;
   pointer-events:auto;
-  transform:translateX(0);
 }
-.back .face-body{justify-content:flex-start}
+.back .face-body{justify-content:center}
+.card.has-diagram .back .face-body{justify-content:flex-start}
 .face-body{
   flex:1;
   display:flex;
@@ -2003,11 +1997,14 @@ const ECON_P3_MACRO_FULL = cardsFromRows("Macro Core and Policy", "full", [
   ["Fiscal and Supply-Side Policy", "How do fiscal, monetary and supply-side policies differ?", "Fiscal policy changes taxation and government spending; monetary policy changes the price/quantity of money; supply-side policy increases productive capacity and market efficiency. Paper 3 judgement: best policy depends on the cause, time horizon, fiscal space, inflation, inequality and external competitiveness.", { bare: true }],
   ["Fiscal and Supply-Side Policy", "How can expansionary fiscal policy affect an economy?", "Higher government spending or lower taxation increases injections, shifts AD right and can raise real GDP and employment. Evaluation: crowding out, national debt, multiplier size, imports leakage, inflationary pressure and whether spare capacity exists."],
   ["Fiscal and Supply-Side Policy", "How can fiscal policy reduce inequality?", "Progressive taxation, welfare benefits, public services, education and healthcare can redistribute income and improve equality of opportunity. Evaluation: possible disincentive effects, tax avoidance, administrative costs and trade-offs with growth or public finances."],
+  ["Fiscal and Supply-Side Policy", "How should you evaluate fiscal deficits and national debt?", "A fiscal deficit is annual borrowing; national debt is accumulated borrowing. Borrowing can stabilise demand and fund productive investment, but debt interest, crowding out, tax rises and weaker confidence may follow. Judgement depends on debt as a share of GDP, interest rates, growth, spare capacity and what borrowing finances."],
+  ["Fiscal and Supply-Side Policy", "How can corporation tax changes affect firms and the macroeconomy?", "Lower corporation tax may increase retained profit, investment, FDI and dynamic efficiency, shifting LRAS right. Higher corporation tax may raise revenue for public services. Evaluation: effect depends on confidence, expected demand, tax avoidance, global tax rates and whether firms invest extra profit."],
   ["Fiscal and Supply-Side Policy", "What are market-based supply-side policies?", "Policies that increase incentives and competition: lower corporation/income tax, deregulation, privatisation, trade liberalisation, weakening trade unions and reducing welfare disincentives. Evaluation: may increase inequality or reduce worker protection."],
   ["Fiscal and Supply-Side Policy", "What are interventionist supply-side policies?", "Policies where government directly improves productive capacity: education, training, infrastructure, industrial policy, R&D subsidies and healthcare. Evaluation: expensive, slow, risk of government failure, but often stronger for long-term productivity.", { bare: true }],
   ["Labour Markets and Inequality", "How do labour markets, inequality and living standards connect?", "Know labour demand/MRP, labour supply, unemployment types, minimum wages, monopsony, wage inequality, poverty and real incomes. Paper 3 often blends labour markets with macro outcomes: productivity, inflation, public finances, living standards and competitiveness.", { bare: true }],
   ["Labour Markets and Inequality", "Sketch a labour market diagram for a minimum wage above equilibrium.", "Checklist: wage on vertical axis, quantity of labour on horizontal; labour demand slopes down and supply slopes up; minimum wage above equilibrium creates excess supply/unemployment. Evaluation: if set in a monopsony, employment may rise.", { bare: true, diagram: "labour-market" }],
   ["Labour Markets and Inequality", "How does unemployment affect living standards and public finances?", "Unemployment reduces household income, consumption and tax revenue while increasing welfare spending. It can worsen mental health and hysteresis as skills erode. Evaluation: impact depends on duration, benefit generosity, household savings and regional labour mobility."],
+  ["Labour Markets and Inequality", "How can labour shortages affect firms and the economy?", "Labour shortages can push up wages, increase firms' costs, reduce output and limit growth. They may also encourage training, automation and productivity improvements. Evaluation depends on skill level, migration, occupational mobility, monopsony power and whether shortages are temporary or structural."],
   ["Labour Markets and Inequality", "How can inequality affect economic performance?", "High inequality may weaken social mobility, reduce human capital, increase poverty and reduce social cohesion. However, some inequality can create incentives for enterprise and work. Judgement: effects depend on equality of opportunity and whether incomes reflect productivity."],
   ["Living Standards and Real Incomes", "Why is real GDP per capita an incomplete measure of living standards?", "It ignores income distribution, unpaid work, leisure, environmental quality, health, education, informal activity and regional differences. Use HDI, poverty measures, real wages, unemployment and inequality to strengthen Paper 3 evaluation."],
   ["Living Standards and Real Incomes", "How does inflation affect households differently?", "Inflation lowers real incomes if wages or benefits lag behind prices. It hurts savers and fixed-income groups, but debtors may gain if nominal debts are eroded. Impact depends on inflation cause, basket of goods, wage bargaining power and interest-rate exposure."],
@@ -2031,6 +2028,9 @@ const ECON_P3_MARKETS_FULL = cardsFromRows("Markets and Intervention", "full", [
   ["Elasticities", "How does PED affect tax incidence?", "If demand is price inelastic, consumers bear more tax and quantity falls less, so tax revenue is higher but behaviour change is weaker. If demand is elastic, producers bear more tax and quantity falls more."],
   ["Elasticities", "How does PES affect supply shocks?", "If PES is inelastic, supply cannot respond quickly, so price changes are larger. This matters in energy, housing, food and labour markets. Evaluation: PES often increases over time as firms invest or capacity adjusts."],
   ["Elasticities", "How can YED help evaluate living standards and growth?", "Normal goods have positive YED; inferior goods have negative YED. Luxury goods are income elastic. During growth, demand for luxury imports may rise, affecting firms and the current account; during recessions, inferior goods may benefit."],
+  ["Housing and Asset Markets", "What shifts demand for owner-occupied housing?", "Demand for housing can rise because of lower interest rates, easier mortgage credit, higher income, consumer confidence, population growth, expectations of future price rises and tax/subsidy changes. Evaluation: housing supply is often price inelastic, so demand shifts may raise prices more than quantity."],
+  ["Housing and Asset Markets", "How can rising house prices affect the wider economy?", "Rising house prices can create a wealth effect, raising confidence, consumption and AD. They may improve collateral for borrowing, but worsen affordability, increase inequality and raise household debt. Judgement depends on whether price rises reflect income growth, credit bubbles or supply shortages."],
+  ["Housing and Asset Markets", "Why can housing markets fail?", "Housing markets can fail because of information gaps, speculative bubbles, regional immobility, planning constraints, externalities and unequal access to credit. Intervention can include planning reform, social housing, subsidies, taxes and regulation. Evaluation: policies may be slow or worsen affordability if they boost demand without supply."],
   ["Exam Skills: Markets", "How do you evaluate market intervention questions?", "Use the intervention's aim, elasticity, information needs, enforcement, fiscal cost, distributional impact, time horizon and risk of government failure. Always ask whether the policy fixes the market failure or merely shifts the problem.", { bare: true }]
 ]);
 
@@ -2040,12 +2040,17 @@ const ECON_P3_FIRMS_FULL = cardsFromRows("Firms and Competition", "full", [
   ["Competition and Market Structures", "Sketch a monopoly profit diagram.", "Checklist: output where MC=MR; price read from AR; AR above AC creates supernormal profit; allocative inefficiency because P exceeds MC. Evaluation: monopoly profit may fund innovation or economies of scale may lower AC.", { diagram: "monopoly" }],
   ["Competition and Market Structures", "Sketch a long-run perfect competition diagram.", "Checklist: AR=MR is horizontal; MC crosses AC at the minimum point; firm produces where MC=MR; in long-run equilibrium AR=AC, so only normal profit is made. Common mistake: drawing supernormal profit in the long run.", { diagram: "perfect-competition" }],
   ["Competition and Market Structures", "What is contestability?", "Contestability is the ease with which new firms can enter and leave a market. Even a concentrated market can behave competitively if barriers to entry/exit are low and hit-and-run entry is credible."],
+  ["Competition and Market Structures", "What is monopolistic competition?", "Monopolistic competition has many firms, low barriers to entry and differentiated products. Firms have some price-setting power, use non-price competition and make normal profit in the long run. Evaluation: differentiation can improve choice, but excess capacity and advertising may reduce efficiency."],
+  ["Competition and Market Structures", "How do price and non-price competition differ?", "Price competition means cutting prices to attract demand, often risky when PED is low or costs are rising. Non-price competition uses quality, branding, advertising, convenience, service and innovation. Evaluation: non-price competition can protect margins but may raise fixed costs."],
+  ["Competition and Market Structures", "Why do platform and two-sided markets matter?", "Platforms connect two user groups, such as consumers and sellers, and network effects make the platform more valuable as users increase. This can create economies of scale and market power. Evaluation: consumers may gain convenience and lower search costs, but firms may face fees and dependency."],
   ["Competition and Market Structures", "Evaluate competition policy.", "Competition policy can reduce monopoly power, protect consumers and improve efficiency through merger control, fines and market investigations. Limitations: enforcement is slow, global digital firms are difficult to regulate, and some mergers create efficiencies."],
   ["Business Growth and Economies of Scale", "Why might firms want to grow?", "Growth can create economies of scale, market power, brand recognition, access to finance, risk spreading and international reach. Evaluation: diseconomies of scale, culture clashes, regulatory scrutiny and management problems can limit gains.", { bare: true }],
   ["Business Growth and Economies of Scale", "What can constrain business growth?", "Constraints include finance, skills shortages, regulation, market size, weak demand, supply-chain limits, management capacity, competition, energy costs and macro uncertainty. Paper 3 often rewards linking firm constraints to macro conditions."],
   ["Business Growth and Economies of Scale", "What are economies of scale?", "Economies of scale are falling long-run average costs as output increases. Types include purchasing, technical, managerial, financial, marketing and risk-bearing economies. They can improve competitiveness but may raise barriers to entry.", { bare: true }],
   ["Business Growth and Economies of Scale", "What are diseconomies of scale?", "Diseconomies of scale occur when long-run average costs rise as firms become too large. Causes include communication problems, coordination issues, weaker motivation and bureaucracy."],
   ["Costs, Revenue and Profit", "What cost, revenue and profit ideas are essential for firm diagrams?", "Know fixed/variable/total costs, average/marginal costs, total/average/marginal revenue, normal/supernormal profit, shutdown logic and efficiency. Many Paper 3 12-mark questions reward accurate cost-revenue diagrams.", { bare: true }],
+  ["Costs, Revenue and Profit", "Why do fixed and variable costs matter in Paper 3?", "Fixed costs do not change with output in the short run; variable costs rise with output. If variable costs rise, MC and AVC rise, affecting output and shutdown decisions. If fixed costs rise, average fixed cost rises but MC may be unchanged. This distinction improves firm-cost analysis."],
+  ["Costs, Revenue and Profit", "How do profit margins affect business decisions?", "A profit margin is profit as a share of revenue. Falling margins can lead firms to raise prices, cut costs, reduce investment, exit markets or seek economies of scale. Evaluation depends on PED, competition, cash reserves, productivity and whether cost increases are temporary."],
   ["Costs, Revenue and Profit", "Sketch a cost-revenue diagram for supernormal profit.", "Checklist: output where MC=MR; price from AR at that output; AC below AR; supernormal profit rectangle between price and AC. Axes: costs/revenue and quantity. Common mistake: choosing output where AC is lowest instead of MC=MR.", { bare: true, diagram: "cost-revenue-profit" }],
   ["Costs, Revenue and Profit", "What is the difference between normal and supernormal profit?", "Normal profit is the minimum profit needed to keep enterprise in the market and is included in costs. Supernormal profit is profit above normal profit, where AR exceeds AC at the profit-maximising output."],
   ["Costs, Revenue and Profit", "How can higher energy costs affect firms?", "Higher energy costs increase variable costs, shifting MC/AC upward. Firms may raise prices, cut output, reduce profit or invest in efficiency. Evaluation: pass-through depends on PED, competition, contracts and ability to substitute energy inputs."],
@@ -2059,10 +2064,14 @@ const ECON_P3_GLOBAL_FULL = cardsFromRows("Global and Financial", "full", [
   ["Globalisation and Trade", "What are the benefits and costs of globalisation?", "Benefits: larger markets, lower prices, FDI, technology transfer, competition and economies of scale. Costs: job losses, dependency, tax avoidance, environmental damage, inequality and vulnerability to external shocks."],
   ["Globalisation and Trade", "What is comparative advantage?", "A country has comparative advantage when it can produce a good at a lower opportunity cost. Trade based on comparative advantage can increase total output and welfare, assuming low transport costs, mobility and no major externalities."],
   ["Globalisation and Trade", "How is absolute advantage different from comparative advantage?", "Absolute advantage means producing more with the same resources. Comparative advantage means lower opportunity cost. Paper 3 may test both directly in development/trade contexts.", { bare: true }],
+  ["Globalisation and Trade", "What are trade blocs and why do they matter?", "A trade bloc is a group of countries reducing barriers between members. Examples include free trade areas, customs unions and single markets. Benefits include trade creation, larger markets and economies of scale; costs include trade diversion, loss of policy control and exposure to competition."],
+  ["Globalisation and Trade", "What is trade creation and trade diversion?", "Trade creation occurs when a bloc shifts consumption to lower-cost member producers, raising welfare. Trade diversion occurs when trade shifts from a lower-cost non-member to a higher-cost member because of external tariffs, reducing welfare. Use this to evaluate trade bloc membership."],
   ["Protectionism", "Evaluate tariffs as a form of protectionism.", "Tariffs raise import prices, reduce imports and protect domestic firms/jobs. But they raise consumer prices, create welfare losses, reduce choice and risk retaliation. Judgement: depends on infant industry potential, unemployment and trading partner response.", { bare: true }],
   ["Protectionism", "Sketch a tariff diagram.", "Checklist: world price below domestic equilibrium; tariff raises price; domestic supply rises; domestic demand falls; imports shrink; government revenue and welfare loss can be shown. Common mistake: drawing a normal tax diagram without world price/imports.", { bare: true, diagram: "tariff" }],
   ["Exchange Rates and Current Account", "How can exchange-rate depreciation affect the current account?", "Depreciation makes exports cheaper and imports more expensive, potentially improving the current account if PEDx + PEDm > 1. In the short run, the J-curve may worsen the balance because contracts and inelastic demand delay volume changes.", { bare: true }],
   ["Exchange Rates and Current Account", "Sketch an exchange-rate diagram for higher demand for pounds.", "Checklist: vertical axis is price of pound in foreign currency; horizontal axis quantity of pounds; demand for pounds shifts right; pound appreciates. Link to exports, imports, inflation and current account.", { bare: true, diagram: "exchange-rate" }],
+  ["Exchange Rates and Current Account", "How do floating and managed exchange rates differ?", "A floating exchange rate is determined by demand and supply for the currency. A managed exchange rate allows central bank or government intervention to influence the value. Evaluation: management can reduce volatility but may require reserves, interest-rate changes and trade-offs with inflation/growth."],
+  ["Exchange Rates and Current Account", "How can governments influence the exchange rate?", "They can change interest rates, use foreign-currency reserves, alter confidence through fiscal/monetary policy, use capital controls or signal policy credibility. Evaluation: markets may overwhelm intervention, reserves are limited, and higher rates can damage growth and employment."],
   ["Exchange Rates and Current Account", "What causes current account deficits?", "High import demand, weak export competitiveness, strong domestic growth, overvalued exchange rate, low productivity and dependence on imported energy/capital goods. Evaluation: deficits are not always harmful if financed sustainably or linked to investment."],
   ["Competitiveness", "What is international competitiveness?", "The ability of an economy's firms to sell goods and services in global markets. Price competitiveness depends on costs, productivity, exchange rates and inflation. Non-price competitiveness depends on quality, design, branding, reliability and innovation.", { bare: true }],
   ["Financial Markets and Banking", "What roles do financial markets perform?", "They channel savings into investment, provide liquidity, price risk, enable borrowing, allocate capital and facilitate payments. Well-functioning financial markets support growth, but instability can create systemic risk."],
@@ -2082,6 +2091,7 @@ const ECON_P3_DEVELOPMENT_FULL = cardsFromRows("Development and Synoptic Evaluat
   ["Development Strategies", "What are barriers to growth and development?", "Poor infrastructure, weak institutions, corruption, low education, poor healthcare, debt, capital flight, conflict, primary product dependency, climate risk and limited access to finance."],
 	  ["Synoptic Evaluation", "What makes a Paper 3 answer synoptic?", "It combines micro and macro: firms, markets, consumers, labour, government, global links and macro objectives. For example, energy costs affect firms' MC, prices/inflation, household real incomes, current account, government policy and long-run competitiveness.", { bare: true }],
 	  ["Synoptic Evaluation", "What are the best evaluation lenses for Paper 3?", "Use time period, elasticity, magnitude, stakeholder impact, opportunity cost, market structure, state of the economy, global conditions, policy conflicts and data reliability. Strong judgement says which factor matters most and why.", { bare: true }],
+	  ["Synoptic Evaluation", "How do positive and normative statements appear in Paper 3?", "A positive statement can be tested using evidence, such as unemployment rising. A normative statement contains a value judgement, such as policy being unfair. In essays, separate evidence from judgement: use data for positive analysis, then justify value-based objectives such as equity or sustainability."],
 	  ["Synoptic Evaluation", "How do you structure a 25-mark Paper 3 essay?", "Intro: define and set context. Paragraphs: KAA chain with diagram/data, then evaluation. Use at least one micro and one macro route. Conclusion: weigh factors/policies by short run vs long run, stakeholders and context.", { bare: true }],
 	  ["Paper 3 A* Prep", "What A* evaluation sentence works for almost any policy?", "The policy is likely to be more effective when the main constraint is demand-side, the relevant elasticities are high, spare capacity exists, the fiscal/administrative cost is low, and the policy targets the root cause rather than symptoms. Final judgement should weigh the binding constraint in the extract."],
 	  ["Paper 3 A* Prep", "How can you use elasticities as A* evaluation?", "Elasticity changes the size and distribution of effects. PED/PES affect tax incidence, subsidy impact and price controls. Labour demand/supply elasticity affects wage policies. Export/import elasticities affect exchange-rate impacts. Strong judgement: effectiveness may rise in the long run as elasticities increase."],
@@ -2334,7 +2344,8 @@ const TOPIC_SUBHEADINGS = {
   ],
   'Markets and Intervention': [
     { label: 'Failure and Intervention', topics: ['Market Failure and Government Failure', 'Government Intervention'] },
-    { label: 'Energy and Elasticity', topics: ['Environment and Energy Markets', 'Elasticities', 'Exam Skills: Markets'] },
+    { label: 'Energy and Elasticity', topics: ['Environment and Energy Markets', 'Elasticities'] },
+    { label: 'Housing and Exam Technique', topics: ['Housing and Asset Markets', 'Exam Skills: Markets'] },
   ],
   'Firms and Competition': [
     { label: 'Market Structures', topics: ['Competition and Market Structures', 'Efficiency'] },
@@ -2468,7 +2479,7 @@ const PREDICTED_TOPICS = {
   'Addiction': ['Gambling Addiction', 'Behaviour Change', 'Exam Skills: Addiction'],
   'Research Methods': ['Research Design', 'Experiments', 'Experimental Design', 'Sampling', 'Reliability and Validity', 'Ethics', 'Data Handling', 'Inferential Testing', 'Paper 3 Application', 'Exam Skills: Research Methods'],
   'Macro Core and Policy': ['AD/AS, Growth and Productivity', 'Inflation and Monetary Policy', 'Fiscal and Supply-Side Policy', 'Labour Markets and Inequality', 'Living Standards and Real Incomes', 'Exam Skills: Macro'],
-  'Markets and Intervention': ['Market Failure and Government Failure', 'Government Intervention', 'Environment and Energy Markets', 'Elasticities'],
+  'Markets and Intervention': ['Market Failure and Government Failure', 'Government Intervention', 'Environment and Energy Markets', 'Elasticities', 'Housing and Asset Markets'],
   'Firms and Competition': ['Competition and Market Structures', 'Business Growth and Economies of Scale', 'Costs, Revenue and Profit', 'Exam Skills: Firms'],
   'Global and Financial': ['Globalisation and Trade', 'Protectionism', 'Exchange Rates and Current Account', 'Financial Markets and Banking', 'Competitiveness'],
   'Development and Synoptic Evaluation': ['Development, HDI and Demographics', 'Development Strategies', 'Synoptic Evaluation', 'Paper 3 A* Prep', 'Predicted Priorities'],
@@ -3362,7 +3373,7 @@ function renderEmptyState() {
   document.getElementById('typedAnswerView').textContent = '—';
   document.getElementById('answerInput').value = '';
   renderCardDiagram(null);
-  document.getElementById('cardInner').classList.remove('flipped');
+  document.getElementById('cardInner').classList.remove('flipped', 'has-diagram');
   flipped = false;
   updateStats();
 }
@@ -3430,7 +3441,9 @@ function render() {
   document.getElementById('cardMetaB').textContent = `${cardData.t} · ${state.mastered ? 'Mastered ✓' : condensedMode ? 'Condensed answer' : 'Model answer'}`;
   document.getElementById('progLabel').textContent = `${reviewedToday()} reviewed today`;
   document.getElementById('nextDue').textContent = `Next review: ${nextDueText()}`;
-  document.getElementById('cardInner').classList.toggle('flipped', flipped);
+  const cardEl = document.getElementById('cardInner');
+  cardEl.classList.toggle('flipped', flipped);
+  cardEl.classList.toggle('has-diagram', Boolean(cardData.diagram));
   document.getElementById('typedAnswerView').textContent = getTypedAnswer(cardData).trim() ? getTypedAnswer(cardData) : '—';
   document.getElementById('answerInput').value = getTypedAnswer(cardData);
   updateStats();

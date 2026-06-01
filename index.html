@@ -2289,67 +2289,35 @@ const SOCIOLOGY_MEDIA_CONDENSED = cardsFromRows("The Media", "condensed", [
   ["Exam Skills: Media", "Media: 20-marker formula", "Intro debate. Paragraphs: theory/study, item hook/example, explicit evaluation, link. For representation essays compare Marxism, feminism, pluralism, postmodernism and active audiences. For predictions prioritise audiences, news selection, globalisation/popular culture, representations, and ownership/control under new media."],
 ]);
 
-const SOCIOLOGY_BARE_QUESTIONS = new Set([
-  "What is Murdock's functionalist view of the family?",
-  "What is Parsons' functional fit theory?",
-  "How do Marxists explain the family?",
-  "What is Zaretsky's Marxist view of the family?",
-  "How do feminists criticise the family?",
-  "What is the New Right view of the family?",
-  "What is the postmodern view of the family?",
-  "How do social policies affect families?",
-  "What is Donzelot's view of social policy and families?",
-  "What is an essay-ready AO3 point on social policy?",
-  "What are the key changing family patterns in the AQA spec?",
-  "Why did divorce increase after the 1960s?",
-  "What is family diversity?",
-  "What did Rapoport and Rapoport argue about family diversity?",
-  "What is the personal life perspective?",
-  "How does individualisation explain family diversity?",
-  "What is the symmetrical family?",
-  "How did Oakley criticise the symmetrical family?",
-  "What are the dual burden and triple shift?",
-  "How does decision-making show power relationships in families?",
-  "How does domestic violence link to family power?",
-  "What is meant by childhood as a social construction?",
-  "What is child-centred society?",
-  "What is Postman's disappearance of childhood thesis?",
-  "What demographic trends since 1900 must AQA students know?",
-  "What is the ageing population?",
-  "How does migration affect families and households?",
-  "How should you structure a 20-mark Families essay?",
-  "What is media convergence?",
-  "What is the global village?",
-  "What are prosumers?",
-  "What is an optimistic view of new media?",
-  "What is a pessimistic view of new media?",
-  "What is the pluralist view of media ownership?",
-  "What is the instrumental Marxist view of media ownership?",
-  "What is the hegemonic Marxist view of the media?",
-  "How does new media affect ownership and control?",
-  "What is a strong AO3 point on media regulation?",
-  "How does media globalisation affect culture?",
-  "What is cultural imperialism?",
-  "What are news values?",
-  "What is agenda setting?",
-  "What is gatekeeping?",
-  "What is a moral panic?",
-  "How do Marxists explain news selection?",
-  "What is media representation?",
-  "How are women represented in the media?",
-  "How are ethnic minorities represented in the media?",
-  "What is symbolic annihilation?",
-  "What is the hypodermic syringe model?",
-  "What is uses and gratifications theory?",
-  "What is Hall's encoding/decoding model?",
-  "What was Morley's Nationwide study?",
-  "How do algorithms affect audiences?",
-  "How should you structure a 20-mark Media essay?",
+const SOCIOLOGY_FAMILIES_BARE_FULL = cardsFromRows("Families and Households", "full", [
+  ["Family Types and Perspectives", "How can you compare the main perspectives on the family in almost any essay?", "Functionalists such as Murdock and Parsons see the family as useful for socialisation, stability and the fit between family form and society. Marxists such as Engels and Zaretsky see it as reproducing capitalism through inheritance, labour power and consumption. Feminists such as Oakley, Delphy and Leonard, and Dobash and Dobash see patriarchy in housework, power and violence. New Right writers such as Murray defend the nuclear family. Postmodernists and personal life writers such as Stacey, Beck and Smart stress diversity and choice. Evaluation: always ask who benefits, whose experience is ignored and how far class, gender, ethnicity and policy limit choice.", { bare: true }],
+  ["Family, Economy and Social Policy", "How can family essays link to social structure, the economy and state policy?", "Economic change shapes family life through female employment, housing costs, migration, welfare, dual-earner families and care needs. State policy shapes family life through divorce law, equal pay, same-sex marriage, education, child protection, welfare and housing. Functionalists argue policy can support families; New Right argue welfare can weaken the nuclear family; feminists ask whether policy challenges patriarchy; Donzelot argues professionals surveil families. Evaluation: policy both protects and controls families.", { bare: true }],
+  ["Changing Family Patterns", "What is the strongest answer frame for changing family patterns?", "AQA can ask marriage, cohabitation, divorce, childbearing, separation, life course and diversity. Causes: secularisation, contraception, legal reform, women's employment, feminism, individualisation, higher expectations, housing costs and less stigma. Effects: more lone-parent, reconstituted, cohabiting, same-sex, single-person and beanpole families. Evaluation: change is real but uneven; Chester argues the neo-conventional family remains common, while Rapoports and Stacey stress diversity.", { bare: true }],
+  ["Family Diversity and Personal Life", "Which sociologists give the most versatile family diversity argument?", "Rapoport and Rapoport identify organisational, cultural, class, life-course and cohort diversity. Stacey argues people construct varied postmodern family arrangements. Beck and Beck-Gernsheim argue individualisation makes relationships negotiated and chosen. Smart's personal life perspective studies meanings, connectedness, memory and chosen ties. AO3: Chester says diversity is overstated because many still experience a nuclear-family phase; New Right see diversity as instability; feminists and Marxists argue choice is constrained by patriarchy, class and money.", { bare: true }],
+  ["Domestic Labour and Power", "What is the strongest domestic labour and power paragraph?", "Young and Willmott argue the symmetrical family has more joint roles. Oakley criticises this, saying men often only help and women retain responsibility. Duncombe and Marsden add the triple shift: paid work, domestic labour and emotion work. Pahl and Vogler show money management reveals power. Dunne found lesbian couples divide labour more equally, suggesting gender roles are socially constructed. Evaluation: equality has improved for some dual-earner couples, but class, gender norms, childcare costs and income differences limit change.", { bare: true }],
+  ["Domestic Labour and Power", "How can domestic violence be used as high-impact AO3?", "Dobash and Dobash argue domestic violence reflects patriarchal power and male control, challenging functionalist warm-bath views of family harmony. It links to power relationships, gender roles and state policy because victims may depend on housing, income and legal protection. Feminists use it to show the family can be dangerous, not naturally supportive. AO3: violence is not experienced identically; class, ethnicity, sexuality and disability affect risk, reporting and access to support.", { bare: true }],
+  ["Childhood", "What is the strongest childhood essay spine?", "Aries argues childhood is socially constructed and modern childhood is separate/protected, unlike medieval mini-adults. March of progress writers say laws, schooling and child protection improved children's status. Child-centred society means children are emotionally and financially central. Conflict sociologists argue childhood is unequal by class, gender, ethnicity and global location. Postman argues media erodes childhood by exposing adult knowledge; critics say children remain heavily regulated by school, law and safeguarding.", { bare: true }],
+  ["Demographic Change", "What demographic knowledge gives the most coverage with the fewest facts?", "Know the core trends since 1900: falling birth rate, falling death rate, smaller family size, rising life expectancy, ageing population, migration and globalisation. Falling birth rates link to contraception, women's work, child costs and changing norms. Falling death rates link to medicine, sanitation, nutrition and welfare. Ageing creates beanpole families, one-person elderly households, care burdens and dependency debates. Migration creates diversity, transnational families and younger labour forces. Evaluation: effects differ by class, gender, ethnicity and policy.", { bare: true }],
+  ["Exam Skills: Families", "How do you turn Families knowledge into a 20-mark answer?", "Use three paragraphs: one structural/perspective paragraph, one named-study paragraph and one contemporary-change paragraph. Each paragraph needs AO1, item application, AO3 and a link. For almost any question, contrast functionalism/New Right with feminism/Marxism/postmodernism/personal life. End by judging extent: family life has changed, but not equally for all groups and not independently of class, gender, ethnicity, economy or state policy.", { bare: true }],
+  ["Exam Skills: Families", "What are the most reusable Families AO3 lines?", "Use these flexibly: evidence may be outdated; one theory overgeneralises family experience; choice is constrained by class/gender/ethnicity; policy can support and control; change may be exaggerated because nuclear-family phases remain common; improvements are uneven; the item may show one group more than another; short-term change may differ from long-term structural change.", { bare: true }],
+]);
+
+const SOCIOLOGY_MEDIA_BARE_FULL = cardsFromRows("The Media", "full", [
+  ["New Media", "What is the strongest new media paragraph?", "New media are digital, interactive, convergent and networked. Jenkins/convergence and Toffler/prosumers support the optimistic view that audiences can participate, create and share. Citizen journalism and Shirky suggest democratic potential. AO3: the digital divide limits access; algorithms, surveillance and platform ownership mean power may be reconfigured rather than removed. Use this paragraph for new media, audiences, ownership, news and representations.", { bare: true }],
+  ["Ownership, Control and Regulation", "Which ownership theories cover the most Media questions?", "Pluralists argue audience choice, competition, professionalism and regulation limit owner control. Instrumental Marxists such as Miliband argue owners directly shape ideology. Curran and Seaton argue concentration narrows viewpoints. Hegemonic Marxists and GUMG argue control is indirect through shared elite assumptions, news routines and source dependence. AO3: new media expands voice but platform giants control algorithms, data and advertising; regulation is difficult because media are global and fast-moving.", { bare: true }],
+  ["Globalisation and Popular Culture", "How can globalisation and popular culture be used across Media essays?", "Media globalisation spreads images, news, identities and consumer culture through transnational corporations, streaming and social platforms. Cultural imperialism argues Western/corporate values dominate and weaken local cultures. Hybridity argues audiences mix global and local meanings, so they are not passive. Popular culture is mass, commercial and accessible, useful for identity and consumption. Evaluation: impact depends on ownership, audience activity, local context and digital access.", { bare: true }],
+  ["News Selection and Presentation", "What is the strongest news selection answer frame?", "Use Galtung and Ruge's news values: negativity, threshold, unexpectedness, personalisation, elite persons/nations, continuity and composition. Gatekeeping explains how editors, journalists, owners and algorithms filter stories. Agenda setting explains how repeated attention shapes public priorities. Cohen's moral panic shows selection/presentation can exaggerate folk devils. AO3: pluralists stress audience demand and professional routines; Marxists stress elite sources, owners and advertisers; new media adds citizen journalism but also misinformation.", { bare: true }],
+  ["Representations: Class, Age and Gender", "How can you answer most representation questions with one framework?", "Representation is constructed through selection, framing and encoding. Marxists link class representation to ideology: working class as criminal, welfare dependent or tasteless. Feminists use Tuchman's symbolic annihilation and Mulvey's male gaze for gender. Cohen's moral panic helps youth representation. Age representations can show older people as dependent or burdensome. AO3: new media allows self-representation, but stereotypes persist because ownership, algorithms and audience demand shape visibility.", { bare: true }],
+  ["Representations: Ethnicity, Sexuality and Disability", "Which representation theorists are most reusable for ethnicity, sexuality and disability?", "Hall argues media encode meanings that can support dominant power; Van Dijk argues news can reproduce racism through problem-focused framing of minorities and migrants. Tuchman's symbolic annihilation can be applied to LGBTQ+ people, disabled people and minorities being absent, trivialised or condemned. Disability can be framed through tragedy, burden, charity or supercrip stereotypes; the social model challenges individualising narratives. AO3: minority creators and online platforms can challenge stereotypes, but tokenism and algorithmic visibility remain issues.", { bare: true }],
+  ["Audiences", "What audience theories give the most coverage?", "Passive models: hypodermic syringe sees direct effects; cultural effects sees gradual cumulative influence. Active models: Blumler and Katz uses and gratifications says audiences use media for diversion, relationships, identity and surveillance. Katz and Lazarsfeld's two-step flow stresses opinion leaders. Hall's encoding/decoding says audiences read messages as dominant, negotiated or oppositional; Morley shows class/social position affects decoding. AO3: algorithms complicate active/passive because users choose, but feeds are curated.", { bare: true }],
+  ["Audiences", "How can Hall and Morley push Media answers higher?", "Hall is powerful because he links content, power and audience activity: producers encode preferred meanings, but audiences decode them differently. Morley's Nationwide study supports this by showing managers were more likely to accept dominant meanings while trade unionists were more oppositional. Use them for audiences, representations, news and ideology. AO3: decoding depends on class, gender, ethnicity, age and media literacy, so audience response is patterned, not random.", { bare: true }],
+  ["Exam Skills: Media", "How do you turn Media knowledge into a 20-mark answer?", "Use three paragraphs: one power/ownership paragraph, one representation/content paragraph and one audience/new media paragraph. Apply the item in every paragraph. Evaluate by asking whether power lies with owners, journalists, platforms, algorithms or active audiences. For representation essays, compare Marxism, feminism, pluralism/postmodernism and active audience theory. For new media, always balance empowerment against platform control and digital inequality.", { bare: true }],
+  ["Exam Skills: Media", "What are the most reusable Media AO3 lines?", "Use these flexibly: old media and new media differ; audience activity varies by social group; ownership may be direct or indirect; algorithms are a new gatekeeper; regulation struggles with global platforms; representation can improve but still be tokenistic; pluralist choice is limited by concentration and digital inequality; media effects are hard to isolate because family, peers and education also shape views.", { bare: true }],
 ]);
 
 function markSociologyBare(cards) {
   return cards.map(cardData => (
-    cardData.variant === "condensed" || SOCIOLOGY_BARE_QUESTIONS.has(cardData.q)
+    cardData.variant === "condensed"
       ? { ...cardData, bare: true }
       : cardData
   ));
@@ -2376,6 +2344,8 @@ const ALL_CARDS = [
   ...markSociologyBare(SOCIOLOGY_FAMILIES_CONDENSED),
   ...markSociologyBare(SOCIOLOGY_MEDIA_FULL),
   ...markSociologyBare(SOCIOLOGY_MEDIA_CONDENSED),
+  ...SOCIOLOGY_FAMILIES_BARE_FULL,
+  ...SOCIOLOGY_MEDIA_BARE_FULL,
 ];
 
 const TOPIC_SUBHEADINGS = {

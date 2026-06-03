@@ -1097,6 +1097,7 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
     </select>
     <button id="condensedToggle" class="secondary" aria-pressed="false">Condensed: Off</button>
     <button id="bareToggle" class="secondary" aria-pressed="false" title="Filter to the leanest high-transfer cards for this subject">Bare 10: Off</button>
+    <button id="econplusDalToggle" class="secondary" aria-pressed="false" title="Economics only: filter to EconplusDal's broad Paper 3 topic board plus added gap-fillers">EconplusDal List: Off</button>
     <button id="diagramOnlyToggle" class="secondary" aria-pressed="false" title="Economics only: show diagram practice cards">Diagram Only: Off</button>
     <button id="predictionsToggle" class="secondary" aria-pressed="false" title="Filter to high-priority predicted topics only">Predictions: Off</button>
     <button id="typeToggle" class="secondary" aria-pressed="false">Type mode: Off</button>
@@ -1262,6 +1263,7 @@ function card(unit, variant, topic, question, answer, options = {}) {
     slug: options.slug || slugify([unit, variant, topic, question].join("-")),
     legacyKey: options.legacyKey || null,
     bare: !!options.bare,
+    dal: !!options.dal,
     diagram: options.diagram || null
   };
 }
@@ -1989,11 +1991,13 @@ const ECONOMICS_THEME4_CONDENSED = [
 const ECON_P3_MACRO_FULL = cardsFromRows("Macro Core and Policy", "full", [
   ["AD/AS, Growth and Productivity", "How do AD/AS, inflation, growth and productivity link together?", "Master the core chain: AD = C + I + G + (X-M). A demand shock changes real GDP, unemployment and inflationary pressure in the short run. LRAS/productivity shifts change potential output. Evaluation: spare capacity, multiplier size, time lags, confidence, supply constraints and whether growth is sustainable.", { bare: true }],
   ["AD/AS, Growth and Productivity", "Sketch an AD/AS diagram for a positive demand shock.", "Checklist: axes labelled price level and real GDP; AD shifts right; real GDP rises from Y1 to Y2; price level rises from P1 to P2; evaluation depends on spare capacity and slope of SRAS. Common mistake: saying growth rises without explaining inflationary pressure.", { bare: true, diagram: "adas-shift" }],
+  ["AD/AS, Growth and Productivity", "Sketch an AD/AS diagram for a positive supply-side shock.", "Checklist: SRAS shifts right for lower costs/productivity gains; LRAS may also shift right if productive capacity rises. Real output increases and price level falls if AD is unchanged. Use for productivity, deregulation, infrastructure, lower energy costs or improved competitiveness. Evaluation: long-run effects depend on skills, investment and spare capacity.", { diagram: "lras-shift", dal: true }],
   ["AD/AS, Growth and Productivity", "What is the difference between actual growth and potential growth?", "Actual growth is an increase in real GDP, often from higher AD. Potential growth is an increase in productive capacity, shown by an outward LRAS shift. Paper 3 often rewards linking short-run growth to demand and long-run growth to productivity, investment, skills and technology."],
   ["AD/AS, Growth and Productivity", "How does productivity affect inflation and competitiveness?", "Higher productivity lowers unit labour costs, increases SRAS/LRAS, supports non-inflationary growth and can improve price competitiveness. Evaluation: productivity gains need investment, skills, infrastructure and management quality, so effects are slow and uneven across sectors.", { bare: true }],
   ["Inflation and Monetary Policy", "How can inflation and monetary policy be linked in Paper 3?", "Inflation can be demand-pull, cost-push or imported. Monetary policy uses interest rates, QE/QT and forward guidance to influence borrowing, saving, asset prices, exchange rates and AD. Evaluation: time lags, debt levels, confidence, mortgage exposure, exchange-rate pass-through and supply-side causes.", { bare: true }],
   ["Inflation and Monetary Policy", "How can higher interest rates reduce inflation?", "Higher interest rates increase saving incentives and borrowing costs, lowering consumption and investment. AD shifts left, reducing demand-pull inflation. They may also appreciate the exchange rate, reducing import prices. Evaluation: weak if inflation is cost-push or if consumers have fixed-rate debt."],
   ["Inflation and Monetary Policy", "Evaluate monetary policy for cost-push inflation.", "It can reduce second-round wage-price effects by cooling demand, but it may deepen recession and unemployment while not directly solving the original supply shock. Strong answers compare monetary policy with supply-side measures or targeted fiscal support."],
+  ["Inflation and Monetary Policy", "What causes deflation and why can it be harmful?", "Deflation is a sustained fall in the price level. It can be caused by falling AD or rising SRAS. Demand-side deflation is dangerous because consumers delay spending, firms' revenues fall, unemployment rises and real debt burdens increase. Benign supply-side deflation may raise real incomes if output is growing.", { dal: true }],
   ["Fiscal and Supply-Side Policy", "How do fiscal, monetary and supply-side policies differ?", "Fiscal policy changes taxation and government spending; monetary policy changes the price/quantity of money; supply-side policy increases productive capacity and market efficiency. Paper 3 judgement: best policy depends on the cause, time horizon, fiscal space, inflation, inequality and external competitiveness.", { bare: true }],
   ["Fiscal and Supply-Side Policy", "How can expansionary fiscal policy affect an economy?", "Higher government spending or lower taxation increases injections, shifts AD right and can raise real GDP and employment. Evaluation: crowding out, national debt, multiplier size, imports leakage, inflationary pressure and whether spare capacity exists."],
   ["Fiscal and Supply-Side Policy", "How can fiscal policy reduce inequality?", "Progressive taxation, welfare benefits, public services, education and healthcare can redistribute income and improve equality of opportunity. Evaluation: possible disincentive effects, tax avoidance, administrative costs and trade-offs with growth or public finances."],
@@ -2003,6 +2007,7 @@ const ECON_P3_MACRO_FULL = cardsFromRows("Macro Core and Policy", "full", [
   ["Fiscal and Supply-Side Policy", "What are interventionist supply-side policies?", "Policies where government directly improves productive capacity: education, training, infrastructure, industrial policy, R&D subsidies and healthcare. Evaluation: expensive, slow, risk of government failure, but often stronger for long-term productivity.", { bare: true }],
   ["Labour Markets and Inequality", "How do labour markets, inequality and living standards connect?", "Know labour demand/MRP, labour supply, unemployment types, minimum wages, monopsony, wage inequality, poverty and real incomes. Paper 3 often blends labour markets with macro outcomes: productivity, inflation, public finances, living standards and competitiveness.", { bare: true }],
   ["Labour Markets and Inequality", "Sketch a labour market diagram for a minimum wage above equilibrium.", "Checklist: wage on vertical axis, quantity of labour on horizontal; labour demand slopes down and supply slopes up; minimum wage above equilibrium creates excess supply/unemployment. Evaluation: if set in a monopsony, employment may rise.", { bare: true, diagram: "labour-market" }],
+  ["Labour Markets and Inequality", "Sketch a monopsony labour market diagram.", "Checklist: MCL lies above ACL/labour supply; monopsonist hires where MCL=MRP, then reads wage from ACL. Compared with a competitive labour market, wage and employment are lower. Use to evaluate minimum wages, trade unions and labour-market regulation.", { diagram: "monopsony-labour", dal: true }],
   ["Labour Markets and Inequality", "How does unemployment affect living standards and public finances?", "Unemployment reduces household income, consumption and tax revenue while increasing welfare spending. It can worsen mental health and hysteresis as skills erode. Evaluation: impact depends on duration, benefit generosity, household savings and regional labour mobility."],
   ["Labour Markets and Inequality", "How can labour shortages affect firms and the economy?", "Labour shortages can push up wages, increase firms' costs, reduce output and limit growth. They may also encourage training, automation and productivity improvements. Evaluation depends on skill level, migration, occupational mobility, monopsony power and whether shortages are temporary or structural."],
   ["Labour Markets and Inequality", "How can inequality affect economic performance?", "High inequality may weaken social mobility, reduce human capital, increase poverty and reduce social cohesion. However, some inequality can create incentives for enterprise and work. Judgement: effects depend on equality of opportunity and whether incomes reflect productivity."],
@@ -2012,16 +2017,21 @@ const ECON_P3_MACRO_FULL = cardsFromRows("Macro Core and Policy", "full", [
 ]);
 
 const ECON_P3_MARKETS_FULL = cardsFromRows("Markets and Intervention", "full", [
+  ["Demand and Supply Shifts", "What are the highest-yield causes of demand and supply shifts?", "Demand shifts with income, tastes, population, advertising, confidence, prices of substitutes/complements and expectations. Supply shifts with costs, productivity, taxes, subsidies, technology, regulation and shocks. Paper 3 often hides this inside energy, food, housing or labour markets.", { dal: true }],
+  ["Demand and Supply Shifts", "Sketch a demand/supply diagram for demand rising faster than supply.", "Checklist: demand shifts right; equilibrium price rises; quantity rises if supply can respond. Use for housing, energy, labour shortages, commodities and price volatility. Evaluation: if PES is inelastic, price rises more than output.", { diagram: "demand-supply-shift", dal: true }],
   ["Market Failure and Government Failure", "How do market failure, government failure and intervention connect?", "Market failure occurs when free markets misallocate resources. Core causes: externalities, public goods, information gaps, immobility, inequality and market power. Government failure occurs when intervention worsens allocation or creates unintended consequences.", { bare: true }],
   ["Market Failure and Government Failure", "What is a negative externality of production?", "A cost imposed on third parties by producers, so MSC exceeds MPC and output is above the socially optimal level. Examples: pollution, congestion and carbon emissions. Policy options include indirect taxes, regulation, permits and subsidies for cleaner alternatives."],
   ["Market Failure and Government Failure", "Sketch a negative production externality diagram.", "Checklist: MPB/MSB demand, MPC supply, MSC above MPC; market output Qm exceeds socially optimum Qs; welfare loss triangle between MSC and MSB over excess output. Common mistake: shifting demand instead of supply for production externalities.", { bare: true, diagram: "negative-externality" }],
+  ["Market Failure and Government Failure", "Sketch a positive consumption externality diagram.", "Checklist: MSB above MPB; market output Qm is below socially optimum Qs; welfare gain is missed because consumers ignore external benefits. Use for education, training, healthcare and vaccination-style examples.", { diagram: "positive-consumption-externality", dal: true }],
   ["Market Failure and Government Failure", "What is government failure?", "Government failure is when intervention causes a net welfare loss or worsens market outcomes. Causes include information failure, regulatory capture, administrative costs, unintended consequences, moral hazard, political incentives and poor policy design.", { bare: true }],
   ["Government Intervention", "What are the main forms of government intervention in markets?", "Indirect taxes, subsidies, regulation, pollution permits, price controls, minimum wages, public provision, nationalisation, privatisation, competition policy and information campaigns. Evaluation depends on elasticity, cost, enforceability and risk of unintended effects.", { bare: true }],
   ["Government Intervention", "Sketch an indirect tax diagram.", "Checklist: supply shifts left/up by the tax; quantity falls from Q1 to Q2; consumer price rises to Pc; producer price falls to Pp; the tax wedge is Pc-Pp and tax revenue is Pc-Pp x Q2. Incidence depends on PED/PES.", { bare: true, diagram: "demand-supply-tax" }],
   ["Government Intervention", "How do maximum prices affect markets?", "A maximum price below equilibrium can improve affordability but creates excess demand/shortages. Evaluation: may require rationing, subsidies or public provision; black markets and lower quality can emerge."],
   ["Government Intervention", "How do minimum prices affect markets?", "A minimum price above equilibrium raises producer revenue if demand is inelastic but creates excess supply. Evaluation: storage, waste, illegal sales and government purchase schemes may be needed."],
+  ["Government Intervention", "How do privatisation, deregulation and nationalisation differ?", "Privatisation transfers assets from state to private ownership; deregulation removes rules to increase competition; nationalisation brings assets under state ownership. Evaluation: private firms may improve efficiency/investment, but natural monopolies and essential services may need public control or strong regulation.", { dal: true }],
   ["Environment and Energy Markets", "Why are environment and energy markets strongly synoptic?", "Energy/environment questions usually combine externalities, elasticities, costs, inflation, regulation and energy security. Know carbon taxes, subsidies, permits, price caps, investment incentives and trade-offs between affordability, sustainability and reliability.", { bare: true }],
   ["Environment and Energy Markets", "Why can energy markets fail?", "Energy markets can fail due to negative externalities from fossil fuels, information gaps, monopoly power, volatile global prices, underinvestment in grids/storage and energy insecurity. Evaluation: market design matters and policy goals may conflict."],
+  ["Environment and Energy Markets", "What causes price volatility in markets such as energy, food and commodities?", "Price volatility is often caused by inelastic demand and supply, supply shocks, low spare capacity, weather/geopolitical disruption, speculation, exchange-rate changes and stockpile limits. Evaluation: volatility is worse in the short run because consumers and producers have fewer substitutes.", { dal: true }],
   ["Environment and Energy Markets", "Evaluate a carbon tax.", "A carbon tax internalises external costs and incentivises cleaner production/consumption. It raises revenue but can be regressive, reduce competitiveness and be ineffective if demand is inelastic or firms relocate. Strong evaluation compares with permits, regulation and subsidies."],
   ["Environment and Energy Markets", "How can energy price caps help and harm consumers?", "Caps can protect households from sudden price rises and reduce fuel poverty. But if set too low they reduce supplier profits, discourage investment, cause shortages or require taxpayer support. Judgement depends on wholesale prices and market structure."],
   ["Elasticities", "How can elasticities strengthen Paper 3 evaluation?", "Know PED, PES, YED and XED. Elasticities improve evaluation: tax incidence, subsidy effectiveness, price cap effects, export response to exchange rates, wage/employment effects and revenue changes all depend on responsiveness.", { bare: true }],
@@ -2054,6 +2064,7 @@ const ECON_P3_FIRMS_FULL = cardsFromRows("Firms and Competition", "full", [
   ["Costs, Revenue and Profit", "Sketch a cost-revenue diagram for supernormal profit.", "Checklist: output where MC=MR; price from AR at that output; AC below AR; supernormal profit rectangle between price and AC. Axes: costs/revenue and quantity. Common mistake: choosing output where AC is lowest instead of MC=MR.", { bare: true, diagram: "cost-revenue-profit" }],
   ["Costs, Revenue and Profit", "What is the difference between normal and supernormal profit?", "Normal profit is the minimum profit needed to keep enterprise in the market and is included in costs. Supernormal profit is profit above normal profit, where AR exceeds AC at the profit-maximising output."],
   ["Costs, Revenue and Profit", "How can higher energy costs affect firms?", "Higher energy costs increase variable costs, shifting MC/AC upward. Firms may raise prices, cut output, reduce profit or invest in efficiency. Evaluation: pass-through depends on PED, competition, contracts and ability to substitute energy inputs."],
+  ["Costs, Revenue and Profit", "Sketch a firm cost-revenue diagram for a rise in variable costs.", "Checklist: MC and AC shift upward; profit-maximising output changes where new MC=MR; profit falls if AR is unchanged. Use for energy, wage, import or raw material cost shocks. Evaluation: impact depends on PED, ability to pass costs on and market structure.", { diagram: "firm-cost-shock", dal: true }],
   ["Efficiency", "What are allocative, productive and dynamic efficiency?", "Allocative efficiency occurs where P=MC. Productive efficiency occurs at minimum AC. Dynamic efficiency is long-run innovation and investment. Paper 3 evaluation often asks which efficiency matters most for consumers over time."],
   ["Efficiency", "How can competition affect dynamic efficiency?", "Competition can force firms to innovate to survive, but monopoly profits may finance R&D. Judgement depends on market contestability, intellectual property, scale economies and whether firms reinvest profits."],
   ["Exam Skills: Firms", "How do you use firm diagrams in Paper 3?", "Draw only the diagram needed for the argument, label axes/curves/output/price/profit, then write the chain in words. Evaluation: PED, market structure, time period, cost conditions and whether firms can pass costs on.", { bare: true }]
@@ -2061,11 +2072,13 @@ const ECON_P3_FIRMS_FULL = cardsFromRows("Firms and Competition", "full", [
 
 const ECON_P3_GLOBAL_FULL = cardsFromRows("Global and Financial", "full", [
   ["Globalisation and Trade", "How do globalisation, trade, protectionism, exchange rates and the current account connect?", "Master the trade chain: specialisation and comparative advantage can raise output and lower prices, but globalisation creates winners/losers. Evaluate with inequality, structural unemployment, supply chains, environment, exchange rates and current account effects.", { bare: true }],
+  ["Globalisation and Trade", "What are the main causes of globalisation?", "Globalisation has been driven by lower transport costs, containerisation, internet/communication technology, trade liberalisation, growth of multinational companies, financial market liberalisation, migration and the expansion of global supply chains.", { dal: true }],
   ["Globalisation and Trade", "What are the benefits and costs of globalisation?", "Benefits: larger markets, lower prices, FDI, technology transfer, competition and economies of scale. Costs: job losses, dependency, tax avoidance, environmental damage, inequality and vulnerability to external shocks."],
   ["Globalisation and Trade", "What is comparative advantage?", "A country has comparative advantage when it can produce a good at a lower opportunity cost. Trade based on comparative advantage can increase total output and welfare, assuming low transport costs, mobility and no major externalities."],
   ["Globalisation and Trade", "How is absolute advantage different from comparative advantage?", "Absolute advantage means producing more with the same resources. Comparative advantage means lower opportunity cost. Paper 3 may test both directly in development/trade contexts.", { bare: true }],
   ["Globalisation and Trade", "What are trade blocs and why do they matter?", "A trade bloc is a group of countries reducing barriers between members. Examples include free trade areas, customs unions and single markets. Benefits include trade creation, larger markets and economies of scale; costs include trade diversion, loss of policy control and exposure to competition."],
   ["Globalisation and Trade", "What is trade creation and trade diversion?", "Trade creation occurs when a bloc shifts consumption to lower-cost member producers, raising welfare. Trade diversion occurs when trade shifts from a lower-cost non-member to a higher-cost member because of external tariffs, reducing welfare. Use this to evaluate trade bloc membership."],
+  ["Globalisation and Trade", "What are the strongest benefits and costs of free trade?", "Benefits: specialisation, lower prices, more choice, economies of scale, competition and technology transfer. Costs: structural unemployment, infant industries harmed, externalities, dependency and current-account pressure. Evaluation depends on mobility of labour, comparative advantage assumptions and whether gains are evenly distributed.", { dal: true }],
   ["Protectionism", "Evaluate tariffs as a form of protectionism.", "Tariffs raise import prices, reduce imports and protect domestic firms/jobs. But they raise consumer prices, create welfare losses, reduce choice and risk retaliation. Judgement: depends on infant industry potential, unemployment and trading partner response.", { bare: true }],
   ["Protectionism", "Sketch a tariff diagram.", "Checklist: world price below domestic equilibrium; tariff raises price; domestic supply rises; domestic demand falls; imports shrink; government revenue and welfare loss can be shown. Common mistake: drawing a normal tax diagram without world price/imports.", { bare: true, diagram: "tariff" }],
   ["Exchange Rates and Current Account", "How can exchange-rate depreciation affect the current account?", "Depreciation makes exports cheaper and imports more expensive, potentially improving the current account if PEDx + PEDm > 1. In the short run, the J-curve may worsen the balance because contracts and inelastic demand delay volume changes.", { bare: true }],
@@ -2073,10 +2086,12 @@ const ECON_P3_GLOBAL_FULL = cardsFromRows("Global and Financial", "full", [
   ["Exchange Rates and Current Account", "How do floating and managed exchange rates differ?", "A floating exchange rate is determined by demand and supply for the currency. A managed exchange rate allows central bank or government intervention to influence the value. Evaluation: management can reduce volatility but may require reserves, interest-rate changes and trade-offs with inflation/growth."],
   ["Exchange Rates and Current Account", "How can governments influence the exchange rate?", "They can change interest rates, use foreign-currency reserves, alter confidence through fiscal/monetary policy, use capital controls or signal policy credibility. Evaluation: markets may overwhelm intervention, reserves are limited, and higher rates can damage growth and employment."],
   ["Exchange Rates and Current Account", "What causes current account deficits?", "High import demand, weak export competitiveness, strong domestic growth, overvalued exchange rate, low productivity and dependence on imported energy/capital goods. Evaluation: deficits are not always harmful if financed sustainably or linked to investment."],
+  ["Exchange Rates and Current Account", "What causes changes in the terms of trade?", "The terms of trade measure export prices relative to import prices. They change when export or import prices move because of exchange rates, commodity prices, global demand, productivity, inflation, supply shocks and market power. Evaluation: an improvement may not help if export volumes fall.", { dal: true }],
   ["Competitiveness", "What is international competitiveness?", "The ability of an economy's firms to sell goods and services in global markets. Price competitiveness depends on costs, productivity, exchange rates and inflation. Non-price competitiveness depends on quality, design, branding, reliability and innovation.", { bare: true }],
   ["Financial Markets and Banking", "What roles do financial markets perform?", "They channel savings into investment, provide liquidity, price risk, enable borrowing, allocate capital and facilitate payments. Well-functioning financial markets support growth, but instability can create systemic risk."],
   ["Financial Markets and Banking", "How can financial market failure damage the wider economy?", "Information gaps, moral hazard, excessive risk-taking and asset bubbles can cause bank failures and credit crunches. This reduces lending, investment and confidence, shifting AD left and damaging long-run capacity.", { bare: true }],
   ["Financial Markets and Banking", "What is the role of central banks in financial stability?", "Central banks act as lender of last resort, regulate banks, set capital/liquidity requirements, conduct monetary policy and support payment systems. Evaluation: support may create moral hazard if banks expect rescue."],
+  ["Financial Markets and Banking", "How can financial market regulation reduce instability?", "Regulation can use capital ratios, liquidity ratios, stress tests, limits on risky lending, deposit protection and conduct rules. This reduces systemic risk and asymmetric information. Evaluation: regulation may raise banks' costs, reduce lending and be weakened by regulatory capture or global finance.", { dal: true }],
   ["Exam Skills: Global", "How do you evaluate trade and exchange-rate essays?", "Use elasticities, time lags, spare capacity, import dependence, retaliation, inflation, productivity, quality and the state of global demand. Always connect micro firm effects to macro outcomes.", { bare: true }]
 ]);
 
@@ -2086,6 +2101,7 @@ const ECON_P3_DEVELOPMENT_FULL = cardsFromRows("Development and Synoptic Evaluat
   ["Development, HDI and Demographics", "How can demographics affect growth and development?", "A young population can create a future demographic dividend if education and jobs exist, but can raise dependency costs. Ageing raises pension/healthcare spending and may reduce labour supply. Migration can fill skills gaps and send remittances."],
   ["Development, HDI and Demographics", "What is the Lewis model?", "The Lewis model suggests surplus labour moves from low-productivity agriculture to higher-productivity manufacturing, raising output and development. Limitations: assumes jobs exist, workers can move, and profits are reinvested productively."],
   ["Development Strategies", "How can FDI support development?", "FDI can bring capital, jobs, tax revenue, technology and export access. Evaluation: profits may be repatriated, jobs may be low paid, regulation may be weak and host economies may become dependent."],
+  ["Development Strategies", "Why might firms choose foreign direct investment?", "Firms may use FDI to access new markets, lower labour or production costs, avoid tariffs, secure raw materials, exploit exchange-rate advantages, gain economies of scale and reduce transport costs. Evaluation: host-country infrastructure, political stability and regulation affect whether FDI succeeds.", { dal: true }],
   ["Development Strategies", "Evaluate aid as a development strategy.", "Aid can fund infrastructure, health, education and emergency support. Limitations: dependency, corruption, tied aid, poor targeting and crowding out local enterprise. Judgement depends on governance and whether aid builds capacity."],
   ["Development Strategies", "How can trade promote development?", "Trade can expand markets, create export revenue, attract FDI and encourage specialisation. Evaluation: primary product dependency, volatile commodity prices, protectionism by richer countries and unequal bargaining power can limit gains."],
   ["Development Strategies", "What are barriers to growth and development?", "Poor infrastructure, weak institutions, corruption, low education, poor healthcare, debt, capital flight, conflict, primary product dependency, climate risk and limited access to finance."],
@@ -2350,6 +2366,38 @@ function markSociologyBare(cards) {
   ));
 }
 
+const ECONPLUS_DAL_TOPIC_SET = new Set([
+  'Demand and Supply Shifts',
+  'AD/AS, Growth and Productivity',
+  'Inflation and Monetary Policy',
+  'Fiscal and Supply-Side Policy',
+  'Labour Markets and Inequality',
+  'Living Standards and Real Incomes',
+  'Market Failure and Government Failure',
+  'Government Intervention',
+  'Environment and Energy Markets',
+  'Elasticities',
+  'Competition and Market Structures',
+  'Business Growth and Economies of Scale',
+  'Costs, Revenue and Profit',
+  'Efficiency',
+  'Globalisation and Trade',
+  'Protectionism',
+  'Exchange Rates and Current Account',
+  'Competitiveness',
+  'Financial Markets and Banking',
+  'Development, HDI and Demographics',
+  'Development Strategies',
+]);
+
+function markEconplusDal(cards) {
+  return cards.map(cardData => (
+    ECONPLUS_DAL_TOPIC_SET.has(cardData.t) || cardData.dal
+      ? { ...cardData, dal: true }
+      : cardData
+  ));
+}
+
 
 const ALL_CARDS = [
   // Psychology — Paper 3
@@ -2364,8 +2412,8 @@ const ALL_CARDS = [
   ...PSYCH_RESEARCH_METHODS_FULL,
   ...PSYCH_RESEARCH_METHODS_CONDENSED,
   // Economics
-  ...ECON_P3_ALL_FULL,
-  ...ECON_P3_ALL_CONDENSED,
+  ...markEconplusDal(ECON_P3_ALL_FULL),
+  ...markEconplusDal(ECON_P3_ALL_CONDENSED),
   // Sociology
   ...markSociologyBare(SOCIOLOGY_FAMILIES_FULL),
   ...markSociologyBare(SOCIOLOGY_FAMILIES_CONDENSED),
@@ -2407,7 +2455,7 @@ const TOPIC_SUBHEADINGS = {
     { label: 'Policy and Labour', topics: ['Fiscal and Supply-Side Policy', 'Labour Markets and Inequality', 'Exam Skills: Macro'] },
   ],
   'Markets and Intervention': [
-    { label: 'Failure and Intervention', topics: ['Market Failure and Government Failure', 'Government Intervention'] },
+    { label: 'Core Market Tools', topics: ['Demand and Supply Shifts', 'Market Failure and Government Failure', 'Government Intervention'] },
     { label: 'Energy and Elasticity', topics: ['Environment and Energy Markets', 'Elasticities'] },
     { label: 'Housing and Exam Technique', topics: ['Housing and Asset Markets', 'Exam Skills: Markets'] },
   ],
@@ -2535,9 +2583,10 @@ let typeMode = storage.getItem('aqa_type_mode') === '1';
 let condensedMode = loadCondensedMode();
 let predictionsMode = storage.getItem('aqa_predictions_mode') === '1';
 let bareMode = loadBareModeForSubject(selectedSubject);
+let econplusDalMode = storage.getItem('aqa_economics_econplusdal_mode') === '1';
 let diagramOnlyMode = storage.getItem('aqa_economics_diagram_only_mode') === '1';
 const PSYCHOLOGY_DECK_VERSION = 'paper3_2026_v2';
-const ECONOMICS_DECK_VERSION = 'paper3_2026_v1';
+const ECONOMICS_DECK_VERSION = 'paper3_2026_v2';
 const SOCIOLOGY_DECK_VERSION = 'paper2_exam_prep_v1';
 const ECONOMICS_GROUP_NAMES = ['Macro Core and Policy', 'Markets and Intervention', 'Firms and Competition', 'Global and Financial', 'Development and Synoptic Evaluation'];
 let selectedGroups = loadSelectedGroups();
@@ -2550,7 +2599,7 @@ const PREDICTED_TOPICS = {
   'Addiction': ['Gambling Addiction', 'Behaviour Change', 'Exam Skills: Addiction'],
   'Research Methods': ['Research Design', 'Experiments', 'Experimental Design', 'Sampling', 'Reliability and Validity', 'Ethics', 'Data Handling', 'Inferential Testing', 'Paper 3 Application', 'Exam Skills: Research Methods'],
   'Macro Core and Policy': ['AD/AS, Growth and Productivity', 'Inflation and Monetary Policy', 'Fiscal and Supply-Side Policy', 'Labour Markets and Inequality', 'Living Standards and Real Incomes', 'Exam Skills: Macro'],
-  'Markets and Intervention': ['Market Failure and Government Failure', 'Government Intervention', 'Environment and Energy Markets', 'Elasticities', 'Housing and Asset Markets'],
+  'Markets and Intervention': ['Demand and Supply Shifts', 'Market Failure and Government Failure', 'Government Intervention', 'Environment and Energy Markets', 'Elasticities', 'Housing and Asset Markets'],
   'Firms and Competition': ['Competition and Market Structures', 'Business Growth and Economies of Scale', 'Costs, Revenue and Profit', 'Exam Skills: Firms'],
   'Global and Financial': ['Globalisation and Trade', 'Protectionism', 'Exchange Rates and Current Account', 'Financial Markets and Banking', 'Competitiveness'],
   'Development and Synoptic Evaluation': ['Development, HDI and Demographics', 'Development Strategies', 'Synoptic Evaluation', 'Paper 3 A* Prep', 'Predicted Priorities'],
@@ -2835,6 +2884,24 @@ function diagramSvg(type) {
       ${guide(173,154,'Y1')}${guide(210,130,'Y2')}
       <text class="diagram-muted" x="36" y="158">P1</text><text class="diagram-muted" x="36" y="134">P2</text>`, 'A rightward AD shift raises real GDP and the price level, unless spare capacity keeps inflationary pressure low.');
   }
+  if (type === 'lras-shift') {
+    return svg('AD/AS: positive supply-side shift', { x:'Real GDP', y:'Price level' }, `
+      <path class="diagram-line" d="M80 246 C132 200 190 145 250 80"/><text class="diagram-label" x="252" y="82">SRAS1</text>
+      <path class="diagram-line warn" d="M112 246 C164 200 222 145 282 80"/><text class="diagram-label" x="284" y="82">SRAS2</text>
+      <path class="diagram-line alt" d="M90 82 C138 134 190 194 252 252"/><text class="diagram-label" x="254" y="254">AD</text>
+      <line class="diagram-line bad" x1="176" y1="54" x2="176" y2="276"/><text class="diagram-label" x="146" y="70">LRAS1</text>
+      <line class="diagram-line bad diagram-dash" x1="230" y1="54" x2="230" y2="276"/><text class="diagram-label" x="236" y="70">LRAS2</text>
+      ${guide(176,154,'Y1')}${guide(230,124,'Y2')}
+      <text class="diagram-muted" x="36" y="158">P1</text><text class="diagram-muted" x="36" y="128">P2</text>`, 'A positive supply-side shift raises output and lowers price pressure; lasting gains need LRAS/productive capacity to improve.');
+  }
+  if (type === 'demand-supply-shift') {
+    return svg('Demand and supply: demand rises', { x:'Quantity', y:'Price' }, `
+      <path class="diagram-line" d="M82 250 C140 198 202 138 274 70"/><text class="diagram-label" x="276" y="72">S</text>
+      <path class="diagram-line alt" d="M82 78 C138 132 198 192 266 254"/><text class="diagram-label" x="268" y="256">D1</text>
+      <path class="diagram-line warn" d="M126 76 C178 128 232 188 300 250"/><text class="diagram-label" x="302" y="252">D2</text>
+      ${guide(178,154,'Q1')}${guide(214,126,'Q2')}
+      <text class="diagram-muted" x="36" y="158">P1</text><text class="diagram-muted" x="36" y="130">P2</text>`, 'When demand rises faster than supply, price and quantity rise; with inelastic supply, price rises more sharply.');
+  }
 	  if (type === 'demand-supply-tax') {
 	    return svg('Indirect tax: supply shifts left/up', { x:'Quantity', y:'Price' }, `
 	      <path class="diagram-line" d="M82 250 C140 198 202 138 274 70"/><text class="diagram-label" x="276" y="72">S1</text>
@@ -2857,6 +2924,15 @@ function diagramSvg(type) {
       <polygon points="164,170 194,146 194,120" fill="rgba(255,107,107,.18)" stroke="#ff6b6b"/>
       <text class="diagram-muted" x="201" y="132">Welfare loss</text>`, 'Market output Qm is above social optimum Qs because MSC exceeds MPC.');
   }
+  if (type === 'positive-consumption-externality') {
+    return svg('Positive consumption externality', { x:'Quantity', y:'Costs/benefits' }, `
+      <path class="diagram-line" d="M82 248 C140 196 202 136 274 70"/><text class="diagram-label" x="276" y="72">MPC/MSC</text>
+      <path class="diagram-line alt" d="M82 116 C144 164 206 224 282 278"/><text class="diagram-label" x="276" y="278">MPB</text>
+      <path class="diagram-line warn" d="M82 72 C144 120 206 180 282 234"/><text class="diagram-label" x="276" y="234">MSB</text>
+      ${guide(170,166,'Qm')}${guide(214,136,'Qs')}
+      <polygon points="170,166 214,136 170,126" fill="rgba(240,192,64,.18)" stroke="#f0c040"/>
+      <text class="diagram-muted" x="174" y="116">Welfare gain missed</text>`, 'Market output Qm is below social optimum Qs because MSB exceeds MPB.');
+  }
   if (type === 'labour-market') {
     return svg('Labour market: minimum wage', { x:'Labour', y:'Wage' }, `
       <path class="diagram-line" d="M82 248 C138 198 202 132 276 64"/><text class="diagram-label" x="278" y="66">SL</text>
@@ -2864,6 +2940,16 @@ function diagramSvg(type) {
       <line class="diagram-line bad" x1="68" y1="130" x2="292" y2="130"/><text class="diagram-label" x="294" y="134">Min wage</text>
       ${guide(152,130,'Ld')}${guide(222,130,'Ls')}
       <text class="diagram-muted" x="164" y="114">Excess supply</text>`, 'A minimum wage above equilibrium can create unemployment; in monopsony it may raise both wages and employment.');
+  }
+  if (type === 'monopsony-labour') {
+    return svg('Monopsony labour market', { x:'Labour', y:'Wage/cost' }, `
+      <path class="diagram-line warn" d="M82 248 C138 188 198 112 272 42"/><text class="diagram-label" x="274" y="44">MCL</text>
+      <path class="diagram-line" d="M82 250 C140 198 202 132 276 64"/><text class="diagram-label" x="278" y="66">ACL/S</text>
+      <path class="diagram-line alt" d="M82 64 C142 122 204 190 278 252"/><text class="diagram-label" x="280" y="254">MRP</text>
+      ${guide(160,150,'Lm')}${guide(202,132,'Lc')}
+      <text class="diagram-muted" x="36" y="194">Wm</text><text class="diagram-muted" x="36" y="136">Wc</text>
+      <line class="diagram-line diagram-dash" x1="54" y1="190" x2="160" y2="190"/>
+      <line class="diagram-line diagram-dash" x1="54" y1="132" x2="202" y2="132"/>`, 'A monopsonist employs fewer workers and pays a lower wage than the competitive outcome.');
   }
 	  if (type === 'tariff') {
 	    return svg('Tariff on imports', { x:'Quantity', y:'Price' }, `
@@ -2895,6 +2981,17 @@ function diagramSvg(type) {
 	      <line class="diagram-line diagram-dash" x1="181" y1="191" x2="181" y2="276"/><line class="diagram-line diagram-dash" x1="54" y1="150" x2="181" y2="150"/><line class="diagram-line diagram-dash" x1="54" y1="222" x2="181" y2="222"/>
 	      <text class="diagram-muted" x="172" y="294">Q*</text><text class="diagram-muted" x="36" y="154">P</text><text class="diagram-muted" x="30" y="226">AC</text>
 	      <text class="diagram-muted" x="112" y="140">Supernormal profit</text>`, 'Profit maximising output is where MC=MR; price is read from AR; profit is the vertical gap between AR and AC at Q*.');
+	  }
+	  if (type === 'firm-cost-shock') {
+	    return svg('Firm costs rise', { x:'Quantity', y:'Costs/revenue' }, `
+	      <path class="diagram-line alt" d="M82 78 C142 126 204 190 278 254"/><text class="diagram-label" x="280" y="256">AR</text>
+	      <path class="diagram-line warn" d="M82 118 C142 166 204 220 278 276"/><text class="diagram-label" x="280" y="278">MR</text>
+	      <path class="diagram-line" d="M84 246 C126 246 156 222 181 191 C210 154 238 112 274 74"/><text class="diagram-label" x="276" y="77">MC1</text>
+	      <path class="diagram-line bad" d="M84 212 C126 212 154 188 178 160 C206 124 236 84 274 48"/><text class="diagram-label" x="276" y="50">MC2</text>
+	      <path class="diagram-line" d="M84 176 C138 240 218 240 278 176"/><text class="diagram-label" x="280" y="178">AC1</text>
+	      <path class="diagram-line bad" d="M84 146 C138 210 218 210 278 146"/><text class="diagram-label" x="280" y="148">AC2</text>
+	      <line class="diagram-line diagram-dash" x1="181" y1="191" x2="181" y2="276"/><line class="diagram-line diagram-dash bad" x1="168" y1="166" x2="168" y2="276"/>
+	      <text class="diagram-muted" x="158" y="294">Q2</text><text class="diagram-muted" x="174" y="294">Q1</text>`, 'A variable-cost shock shifts MC and AC upward, usually reducing output and profit unless firms pass costs on.');
 	  }
 	  if (type === 'monopoly') {
 	    return svg('Monopoly: supernormal profit', { x:'Quantity', y:'Costs/revenue' }, `
@@ -2970,6 +3067,7 @@ function topicSummaryText() {
   const selTopics = groups.reduce((s, g) => s + selectedTopicsForGroup(g).length, 0);
   const tags = [];
   if (subjectSupportsBare(selectedSubject) && bareMode) tags.push(bareModeLabel());
+  if (selectedSubject === 'Economics' && econplusDalMode) tags.push('EconplusDal List');
   if (selectedSubject === 'Economics' && diagramOnlyMode) tags.push('Diagrams');
   if (predictionsMode) tags.push('🔮 Predictions');
   tags.push(condensedMode ? 'Condensed' : 'Full deck');
@@ -2992,6 +3090,7 @@ function cardCountForTopic(groupName, topic) {
   return ALL_CARDS.filter(c => {
 	    if (cardGroup(c) !== groupName || c.t !== topic || c.variant !== variant) return false;
 	    if (subjectSupportsBare(selectedSubject) && bareMode && !c.bare) return false;
+	    if (selectedSubject === 'Economics' && econplusDalMode && !c.dal) return false;
 	    if (selectedSubject === 'Economics' && diagramOnlyMode && !c.diagram) return false;
 	    if (predictionsMode) {
       const predicted = PREDICTED_TOPICS[groupName];
@@ -3098,6 +3197,11 @@ function updateProfileUI() {
   bareToggle.classList.toggle('active', showBareToggle && bareMode);
   bareToggle.setAttribute('aria-pressed', String(showBareToggle && bareMode));
   bareToggle.textContent = `${bareModeLabel()}: ${bareMode ? 'On' : 'Off'}`;
+  const econplusDalToggle = document.getElementById('econplusDalToggle');
+  econplusDalToggle.style.display = selectedSubject === 'Economics' ? '' : 'none';
+  econplusDalToggle.classList.toggle('active', selectedSubject === 'Economics' && econplusDalMode);
+  econplusDalToggle.setAttribute('aria-pressed', String(selectedSubject === 'Economics' && econplusDalMode));
+  econplusDalToggle.textContent = `EconplusDal List: ${econplusDalMode ? 'On' : 'Off'}`;
   const diagramOnlyToggle = document.getElementById('diagramOnlyToggle');
   diagramOnlyToggle.style.display = selectedSubject === 'Economics' ? '' : 'none';
   diagramOnlyToggle.classList.toggle('active', selectedSubject === 'Economics' && diagramOnlyMode);
@@ -3139,6 +3243,17 @@ function setCondensedMode(on) {
 function setBareMode(on) {
   bareMode = !!on;
   storage.setItem(bareModeStorageKey(), bareMode ? '1' : '0');
+  flipped = false;
+  currentId = null;
+  updateProfileUI();
+  buildDeck();
+  updateReviewQueue();
+  populateTypingArea();
+}
+
+function setEconplusDalMode(on) {
+  econplusDalMode = !!on;
+  storage.setItem('aqa_economics_econplusdal_mode', econplusDalMode ? '1' : '0');
   flipped = false;
   currentId = null;
   updateProfileUI();
@@ -3382,9 +3497,13 @@ function activeCatalog() {
     ? filtered.filter(cardData => cardData.bare)
     : filtered;
 
-  const diagramFiltered = selectedSubject === 'Economics' && diagramOnlyMode
-    ? bareFiltered.filter(cardData => cardData.diagram)
+  const econplusDalFiltered = selectedSubject === 'Economics' && econplusDalMode
+    ? bareFiltered.filter(cardData => cardData.dal)
     : bareFiltered;
+
+  const diagramFiltered = selectedSubject === 'Economics' && diagramOnlyMode
+    ? econplusDalFiltered.filter(cardData => cardData.diagram)
+    : econplusDalFiltered;
 
   if (predictionsMode) {
     return diagramFiltered.filter(cardData => {
@@ -3721,6 +3840,7 @@ document.getElementById('modeSel').addEventListener('change', () => {
 });
 document.getElementById('condensedToggle').addEventListener('click', () => setCondensedMode(!condensedMode));
 document.getElementById('bareToggle').addEventListener('click', () => setBareMode(!bareMode));
+document.getElementById('econplusDalToggle').addEventListener('click', () => setEconplusDalMode(!econplusDalMode));
 document.getElementById('diagramOnlyToggle').addEventListener('click', () => setDiagramOnlyMode(!diagramOnlyMode));
 document.getElementById('predictionsToggle').addEventListener('click', () => setPredictionsMode(!predictionsMode));
 document.getElementById('shuffleBtn').addEventListener('click', () => {

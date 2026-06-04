@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-<title>AQA Psychology/Sociology &amp; Edexcel Economics Flashcards</title>
+<title>AQA Psychology &amp; Sociology Flashcards</title>
 <link rel="icon" href="data:," />
 <style>
 :root{
@@ -1048,14 +1048,13 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
     <span class="subject-label">Subject</span>
     <div class="subject-pills">
       <button class="subject-pill" id="btnPsychology" onclick="switchSubject('Psychology')">Psychology</button>
-      <button class="subject-pill" id="btnEconomics" onclick="switchSubject('Economics')">Economics</button>
       <button class="subject-pill" id="btnSociology" onclick="switchSubject('Sociology')">Sociology</button>
     </div>
   </div>
 
   <div class="header">
     <div class="title">
-      <h1>AQA Psychology + Sociology, Edexcel Economics Flashcards</h1>
+      <h1>AQA Psychology + Sociology Flashcards</h1>
       <p>Built for active recall, spaced repetition, and fast exam prep. Choose a subject, then select the topics you want to revise. Grade honestly — weak cards come back sooner.</p>
     </div>
     <div class="pill-row">
@@ -1186,7 +1185,7 @@ html[data-subject="Sociology"] .quick-sel-btn:not(:disabled):hover{background:rg
   </div>
 
   <div class="footer-note">
-    Progress syncs to Supabase separately for each profile. AQA Psychology/Sociology and Edexcel Economics live in this file — card IDs are synced so topic packs can be added without losing history.
+    Progress syncs to Supabase separately for each profile. AQA Psychology and Sociology live in this file — card IDs are synced so topic packs can be added without losing history.
   </div>
 </div>
 
@@ -1331,6 +1330,11 @@ const PSYCH_ISSUES_DEBATES_CONDENSED = cardsFromRows("Issues and Debates", "cond
 ]);
 
 const PSYCH_RELATIONSHIPS_FULL = cardsFromRows("Relationships", "full", [
+  ["Evolutionary Partner Preferences", "What is sexual selection?", "Sexual selection is the evolutionary process through which characteristics that increase reproductive success become more common. Intersexual selection occurs when one sex chooses mates with desirable qualities; intrasexual selection occurs when members of one sex compete for access to mates."],
+  ["Evolutionary Partner Preferences", "How does anisogamy explain sex differences in partner preferences?", "Anisogamy means males and females produce different sex cells and face different reproductive costs. Females produce few costly eggs and may invest heavily in pregnancy, so evolutionary explanations predict greater selectivity. Males produce many sperm, so they may gain reproductive success through access to fertile partners."],
+  ["Evolutionary Partner Preferences", "What partner preferences are predicted by evolutionary psychology?", "Evolutionary explanations predict that women will tend to value resources, status and commitment because these supported offspring survival, while men will tend to value cues of fertility such as youth and physical attractiveness. These are average tendencies, not rules for every individual."],
+  ["Evolutionary Partner Preferences", "What evidence supports evolutionary explanations of partner preferences?", "Buss studied partner preferences across 37 cultures and found women generally valued financial prospects more, while men valued youth and physical attractiveness more. This cross-cultural consistency supports an evolved explanation, although cultural similarities and gender roles may also influence preferences."],
+  ["Evolutionary Partner Preferences", "Evaluate evolutionary explanations of partner preferences.", "Strength: cross-cultural patterns and research on mate preferences support some predicted sex differences. Limitations: the explanation can be biologically deterministic, may underestimate cultural change and individual variation, and often relies on stated preferences rather than actual partner choices."],
   ["Self-Disclosure", "What is self-disclosure in romantic relationships?", "Self-disclosure is revealing personal information to a partner. Social penetration theory argues relationships develop as disclosure increases in breadth and depth, creating intimacy and trust."],
   ["Self-Disclosure", "What did Altman and Taylor argue about self-disclosure?", "Altman and Taylor's social penetration theory says relationships move from superficial disclosure to deeper, more personal disclosure. Breadth means range of topics; depth means how intimate the information is."],
   ["Self-Disclosure", "How does reciprocity affect self-disclosure?", "Reciprocity means partners respond to disclosure with disclosure of their own. This creates balance, trust and intimacy. If disclosure is one-sided, the relationship may feel unequal or unsafe."],
@@ -1376,6 +1380,7 @@ const PSYCH_RELATIONSHIPS_FULL = cardsFromRows("Relationships", "full", [
 ]);
 
 const PSYCH_RELATIONSHIPS_CONDENSED = cardsFromRows("Relationships", "condensed", [
+  ["Evolutionary Partner Preferences", "Evolutionary partner preferences: night-before summary", "Sexual selection includes intersexual mate choice and intrasexual competition. Anisogamy predicts women value resources/commitment and men value youth/attractiveness on average. Buss found similar patterns across cultures; evaluate with biological determinism, cultural influence and stated-versus-actual preferences."],
   ["Self-Disclosure", "Self-disclosure: night-before summary", "Altman and Taylor: breadth and depth increase intimacy. Reciprocity matters. Evaluate with support from relationship satisfaction research, cultural bias and correlation problems."],
   ["Physical Attractiveness", "Physical attractiveness: night-before summary", "Attractiveness affects early attraction through halo effect and evolutionary cues. Matching hypothesis says people choose similar attractiveness. Evaluate with Walster, cultural variation and short-term effects."],
   ["Filter Theory", "Filter theory: night-before summary", "Kerckhoff and Davis: social demography, similarity in attitudes, complementarity. Good for stages, but online dating and correlational evidence weaken it."],
@@ -1418,6 +1423,9 @@ const PSYCH_SCHIZOPHRENIA_FULL = cardsFromRows("Schizophrenia", "full", [
   ["CBT and Family Therapy", "Evaluate CBT for schizophrenia.", "Strength: can reduce distress and improve coping, especially alongside medication. Limitations: it requires motivation and insight, may not work during severe acute symptoms, and effect sizes are debated."],
   ["CBT and Family Therapy", "How is family therapy used for schizophrenia?", "Family therapy aims to reduce expressed emotion, improve communication, educate relatives and create relapse-prevention strategies. It treats the family environment as important for recovery and relapse."],
   ["CBT and Family Therapy", "Evaluate family therapy for schizophrenia.", "Strength: evidence suggests it reduces relapse and improves family functioning. Limitations: it requires family involvement and may be less useful where family relationships are absent or unsafe."],
+  ["Token Economies", "How are token economies used to manage schizophrenia?", "Token economies use operant conditioning to manage behaviour in institutional settings. Patients receive tokens immediately for desirable target behaviours, such as self-care or social interaction, and exchange the tokens for rewards or privileges."],
+  ["Token Economies", "Why do tokens work as secondary reinforcers?", "Tokens begin as neutral objects but become secondary reinforcers because they are repeatedly associated with primary reinforcers or valued rewards. Positive reinforcement increases the likelihood that the target behaviour will be repeated."],
+  ["Token Economies", "Evaluate token economies for schizophrenia.", "Strength: they can improve adaptive behaviour and make institutional care more manageable. Limitations: improvements may not generalise outside the institution, token economies manage behaviour rather than treat underlying symptoms, and withholding rewards from vulnerable patients raises ethical concerns."],
   ["Interactionist Approach", "What is the interactionist approach to schizophrenia?", "The interactionist approach combines biological and psychological factors. It argues schizophrenia is best explained and treated through interaction between vulnerability and stress, rather than one cause alone."],
   ["Interactionist Approach", "What is the diathesis-stress model?", "The diathesis-stress model says schizophrenia develops when a vulnerability, such as genetic risk or trauma, is triggered by stress. Modern versions allow multiple biological and psychological vulnerabilities."],
   ["Interactionist Approach", "How does the interactionist approach inform treatment?", "It supports combined treatment: antipsychotic medication can reduce biological symptoms, while CBT or family therapy addresses psychological and environmental factors. This is more holistic than single treatments."],
@@ -1433,6 +1441,7 @@ const PSYCH_SCHIZOPHRENIA_CONDENSED = cardsFromRows("Schizophrenia", "condensed"
   ["Psychological Explanations", "Psychological explanations: night-before summary", "Family dysfunction: double bind and expressed emotion. Cognitive: dysfunctional thought processing/source monitoring. Evaluate with social sensitivity and cause-effect problems."],
   ["Drug Therapy", "Antipsychotics: night-before summary", "Typical drugs block D2 receptors. Atypicals affect dopamine and serotonin. Evaluate with effectiveness, relapse reduction, side effects and treating symptoms not causes."],
   ["CBT and Family Therapy", "CBT/family therapy: night-before summary", "CBT challenges beliefs and improves coping. Family therapy reduces expressed emotion and relapse. Best evaluation: useful with medication but not always suitable in acute cases."],
+  ["Token Economies", "Token economies: night-before summary", "Operant conditioning: patients earn tokens for adaptive target behaviours and exchange them for rewards. Useful for managing institutional behaviour, but effects may not generalise, they do not treat underlying symptoms, and they raise ethical concerns."],
   ["Interactionist Approach", "Interactionist approach: night-before summary", "Diathesis-stress = vulnerability plus trigger. Supports combined treatment: drugs plus CBT/family therapy. Strong because it is holistic; weaker because interactions are hard to measure."],
   ["Exam Skills: Schizophrenia", "Predicted Schizophrenia priorities", "Prioritise CBT, interactionist approach and diagnosis reliability/validity. Prepare 16-mark plans for each with AO1, evidence, AO3 and judgement."]
 ]);
@@ -2411,9 +2420,6 @@ const ALL_CARDS = [
   ...PSYCH_ADDICTION_CONDENSED,
   ...PSYCH_RESEARCH_METHODS_FULL,
   ...PSYCH_RESEARCH_METHODS_CONDENSED,
-  // Economics
-  ...markEconplusDal(ECON_P3_ALL_FULL),
-  ...markEconplusDal(ECON_P3_ALL_CONDENSED),
   // Sociology
   ...markSociologyBare(SOCIOLOGY_FAMILIES_FULL),
   ...markSociologyBare(SOCIOLOGY_FAMILIES_CONDENSED),
@@ -2431,14 +2437,14 @@ const TOPIC_SUBHEADINGS = {
     { label: 'Ethics & Exam Technique', topics: ['Social Sensitivity and Ethics', 'Exam Skills: Issues and Debates'] },
   ],
   'Relationships': [
-    { label: 'Attraction', topics: ['Self-Disclosure', 'Physical Attractiveness', 'Filter Theory'] },
+    { label: 'Attraction', topics: ['Evolutionary Partner Preferences', 'Self-Disclosure', 'Physical Attractiveness', 'Filter Theory'] },
     { label: 'Relationship Theories', topics: ['Theories of Romantic Relationships', 'Relationship Breakdown'] },
     { label: 'Online & Parasocial', topics: ['Online Relationships', 'Parasocial Relationships', 'Exam Skills: Relationships'] },
   ],
   'Schizophrenia': [
     { label: 'Diagnosis', topics: ['Classification and Diagnosis', 'Reliability and Validity'] },
     { label: 'Explanations', topics: ['Biological Explanations', 'Psychological Explanations', 'Interactionist Approach'] },
-    { label: 'Treatments & Exam Technique', topics: ['Drug Therapy', 'CBT and Family Therapy', 'Exam Skills: Schizophrenia'] },
+    { label: 'Treatments & Exam Technique', topics: ['Drug Therapy', 'CBT and Family Therapy', 'Token Economies', 'Exam Skills: Schizophrenia'] },
   ],
   'Addiction': [
     { label: 'Description & Risk', topics: ['Describing Addiction', 'Risk Factors'] },
@@ -2499,17 +2505,10 @@ const DEFAULT_GROUPS = [...GROUP_NAMES];
 const GROUP_META_BY_SUBJECT = {
   Psychology: [
     { name: 'Issues and Debates', note: 'Compulsory Paper 3 debates, ethics and essay-ready examples' },
-    { name: 'Relationships', note: 'Attraction, relationship theories, breakdown, online and parasocial relationships' },
-    { name: 'Schizophrenia', note: 'Diagnosis, explanations, treatments and interactionist approach' },
+    { name: 'Relationships', note: 'Evolutionary preferences, attraction, relationship theories, breakdown, online and parasocial relationships' },
+    { name: 'Schizophrenia', note: 'Diagnosis, explanations, treatments, token economies and interactionist approach' },
     { name: 'Addiction', note: 'Risk factors, nicotine, gambling, treatments and behaviour change' },
     { name: 'Research Methods', note: 'Standalone methods, data and Paper 3-style application' },
-  ],
-  Economics: [
-    { name: 'Macro Core and Policy', note: 'AD/AS, inflation, productivity, growth, living standards, policy and labour markets' },
-    { name: 'Markets and Intervention', note: 'Market failure, government failure, intervention, energy, environment and elasticities' },
-    { name: 'Firms and Competition', note: 'Market structures, business growth, economies of scale, costs, revenue and profit' },
-    { name: 'Global and Financial', note: 'Trade, protectionism, exchange rates, current account, finance and competitiveness' },
-    { name: 'Development and Synoptic Evaluation', note: 'Development, HDI, demographics and Paper 3 synoptic judgement' },
   ],
   Sociology: [
     { name: 'Families and Households', note: 'Perspectives, policy, changing patterns, diversity, power, childhood and demography' },
@@ -2585,7 +2584,7 @@ let predictionsMode = storage.getItem('aqa_predictions_mode') === '1';
 let bareMode = loadBareModeForSubject(selectedSubject);
 let econplusDalMode = storage.getItem('aqa_economics_econplusdal_mode') === '1';
 let diagramOnlyMode = storage.getItem('aqa_economics_diagram_only_mode') === '1';
-const PSYCHOLOGY_DECK_VERSION = 'paper3_2026_v2';
+const PSYCHOLOGY_DECK_VERSION = 'paper3_2026_v3';
 const ECONOMICS_DECK_VERSION = 'paper3_2026_v2';
 const SOCIOLOGY_DECK_VERSION = 'paper2_exam_prep_v1';
 const ECONOMICS_GROUP_NAMES = ['Macro Core and Policy', 'Markets and Intervention', 'Firms and Competition', 'Global and Financial', 'Development and Synoptic Evaluation'];
@@ -2622,7 +2621,7 @@ function saveCondensedMode() {
   try { storage.setItem(lk('condensed_mode'), condensedMode ? '1' : '0'); } catch {}
 }
 function subjectSupportsBare(subject = selectedSubject) {
-  return subject === 'Economics' || subject === 'Sociology';
+  return subject === 'Sociology';
 }
 function bareModeStorageKey(subject = selectedSubject) {
   return subject === 'Sociology' ? 'aqa_sociology_bare_mode' : 'aqa_economics_bare_mode';
@@ -2637,7 +2636,7 @@ function bareModeLabel(subject = selectedSubject) {
 function loadSelectedSubject() {
   try {
     const saved = storage.getItem(lk('subject'));
-    return ['Psychology', 'Economics', 'Sociology'].includes(saved) ? saved : 'Psychology';
+    return ['Psychology', 'Sociology'].includes(saved) ? saved : 'Psychology';
   } catch {
     return 'Psychology';
   }
@@ -3078,10 +3077,8 @@ function topicSummaryText() {
 function renderSubjectButtons() {
   document.querySelectorAll('.subject-pill').forEach(b => b.classList.remove('active'));
   const psychBtn = document.getElementById('btnPsychology');
-  const econBtn = document.getElementById('btnEconomics');
   const socBtn = document.getElementById('btnSociology');
   if (psychBtn) { psychBtn.classList.toggle('active', selectedSubject === 'Psychology'); psychBtn.setAttribute('aria-pressed', String(selectedSubject === 'Psychology')); }
-  if (econBtn) { econBtn.classList.toggle('active', selectedSubject === 'Economics'); econBtn.setAttribute('aria-pressed', String(selectedSubject === 'Economics')); }
   if (socBtn) { socBtn.classList.toggle('active', selectedSubject === 'Sociology'); socBtn.setAttribute('aria-pressed', String(selectedSubject === 'Sociology')); }
 }
 
